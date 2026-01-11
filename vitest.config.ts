@@ -13,6 +13,8 @@ export default defineConfig({
         'tests/**',
         '**/*.test.ts',
         '**/*.config.ts',
+        'examples/**',
+        'eslint.config.js',
       ],
       thresholds: {
         lines: 85,

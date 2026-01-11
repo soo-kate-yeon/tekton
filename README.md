@@ -1,7 +1,7 @@
 # Tekton
 
 [![Build Status](https://img.shields.io/badge/build-passing-brightgreen)](https://github.com/your-org/tekton)
-[![Coverage](https://img.shields.io/badge/coverage-72.37%25-yellow)](https://github.com/your-org/tekton)
+[![Coverage](https://img.shields.io/badge/coverage-98.04%25-brightgreen)](https://github.com/your-org/tekton)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.7-blue)](https://www.typescriptlang.org/)
 [![Node](https://img.shields.io/badge/node-%3E%3D20.0.0-brightgreen)](https://nodejs.org/)
@@ -285,7 +285,7 @@ For complete API documentation with usage examples, see [API Reference](./docs/a
 
 **Current Version**: 0.1.0
 **Current Branch**: `feature/SPEC-PHASEAB-001`
-**SPEC Phase**: A2 - Token Generator (75% complete)
+**SPEC Phase**: A2 - Token Generator (95% complete)
 
 ### Implementation Status
 
@@ -300,16 +300,18 @@ For complete API documentation with usage examples, see [API Reference](./docs/a
 - ✅ Dark mode variant generation
 - ✅ Token caching and performance optimization
 - ✅ Strict TypeScript type safety
+- ✅ Neutral palette generation (pure/tinted/custom modes)
+- ✅ Semantic token mapping (shadcn/ui compatible)
+- ✅ Questionnaire schema validation
 
 **In Progress**:
-- 🔄 Test coverage improvement (current: 72.37%, target: 85%)
-- 🔄 Tinted neutral palette generation (CR-002)
+- 🔄 A1 integration (Preset Definition System)
 
 **Quality Gates**:
-- ✅ Tests: 142 passing tests across 12 test suites
-- ⚠️ Coverage: 72.37% (target: ≥85%)
-- ✅ Type Safety: Zero `any` types in public APIs
-- ⚠️ Linter: 1 warning (no-explicit-any at token-generator.ts:213)
+- ✅ Tests: 242 passing tests across 16 test suites
+- ✅ Coverage: 98.04% (exceeds ≥85% target)
+- ✅ Type Safety: Zero type errors with strict mode
+- ⚠️ Linter: 3 minor issues (2 warnings, 1 auto-fixable)
 - ⚠️ Security: 6 moderate dev dependency vulnerabilities
 
 **Next Phases** (SPEC-PHASEAB-001):

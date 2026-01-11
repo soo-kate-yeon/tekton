@@ -30,8 +30,8 @@ function clipToGamut(color: OKLCHColor): OKLCHColor {
   }
 
   // Reduce chroma until color is in gamut
-  let clippedColor = { ...color };
-  let step = 0.01;
+  const clippedColor = { ...color };
+  const step = 0.01;
 
   while (clippedColor.c > 0) {
     clippedColor.c = Math.max(0, clippedColor.c - step);

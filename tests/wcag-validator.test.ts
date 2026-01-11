@@ -3,6 +3,7 @@ import {
   calculateContrastRatio,
   checkWCAGCompliance,
   validateColorPair,
+  suggestLightnessAdjustment,
 } from '../src/wcag-validator';
 
 describe('WCAG AA Validator - TASK-008', () => {
@@ -114,6 +115,74 @@ describe('WCAG AA Validator - TASK-008', () => {
       const result = validateColorPair(foreground, background, 'AA');
 
       expect(result.passed).toBe(true);
+    });
+  });
+
+  describe('Large Text Compliance', () => {
+    it('should pass AA for large text with 3:1 ratio', () => {
+      const result = checkWCAGCompliance(3.0, 'AA', true);
+      expect(result.passed).toBe(true);
+    });
+
+    it('should fail AA for large text with <3:1 ratio', () => {
+      const result = checkWCAGCompliance(2.5, 'AA', true);
+      expect(result.passed).toBe(false);
+    });
+
+    it('should pass AAA for large text with 4.5:1 ratio', () => {
+      const result = checkWCAGCompliance(4.5, 'AAA', true);
+      expect(result.passed).toBe(true);
+    });
+
+    it('should fail AAA for large text with <4.5:1 ratio', () => {
+      const result = checkWCAGCompliance(4.0, 'AAA', true);
+      expect(result.passed).toBe(false);
+    });
+
+    it('should validate large text with validateColorPair', () => {
+      const foreground = { r: 100, g: 100, b: 100 };
+      const background = { r: 200, g: 200, b: 200 };
+      const result = validateColorPair(foreground, background, 'AA', true);
+
+      expect(result).toBeDefined();
+    });
+  });
+
+  describe('suggestLightnessAdjustment', () => {
+    it('should return null for already compliant colors', () => {
+      const foreground = { r: 0, g: 0, b: 0 };
+      const background = { r: 255, g: 255, b: 255 };
+      const suggestion = suggestLightnessAdjustment(foreground, background, 'AA');
+
+      expect(suggestion).toBeNull();
+    });
+
+    it('should suggest darkening lighter foreground', () => {
+      const foreground = { r: 200, g: 200, b: 200 }; // Light foreground
+      const background = { r: 220, g: 220, b: 220 }; // Light background
+      const suggestion = suggestLightnessAdjustment(foreground, background, 'AA');
+
+      expect(suggestion).not.toBeNull();
+      expect(suggestion).toBeGreaterThanOrEqual(0);
+      expect(suggestion).toBeLessThanOrEqual(1);
+    });
+
+    it('should suggest lightening darker background', () => {
+      const foreground = { r: 50, g: 50, b: 50 }; // Dark foreground
+      const background = { r: 60, g: 60, b: 60 }; // Dark background
+      const suggestion = suggestLightnessAdjustment(foreground, background, 'AA');
+
+      expect(suggestion).not.toBeNull();
+      expect(suggestion).toBeGreaterThanOrEqual(0);
+      expect(suggestion).toBeLessThanOrEqual(1);
+    });
+
+    it('should work with AAA level', () => {
+      const foreground = { r: 100, g: 100, b: 100 };
+      const background = { r: 150, g: 150, b: 150 };
+      const suggestion = suggestLightnessAdjustment(foreground, background, 'AAA');
+
+      expect(suggestion).not.toBeNull();
     });
   });
 

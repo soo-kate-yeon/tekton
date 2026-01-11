@@ -103,7 +103,7 @@ export function rgbToOklch(rgb: RGBColor): OKLCHColor {
   let h = (Math.atan2(b, a) * 180) / Math.PI;
 
   // Normalize hue to 0-360
-  if (h < 0) h += 360;
+  if (h < 0) {h += 360;}
 
   return { l, c, h };
 }

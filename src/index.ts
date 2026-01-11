@@ -46,5 +46,33 @@ export {
   COMPONENT_PRESETS,
 } from './component-presets';
 
+// Neutral palette generation
+export {
+  generateNeutralPalette,
+  type NeutralPaletteConfig,
+} from './generator/neutral-palette';
+
+// Semantic token mapping
+export {
+  mapSemanticTokens,
+  type SemanticTokenConfig,
+  type SemanticTokens,
+} from './generator/semantic-mapper';
+
+// Output format exporters
+export {
+  exportToCSS,
+  exportToDTCG,
+  exportToTailwind,
+  type ExportConfig,
+} from './generator/output';
+
+// Questionnaire schema
+export {
+  QuestionnaireSchema,
+  DEFAULT_QUESTIONNAIRE,
+  type Questionnaire,
+} from './generator/questionnaire';
+
 // Version
 export const VERSION = '0.1.0';

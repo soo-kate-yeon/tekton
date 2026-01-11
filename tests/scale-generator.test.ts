@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { generateLightnessScale } from '../src/scale-generator';
+import { generateLightnessScale, generateColorScales } from '../src/scale-generator';
 
 describe('Lightness Scale Generator - TASK-007', () => {
   it('should generate 11-step scale from base color', () => {
@@ -88,5 +88,57 @@ describe('Lightness Scale Generator - TASK-007', () => {
 
     expect(scale['50'].l).toBeLessThanOrEqual(1);
     expect(scale['950'].l).toBeGreaterThanOrEqual(0);
+  });
+
+  it('should reduce chroma at extreme lightness values', () => {
+    const base = { l: 0.5, c: 0.2, h: 220 };
+    const scale = generateLightnessScale(base);
+
+    // Very light (>0.9) should have reduced chroma
+    expect(scale['50'].c).toBeLessThan(base.c);
+
+    // Very dark (<0.2) should have reduced chroma
+    expect(scale['950'].c).toBeLessThan(base.c);
+  });
+});
+
+describe('Color Scales Generator - Multiple Palettes', () => {
+  it('should generate scales for multiple colors', () => {
+    const palette = {
+      primary: { l: 0.5, c: 0.15, h: 220 },
+      secondary: { l: 0.6, c: 0.12, h: 180 },
+      accent: { l: 0.55, c: 0.18, h: 280 },
+    };
+
+    const scales = generateColorScales(palette);
+
+    expect(Object.keys(scales)).toHaveLength(3);
+    expect(scales.primary).toBeDefined();
+    expect(scales.secondary).toBeDefined();
+    expect(scales.accent).toBeDefined();
+  });
+
+  it('should generate 11 steps for each color', () => {
+    const palette = {
+      primary: { l: 0.5, c: 0.15, h: 220 },
+      secondary: { l: 0.6, c: 0.12, h: 180 },
+    };
+
+    const scales = generateColorScales(palette);
+
+    expect(Object.keys(scales.primary)).toHaveLength(11);
+    expect(Object.keys(scales.secondary)).toHaveLength(11);
+  });
+
+  it('should preserve individual color characteristics', () => {
+    const palette = {
+      blue: { l: 0.5, c: 0.15, h: 220 },
+      green: { l: 0.5, c: 0.15, h: 140 },
+    };
+
+    const scales = generateColorScales(palette);
+
+    expect(scales.blue['500'].h).toBe(220);
+    expect(scales.green['500'].h).toBe(140);
   });
 });

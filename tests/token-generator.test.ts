@@ -154,5 +154,52 @@ describe('Token Generator - TASK-009 to TASK-013', () => {
         });
       }).toThrow();
     });
+
+    it('should export to TypeScript format - TASK-012', () => {
+      const generator = new TokenGenerator();
+      const ts = generator.exportTokens(
+        { primary: { l: 0.5, c: 0.15, h: 220 } },
+        'ts'
+      );
+
+      expect(ts).toContain('export');
+      expect(ts).toContain('const');
+      expect(ts).toContain('as const');
+    });
+
+    it('should clear cache correctly', () => {
+      const generator = new TokenGenerator();
+      const color = { l: 0.5, c: 0.15, h: 220 };
+
+      // Populate cache
+      generator.generateTokens({ primary: color });
+
+      // Clear cache
+      generator.clearCache();
+
+      // Generate again (should not use cache)
+      const tokens = generator.generateTokens({ primary: color });
+      expect(tokens).toBeDefined();
+    });
+
+    it('should handle out-of-gamut colors with high chroma', () => {
+      const generator = new TokenGenerator();
+      const outOfGamut = { l: 0.5, c: 0.45, h: 120 };
+
+      const tokens = generator.generateTokens({ test: outOfGamut });
+
+      expect(tokens[0]).toBeDefined();
+      expect(tokens[0].metadata?.gamutClipped).toBeDefined();
+    });
+
+    it('should generate metadata with timestamp', () => {
+      const generator = new TokenGenerator();
+      const tokens = generator.generateTokens({
+        primary: { l: 0.5, c: 0.15, h: 220 },
+      });
+
+      expect(tokens[0].metadata?.generated).toBeDefined();
+      expect(new Date(tokens[0].metadata!.generated)).toBeInstanceOf(Date);
+    });
   });
 });
