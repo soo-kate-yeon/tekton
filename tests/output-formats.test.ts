@@ -107,7 +107,7 @@ describe('Output Format Exporters - TASK-005 to TASK-007', () => {
       });
 
       // Should have indented properties
-      expect(css).toMatch(/\n  --/);
+      expect(css).toMatch(/\n {2}--/);
     });
   });
 
