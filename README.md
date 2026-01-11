@@ -156,6 +156,68 @@ console.log(button.states.hover); // { l: 0.45, c: 0.15, h: 220 }
 const allPresets = generateComponentPresets(primaryColor);
 ```
 
+### Using Presets
+
+Presets provide pre-configured design system settings for common technology stacks:
+
+```typescript
+import { loadDefaultPreset, generateTokensFromPreset } from 'tekton/presets';
+
+// Load Next.js + Tailwind + shadcn/ui preset
+const preset = loadDefaultPreset('next-tailwind-shadcn');
+
+// Generate tokens in different formats
+const cssTokens = generateTokensFromPreset(preset, { format: 'css' });
+const dtcgTokens = generateTokensFromPreset(preset, { format: 'dtcg' });
+const tailwindConfig = generateTokensFromPreset(preset, { format: 'tailwind' });
+
+// Use in your project
+import fs from 'fs';
+fs.writeFileSync('styles/tokens.css', cssTokens);
+```
+
+#### Available Presets
+
+- **`next-tailwind-shadcn`**: Next.js + Tailwind CSS + shadcn/ui (default)
+
+#### Custom Presets
+
+Create your own preset JSON file:
+
+```json
+{
+  "id": "my-preset",
+  "version": "1.0.0",
+  "name": "My Custom Preset",
+  "description": "Custom design system configuration",
+  "stack": {
+    "framework": "nextjs",
+    "styling": "tailwindcss",
+    "components": "shadcn-ui"
+  },
+  "questionnaire": {
+    "brandTone": "professional",
+    "contrast": "high",
+    "density": "comfortable",
+    "borderRadius": "medium",
+    "primaryColor": { "l": 0.5, "c": 0.15, "h": 220 },
+    "neutralTone": "pure",
+    "fontScale": "medium"
+  }
+}
+```
+
+Load with `loadPreset(presetData)`:
+
+```typescript
+import { loadPreset, generateTokensFromPreset } from 'tekton/presets';
+import fs from 'fs';
+
+const presetData = JSON.parse(fs.readFileSync('my-preset.json', 'utf-8'));
+const preset = loadPreset(presetData);
+const tokens = generateTokensFromPreset(preset);
+```
+
 ### Color Conversion
 
 ```typescript
