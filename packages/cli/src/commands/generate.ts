@@ -1,5 +1,6 @@
 import chalk from 'chalk';
-import { prompt } from 'enquirer';
+import enquirer from 'enquirer';
+const { prompt } = enquirer;
 import * as fs from 'fs-extra';
 import * as path from 'path';
 import { isValidHexColor, validateHexColor } from '../utils/validators.js';
