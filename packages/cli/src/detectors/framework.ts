@@ -8,6 +8,8 @@ export enum Framework {
   NextJS = 'Next.js',
   Vite = 'Vite',
   Remix = 'Remix',
+  Nuxt = 'Nuxt',
+  SvelteKit = 'SvelteKit',
 }
 
 /**
@@ -21,7 +23,7 @@ export interface FrameworkDetectionResult {
 
 /**
  * Framework configuration file patterns
- * Priority order: Next.js > Vite > Remix
+ * Priority order: Next.js > Vite > Remix > Nuxt > SvelteKit
  */
 const FRAMEWORK_CONFIGS = [
   {
@@ -38,6 +40,16 @@ const FRAMEWORK_CONFIGS = [
     framework: Framework.Remix,
     patterns: ['remix.config.js', 'remix.config.ts'],
     packageName: '@remix-run/react',
+  },
+  {
+    framework: Framework.Nuxt,
+    patterns: ['nuxt.config.js', 'nuxt.config.ts'],
+    packageName: 'nuxt',
+  },
+  {
+    framework: Framework.SvelteKit,
+    patterns: ['svelte.config.js'],
+    packageName: '@sveltejs/kit',
   },
 ];
 

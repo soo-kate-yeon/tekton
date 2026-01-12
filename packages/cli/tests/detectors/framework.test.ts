@@ -141,6 +141,71 @@ describe('Framework Detector', () => {
     });
   });
 
+  describe('Nuxt detection', () => {
+    it('should detect Nuxt when nuxt.config.js exists', async () => {
+      const projectDir = path.join(testDir, 'nuxt-js');
+      await fs.ensureDir(projectDir);
+      await fs.writeFile(path.join(projectDir, 'nuxt.config.js'), 'export default {}');
+
+      const result = await detectFramework(projectDir);
+
+      expect(result.framework).toBe(Framework.Nuxt);
+      expect(result.configPath).toBe(path.join(projectDir, 'nuxt.config.js'));
+    });
+
+    it('should detect Nuxt when nuxt.config.ts exists', async () => {
+      const projectDir = path.join(testDir, 'nuxt-ts');
+      await fs.ensureDir(projectDir);
+      await fs.writeFile(path.join(projectDir, 'nuxt.config.ts'), 'export default {}');
+
+      const result = await detectFramework(projectDir);
+
+      expect(result.framework).toBe(Framework.Nuxt);
+      expect(result.configPath).toBe(path.join(projectDir, 'nuxt.config.ts'));
+    });
+
+    it('should extract Nuxt version from package.json', async () => {
+      const projectDir = path.join(testDir, 'nuxt-versioned');
+      await fs.ensureDir(projectDir);
+      await fs.writeFile(path.join(projectDir, 'nuxt.config.ts'), 'export default {}');
+      await fs.writeJSON(path.join(projectDir, 'package.json'), {
+        dependencies: { nuxt: '^3.0.0' },
+      });
+
+      const result = await detectFramework(projectDir);
+
+      expect(result.framework).toBe(Framework.Nuxt);
+      expect(result.version).toBe('^3.0.0');
+    });
+  });
+
+  describe('SvelteKit detection', () => {
+    it('should detect SvelteKit when svelte.config.js exists', async () => {
+      const projectDir = path.join(testDir, 'sveltekit-js');
+      await fs.ensureDir(projectDir);
+      await fs.writeFile(path.join(projectDir, 'svelte.config.js'), 'export default {}');
+
+      const result = await detectFramework(projectDir);
+
+      expect(result.framework).toBe(Framework.SvelteKit);
+      expect(result.configPath).toBe(path.join(projectDir, 'svelte.config.js'));
+    });
+
+    it('should extract SvelteKit version from package.json', async () => {
+      const projectDir = path.join(testDir, 'sveltekit-versioned');
+      await fs.ensureDir(projectDir);
+      await fs.writeFile(path.join(projectDir, 'svelte.config.js'), 'export default {}');
+      await fs.writeJSON(path.join(projectDir, 'package.json'), {
+        devDependencies: { '@sveltejs/kit': '^2.0.0' },
+      });
+
+      const result = await detectFramework(projectDir);
+
+      expect(result.framework).toBe(Framework.SvelteKit);
+      expect(result.version).toBe('^2.0.0');
+    });
+  });
+
   describe('Priority handling', () => {
     it('should prioritize Next.js when multiple frameworks detected', async () => {
       const projectDir = path.join(testDir, 'multi-framework');
@@ -162,6 +227,42 @@ describe('Framework Detector', () => {
       const result = await detectFramework(projectDir);
 
       expect(result.framework).toBe(Framework.Vite);
+    });
+
+    it('should prioritize Remix over Nuxt when both detected', async () => {
+      const projectDir = path.join(testDir, 'remix-nuxt');
+      await fs.ensureDir(projectDir);
+      await fs.writeFile(path.join(projectDir, 'remix.config.js'), 'module.exports = {}');
+      await fs.writeFile(path.join(projectDir, 'nuxt.config.ts'), 'export default {}');
+
+      const result = await detectFramework(projectDir);
+
+      expect(result.framework).toBe(Framework.Remix);
+    });
+
+    it('should prioritize Nuxt over SvelteKit when both detected', async () => {
+      const projectDir = path.join(testDir, 'nuxt-svelte');
+      await fs.ensureDir(projectDir);
+      await fs.writeFile(path.join(projectDir, 'nuxt.config.js'), 'export default {}');
+      await fs.writeFile(path.join(projectDir, 'svelte.config.js'), 'export default {}');
+
+      const result = await detectFramework(projectDir);
+
+      expect(result.framework).toBe(Framework.Nuxt);
+    });
+
+    it('should prioritize Next.js when all 5 frameworks detected', async () => {
+      const projectDir = path.join(testDir, 'all-frameworks');
+      await fs.ensureDir(projectDir);
+      await fs.writeFile(path.join(projectDir, 'next.config.js'), 'module.exports = {}');
+      await fs.writeFile(path.join(projectDir, 'vite.config.ts'), 'export default {}');
+      await fs.writeFile(path.join(projectDir, 'remix.config.js'), 'module.exports = {}');
+      await fs.writeFile(path.join(projectDir, 'nuxt.config.ts'), 'export default {}');
+      await fs.writeFile(path.join(projectDir, 'svelte.config.js'), 'export default {}');
+
+      const result = await detectFramework(projectDir);
+
+      expect(result.framework).toBe(Framework.NextJS);
     });
   });
 
