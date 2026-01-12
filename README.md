@@ -1,7 +1,7 @@
 # Tekton
 
-[![Build Status](https://img.shields.io/badge/build-passing-brightgreen)](https://github.com/your-org/tekton)
-[![Coverage](https://img.shields.io/badge/coverage-98.04%25-brightgreen)](https://github.com/your-org/tekton)
+[![Build Status](https://img.shields.io/badge/build-passing-brightgreen)](https://github.com/asleep/tekton)
+[![Coverage](https://img.shields.io/badge/coverage-98.7%25-brightgreen)](https://github.com/asleep/tekton)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.7-blue)](https://www.typescriptlang.org/)
 [![Node](https://img.shields.io/badge/node-%3E%3D20.0.0-brightgreen)](https://nodejs.org/)
@@ -291,6 +291,7 @@ index.ts (Public API)
 - **wcag-validator.ts**: WCAG AA/AAA contrast ratio validation and compliance checking
 - **token-generator.ts**: Core token generation, caching, multi-format export
 - **component-presets.ts**: Pre-configured tokens for 8 common UI components
+- **contracts/**: Component contract validation system with 8 MVP shadcn/ui contracts
 
 For detailed architecture documentation, see [Architecture Guide](./docs/architecture/README.md).
 
@@ -332,6 +333,41 @@ For detailed architecture documentation, see [Architecture Guide](./docs/archite
 - **`radioPreset(baseColor)`** - Radio component tokens
 - **`generateComponentPresets(baseColor)`** - All 8 presets
 
+### Component Contracts
+
+- **`getContract(componentName)`** - Retrieve component contract by name
+- **`registerContract(contract)`** - Register a new component contract
+- **`listAllContracts()`** - List all registered component contracts
+
+**Available Contracts** (8 MVP components):
+- **button** (15 constraints) - Icon-only accessibility, prop combinations, WCAG
+- **input** (12 constraints) - Label association, validation states, security
+- **dialog** (10 constraints) - Required structure (DialogTitle), focus management
+- **form** (12 constraints) - Field accessibility (aria-required), validation
+- **card** (8 constraints) - Semantic structure, header/footer ordering
+- **alert** (7 constraints) - Role requirements, variant validation
+- **select** (10 constraints) - Keyboard navigation, aria-expanded state
+- **checkbox** (8 constraints) - Label association, aria-checked state
+
+**Contract Usage Example**:
+```typescript
+import { getContract } from 'tekton/contracts';
+
+// Get button contract
+const buttonContract = getContract('button');
+
+// Check all constraints
+buttonContract.constraints.forEach(constraint => {
+  console.log(`${constraint.id}: ${constraint.description}`);
+  console.log(`Severity: ${constraint.severity}`);
+  console.log(`Auto-fixable: ${constraint.autoFixable}`);
+});
+
+// Example: BTN-A01 - Icon-only buttons require aria-label
+// Severity: error
+// Auto-fixable: true
+```
+
 ### Schemas (Zod)
 
 - **`OKLCHColorSchema`** - OKLCH color validation
@@ -347,7 +383,7 @@ For complete API documentation with usage examples, see [API Reference](./docs/a
 
 **Current Version**: 0.1.0
 **Current Branch**: `feature/SPEC-PHASEAB-001`
-**SPEC Phase**: A2 - Token Generator (100% complete)
+**SPEC Phase**: Phase A Complete - All 3 packages implemented (100%)
 
 ### Implementation Status
 
@@ -368,18 +404,21 @@ For complete API documentation with usage examples, see [API Reference](./docs/a
 - ✅ Preset definition system (A1 integration)
 - ✅ Preset loading with Zod validation
 - ✅ Default preset: next-tailwind-shadcn
+- ✅ Component contract system (8 MVP contracts, 82 total constraints)
+- ✅ Contract registry with O(1) lookup performance
+- ✅ 6 constraint rule types (accessibility, prop-combination, children, context, composition, state)
 
 **Quality Gates**:
-- ✅ Tests: 276 passing tests across 19 test suites
-- ✅ Coverage: 98.02% (exceeds ≥85% target)
+- ✅ Tests: 497 passing tests across 37 test suites
+- ✅ Coverage: 98.7% (exceeds ≥98% target)
 - ✅ Type Safety: Zero type errors with strict mode
 - ✅ Linter: Clean (2 warnings only, no errors)
 - ⚠️ Security: 6 moderate dev dependency vulnerabilities
 
-**Next Phases** (SPEC-PHASEAB-001):
-- ✅ A1: Preset definition system (complete)
-- ✅ A2: Token generator (complete)
-- A3: Component contract system (not started)
+**Phase Status** (SPEC-PHASEAB-001):
+- ✅ A1: Preset definition system (100% complete)
+- ✅ A2: Token generator (100% complete)
+- ✅ A3: Component contract system (100% complete)
 
 For detailed implementation status, see [Implementation Status](/.moai/specs/SPEC-PHASEAB-001/implementation-status.md).
 
@@ -449,6 +488,6 @@ MIT © 2026
 
 ---
 
-**Built with** [MoAI-ADK](https://github.com/your-org/moai-adk) - AI-Driven Development Kit
+**Built with** [MoAI-ADK](https://github.com/asleep/moai-adk) - AI-Driven Development Kit
 
 **Generated using** SPEC-First TDD workflow for quality-first development
