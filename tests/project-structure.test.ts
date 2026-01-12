@@ -14,8 +14,8 @@ describe('Project Structure - TASK-001', () => {
     expect(packageJson.name).toBe('tekton');
     expect(packageJson.version).toBeDefined();
     expect(packageJson.type).toBe('module');
-    expect(packageJson.main).toBeDefined();
-    expect(packageJson.types).toBeDefined();
+    // Monorepo root is now private, packages have main/types
+    expect(packageJson.private).toBe(true);
   });
 
   it('should have tsconfig.json with strict TypeScript configuration', () => {

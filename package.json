@@ -2,25 +2,18 @@
   "name": "tekton",
   "version": "0.1.0",
   "description": "OKLCH-based design token generator with WCAG AA compliance",
+  "private": true,
   "type": "module",
-  "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
-  "exports": {
-    ".": {
-      "import": "./dist/index.js",
-      "types": "./dist/index.d.ts"
-    }
-  },
-  "files": [
-    "dist"
-  ],
   "scripts": {
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
+    "test:all": "pnpm --filter \"./packages/*\" test",
     "build": "tsc",
+    "build:all": "pnpm --filter \"./packages/*\" build",
     "dev": "tsc --watch",
     "lint": "eslint src tests --ext .ts",
+    "lint:all": "pnpm --filter \"./packages/*\" lint",
     "format": "prettier --write \"src/**/*.ts\" \"tests/**/*.ts\""
   },
   "keywords": [
@@ -41,7 +34,8 @@
     "eslint": "^9.18.0",
     "prettier": "^3.4.2",
     "typescript": "^5.7.3",
-    "vitest": "^2.1.8"
+    "vitest": "^2.1.8",
+    "yaml": "^2.8.2"
   },
   "dependencies": {
     "zod": "^3.23.8"
