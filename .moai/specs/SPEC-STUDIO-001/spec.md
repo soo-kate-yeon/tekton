@@ -1,9 +1,10 @@
 ---
 id: SPEC-STUDIO-001
 version: "1.0.0"
-status: "draft"
+status: "completed"
 created: "2026-01-13"
 updated: "2026-01-13"
+completed: "2026-01-13"
 author: "asleep"
 priority: "HIGH"
 ---
