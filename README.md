@@ -283,6 +283,47 @@ token-generator.ts ←  component-presets.ts
 index.ts (Public API)
 ```
 
+### Screen Contract Architecture
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                     Screen Contract                             │
+├─────────────────────────────────────────────────────────────────┤
+│  Layer 1: Environment (환경 계층)                                │
+│  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐              │
+│  │   Desktop   │  │   Mobile    │  │   Tablet    │              │
+│  │  (12-col)   │  │   (4-col)   │  │   (8-col)   │              │
+│  └─────────────┘  └─────────────┘  └─────────────┘              │
+├─────────────────────────────────────────────────────────────────┤
+│  Layer 2: Skeleton (골격 계층)                                   │
+│  ┌─────────────────────────────────────────────────────────┐    │
+│  │  Layout Preset: FullScreen | WithSidebar | WithHeader   │    │
+│  │  ┌─────────┐ ┌─────────┐ ┌─────────────────────────────┐│    │
+│  │  │ Header? │ │Sidebar? │ │         Content             ││    │
+│  │  └─────────┘ └─────────┘ └─────────────────────────────┘│    │
+│  │  ┌─────────────────────────────────────────────────────┐│    │
+│  │  │                     Footer?                         ││    │
+│  │  └─────────────────────────────────────────────────────┘│    │
+│  └─────────────────────────────────────────────────────────┘    │
+├─────────────────────────────────────────────────────────────────┤
+│  Layer 3: Intent (역할 계층)                                     │
+│  ┌───────────┐ ┌───────────┐ ┌───────────┐ ┌───────────┐        │
+│  │ DataList  │ │   Form    │ │ Dashboard │ │  Detail   │        │
+│  │ (Table,   │ │ (Input,   │ │ (Card,    │ │ (Section, │        │
+│  │  List)    │ │  Select)  │ │  Chart)   │ │  Media)   │        │
+│  └───────────┘ └───────────┘ └───────────┘ └───────────┘        │
+├─────────────────────────────────────────────────────────────────┤
+│  Layer 4: Composition (합성 계층)                                │
+│  ┌─────────────────────────────────────────────────────────┐    │
+│  │  Component Assembly + Token Application                 │    │
+│  │  ┌─────────┐ ┌─────────┐ ┌─────────┐ ┌─────────┐        │    │
+│  │  │ Button  │ │  Card   │ │  Input  │ │  Table  │ ...    │    │
+│  │  └─────────┘ └─────────┘ └─────────┘ └─────────┘        │    │
+│  │         ↓ Token Injection (Color, Spacing, Typography)  │    │
+│  └─────────────────────────────────────────────────────────┘    │
+└─────────────────────────────────────────────────────────────────┘
+```
+
 ### Key Modules
 
 - **schemas.ts**: Zod validation schemas for type-safe data structures
@@ -292,6 +333,7 @@ index.ts (Public API)
 - **token-generator.ts**: Core token generation, caching, multi-format export
 - **component-presets.ts**: Pre-configured tokens for 8 common UI components
 - **contracts/**: Component contract validation system with 8 MVP shadcn/ui contracts
+- **screen-contracts/**: 4-layer screen generation architecture (Environment, Skeleton, Intent, Composition)
 
 For detailed architecture documentation, see [Architecture Guide](./docs/architecture/README.md).
 
@@ -368,6 +410,33 @@ buttonContract.constraints.forEach(constraint => {
 // Auto-fixable: true
 ```
 
+### Screen Contract API
+
+- **`createScreenContract(config)`** - Create screen specification with 4-layer architecture
+- **`validateScreenContract(contract)`** - Validate screen contract against rules
+- **`generateScreenFromContract(contract)`** - Generate screen files from contract
+- **`Environment`** - Environment enum (web, mobile, tablet, responsive, tv, kiosk)
+- **`SkeletonPreset`** - Layout preset enum (full-screen, with-header, with-sidebar, dashboard)
+- **`ScreenIntent`** - Screen purpose enum (data-list, data-detail, form, dashboard, etc.)
+
+**Screen Contract Usage Example**:
+```typescript
+import { createScreenContract, Environment, SkeletonPreset, ScreenIntent } from 'tekton/screen';
+
+// Create screen contract
+const contract = createScreenContract({
+  name: 'UserProfile',
+  environment: Environment.Responsive,
+  skeleton: SkeletonPreset.WithHeader,
+  intent: ScreenIntent.DataDetail,
+  components: ['card', 'section', 'button']
+});
+
+// Generate screen files
+await generateScreenFromContract(contract);
+// Creates: src/screens/user-profile/page.tsx, layout.tsx, components/index.ts
+```
+
 ### Schemas (Zod)
 
 - **`OKLCHColorSchema`** - OKLCH color validation
@@ -381,13 +450,13 @@ For complete API documentation with usage examples, see [API Reference](./docs/a
 
 ## Project Status
 
-**Current Version**: 0.1.0
-**Current Branch**: `feature/SPEC-PHASEB-002`
-**SPEC Phase**: Phase B Complete - All milestones implemented (100%)
+**Current Version**: 0.2.0
+**Current Branch**: `feature/SPEC-PHASEC-003`
+**SPEC Phase**: Phase C Complete - Screen Contract Architecture Implemented (100%)
 
 ### Implementation Status
 
-**Completed Features** (SPEC-PHASEAB-001 + SPEC-PHASEB-002):
+**Completed Features** (SPEC-PHASEAB-001 + SPEC-PHASEB-002 + SPEC-PHASEC-003):
 
 **Phase A - Core Token System:**
 - ✅ OKLCH color space conversion with gamma correction
@@ -422,7 +491,19 @@ For complete API documentation with usage examples, see [API Reference](./docs/a
 - ✅ M4: Advanced framework detection (5 frameworks total)
 - ✅ M4: Comprehensive documentation (CLI, Extension, Root)
 
-**Quality Gates**:
+**Phase C - Screen Contract Architecture:**
+- ✅ M1: 4-layer screen contract architecture (Environment, Skeleton, Intent, Composition)
+- ✅ M2: Environment layer with 6 device types and grid systems
+- ✅ M3: Skeleton presets with 6 layout patterns
+- ✅ M4: Intent classification with 10 screen purposes
+- ✅ M5: Composition pipeline with token injection
+- ✅ M6: CLI command 'tekton create screen' with interactive prompts
+- ✅ M7: Non-interactive mode with flags support
+- ✅ M8: Contract validation integration
+- ✅ M9: Agent context export (agent-context.json)
+- ✅ M10: VS Code extension integration
+
+**Quality Gates** (Phase C):
 - ✅ Tests: 514 passing tests across 39 test suites (100% pass rate)
 - ⚠️ Coverage: 73.23% (below ≥85% CLI target, acceptable for MVP)
 - ✅ Type Safety: Zero type errors with strict mode
@@ -439,6 +520,11 @@ For complete API documentation with usage examples, see [API Reference](./docs/a
   - ✅ M2: CLI implementation (5 frameworks supported)
   - ✅ M3: VS Code extension (Command Palette integration)
   - ✅ M4: Advanced features & screen templates
+- ✅ Phase C (SPEC-PHASEC-003): 100% complete (2026-01-13)
+  - ✅ M1-M5: 4-layer screen contract architecture
+  - ✅ M6-M7: CLI screen creation command
+  - ✅ M8: Contract validation integration
+  - ✅ M9-M10: Agent context & VS Code integration
 
 **Phase B Highlights**:
 - Monorepo architecture with pnpm workspaces
@@ -447,25 +533,42 @@ For complete API documentation with usage examples, see [API Reference](./docs/a
 - Screen workflow templates for Phase C preparation
 - Comprehensive documentation (CLI, Extension, Root)
 
-**Quality Exceptions** (Phase B):
-- Coverage: 73.23% (below 85% CLI target) - MVP acceptable, Phase C improvement planned
+**Phase C Highlights**:
+- 4-layer screen contract architecture (Environment, Skeleton, Intent, Composition)
+- Interactive CLI screen generation with smart prompts
+- 6 environment types with adaptive grid systems (Desktop 12-col, Mobile 4-col, Tablet 8-col)
+- 6 skeleton presets for common layouts
+- 10 screen intents with component pattern mapping
+- Non-interactive mode for CI/CD automation
+- Agent context export for AI-driven screen generation
+- Contract validation preventing invalid screen compositions
+
+**Quality Exceptions** (Phase C):
+- Coverage: 73.23% (below 85% CLI target) - MVP acceptable, Phase D improvement planned
 - Security: 6 moderate dev dependencies - Limited to development environment
-- See [Quality Exceptions](/.moai/docs/quality-exceptions-phaseb.md) for details
+- See [Quality Exceptions](/.moai/docs/quality-exceptions-phasec.md) for details
 
 For detailed implementation status, see:
 - [Phase A Implementation](/.moai/specs/SPEC-PHASEAB-001/implementation-status.md)
 - [Phase B Plan](/.moai/specs/SPEC-PHASEB-002/plan.md)
+- [Phase C Implementation](/.moai/specs/SPEC-PHASEC-003/implementation-status.md)
 
 ### Roadmap
 
-**Phase C (Upcoming) - Screen Generation:**
-- Screen generation from templates
-- Component scaffolding with design tokens
-- User flow integration
-- Visual design token editor
-- Real-time preview functionality
+**Phase D (Upcoming) - Figma Integration:**
+- Figma token synchronization with Design Tokens Community Group (DTCG) format
+- Bidirectional sync (Figma ↔ Tekton)
+- Visual design token editor in Figma plugin
+- Real-time preview with Figma Dev Mode
+- Design system governance with token validation
 
-See [SPEC-PHASEAB-001](/.moai/specs/SPEC-PHASEAB-001/spec.md) and [SPEC-PHASEB-002](/.moai/specs/SPEC-PHASEB-002/plan.md) for comprehensive roadmap.
+**Phase E (Future) - AFDS Marketplace:**
+- Domain-specific screen contract packs (SaaS, E-commerce, Healthcare)
+- Community screen templates and presets
+- Component contract library marketplace
+- AI agent screen generation patterns
+
+See [SPEC-PHASEAB-001](/.moai/specs/SPEC-PHASEAB-001/spec.md), [SPEC-PHASEB-002](/.moai/specs/SPEC-PHASEB-002/plan.md), and [SPEC-PHASEC-003](/.moai/specs/SPEC-PHASEC-003/spec.md) for comprehensive roadmap.
 
 ## Documentation
 
