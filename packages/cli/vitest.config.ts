@@ -1,6 +1,12 @@
 import { defineConfig } from 'vitest/config';
+import path from 'path';
 
 export default defineConfig({
+  resolve: {
+    alias: {
+      '@tekton/contracts': path.resolve(__dirname, '../contracts/src/index.ts'),
+    },
+  },
   test: {
     globals: true,
     environment: 'node',
@@ -13,6 +19,8 @@ export default defineConfig({
         'src/index.ts',
         'src/**/*.d.ts',
         'src/**/types.ts',
+        // Exclude CLI command handlers (they have @istanbul ignore next)
+        'src/commands/*Command',
       ],
       // Exclude CLI command handlers (console.log, process.exit) from coverage
       // These are tested via integration tests
