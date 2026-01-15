@@ -192,15 +192,165 @@ export function usePagination(props: UsePaginationProps): UsePaginationReturn {
     ariaAttributes = {},
   } = props;
 
-  // TODO: Implement controlled/uncontrolled page state
-  // TODO: Calculate total pages from total and pageSize
-  // TODO: Generate page items array with pages, ellipsis, previous, next
-  // TODO: Implement page change handlers (next, previous, first, last, setPage)
-  // TODO: Calculate hasPrevious and hasNext
-  // TODO: Generate nav props with role="navigation"
-  // TODO: Generate page props with aria-current for current page
-  // TODO: Implement boundary and sibling logic for ellipsis
-  // TODO: Return prop generators and navigation functions
+  const [internalPage, setInternalPage] = useState(defaultPage);
+  const isControlled = controlledPage !== undefined;
+  const currentPage = isControlled ? controlledPage : internalPage;
 
-  throw new Error('usePagination: Implementation pending');
+  const totalPages = Math.ceil(total / pageSize);
+
+  const handlePageChange = useCallback(
+    (newPage: number) => {
+      if (disabled) return;
+
+      const clampedPage = Math.max(1, Math.min(newPage, totalPages));
+
+      if (!isControlled) {
+        setInternalPage(clampedPage);
+      }
+
+      if (onChange && clampedPage !== currentPage) {
+        onChange(clampedPage);
+      }
+    },
+    [disabled, isControlled, totalPages, onChange, currentPage]
+  );
+
+  const setPage = useCallback(
+    (page: number) => {
+      handlePageChange(page);
+    },
+    [handlePageChange]
+  );
+
+  const next = useCallback(() => {
+    handlePageChange(currentPage + 1);
+  }, [handlePageChange, currentPage]);
+
+  const previous = useCallback(() => {
+    handlePageChange(currentPage - 1);
+  }, [handlePageChange, currentPage]);
+
+  const first = useCallback(() => {
+    handlePageChange(1);
+  }, [handlePageChange]);
+
+  const last = useCallback(() => {
+    handlePageChange(totalPages);
+  }, [handlePageChange, totalPages]);
+
+  const hasPrevious = currentPage > 1;
+  const hasNext = currentPage < totalPages;
+
+  const items = useMemo(() => {
+    const items: PageItem[] = [];
+
+    items.push({ type: 'previous', value: 'previous' });
+
+    const range = (start: number, end: number) => {
+      const result: number[] = [];
+      for (let i = start; i <= end; i++) {
+        result.push(i);
+      }
+      return result;
+    };
+
+    const leftBoundary = range(1, Math.min(boundaries, totalPages));
+    const rightBoundary = range(
+      Math.max(totalPages - boundaries + 1, boundaries + 1),
+      totalPages
+    );
+    const siblingsStart = Math.max(currentPage - siblings, boundaries + 1);
+    const siblingsEnd = Math.min(currentPage + siblings, totalPages - boundaries);
+
+    const pages = new Set<number>([
+      ...leftBoundary,
+      ...range(siblingsStart, siblingsEnd),
+      ...rightBoundary,
+    ]);
+
+    const sortedPages = Array.from(pages).sort((a, b) => a - b);
+
+    sortedPages.forEach((page, index) => {
+      if (index > 0 && sortedPages[index - 1] !== page - 1) {
+        items.push({ type: 'ellipsis', value: '...' });
+      }
+      items.push({ type: 'page', value: page });
+    });
+
+    items.push({ type: 'next', value: 'next' });
+
+    return items;
+  }, [currentPage, totalPages, siblings, boundaries]);
+
+  const navProps = {
+    role: 'navigation' as const,
+    'aria-label': ariaLabel,
+    ...generateAriaProps(ariaAttributes),
+  };
+
+  const getPageProps = useCallback(
+    (item: PageItem) => {
+      const isCurrentPage = item.type === 'page' && item.value === currentPage;
+      const isPreviousDisabled = item.type === 'previous' && !hasPrevious;
+      const isNextDisabled = item.type === 'next' && !hasNext;
+      const isDisabled = disabled || isPreviousDisabled || isNextDisabled;
+
+      let ariaLabelText = '';
+      if (item.type === 'page') {
+        ariaLabelText = `Page ${item.value}`;
+      } else if (item.type === 'previous') {
+        ariaLabelText = 'Previous page';
+      } else if (item.type === 'next') {
+        ariaLabelText = 'Next page';
+      }
+
+      const props: {
+        'aria-current'?: 'page';
+        'aria-disabled'?: boolean;
+        'aria-label': string;
+        onClick: () => void;
+        disabled: boolean;
+      } = {
+        'aria-label': ariaLabelText,
+        onClick: () => {
+          if (isDisabled) return;
+
+          if (item.type === 'page') {
+            handlePageChange(item.value);
+          } else if (item.type === 'previous') {
+            previous();
+          } else if (item.type === 'next') {
+            next();
+          }
+        },
+        disabled: isDisabled,
+      };
+
+      if (isCurrentPage) {
+        props['aria-current'] = 'page';
+      }
+
+      if (isDisabled) {
+        props['aria-disabled'] = true;
+      }
+
+      return props;
+    },
+    [currentPage, hasPrevious, hasNext, disabled, handlePageChange, previous, next]
+  );
+
+  return {
+    navProps,
+    getPageProps,
+    items,
+    currentPage,
+    totalPages,
+    hasPrevious,
+    hasNext,
+    setPage,
+    next,
+    previous,
+    first,
+    last,
+  };
 }

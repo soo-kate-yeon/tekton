@@ -158,7 +158,7 @@ export interface UseSliderReturn {
 export function useSlider(props: UseSliderProps = {}): UseSliderReturn {
   const {
     value: controlledValue,
-    defaultValue = 0,
+    defaultValue,
     onChange,
     min = 0,
     max = 100,
@@ -170,15 +170,115 @@ export function useSlider(props: UseSliderProps = {}): UseSliderReturn {
     ariaAttributes = {},
   } = props;
 
-  // TODO: Implement controlled/uncontrolled state management
-  // TODO: Implement keyboard handlers (Arrow keys, Home, End, PageUp, PageDown)
-  // TODO: Implement increment/decrement with bounds checking
-  // TODO: Calculate percentage based on current value
-  // TODO: Generate unique ID
-  // TODO: Generate ARIA props with role=slider
-  // TODO: Clamp value within min/max bounds
-  // TODO: Handle step increments
-  // TODO: Return thumb and track props with event handlers
+  const clamp = useCallback(
+    (value: number) => Math.max(min, Math.min(max, value)),
+    [min, max]
+  );
 
-  throw new Error('useSlider: Implementation pending');
+  const initialValue = clamp(defaultValue !== undefined ? defaultValue : min);
+  const [internalValue, setInternalValue] = useState(initialValue);
+  const isControlled = controlledValue !== undefined;
+  const value = isControlled ? clamp(controlledValue) : internalValue;
+
+  const id = useUniqueId(customId);
+
+  const handleValueChange = useCallback(
+    (newValue: number) => {
+      if (disabled) return;
+
+      const clampedValue = clamp(newValue);
+
+      if (!isControlled) {
+        setInternalValue(clampedValue);
+      }
+
+      if (onChange && clampedValue !== value) {
+        onChange(clampedValue);
+      }
+    },
+    [disabled, isControlled, clamp, onChange, value]
+  );
+
+  const setValue = useCallback(
+    (newValue: number) => {
+      handleValueChange(newValue);
+    },
+    [handleValueChange]
+  );
+
+  const increment = useCallback(() => {
+    handleValueChange(value + step);
+  }, [handleValueChange, value, step]);
+
+  const decrement = useCallback(() => {
+    handleValueChange(value - step);
+  }, [handleValueChange, value, step]);
+
+  const percentage = ((value - min) / (max - min)) * 100;
+
+  const handleKeyDown = useCallback(
+    (event: KeyboardEvent) => {
+      if (disabled) return;
+
+      const largeStep = step * 10;
+
+      switch (event.key) {
+        case 'ArrowUp':
+        case 'ArrowRight':
+          event.preventDefault();
+          increment();
+          break;
+        case 'ArrowDown':
+        case 'ArrowLeft':
+          event.preventDefault();
+          decrement();
+          break;
+        case 'Home':
+          event.preventDefault();
+          handleValueChange(min);
+          break;
+        case 'End':
+          event.preventDefault();
+          handleValueChange(max);
+          break;
+        case 'PageUp':
+          event.preventDefault();
+          handleValueChange(value + largeStep);
+          break;
+        case 'PageDown':
+          event.preventDefault();
+          handleValueChange(value - largeStep);
+          break;
+      }
+    },
+    [disabled, increment, decrement, handleValueChange, min, max, value, step]
+  );
+
+  const thumbProps = {
+    id,
+    role: 'slider' as const,
+    tabIndex: 0,
+    'aria-valuemin': min,
+    'aria-valuemax': max,
+    'aria-valuenow': value,
+    'aria-orientation': orientation,
+    ...(disabled && { 'aria-disabled': true }),
+    ...(ariaLabel && { 'aria-label': ariaLabel }),
+    ...generateAriaProps(ariaAttributes),
+    onKeyDown: handleKeyDown,
+  };
+
+  const trackProps = {
+    'aria-hidden': true as const,
+  };
+
+  return {
+    thumbProps,
+    trackProps,
+    value,
+    percentage,
+    setValue,
+    increment,
+    decrement,
+  };
 }

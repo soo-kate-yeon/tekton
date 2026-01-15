@@ -129,11 +129,50 @@ export function useBreadcrumb(props: UseBreadcrumbProps): UseBreadcrumbReturn {
     ariaAttributes = {},
   } = props;
 
-  // TODO: Implement navigation handler
-  // TODO: Generate nav props with aria-label="Breadcrumb"
-  // TODO: Generate list props with role="list"
-  // TODO: Generate item props with aria-current="page" for current item
-  // TODO: Return prop generators and item count
+  const id = useUniqueId(customId);
 
-  throw new Error('useBreadcrumb: Implementation pending');
+  const handleNavigate = useCallback(
+    (item: BreadcrumbItem, index: number) => {
+      if (onNavigate) {
+        onNavigate(item, index);
+      }
+    },
+    [onNavigate]
+  );
+
+  const navProps = {
+    'aria-label': ariaLabel,
+    ...generateAriaProps(ariaAttributes),
+  };
+
+  const listProps = {
+    role: 'list' as const,
+  };
+
+  const getItemProps = useCallback(
+    (item: BreadcrumbItem, index: number) => {
+      const props: {
+        'aria-current'?: 'page';
+        onClick?: () => void;
+      } = {};
+
+      if (item.isCurrent) {
+        props['aria-current'] = 'page';
+      }
+
+      if (onNavigate) {
+        props.onClick = () => handleNavigate(item, index);
+      }
+
+      return props;
+    },
+    [onNavigate, handleNavigate]
+  );
+
+  return {
+    navProps,
+    listProps,
+    getItemProps,
+    itemCount: items.length,
+  };
 }
