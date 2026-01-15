@@ -131,14 +131,128 @@ export interface UsePopoverReturn {
  * ```
  */
 export function usePopover(props: UsePopoverProps = {}): UsePopoverReturn {
-  // TODO: Implement open state management
-  // TODO: Implement click trigger
-  // TODO: Implement hover trigger
-  // TODO: Implement focus trigger
-  // TODO: Implement click outside detection
-  // TODO: Implement Escape key handling
-  // TODO: Generate unique IDs
-  // TODO: Return trigger and popover props
+  const {
+    isOpen: controlledIsOpen,
+    defaultOpen = false,
+    onOpenChange,
+    trigger = 'click',
+    closeOnClickOutside = true,
+    closeOnEscape = true,
+    placement = 'bottom',
+    id: customId,
+  } = props;
 
-  throw new Error('usePopover: Implementation pending');
+  // Determine if component is controlled
+  const isControlled = controlledIsOpen !== undefined;
+
+  // Internal open state (for uncontrolled mode)
+  const [internalIsOpen, setInternalIsOpen] = useState(defaultOpen);
+
+  // Use controlled state if provided, otherwise use internal state
+  const isOpen = isControlled ? controlledIsOpen : internalIsOpen;
+
+  // Generate unique ID for popover
+  const popoverId = useUniqueId(customId, 'popover');
+
+  // Update state and call onChange
+  const updateIsOpen = useCallback(
+    (newIsOpen: boolean) => {
+      if (!isControlled) {
+        setInternalIsOpen(newIsOpen);
+      }
+      onOpenChange?.(newIsOpen);
+    },
+    [isControlled, onOpenChange]
+  );
+
+  // Open popover
+  const open = useCallback(() => {
+    updateIsOpen(true);
+  }, [updateIsOpen]);
+
+  // Close popover
+  const close = useCallback(() => {
+    updateIsOpen(false);
+  }, [updateIsOpen]);
+
+  // Toggle popover
+  const toggle = useCallback(() => {
+    updateIsOpen(!isOpen);
+  }, [isOpen, updateIsOpen]);
+
+  // Handle click trigger
+  const handleClick = useCallback(() => {
+    if (trigger === 'click') {
+      toggle();
+    }
+  }, [trigger, toggle]);
+
+  // Handle mouse enter
+  const handleMouseEnter = useCallback(() => {
+    if (trigger === 'hover') {
+      open();
+    }
+  }, [trigger, open]);
+
+  // Handle mouse leave
+  const handleMouseLeave = useCallback(() => {
+    if (trigger === 'hover') {
+      close();
+    }
+  }, [trigger, close]);
+
+  // Handle focus
+  const handleFocus = useCallback(() => {
+    if (trigger === 'focus') {
+      open();
+    }
+  }, [trigger, open]);
+
+  // Handle blur
+  const handleBlur = useCallback(() => {
+    if (trigger === 'focus') {
+      close();
+    }
+  }, [trigger, close]);
+
+  // Handle keyboard events
+  const handleKeyDown = useCallback(
+    (event: KeyboardEvent) => {
+      if (closeOnEscape && isKeyboardKey(event, 'Escape')) {
+        event.preventDefault();
+        close();
+      }
+    },
+    [closeOnEscape, close]
+  );
+
+  // Build trigger props based on trigger mode
+  const triggerProps: UsePopoverReturn['triggerProps'] = {
+    'aria-expanded': isOpen,
+    'aria-controls': popoverId,
+    'aria-haspopup': true,
+  };
+
+  if (trigger === 'click') {
+    triggerProps.onClick = handleClick;
+  } else if (trigger === 'hover') {
+    triggerProps.onMouseEnter = handleMouseEnter;
+    triggerProps.onMouseLeave = handleMouseLeave;
+  } else if (trigger === 'focus') {
+    triggerProps.onFocus = handleFocus;
+    triggerProps.onBlur = handleBlur;
+  }
+
+  return {
+    triggerProps,
+    popoverProps: {
+      id: popoverId,
+      role: 'dialog',
+      onKeyDown: handleKeyDown,
+    },
+    isOpen,
+    open,
+    close,
+    toggle,
+  };
 }

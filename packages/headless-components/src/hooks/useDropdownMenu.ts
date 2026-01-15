@@ -158,14 +158,196 @@ export interface UseDropdownMenuReturn {
  * ```
  */
 export function useDropdownMenu(props: UseDropdownMenuProps): UseDropdownMenuReturn {
-  // TODO: Implement open state
-  // TODO: Implement highlighted index for navigation
-  // TODO: Implement Arrow Up/Down navigation
-  // TODO: Implement Enter/Space selection
-  // TODO: Implement Escape to close
-  // TODO: Implement Home/End keys
-  // TODO: Generate unique IDs
-  // TODO: Return trigger, menu, and item props
+  const {
+    items,
+    isOpen: controlledIsOpen,
+    defaultOpen = false,
+    onOpenChange,
+    closeOnSelect = true,
+    id: customId,
+    ariaLabel,
+  } = props;
 
-  throw new Error('useDropdownMenu: Implementation pending');
+  // Determine if component is controlled
+  const isControlled = controlledIsOpen !== undefined;
+
+  // Internal open state (for uncontrolled mode)
+  const [internalIsOpen, setInternalIsOpen] = useState(defaultOpen);
+
+  // Highlighted item index for keyboard navigation
+  const [highlightedIndex, setHighlightedIndex] = useState(-1);
+
+  // Use controlled state if provided, otherwise use internal state
+  const isOpen = isControlled ? controlledIsOpen : internalIsOpen;
+
+  // Generate unique ID for menu
+  const menuId = useUniqueId(customId, 'menu');
+
+  // Update state and call onChange
+  const updateIsOpen = useCallback(
+    (newIsOpen: boolean) => {
+      if (!isControlled) {
+        setInternalIsOpen(newIsOpen);
+      }
+      onOpenChange?.(newIsOpen);
+
+      // Reset highlighted index when closing
+      if (!newIsOpen) {
+        setHighlightedIndex(-1);
+      }
+    },
+    [isControlled, onOpenChange]
+  );
+
+  // Open menu
+  const open = useCallback(() => {
+    updateIsOpen(true);
+  }, [updateIsOpen]);
+
+  // Close menu
+  const close = useCallback(() => {
+    updateIsOpen(false);
+  }, [updateIsOpen]);
+
+  // Toggle menu
+  const toggle = useCallback(() => {
+    updateIsOpen(!isOpen);
+  }, [isOpen, updateIsOpen]);
+
+  // Find next non-disabled item index
+  const findNextEnabledIndex = useCallback(
+    (startIndex: number, direction: 1 | -1): number => {
+      let index = startIndex;
+      const itemCount = items.length;
+
+      for (let i = 0; i < itemCount; i++) {
+        index = (index + direction + itemCount) % itemCount;
+        if (!items[index].disabled) {
+          return index;
+        }
+      }
+
+      return startIndex; // No enabled items found
+    },
+    [items]
+  );
+
+  // Handle menu keyboard navigation
+  const handleMenuKeyDown = useCallback(
+    (event: KeyboardEvent) => {
+      if (isKeyboardKey(event, 'Escape')) {
+        event.preventDefault();
+        close();
+        return;
+      }
+
+      if (isKeyboardKey(event, 'ArrowDown')) {
+        event.preventDefault();
+        setHighlightedIndex((current) => {
+          if (current === -1) {
+            return findNextEnabledIndex(-1, 1);
+          }
+          return findNextEnabledIndex(current, 1);
+        });
+        return;
+      }
+
+      if (isKeyboardKey(event, 'ArrowUp')) {
+        event.preventDefault();
+        setHighlightedIndex((current) => {
+          if (current === -1) {
+            return findNextEnabledIndex(items.length, -1);
+          }
+          return findNextEnabledIndex(current, -1);
+        });
+        return;
+      }
+
+      if (isKeyboardKey(event, 'Home')) {
+        event.preventDefault();
+        const firstEnabled = findNextEnabledIndex(-1, 1);
+        setHighlightedIndex(firstEnabled);
+        return;
+      }
+
+      if (isKeyboardKey(event, 'End')) {
+        event.preventDefault();
+        const lastEnabled = findNextEnabledIndex(items.length, -1);
+        setHighlightedIndex(lastEnabled);
+        return;
+      }
+
+      if (isKeyboardKey(event, ['Enter', ' '])) {
+        event.preventDefault();
+        if (highlightedIndex >= 0 && highlightedIndex < items.length) {
+          const item = items[highlightedIndex];
+          if (!item.disabled) {
+            item.onClick?.();
+            if (closeOnSelect) {
+              close();
+            }
+          }
+        }
+        return;
+      }
+    },
+    [highlightedIndex, items, close, closeOnSelect, findNextEnabledIndex]
+  );
+
+  // Handle trigger keyboard events
+  const handleTriggerKeyDown = useCallback(
+    (event: KeyboardEvent) => {
+      if (isKeyboardKey(event, 'Escape')) {
+        event.preventDefault();
+        close();
+        return;
+      }
+    },
+    [close]
+  );
+
+  // Get item props
+  const getItemProps = useCallback(
+    (item: MenuItem, index: number) => {
+      const handleItemClick = () => {
+        if (item.disabled) return;
+        item.onClick?.();
+        if (closeOnSelect) {
+          close();
+        }
+      };
+
+      return {
+        id: item.id,
+        role: 'menuitem' as const,
+        'aria-disabled': item.disabled ? true : undefined,
+        tabIndex: -1,
+        onClick: handleItemClick,
+      };
+    },
+    [close, closeOnSelect]
+  );
+
+  return {
+    triggerProps: {
+      'aria-expanded': isOpen,
+      'aria-haspopup': 'menu' as const,
+      'aria-controls': menuId,
+      onClick: toggle,
+      onKeyDown: handleTriggerKeyDown,
+    },
+    menuProps: {
+      id: menuId,
+      role: 'menu',
+      'aria-label': ariaLabel,
+      'aria-activedescendant': highlightedIndex >= 0 ? items[highlightedIndex]?.id : undefined,
+      onKeyDown: handleMenuKeyDown,
+    },
+    getItemProps,
+    isOpen,
+    highlightedIndex,
+    open,
+    close,
+    toggle,
+  };
 }

@@ -117,13 +117,44 @@ export function useAlert(props: UseAlertProps = {}): UseAlertReturn {
     ariaAttributes = {},
   } = props;
 
-  // TODO: Implement dismiss handler
-  // TODO: Generate unique ID
-  // TODO: Set role based on variant (alert for error/warning, status for info/success)
-  // TODO: Set aria-live based on variant (assertive for error/warning, polite for info/success)
-  // TODO: Generate alert props with proper ARIA attributes
-  // TODO: Generate dismiss button props
-  // TODO: Return alert props and dismiss function
+  // Generate unique ID for alert
+  const alertId = useUniqueId(customId, 'alert');
 
-  throw new Error('useAlert: Implementation pending');
+  // Determine role based on variant
+  // error/warning use "alert" for immediate attention
+  // info/success use "status" for less urgent updates
+  const role: 'alert' | 'status' = variant === 'error' || variant === 'warning' ? 'alert' : 'status';
+
+  // Determine aria-live based on variant
+  // error/warning use "assertive" for immediate announcement
+  // info/success use "polite" for non-interrupting announcement
+  const ariaLive: 'polite' | 'assertive' = variant === 'error' || variant === 'warning' ? 'assertive' : 'polite';
+
+  // Dismiss handler
+  const dismiss = useCallback(() => {
+    onDismiss?.();
+  }, [onDismiss]);
+
+  // Alert props with ARIA attributes
+  const alertProps = {
+    id: alertId,
+    role,
+    'aria-live': ariaLive,
+    'aria-atomic': true as const,
+    'aria-label': ariaLabel,
+    ...ariaAttributes,
+  };
+
+  // Dismiss button props
+  const dismissButtonProps = {
+    'aria-label': 'Dismiss alert',
+    onClick: dismiss,
+  };
+
+  return {
+    alertProps,
+    dismissButtonProps,
+    variant,
+    dismiss,
+  };
 }

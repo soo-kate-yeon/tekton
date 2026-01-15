@@ -106,13 +106,130 @@ export interface UseTooltipReturn {
  * ```
  */
 export function useTooltip(props: UseTooltipProps = {}): UseTooltipReturn {
-  // TODO: Implement visibility state
-  // TODO: Implement show/hide with delays
-  // TODO: Handle mouse enter/leave events
-  // TODO: Handle focus/blur events
-  // TODO: Generate unique ID for tooltip
-  // TODO: Link trigger to tooltip with aria-describedby
-  // TODO: Return trigger and tooltip props
+  const {
+    showDelay = 0,
+    hideDelay = 0,
+    placement = 'top',
+    disabled = false,
+    id: customId,
+  } = props;
 
-  throw new Error('useTooltip: Implementation pending');
+  // State
+  const [isVisible, setIsVisible] = useState(false);
+
+  // Timers
+  const showTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const hideTimerRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Generate unique ID for tooltip
+  const tooltipId = useUniqueId(customId, 'tooltip');
+
+  // Clear timers on unmount
+  useEffect(() => {
+    return () => {
+      if (showTimerRef.current) clearTimeout(showTimerRef.current);
+      if (hideTimerRef.current) clearTimeout(hideTimerRef.current);
+    };
+  }, []);
+
+  // Show tooltip
+  const show = useCallback(() => {
+    if (disabled) return;
+
+    // Clear any pending hide timer
+    if (hideTimerRef.current) {
+      clearTimeout(hideTimerRef.current);
+      hideTimerRef.current = null;
+    }
+
+    setIsVisible(true);
+  }, [disabled]);
+
+  // Hide tooltip
+  const hide = useCallback(() => {
+    // Clear any pending show timer
+    if (showTimerRef.current) {
+      clearTimeout(showTimerRef.current);
+      showTimerRef.current = null;
+    }
+
+    setIsVisible(false);
+  }, []);
+
+  // Handle mouse enter with delay
+  const handleMouseEnter = useCallback(() => {
+    if (disabled) return;
+
+    // Clear any pending hide timer
+    if (hideTimerRef.current) {
+      clearTimeout(hideTimerRef.current);
+      hideTimerRef.current = null;
+    }
+
+    if (showDelay > 0) {
+      showTimerRef.current = setTimeout(() => {
+        setIsVisible(true);
+      }, showDelay);
+    } else {
+      setIsVisible(true);
+    }
+  }, [disabled, showDelay]);
+
+  // Handle mouse leave with delay
+  const handleMouseLeave = useCallback(() => {
+    // Clear any pending show timer
+    if (showTimerRef.current) {
+      clearTimeout(showTimerRef.current);
+      showTimerRef.current = null;
+    }
+
+    if (hideDelay > 0) {
+      hideTimerRef.current = setTimeout(() => {
+        setIsVisible(false);
+      }, hideDelay);
+    } else {
+      setIsVisible(false);
+    }
+  }, [hideDelay]);
+
+  // Handle focus (show immediately)
+  const handleFocus = useCallback(() => {
+    if (disabled) return;
+
+    // Clear any pending hide timer
+    if (hideTimerRef.current) {
+      clearTimeout(hideTimerRef.current);
+      hideTimerRef.current = null;
+    }
+
+    setIsVisible(true);
+  }, [disabled]);
+
+  // Handle blur (hide immediately)
+  const handleBlur = useCallback(() => {
+    // Clear any pending show timer
+    if (showTimerRef.current) {
+      clearTimeout(showTimerRef.current);
+      showTimerRef.current = null;
+    }
+
+    setIsVisible(false);
+  }, []);
+
+  return {
+    triggerProps: {
+      'aria-describedby': tooltipId,
+      onMouseEnter: handleMouseEnter,
+      onMouseLeave: handleMouseLeave,
+      onFocus: handleFocus,
+      onBlur: handleBlur,
+    },
+    tooltipProps: {
+      id: tooltipId,
+      role: 'tooltip',
+    },
+    isVisible,
+    show,
+    hide,
+  };
 }

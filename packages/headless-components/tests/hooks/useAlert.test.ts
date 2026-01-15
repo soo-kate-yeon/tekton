@@ -9,89 +9,158 @@ describe('useAlert', () => {
 
   describe('Initialization', () => {
     it('should default to info variant', () => {
-      // TODO: Implement test
+      const { result } = renderHook(() => useAlert());
+      expect(result.current.variant).toBe('info');
     });
 
     it('should accept custom variant', () => {
-      // TODO: Implement test
+      const { result } = renderHook(() => useAlert({ variant: 'success' }));
+      expect(result.current.variant).toBe('success');
     });
 
     it('should generate unique ID', () => {
-      // TODO: Implement test
+      const { result: result1 } = renderHook(() => useAlert());
+      const { result: result2 } = renderHook(() => useAlert());
+
+      expect(result1.current.alertProps.id).toBeTruthy();
+      expect(result2.current.alertProps.id).toBeTruthy();
+      expect(result1.current.alertProps.id).not.toBe(result2.current.alertProps.id);
+    });
+
+    it('should use custom ID when provided', () => {
+      const { result } = renderHook(() => useAlert({ id: 'custom-alert' }));
+      expect(result.current.alertProps.id).toBe('custom-alert');
     });
   });
 
   describe('Variants', () => {
     it('should support info variant', () => {
-      // TODO: Implement test
+      const { result } = renderHook(() => useAlert({ variant: 'info' }));
+      expect(result.current.variant).toBe('info');
+      expect(result.current.alertProps.role).toBe('status');
+      expect(result.current.alertProps['aria-live']).toBe('polite');
     });
 
     it('should support success variant', () => {
-      // TODO: Implement test
+      const { result } = renderHook(() => useAlert({ variant: 'success' }));
+      expect(result.current.variant).toBe('success');
+      expect(result.current.alertProps.role).toBe('status');
+      expect(result.current.alertProps['aria-live']).toBe('polite');
     });
 
     it('should support warning variant', () => {
-      // TODO: Implement test
+      const { result } = renderHook(() => useAlert({ variant: 'warning' }));
+      expect(result.current.variant).toBe('warning');
+      expect(result.current.alertProps.role).toBe('alert');
+      expect(result.current.alertProps['aria-live']).toBe('assertive');
     });
 
     it('should support error variant', () => {
-      // TODO: Implement test
+      const { result } = renderHook(() => useAlert({ variant: 'error' }));
+      expect(result.current.variant).toBe('error');
+      expect(result.current.alertProps.role).toBe('alert');
+      expect(result.current.alertProps['aria-live']).toBe('assertive');
     });
   });
 
   describe('Dismissible', () => {
     it('should call onDismiss when dismiss button clicked', () => {
-      // TODO: Implement test
+      const onDismiss = vi.fn();
+      const { result } = renderHook(() => useAlert({ dismissible: true, onDismiss }));
+
+      act(() => {
+        result.current.dismissButtonProps.onClick();
+      });
+
+      expect(onDismiss).toHaveBeenCalledTimes(1);
     });
 
-    it('should provide dismiss button props when dismissible=true', () => {
-      // TODO: Implement test
+    it('should call dismiss method', () => {
+      const onDismiss = vi.fn();
+      const { result } = renderHook(() => useAlert({ onDismiss }));
+
+      act(() => {
+        result.current.dismiss();
+      });
+
+      expect(onDismiss).toHaveBeenCalledTimes(1);
     });
 
     it('should have aria-label on dismiss button', () => {
-      // TODO: Implement test
+      const { result } = renderHook(() => useAlert({ dismissible: true }));
+      expect(result.current.dismissButtonProps['aria-label']).toBe('Dismiss alert');
     });
   });
 
   describe('ARIA Attributes', () => {
     it('should set role="alert" for error variant', () => {
-      // TODO: Implement test
+      const { result } = renderHook(() => useAlert({ variant: 'error' }));
+      expect(result.current.alertProps.role).toBe('alert');
     });
 
     it('should set role="alert" for warning variant', () => {
-      // TODO: Implement test
+      const { result } = renderHook(() => useAlert({ variant: 'warning' }));
+      expect(result.current.alertProps.role).toBe('alert');
     });
 
     it('should set role="status" for info variant', () => {
-      // TODO: Implement test
+      const { result } = renderHook(() => useAlert({ variant: 'info' }));
+      expect(result.current.alertProps.role).toBe('status');
     });
 
     it('should set role="status" for success variant', () => {
-      // TODO: Implement test
+      const { result } = renderHook(() => useAlert({ variant: 'success' }));
+      expect(result.current.alertProps.role).toBe('status');
     });
 
     it('should set aria-live="assertive" for error', () => {
-      // TODO: Implement test
+      const { result } = renderHook(() => useAlert({ variant: 'error' }));
+      expect(result.current.alertProps['aria-live']).toBe('assertive');
     });
 
     it('should set aria-live="assertive" for warning', () => {
-      // TODO: Implement test
+      const { result } = renderHook(() => useAlert({ variant: 'warning' }));
+      expect(result.current.alertProps['aria-live']).toBe('assertive');
     });
 
     it('should set aria-live="polite" for info', () => {
-      // TODO: Implement test
+      const { result } = renderHook(() => useAlert({ variant: 'info' }));
+      expect(result.current.alertProps['aria-live']).toBe('polite');
     });
 
     it('should set aria-live="polite" for success', () => {
-      // TODO: Implement test
+      const { result } = renderHook(() => useAlert({ variant: 'success' }));
+      expect(result.current.alertProps['aria-live']).toBe('polite');
     });
 
     it('should set aria-atomic=true', () => {
-      // TODO: Implement test
+      const { result } = renderHook(() => useAlert());
+      expect(result.current.alertProps['aria-atomic']).toBe(true);
     });
 
     it('should include aria-label when provided', () => {
-      // TODO: Implement test
+      const { result } = renderHook(() => useAlert({ ariaLabel: 'Custom alert' }));
+      expect(result.current.alertProps['aria-label']).toBe('Custom alert');
+    });
+
+    it('should include additional aria attributes', () => {
+      const { result } = renderHook(() =>
+        useAlert({ ariaAttributes: { 'aria-describedby': 'desc-1' } })
+      );
+      expect(result.current.alertProps['aria-describedby']).toBe('desc-1');
+    });
+  });
+
+  describe('Programmatic Control', () => {
+    it('should allow programmatic dismissal', () => {
+      const onDismiss = vi.fn();
+      const { result } = renderHook(() => useAlert({ onDismiss }));
+
+      act(() => {
+        result.current.dismiss();
+      });
+
+      expect(onDismiss).toHaveBeenCalled();
     });
   });
 });
