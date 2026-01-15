@@ -66,9 +66,20 @@ Automatic dark theme generation with semantic token mapping:
 - **Semantic Preservation**: Maintains meaningful color relationships
 - **Configurable**: Enable/disable dark mode generation per project
 
-### Brand DNA MCP Integration
+### Curated Presets System (NEW)
 
-AI-powered design personality system with axis-based token generation:
+Modern preset management system replacing legacy Brand DNA:
+
+- **Systematic Management**: PostgreSQL-backed preset storage with JSONB metadata
+- **Category Filtering**: Organize presets by Brand, Product, Campaign categories
+- **Tag-Based Search**: Fast GIN-indexed tag searching for preset discovery
+- **MCP-Powered Suggestions**: Intelligent preset recommendations via studio-mcp
+- **RESTful API**: v2 API with pagination, filtering, and search capabilities
+- **High Test Coverage**: 85.23% coverage with 54 passing tests
+
+### Brand DNA MCP Integration (Legacy - Deprecated)
+
+AI-powered design personality system (deprecated in favor of Curated Presets):
 
 - **5 Personality Axes**: Density, Warmth, Playfulness, Sophistication, Energy
 - **Axis Interpreter**: Converts 0-1 values to design token characteristics
@@ -76,6 +87,7 @@ AI-powered design personality system with axis-based token generation:
 - **Schema Validation**: Runtime type safety with Zod validation
 - **Preset Library**: 3 pre-configured brand personalities
 - **MCP Ready**: Model Context Protocol integration for AI assistants
+- ⚠️ **Status**: Deprecated as of 2026-01-15, migrating to Curated Presets
 
 ### Production Ready
 
@@ -559,6 +571,12 @@ For complete API documentation with usage examples, see [API Reference](./docs/a
   - ✅ Design token type system
   - ✅ Preset library
   - ✅ Complete API documentation
+- ✅ Phase E (SPEC-STUDIO-002): 85.23% complete (2026-01-15)
+  - ✅ Phase 1: Brand DNA cleanup (deprecation, archive, read-only mode)
+  - ✅ Phase 2: Curated Presets core build (database, API, frontend, MCP)
+  - ✅ 54 passing tests, 85.23% coverage
+  - ✅ FastAPI backend with PostgreSQL and Alembic migrations
+  - ⏳ Phase 3: Custom Image Flow (deferred to 1 month post-Phase 2)
 
 **Phase B Highlights**:
 - Monorepo architecture with pnpm workspaces
