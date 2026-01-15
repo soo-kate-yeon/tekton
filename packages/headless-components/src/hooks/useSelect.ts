@@ -1,7 +1,7 @@
-import { useState, useCallback, KeyboardEvent, useRef } from 'react';
+import { useState, useCallback, KeyboardEvent, useMemo } from 'react';
 import type { AriaAttributes } from '../types';
 import { generateAriaProps } from '../utils/aria';
-import { isKeyboardKey, handleKeyboardEvent } from '../utils/keyboard';
+import { createKeyboardHandler } from '../utils/keyboard';
 import { useUniqueId } from '../utils/id';
 
 /**
@@ -206,17 +206,274 @@ export function useSelect(props: UseSelectProps): UseSelectReturn {
     ariaAttributes = {},
   } = props;
 
-  // TODO: Implement controlled/uncontrolled state management
-  // TODO: Implement open/close state
-  // TODO: Implement highlighted index for keyboard navigation
-  // TODO: Implement Arrow Up/Down navigation
-  // TODO: Implement Enter/Space to select
-  // TODO: Implement Escape to close
-  // TODO: Implement Home/End key support
-  // TODO: Generate unique IDs for trigger, listbox, and options
-  // TODO: Calculate aria-activedescendant based on highlightedIndex
-  // TODO: Generate ARIA props for trigger (role=combobox, aria-expanded)
-  // TODO: Return trigger, listbox, and option prop generators
+  // Generate unique IDs
+  const triggerId = useUniqueId(customId);
+  const listboxId = `${triggerId}-listbox`;
 
-  throw new Error('useSelect: Implementation pending');
+  // Determine if component is controlled
+  const isControlled = controlledValue !== undefined;
+
+  // State management
+  const [internalValue, setInternalValue] = useState(() => {
+    // Validate defaultValue is in options
+    const validOption = options.find((opt) => opt.value === defaultValue);
+    return validOption ? defaultValue : '';
+  });
+  const [isOpen, setIsOpen] = useState(false);
+  const [highlightedIndex, setHighlightedIndex] = useState(-1);
+
+  // Use controlled value if provided, otherwise use internal state
+  const value = isControlled ? controlledValue : internalValue;
+
+  // Find selected option
+  const selectedOption = useMemo(
+    () => options.find((opt) => opt.value === value) || null,
+    [options, value]
+  );
+
+  // Open/close handlers
+  const open = useCallback(() => {
+    if (!disabled) {
+      setIsOpen(true);
+      // Reset highlighted index to -1 (no highlight initially)
+      setHighlightedIndex(-1);
+    }
+  }, [disabled]);
+
+  const close = useCallback(() => {
+    setIsOpen(false);
+    setHighlightedIndex(-1);
+  }, []);
+
+  const toggle = useCallback(() => {
+    if (isOpen) {
+      close();
+    } else {
+      open();
+    }
+  }, [isOpen, open, close]);
+
+  // Select option handler
+  const selectOption = useCallback(
+    (optionValue: string) => {
+      const option = options.find((opt) => opt.value === optionValue);
+      if (!option || option.disabled) return;
+
+      // Update value
+      if (!isControlled) {
+        setInternalValue(optionValue);
+      }
+
+      // Call onChange callback
+      onChange?.(optionValue);
+
+      // Close dropdown
+      close();
+    },
+    [options, isControlled, onChange, close]
+  );
+
+  // Find next non-disabled option index
+  const findNextEnabledIndex = useCallback(
+    (currentIndex: number, direction: 1 | -1): number => {
+      // If no current index, start from beginning or end based on direction
+      if (currentIndex < 0) {
+        if (direction === 1) {
+          // Find first non-disabled
+          const firstEnabled = options.findIndex((opt) => !opt.disabled);
+          return firstEnabled >= 0 ? firstEnabled : 0;
+        } else {
+          // Find last non-disabled
+          const lastEnabledIndex = options
+            .slice()
+            .reverse()
+            .findIndex((opt) => !opt.disabled);
+          return lastEnabledIndex >= 0
+            ? options.length - 1 - lastEnabledIndex
+            : options.length - 1;
+        }
+      }
+
+      let nextIndex = currentIndex;
+      let attempts = 0;
+
+      do {
+        nextIndex = nextIndex + direction;
+
+        // Wrap around
+        if (nextIndex >= options.length) {
+          nextIndex = 0;
+        } else if (nextIndex < 0) {
+          nextIndex = options.length - 1;
+        }
+
+        // Prevent infinite loop
+        attempts++;
+        if (attempts > options.length) {
+          return currentIndex;
+        }
+      } while (options[nextIndex]?.disabled);
+
+      return nextIndex;
+    },
+    [options]
+  );
+
+  // Keyboard navigation handler
+  const handleKeyDown = useCallback(
+    (event: KeyboardEvent) => {
+      if (disabled) return;
+
+      const handlers: Record<string, () => void> = {
+        ArrowDown: () => {
+          if (!isOpen) {
+            open();
+          } else {
+            setHighlightedIndex((current) => findNextEnabledIndex(current, 1));
+          }
+        },
+        ArrowUp: () => {
+          if (!isOpen) {
+            open();
+          } else {
+            setHighlightedIndex((current) => findNextEnabledIndex(current, -1));
+          }
+        },
+        Enter: () => {
+          if (isOpen && highlightedIndex >= 0) {
+            const option = options[highlightedIndex];
+            if (option && !option.disabled) {
+              selectOption(option.value);
+            }
+          }
+        },
+        ' ': () => {
+          if (isOpen && highlightedIndex >= 0) {
+            const option = options[highlightedIndex];
+            if (option && !option.disabled) {
+              selectOption(option.value);
+            }
+          }
+        },
+        Escape: () => {
+          if (isOpen) {
+            close();
+          }
+        },
+        Home: () => {
+          if (isOpen) {
+            // Find first non-disabled option
+            const firstEnabledIndex = options.findIndex((opt) => !opt.disabled);
+            if (firstEnabledIndex >= 0) {
+              setHighlightedIndex(firstEnabledIndex);
+            }
+          }
+        },
+        End: () => {
+          if (isOpen) {
+            // Find last non-disabled option
+            const lastEnabledIndex = options
+              .slice()
+              .reverse()
+              .findIndex((opt) => !opt.disabled);
+            if (lastEnabledIndex >= 0) {
+              setHighlightedIndex(options.length - 1 - lastEnabledIndex);
+            }
+          }
+        },
+      };
+
+      const keyboardHandler = createKeyboardHandler(handlers);
+      keyboardHandler(event);
+    },
+    [
+      disabled,
+      isOpen,
+      open,
+      close,
+      highlightedIndex,
+      findNextEnabledIndex,
+      options,
+      selectOption,
+    ]
+  );
+
+  // Click handler for trigger
+  const handleTriggerClick = useCallback(() => {
+    if (!disabled) {
+      toggle();
+    }
+  }, [disabled, toggle]);
+
+  // Get props for individual option
+  const getOptionProps = useCallback(
+    (option: SelectOption, index: number) => {
+      const optionId = `${listboxId}-option-${index}`;
+      const isSelected = option.value === value;
+
+      return {
+        id: optionId,
+        role: 'option' as const,
+        'aria-selected': isSelected,
+        ...(option.disabled && { 'aria-disabled': true }),
+        onClick: () => {
+          if (!option.disabled) {
+            selectOption(option.value);
+          }
+        },
+      };
+    },
+    [listboxId, value, selectOption]
+  );
+
+  // Calculate aria-activedescendant
+  const activeDescendant =
+    isOpen && highlightedIndex >= 0
+      ? `${listboxId}-option-${highlightedIndex}`
+      : undefined;
+
+  // Generate ARIA props for trigger
+  const triggerAriaProps = generateAriaProps({
+    role: 'combobox',
+    'aria-haspopup': 'listbox',
+    'aria-expanded': isOpen,
+    'aria-controls': listboxId,
+    'aria-activedescendant': activeDescendant,
+    'aria-disabled': disabled,
+    'aria-required': required,
+    'aria-label': ariaLabel,
+    ...ariaAttributes,
+  });
+
+  return {
+    triggerProps: {
+      ...triggerAriaProps,
+      id: triggerId,
+      role: 'combobox',
+      tabIndex: disabled ? -1 : 0,
+      'aria-haspopup': 'listbox' as const,
+      'aria-expanded': isOpen,
+      'aria-controls': listboxId,
+      ...(activeDescendant && { 'aria-activedescendant': activeDescendant }),
+      ...(disabled && { 'aria-disabled': true }),
+      ...(required && { 'aria-required': true }),
+      ...(ariaLabel && { 'aria-label': ariaLabel }),
+      onKeyDown: handleKeyDown,
+      onClick: handleTriggerClick,
+    },
+    listboxProps: {
+      id: listboxId,
+      role: 'listbox',
+      'aria-labelledby': triggerId,
+    },
+    getOptionProps,
+    isOpen,
+    value,
+    selectedOption,
+    highlightedIndex,
+    open,
+    close,
+    toggle,
+    selectOption,
+  };
 }
