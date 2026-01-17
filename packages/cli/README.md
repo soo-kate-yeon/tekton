@@ -12,7 +12,11 @@ Command-line interface for Tekton - OKLCH design token generator with framework 
 - **Tailwind Detection** - Identify Tailwind CSS configuration and version
 - **shadcn/ui Detection** - Detect shadcn/ui components and configuration
 - **Project Scanning** - Comprehensive project analysis with all detectors combined
-- **Screen Templates** - Ready-to-use templates for Phase C screen generation
+- **Code Template Engine** - Transform archetype data into React components with 4-layer transformation
+- **Screen Generation** - Contract-based screen creation with layout skeletons and intent patterns
+- **Token Injection** - Complete design token generation (colors, spacing, typography, shadows)
+- **Archetype Integration** - Connect to MCP server for hook-based styling rules
+- **Preset API** - Fetch curated design presets for consistent theming
 - **Zero Configuration** - Works out of the box with sensible defaults
 
 ## Installation
@@ -713,21 +717,199 @@ done
 
 ---
 
-## Screen Templates (Phase C Preview)
+## Screen Generation (Phase 2 - Code Template Engine)
 
-Tekton CLI includes screen templates for future screen generation features. Templates are located in `templates/screen/`:
+Tekton CLI now includes a powerful Code Template Engine that transforms archetype data and preset tokens into complete React components.
 
-- `page.tsx.template` - Page component template
-- `layout.tsx.template` - Layout component template
-- `index.ts.template` - Barrel export template
+### `tekton create-screen <name>`
 
-These will be used in Phase C for:
+Generate a new screen with contract-based code generation and archetype integration.
+
+**Usage:**
 ```bash
-# Coming in Phase C
-tekton generate screen Dashboard --with-layout
+tekton create-screen <name> [options]
 ```
 
-See [templates/screen/README.md](./templates/screen/README.md) for details.
+**Options:**
+- `-e, --environment <env>` - Target environment (web, mobile, tablet, responsive, tv, kiosk)
+- `-s, --skeleton <skeleton>` - Skeleton preset (full-screen, with-header, with-sidebar, dashboard, with-footer, complete)
+- `-i, --intent <intent>` - Screen intent (data-list, data-detail, dashboard, form, settings, landing, auth, error, empty)
+- `-c, --components <components...>` - Components to include
+- `-p, --path <path>` - Output directory path (default: current directory)
+- `--preset <preset>` - Preset name to fetch design tokens from API
+- `--skip-mcp` - Skip MCP server integration (offline mode)
+- `--skip-api` - Skip Preset API integration (offline mode)
+
+**Examples:**
+
+```bash
+# Create a dashboard screen with default components
+tekton create-screen Dashboard -e web -s dashboard -i dashboard -p ./src
+
+# Create a form screen with specific components
+tekton create-screen UserProfile -e responsive -s with-header -i form -c Button Input Card -p ./src
+
+# Create a screen with preset tokens
+tekton create-screen Analytics -e web -s complete -i dashboard --preset "Professional" -p ./src
+
+# Offline mode (no external services)
+tekton create-screen Settings -e web -s with-sidebar -i settings --skip-mcp --skip-api -p ./src
+```
+
+**Sample Output:**
+
+```
+Creating screen: Dashboard...
+
+  Fetching preset "Professional"...
+  ✓ Preset loaded: Professional
+  ✓ Loaded 5 archetypes
+
+✓ Screen "Dashboard" contract created successfully
+  Environment: web
+  Skeleton: dashboard
+  Intent: dashboard
+  Components: Stat, Chart, Table, Card, Button
+
+Files generated:
+  /src/screens/Dashboard/page.tsx
+  /src/screens/Dashboard/layout.tsx
+  /src/screens/Dashboard/tokens.css
+  /src/screens/Dashboard/components/index.ts
+
+Generation Statistics:
+  Components generated: 5
+  Archetypes applied: 3
+  Token variables: 87
+```
+
+### Code Template Engine Architecture
+
+The Code Template Engine transforms archetype data through a 4-layer transformation process:
+
+**Layer 1: Prop Rules to Base CSS**
+- Maps hook prop objects (buttonProps, inputProps) to CSS base styles
+- Generates semantic CSS using Token Contract variables
+
+**Layer 2: State Mappings to Interaction CSS**
+- Maps hook states (isPressed, isOpen, isInvalid) to hover/active/disabled styles
+- Adds smooth transitions for visual feedback
+
+**Layer 3: Variant Branching to Variant Classes**
+- Processes configuration options (variant: primary/secondary/outline)
+- Generates modifier CSS classes (button--primary, card--elevated)
+
+**Layer 4: Structure Templates to JSX**
+- Generates React functional components with TypeScript
+- Includes proper ARIA attributes for accessibility
+- Creates barrel exports for clean imports
+
+### Generated File Structure
+
+```
+src/screens/Dashboard/
+├── page.tsx           # Main page component with intent-based structure
+├── layout.tsx         # Layout wrapper with skeleton configuration
+├── tokens.css         # Complete design tokens (colors, spacing, typography)
+└── components/
+    ├── index.ts       # Barrel exports
+    ├── Button.tsx     # Generated component
+    ├── Button.css     # Component styles
+    ├── Card.tsx
+    ├── Card.css
+    └── ...
+```
+
+### Design Token Categories
+
+The generated `tokens.css` includes comprehensive token variables:
+
+- **Brand Colors** - Primary, secondary with base/light/dark/contrast variants
+- **Semantic Colors** - Success, warning, error, info
+- **Neutral Colors** - 50-900 scale for backgrounds and text
+- **Spacing** - xs through 3xl (4px to 64px)
+- **Border Radius** - none, sm, default, md, lg, xl, 2xl, full
+- **Shadows** - none, sm, default, md, lg, xl, 2xl, inner
+- **Typography** - Font family, size, weight, line height, letter spacing
+
+### Supported Components
+
+The following components can be generated with archetype integration:
+
+| Component | Hook Mapping | Default Styles |
+|-----------|--------------|----------------|
+| Button | useButton | Primary variant, hover/active states |
+| Input | useTextField | Border, focus ring, validation states |
+| Card | useCard | Background, shadow, radius |
+| Badge | useBadge | Inline-flex, semantic colors |
+| Avatar | useAvatar | Circular, fallback initials |
+| Alert | useAlert | Icon, message, semantic variants |
+| Dialog | useDialog | Modal overlay, centered positioning |
+| Table | useTable | Collapse borders, row styles |
+| Stat | useStat | Label, value, trend display |
+| Chart | useChart | Container with minimum height |
+| Progress | useProgressBar | Track, bar, ARIA attributes |
+| Tooltip | useTooltip | Absolute positioning, fade animation |
+| Tabs | useTabs | Tab list, panel, active state |
+| Menu | useMenu | Dropdown, item hover states |
+| Select | useSelect | Trigger, dropdown, selected state |
+| Checkbox | useCheckbox | Check mark, indeterminate state |
+| Switch | useSwitch | Toggle track, thumb animation |
+| Slider | useSlider | Track, thumb, range support |
+| Accordion | useAccordion | Expand/collapse animation |
+| Pagination | usePagination | Page buttons, active indicator |
+
+### Intent-Based Content Patterns
+
+Screen intent determines the recommended layout structure:
+
+| Intent | Layout | Primary Areas |
+|--------|--------|---------------|
+| dashboard | grid | stats, charts, tables |
+| data-list | list | filters, table, pagination |
+| form | form | form-fields, actions |
+| detail | detail | header, content, sidebar |
+| settings | settings | navigation, content |
+| landing | landing | hero, features, cta |
+| auth | centered | form |
+| error | centered | message, actions |
+| empty | centered | illustration, message, action |
+
+### Skeleton Presets
+
+Layout skeletons define the structural regions:
+
+| Skeleton | Header | Sidebar | Footer | Use Case |
+|----------|--------|---------|--------|----------|
+| full-screen | No | No | No | Immersive experiences |
+| with-header | Yes | No | No | Simple pages |
+| with-sidebar | No | Yes | No | Navigation-heavy apps |
+| dashboard | Yes | Yes | No | Admin dashboards |
+| with-footer | Yes | No | Yes | Marketing pages |
+| complete | Yes | Yes | Yes | Full-featured apps |
+
+### Programmatic Usage
+
+```typescript
+import { createScreen, generateScreenFiles } from '@tekton/cli';
+
+// Validate and create screen contract
+const result = await createScreen({
+  name: 'Dashboard',
+  environment: 'web',
+  skeleton: 'dashboard',
+  intent: 'dashboard',
+  components: ['Stat', 'Chart', 'Table'],
+  path: './src',
+  preset: 'Professional',
+});
+
+if (result.success) {
+  console.log('Generated:', result.files);
+  console.log('Stats:', result.stats);
+  // { componentsGenerated: 3, archetypesApplied: 2, tokenVariables: 87 }
+}
+```
 
 ---
 
@@ -792,16 +974,29 @@ npm run test:coverage
 ```
 packages/cli/
 ├── src/
-│   ├── commands/         # CLI command implementations
-│   ├── detectors/        # Framework/tool detection logic
-│   │   ├── framework.ts  # Framework detector
-│   │   ├── tailwind.ts   # Tailwind detector
-│   │   └── shadcn.ts     # shadcn/ui detector
-│   └── index.ts          # Main CLI entry point
+│   ├── commands/                  # CLI command implementations
+│   │   ├── detect.ts              # Framework/tool detection command
+│   │   ├── setup.ts               # Project setup command
+│   │   ├── generate.ts            # Token generation command
+│   │   └── create-screen.ts       # Screen generation command (Phase 2)
+│   ├── clients/                   # External service clients (Phase 2)
+│   │   ├── mcp-client.ts          # MCP server integration for archetypes
+│   │   └── preset-client.ts       # Preset API client for design tokens
+│   ├── detectors/                 # Framework/tool detection logic
+│   │   ├── framework.ts           # Framework detector
+│   │   ├── tailwind.ts            # Tailwind detector
+│   │   └── shadcn.ts              # shadcn/ui detector
+│   ├── generators/                # Code generation modules (Phase 2)
+│   │   ├── code-template-engine.ts # 4-layer archetype transformation
+│   │   ├── component-generator.ts  # Individual component file generation
+│   │   ├── screen-generator.ts     # Screen structure and layout generation
+│   │   └── token-injector.ts       # Design token CSS generation
+│   └── index.ts                   # Main CLI entry point
 ├── templates/
-│   └── screen/           # Screen templates for Phase C
+│   └── screen/                    # Screen templates
 ├── tests/
-│   └── detectors/        # Unit tests for detectors
+│   ├── detectors/                 # Unit tests for detectors
+│   └── generators/                # Unit tests for generators
 └── package.json
 ```
 

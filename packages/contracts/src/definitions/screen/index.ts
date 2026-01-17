@@ -18,7 +18,7 @@ export {
   type LayoutBehavior,
   type EnvironmentContract,
   type EnvironmentContractSchema,
-} from './environment';
+} from './environment.js';
 
 // Skeleton Layer
 export {
@@ -28,7 +28,7 @@ export {
   type ContentArea,
   type SkeletonContract,
   type SkeletonContractSchema,
-} from './skeleton';
+} from './skeleton.js';
 
 // Intent Layer
 export {
@@ -39,4 +39,4 @@ export {
   type CompoundPatternMapping,
   type IntentContract,
   type IntentContractSchema,
-} from './intent';
+} from './intent.js';

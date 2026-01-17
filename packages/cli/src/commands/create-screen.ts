@@ -11,6 +11,8 @@ import {
   intentContractSchema,
 } from '@tekton/contracts';
 import { generateScreenFiles, checkDuplicateScreen } from '../generators/screen-generator.js';
+import { MCPClient, CompleteArchetype } from '../clients/mcp-client.js';
+import { PresetClient, PresetConfig } from '../clients/preset-client.js';
 
 /**
  * Create screen command options
@@ -23,6 +25,9 @@ export interface CreateScreenOptions {
   intent?: string;
   components?: string[];
   path?: string;
+  preset?: string;
+  skipMcp?: boolean;
+  skipApi?: boolean;
 }
 
 /**
@@ -49,8 +54,17 @@ export interface CreateScreenResult {
     page: string;
     layout: string;
     components: string;
+    tokens?: string;
+  };
+  stats?: {
+    componentsGenerated: number;
+    archetypesApplied: number;
+    tokenVariables: number;
   };
   error?: string;
+  archetypes?: Map<string, CompleteArchetype>;
+  presetTokens?: PresetConfig;
+  warnings?: string[];
 }
 
 /**
@@ -126,6 +140,10 @@ function getSuggestedComponents(intent: string): string[] {
  * @returns Screen creation result
  */
 export async function createScreen(options: CreateScreenOptions): Promise<CreateScreenResult> {
+  const warnings: string[] = [];
+  let archetypes: Map<string, CompleteArchetype> | undefined;
+  let presetTokens: PresetConfig | undefined;
+
   try {
     // Validate screen name
     const nameValidation = validateScreenName(options.name);
@@ -143,46 +161,44 @@ export async function createScreen(options: CreateScreenOptions): Promise<Create
 
     // Interactive mode - prompt for missing values
     if (options.interactive) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const questions: any[] = [];
+
+      if (!environment) {
+        questions.push({
+          type: 'select',
+          name: 'environment',
+          message: 'Select target environment:',
+          choices: ENVIRONMENT_OPTIONS as unknown as string[],
+          initial: 0,
+        });
+      }
+
+      if (!skeleton) {
+        questions.push({
+          type: 'select',
+          name: 'skeleton',
+          message: 'Select skeleton preset:',
+          choices: SKELETON_OPTIONS as unknown as string[],
+          initial: 0,
+        });
+      }
+
+      if (!intent) {
+        questions.push({
+          type: 'select',
+          name: 'intent',
+          message: 'Select screen intent:',
+          choices: INTENT_OPTIONS as unknown as string[],
+          initial: 0,
+        });
+      }
+
       const answers = await prompt<{
         environment?: string;
         skeleton?: string;
         intent?: string;
-        components?: string[];
-      }>([
-        ...(environment
-          ? []
-          : [
-              {
-                type: 'select',
-                name: 'environment',
-                message: 'Select target environment:',
-                choices: ENVIRONMENT_OPTIONS,
-                initial: 0,
-              },
-            ]),
-        ...(skeleton
-          ? []
-          : [
-              {
-                type: 'select',
-                name: 'skeleton',
-                message: 'Select skeleton preset:',
-                choices: SKELETON_OPTIONS,
-                initial: 0,
-              },
-            ]),
-        ...(intent
-          ? []
-          : [
-              {
-                type: 'select',
-                name: 'intent',
-                message: 'Select screen intent:',
-                choices: INTENT_OPTIONS,
-                initial: 0,
-              },
-            ]),
-      ]);
+      }>(questions);
 
       environment = environment || answers.environment;
       skeleton = skeleton || answers.skeleton;
@@ -217,6 +233,38 @@ export async function createScreen(options: CreateScreenOptions): Promise<Create
     // Use provided components or suggested components
     if (components.length === 0) {
       components = suggestedComponents;
+    }
+
+    // Fetch preset tokens if --preset provided
+    if (options.preset && !options.skipApi) {
+      try {
+        const presetClient = new PresetClient();
+        const preset = await presetClient.getPresetByName(options.preset);
+        if (preset) {
+          presetTokens = preset.config;
+        } else {
+          warnings.push(`Preset "${options.preset}" not found, using defaults`);
+        }
+      } catch (error) {
+        const message = error instanceof Error ? error.message : 'Unknown error';
+        warnings.push(`Could not fetch preset: ${message}`);
+      }
+    }
+
+    // Fetch archetypes from MCP for components
+    if (!options.skipMcp && components.length > 0) {
+      try {
+        const mcpClient = new MCPClient();
+        const isAvailable = await mcpClient.isAvailable();
+        if (isAvailable) {
+          archetypes = await mcpClient.getArchetypesForComponents(components);
+        } else {
+          warnings.push('MCP server not available, generating without archetype data');
+        }
+      } catch (error) {
+        const message = error instanceof Error ? error.message : 'Unknown error';
+        warnings.push(`Could not fetch archetypes: ${message}`);
+      }
     }
 
     // Build screen contract
@@ -286,6 +334,7 @@ export async function createScreen(options: CreateScreenOptions): Promise<Create
 
     // Generate screen files if path is provided
     let files;
+    let stats;
     if (options.path) {
       // Check for duplicate
       const isDuplicate = await checkDuplicateScreen(options.name, options.path);
@@ -299,8 +348,14 @@ export async function createScreen(options: CreateScreenOptions): Promise<Create
           screenName: options.name,
           screenContract,
           suggestedComponents,
+          archetypes,
+          presetTokens,
+          warnings: warnings.length > 0 ? warnings : undefined,
         };
       }
+
+      // Extract tokens from preset config if available
+      const tokens = presetTokens?.tokens as import('@tekton/preset').ExtendedTokenPreset | undefined;
 
       const generationResult = await generateScreenFiles({
         name: options.name,
@@ -309,10 +364,13 @@ export async function createScreen(options: CreateScreenOptions): Promise<Create
         intent,
         components,
         outputDir: options.path,
+        archetypes,
+        tokens,
       });
 
       if (generationResult.success) {
         files = generationResult.files;
+        stats = generationResult.stats;
       }
     }
 
@@ -323,11 +381,16 @@ export async function createScreen(options: CreateScreenOptions): Promise<Create
       screenContract,
       suggestedComponents,
       files,
+      stats,
+      archetypes,
+      presetTokens,
+      warnings: warnings.length > 0 ? warnings : undefined,
     };
   } catch (error) {
     return {
       success: false,
       error: error instanceof Error ? error.message : 'Screen creation failed',
+      warnings: warnings.length > 0 ? warnings : undefined,
     };
   }
 }
@@ -343,6 +406,11 @@ export async function createScreenCommand(
 ): Promise<void> {
   console.log(chalk.bold(`\nCreating screen: ${name}...\n`));
 
+  // Show progress for external service calls
+  if (options.preset && !options.skipApi) {
+    console.log(chalk.gray(`  Fetching preset "${options.preset}"...`));
+  }
+
   const result = await createScreen({ name, ...options, interactive: !options.environment });
 
   if (!result.success) {
@@ -350,13 +418,48 @@ export async function createScreenCommand(
     process.exit(1);
   }
 
+  // Display warnings (non-fatal)
+  if (result.warnings && result.warnings.length > 0) {
+    for (const warning of result.warnings) {
+      console.log(chalk.yellow(`  ⚠ ${warning}`));
+    }
+  }
+
+  // Display service integration results
+  if (result.presetTokens) {
+    console.log(chalk.green(`  ✓ Preset loaded: ${options.preset}`));
+  }
+  if (result.archetypes && result.archetypes.size > 0) {
+    console.log(chalk.green(`  ✓ Loaded ${result.archetypes.size} archetypes`));
+  }
+
   // Success message
-  console.log(chalk.green(`✓ ${result.message}`));
+  console.log(chalk.green(`\n✓ ${result.message}`));
   if (result.screenContract) {
     console.log(chalk.gray(`  Environment: ${result.screenContract.environment}`));
     console.log(chalk.gray(`  Skeleton: ${result.screenContract.skeleton}`));
     console.log(chalk.gray(`  Intent: ${result.screenContract.intent}`));
     console.log(chalk.gray(`  Components: ${result.screenContract.components.join(', ')}`));
   }
+
+  // Display generated files
+  if (result.files) {
+    console.log(chalk.gray(`\nFiles generated:`));
+    console.log(chalk.gray(`  ${result.files.page}`));
+    console.log(chalk.gray(`  ${result.files.layout}`));
+    if (result.files.tokens) {
+      console.log(chalk.gray(`  ${result.files.tokens}`));
+    }
+    console.log(chalk.gray(`  ${result.files.components}`));
+  }
+
+  // Display generation statistics
+  if (result.stats) {
+    console.log(chalk.cyan(`\nGeneration Statistics:`));
+    console.log(chalk.cyan(`  Components generated: ${result.stats.componentsGenerated}`));
+    console.log(chalk.cyan(`  Archetypes applied: ${result.stats.archetypesApplied}`));
+    console.log(chalk.cyan(`  Token variables: ${result.stats.tokenVariables}`));
+  }
+
   console.log();
 }

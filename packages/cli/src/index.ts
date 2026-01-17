@@ -4,6 +4,7 @@ import { Command } from 'commander';
 import { detectCommand } from './commands/detect.js';
 import { setupCommand } from './commands/setup.js';
 import { generateCommand } from './commands/generate.js';
+import { createScreenCommand } from './commands/create-screen.js';
 
 const program = new Command();
 
@@ -44,6 +45,31 @@ program
       primaryColor: options.primaryColor,
       preset: options.preset,
       force: options.force,
+    });
+  });
+
+// Create screen command
+program
+  .command('create-screen <name>')
+  .description('Create a new screen with contract-based generation')
+  .option('-e, --environment <env>', 'Target environment (web, mobile, tablet, responsive, tv, kiosk)')
+  .option('-s, --skeleton <skeleton>', 'Skeleton preset (full-screen, with-header, with-sidebar, etc.)')
+  .option('-i, --intent <intent>', 'Screen intent (data-list, data-detail, dashboard, form, etc.)')
+  .option('-c, --components <components...>', 'Components to include')
+  .option('-p, --path <path>', 'Output directory path', process.cwd())
+  .option('--preset <preset>', 'Preset name to fetch design tokens from API')
+  .option('--skip-mcp', 'Skip MCP server integration (offline mode)')
+  .option('--skip-api', 'Skip Preset API integration (offline mode)')
+  .action(async (name, options) => {
+    await createScreenCommand(name, {
+      environment: options.environment,
+      skeleton: options.skeleton,
+      intent: options.intent,
+      components: options.components,
+      path: options.path,
+      preset: options.preset,
+      skipMcp: options.skipMcp,
+      skipApi: options.skipApi,
     });
   });
 
