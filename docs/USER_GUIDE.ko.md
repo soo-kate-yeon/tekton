@@ -209,29 +209,151 @@ curl http://localhost:8000/api/v2/health
 ### 개요
 
 MCP (Model Context Protocol) 서버는 AI 어시스턴트가 다음을 수행할 수 있도록 합니다:
-- Brand DNA 구성 읽기 및 쓰기
-- 5-축 개성 값을 디자인 토큰으로 해석
-- Brand DNA에서 CSS 변수 생성
+- 컴포넌트 생성을 위한 훅 아키타입 조회
+- 4-레이어 아키타입 데이터 액세스 (프롭 규칙, 상태 매핑, 변형, 구조)
+- WCAG 레벨, 상태 이름 및 기타 기준으로 아키타입 검색
 
-### Brand DNA 5-축 시스템
+### 아키타입 시스템 아키텍처
 
-| 축 | 범위 | 낮음 (0) | 중간 (0.5) | 높음 (1) |
-|------|-------|---------|-----------|----------|
-| **Density** | 0-1 | 너그러운 간격 | 편안한 | 컴팩트 |
-| **Warmth** | 0-1 | 차가운 색상 | 중립 | 따뜻한 색상 |
-| **Playfulness** | 0-1 | 날카로운 모서리 | 적당한 | 둥근 모서리 |
-| **Sophistication** | 0-1 | 캐주얼 | 균형잡힌 | 우아한 |
-| **Energy** | 0-1 | 낮은 강도 | 중간 | 높은 강도 |
+아키타입 시스템은 AI 기반 컴포넌트 생성을 위한 구조화된 데이터를 제공합니다:
+
+| 레이어 | 설명 | 콘텐츠 |
+|-------|-------------|---------|
+| **레이어 1** | 훅 속성 규칙 | 훅을 prop 객체와 기본 CSS 스타일에 매핑 |
+| **레이어 2** | 상태-스타일 매핑 | 컴포넌트 상태에 대한 시각적 피드백 규칙 |
+| **레이어 3** | 변형 브랜칭 | 구성에 기반한 조건부 스타일링 |
+| **레이어 4** | 구조 템플릿 | HTML/JSX 패턴 및 접근성 규칙 |
 
 ### 사용 가능한 MCP 도구
 
 | 도구 | 설명 |
 |------|-------------|
-| `brand-dna.create` | 새 Brand DNA 구성 생성 |
-| `brand-dna.read` | 기존 Brand DNA 읽기 |
-| `brand-dna.update` | Brand DNA 축 업데이트 |
-| `brand-dna.interpret` | 축을 디자인 토큰으로 변환 |
-| `brand-dna.export-css` | CSS 변수로 내보내기 |
+| `archetype.list` | 사용 가능한 모든 훅 나열 |
+| `archetype.get` | 훅에 대한 완전한 아키타입 가져오기 |
+| `archetype.getPropRules` | 레이어 1 (훅 prop 규칙) 가져오기 |
+| `archetype.getStateMappings` | 레이어 2 (상태-스타일 매핑) 가져오기 |
+| `archetype.getVariants` | 레이어 3 (변형 브랜칭) 가져오기 |
+| `archetype.getStructure` | 레이어 4 (구조 템플릿) 가져오기 |
+| `archetype.query` | 기준으로 검색 (WCAG 레벨, 상태명 등) |
+
+### 구현 세부사항
+
+#### 패키지 구조
+
+```
+packages/studio-mcp/
+├── src/
+│   ├── index.ts              # 패키지 내보내기
+│   ├── archetype/
+│   │   └── tools.ts          # ArchetypeTools 클래스
+│   ├── server/
+│   │   ├── index.ts          # 서버 진입점
+│   │   └── mcp-server.ts     # HTTP MCP 서버
+│   ├── storage/
+│   │   └── storage.ts        # 범용 스토리지 유틸리티
+│   └── types/
+│       └── design-tokens.ts  # 디자인 토큰 스키마
+└── tests/
+    ├── archetype/
+    │   └── tools.test.ts     # ArchetypeTools 테스트
+    ├── storage/
+    │   └── storage.test.ts   # 스토리지 테스트
+    └── index.test.ts         # 내보내기 테스트
+```
+
+#### ArchetypeTools 클래스
+
+`ArchetypeTools` 클래스는 아키타입 데이터에 대한 프로그래밍 방식 액세스를 제공합니다:
+
+```typescript
+import { ArchetypeTools, archetypeTools } from '@tekton/studio-mcp';
+
+// 초기화 (@tekton/archetype-system에서 데이터 로드)
+await archetypeTools.initialize();
+
+// 사용 가능한 모든 훅 나열
+const hookList = await archetypeTools.list();
+// { success: true, data: ["useButton", "useTextField", ...] }
+
+// 훅에 대한 완전한 아키타입 가져오기
+const archetype = await archetypeTools.get("useButton");
+// { success: true, data: { hookName, propRules, stateMappings, variants, structure } }
+
+// 개별 레이어 가져오기
+const propRules = await archetypeTools.getPropRules("useButton");
+const stateMappings = await archetypeTools.getStateMappings("useButton");
+const variants = await archetypeTools.getVariants("useButton");
+const structure = await archetypeTools.getStructure("useButton");
+
+// 기준으로 조회
+const aaComponents = await archetypeTools.query({ wcagLevel: "AA" });
+const buttonComponents = await archetypeTools.query({ propObject: "buttonProps" });
+```
+
+#### MCP 서버 구현
+
+MCP 서버는 CORS 지원이 있는 HTTP 기반 구현입니다:
+
+```typescript
+import { createMCPServer, TOOLS } from '@tekton/studio-mcp';
+
+// 포트 3000에서 서버 시작
+const server = createMCPServer(3000);
+
+// 사용 가능한 엔드포인트:
+// GET  /health              - 헬스 체크
+// GET  /tools               - 사용 가능한 도구 목록
+// POST /tools/:toolName     - 도구 실행
+```
+
+**서버 기능:**
+- 크로스 오리진 요청을 위한 CORS 활성화
+- JSON 요청/응답 형식
+- POST 요청을 통한 도구 실행
+- 우아한 종료 처리 (SIGINT, SIGTERM)
+
+#### 스토리지 유틸리티
+
+아키타입 데이터 지속을 위한 범용 스토리지 함수:
+
+```typescript
+import {
+  saveArchetype,
+  loadArchetype,
+  listArchetypes,
+  deleteArchetype,
+  archetypeExists
+} from '@tekton/studio-mcp';
+import { z } from 'zod';
+
+// 스키마 정의
+const MySchema = z.object({
+  hookName: z.string(),
+  version: z.string(),
+});
+
+// 스키마 검증과 함께 데이터 저장
+await saveArchetype('useButton', myData, MySchema);
+
+// 스키마 검증과 함께 데이터 로드
+const data = await loadArchetype('useButton', MySchema);
+
+// 저장된 모든 아키타입 나열
+const hooks = await listArchetypes();
+// ["useButton", "useTextField", ...]
+
+// 아키타입 존재 확인
+const exists = await archetypeExists('useButton');
+
+// 아키타입 삭제
+await deleteArchetype('useButton');
+```
+
+**스토리지 기능:**
+- 저장/로드 시 Zod 스키마 검증
+- 자동 디렉토리 생성
+- 메타데이터가 포함된 JSON 파일 형식 (hookName, updatedAt)
+- 커스텀 스토리지 경로 지원
 
 ### 워크플로우 검증
 
@@ -242,49 +364,42 @@ MCP (Model Context Protocol) 서버는 AI 어시스턴트가 다음을 수행할
 curl http://localhost:3000/health
 
 # 예상 응답:
-# {"status": "ok", "tools": ["brand-dna.create", "brand-dna.read", ...]}
+# {"status": "ok", "service": "studio-mcp", "tools": ["archetype.list", ...]}
 ```
 
-#### 2단계: Brand DNA 생성
+#### 2단계: 사용 가능한 훅 나열
 
 ```bash
-# 새 Brand DNA 구성 생성
-curl -X POST http://localhost:3000/tools/brand-dna.create \
-  -H "Content-Type: application/json" \
-  -d '{
-    "name": "my-brand",
-    "axes": {
-      "density": 0.5,
-      "warmth": 0.6,
-      "playfulness": 0.4,
-      "sophistication": 0.7,
-      "energy": 0.5
-    }
-  }'
+# 모든 사용 가능한 훅 나열
+curl -X POST http://localhost:3000/tools/archetype.list
 
-# 예상: ID와 함께 Brand DNA 생성됨
+# 예상 응답:
+# {"success": true, "data": ["useButton", "useTextField", "useModal", ...]}
 ```
 
-#### 3단계: 축 해석
+#### 3단계: 아키타입 데이터 가져오기
 
 ```bash
-# 축을 디자인 특성으로 해석
-curl -X POST http://localhost:3000/tools/brand-dna.interpret \
+# useButton에 대한 완전한 아키타입 가져오기
+curl -X POST http://localhost:3000/tools/archetype.get \
   -H "Content-Type: application/json" \
-  -d '{"name": "my-brand"}'
+  -d '{"hookName": "useButton"}'
 
-# 예상: 디자인 토큰 특성
+# 예상: hookName, propRules, stateMappings, variants, structure가 포함된 JSON
 ```
 
-#### 4단계: CSS 내보내기
+#### 4단계: 레이어별 데이터 쿼리
 
 ```bash
-# CSS 변수로 내보내기
-curl -X POST http://localhost:3000/tools/brand-dna.export-css \
+# 레이어 1: 프롭 규칙만 가져오기
+curl -X POST http://localhost:3000/tools/archetype.getPropRules \
   -H "Content-Type: application/json" \
-  -d '{"name": "my-brand"}'
+  -d '{"hookName": "useButton"}'
 
-# 예상: --tekton-* 변수가 포함된 CSS
+# 레이어 2: 상태 매핑 가져오기
+curl -X POST http://localhost:3000/tools/archetype.getStateMappings \
+  -H "Content-Type: application/json" \
+  -d '{"hookName": "useButton"}'
 ```
 
 #### 5단계: Claude 통합 확인
@@ -295,11 +410,11 @@ Claude Code를 MCP 서버를 사용하도록 구성:
 // .claude/settings.json
 {
   "mcpServers": {
-    "tekton-brand-dna": {
+    "tekton-archetype": {
       "command": "node",
       "args": ["packages/studio-mcp/dist/index.js"],
       "env": {
-        "STORAGE_PATH": ".tekton/brand-dna"
+        "STORAGE_PATH": ".tekton/archetypes"
       }
     }
   }
@@ -308,19 +423,20 @@ Claude Code를 MCP 서버를 사용하도록 구성:
 
 Claude에서 액세스 확인:
 ```
-> 사용 가능한 Brand DNA 구성은 무엇입니까?
-> 높은 에너지와 재미를 가진 Brand DNA 만들기
+> 사용 가능한 훅 아키타입은 무엇입니까?
+> useButton에 대한 완전한 아키타입을 보여주세요
+> WCAG AA 준수 컴포넌트를 찾아주세요
 ```
 
 ### 검증 체크리스트
 
 - [ ] MCP 서버가 오류 없이 시작됨
 - [ ] 헬스 엔드포인트가 도구 목록 반환
-- [ ] Brand DNA 생성 작동
-- [ ] 축 해석이 토큰 반환
-- [ ] CSS 내보내기가 유효한 변수 생성
+- [ ] 훅 목록 조회 작동
+- [ ] 아키타입 데이터 가져오기 작동
+- [ ] 레이어별 쿼리 작동
 - [ ] Claude가 MCP 도구에 액세스 가능
-- [ ] 저장소가 `.tekton/brand-dna/`에 유지됨
+- [ ] 스토리지가 `.tekton/archetypes/`에 유지됨
 
 ---
 
