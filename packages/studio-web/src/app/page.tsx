@@ -23,29 +23,44 @@ export default function HomePage() {
             </p>
           </Link>
 
-          <div className="block p-6 rounded-lg border bg-card opacity-60">
-            <h2 className="text-2xl font-semibold mb-2">Token Editor</h2>
+          <Link
+            href="/token-editor"
+            className="group block p-6 rounded-lg border bg-card hover:border-primary transition-colors"
+          >
+            <h2 className="text-2xl font-semibold mb-2 group-hover:text-primary">
+              Token Editor
+            </h2>
             <p className="text-muted-foreground">
               Create and customize design tokens with OKLCH color picker and
-              live preview. Coming soon.
+              live WCAG compliance preview.
             </p>
-          </div>
+          </Link>
 
-          <div className="block p-6 rounded-lg border bg-card opacity-60">
-            <h2 className="text-2xl font-semibold mb-2">Component Preview</h2>
+          <Link
+            href="/component-preview"
+            className="group block p-6 rounded-lg border bg-card hover:border-primary transition-colors"
+          >
+            <h2 className="text-2xl font-semibold mb-2 group-hover:text-primary">
+              Component Preview
+            </h2>
             <p className="text-muted-foreground">
-              Preview components with different presets and states.
-              Coming soon.
+              Preview 20 headless components with archetype styling,
+              accessibility info, and code export.
             </p>
-          </div>
+          </Link>
 
-          <div className="block p-6 rounded-lg border bg-card opacity-60">
-            <h2 className="text-2xl font-semibold mb-2">Export</h2>
+          <Link
+            href="/export"
+            className="group block p-6 rounded-lg border bg-card hover:border-primary transition-colors"
+          >
+            <h2 className="text-2xl font-semibold mb-2 group-hover:text-primary">
+              Export
+            </h2>
             <p className="text-muted-foreground">
-              Export tokens as CSS variables, JSON, or React Native StyleSheet.
-              Coming soon.
+              Export tokens as CSS variables, JSON, or React Native StyleSheet
+              with dark mode support.
             </p>
-          </div>
+          </Link>
         </div>
       </div>
     </div>

@@ -8,6 +8,9 @@ import { cn } from '@/lib/utils/cn';
 const navigation = [
   { name: 'Home', href: '/' },
   { name: 'Presets', href: '/presets' },
+  { name: 'Token Editor', href: '/token-editor' },
+  { name: 'Component Preview', href: '/component-preview' },
+  { name: 'Export', href: '/export' },
 ];
 
 export function Header() {
