@@ -19,7 +19,14 @@ class CuratedPresetBase(BaseModel):
 class CuratedPresetCreate(CuratedPresetBase):
     """Schema for creating a new CuratedPreset."""
 
-    pass
+    # Style archetype fields
+    one_line_definition: str | None = Field(None, description="One-line style definition")
+    reference_style: str | None = Field(None, description="Reference style (e.g., Notion, Nike)")
+    
+    # AI-only fields (stored but not exposed in response)
+    principles: list[str] | None = Field(None, description="Design principles for AI")
+    component_rules: dict[str, Any] | None = Field(None, description="Component-specific rules")
+    forbidden_patterns: list[str] | None = Field(None, description="Patterns to avoid")
 
 
 class CuratedPresetUpdate(BaseModel):
@@ -31,15 +38,26 @@ class CuratedPresetUpdate(BaseModel):
     config: dict[str, Any] | None = None
     tags: list[str] | None = None
     is_active: bool | None = None
+    one_line_definition: str | None = None
+    reference_style: str | None = None
+    principles: list[str] | None = None
+    component_rules: dict[str, Any] | None = None
+    forbidden_patterns: list[str] | None = None
 
 
 class CuratedPresetResponse(CuratedPresetBase):
-    """Schema for CuratedPreset response."""
+    """Schema for CuratedPreset response.
+    
+    Note: principles, component_rules, forbidden_patterns are intentionally
+    excluded from the response for security (AI-only data).
+    """
 
     model_config = ConfigDict(from_attributes=True)
 
     id: int
     is_active: bool
+    one_line_definition: str | None = None
+    reference_style: str | None = None
     created_at: datetime
     updated_at: datetime
 
@@ -51,3 +69,4 @@ class CuratedPresetList(BaseModel):
     total: int
     skip: int = 0
     limit: int = 100
+
