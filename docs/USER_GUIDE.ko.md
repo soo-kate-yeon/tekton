@@ -126,16 +126,19 @@ MCP_PORT=3000
 ```bash
 # 터미널 1: MCP 서버 시작
 cd packages/studio-mcp
-pnpm dev
+pnpm install  # 처음인 경우 nodemon 설치
+pnpm dev      # 이제 TypeScript 컴파일 + 서버 실행
 
 # 터미널 2: Studio API 시작
 cd packages/studio-api
-python -m uvicorn studio_api.main:app --reload
+uv sync                                                    # 의존성 설치
+uv run uvicorn studio_api.main:app --reload --host 0.0.0.0 --port 8000
 
-# 터미널 3: Studio Web 시작
-cd packages/studio-web
-pnpm dev
+# 터미널 3: Studio Web (현재 미구현)
+# Studio Web UI는 계획되어 있지만 아직 구현되지 않았습니다
 ```
+
+**참고**: Studio Web은 현재 개발 중입니다. 핵심 기능(MCP 및 API)은 이것 없이도 작동합니다.
 
 ---
 

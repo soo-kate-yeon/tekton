@@ -11,7 +11,7 @@
 
 1. [System Overview](#1-system-overview)
 2. [Prerequisites & Setup](#2-prerequisites--setup)
-3. [Web View Studio](#3-web-view-studio)
+3. [Web View Studio (Planned)](#3-web-view-studio-planned)
 4. [MCP Integration](#4-mcp-integration)
 5. [Environment Detection](#5-environment-detection)
 6. [Token & CSS Mapping](#6-token--css-mapping)
@@ -33,7 +33,7 @@
 │                                                                   │
 │   ┌─────────────────┐    ┌─────────────────┐    ┌──────────────┐ │
 │   │  Studio Web     │    │  Studio API     │    │  Studio MCP  │ │
-│   │  (Next.js 16)   │◄──►│  (FastAPI)      │◄──►│  (MCP Server)│ │
+│   │  (PLANNED)      │◄──►│  (FastAPI)      │◄──►│  (MCP Server)│ │
 │   │  - UI Preview   │    │  - Presets CRUD │    │  - Archetype │ │
 │   │  - Editor       │    │  - PostgreSQL   │    │  - MCP Tools │ │
 │   └────────┬────────┘    └────────┬────────┘    └──────┬───────┘ │
@@ -67,16 +67,16 @@
 
 ### Package Structure
 
-| Package | Purpose | Location |
-|---------|---------|----------|
-| `@tekton/studio-web` | Web-based design studio UI | `packages/studio-web/` |
-| `@tekton/studio-api` | REST API for presets management | `packages/studio-api/` |
-| `@tekton/studio-mcp` | MCP server for Archetypes | `packages/studio-mcp/` |
-| `@tekton/token-contract` | Design token → CSS mapping | `packages/token-contract/` |
-| `@tekton/headless-components` | Unstyled React hooks | `packages/headless-components/` |
-| `@tekton/archetype-system` | Component archetype rules | `packages/archetype-system/` |
-| `@tekton/cli` | Command-line interface | `packages/cli/` |
-| `@tekton/contracts` | Type definitions & schemas | `packages/contracts/` |
+| Package | Purpose | Location | Status |
+|---------|---------|----------|--------|
+| `@tekton/studio-web` | Web-based design studio UI | `packages/studio-web/` | **Planned** |
+| `@tekton/studio-api` | REST API for presets management | `packages/studio-api/` | Implemented |
+| `@tekton/studio-mcp` | MCP server for Archetypes | `packages/studio-mcp/` | Implemented |
+| `@tekton/token-contract` | Design token → CSS mapping | `packages/token-contract/` | Implemented |
+| `@tekton/headless-components` | Unstyled React hooks | `packages/headless-components/` | Planned |
+| `@tekton/archetype-system` | Component archetype rules | `packages/archetype-system/` | Implemented |
+| `@tekton/cli` | Command-line interface | `packages/cli/` | Planned |
+| `@tekton/contracts` | Type definitions & schemas | `packages/contracts/` | Planned |
 
 ---
 
@@ -125,81 +125,58 @@ MCP_PORT=3000
 ```bash
 # Terminal 1: Start MCP Server
 cd packages/studio-mcp
-pnpm dev
+pnpm install  # Install nodemon if first time
+pnpm dev      # Now runs TypeScript compilation + server
 
 # Terminal 2: Start Studio API
 cd packages/studio-api
-python -m uvicorn studio_api.main:app --reload
+uv sync                                                    # Install dependencies
+uv run uvicorn studio_api.main:app --reload --host 0.0.0.0 --port 8000
 
-# Terminal 3: Start Studio Web
-cd packages/studio-web
-pnpm dev
+# Terminal 3: Studio Web (currently not implemented)
+# Studio Web UI is planned but not yet implemented
 ```
+
+**Note**: Studio Web is currently under development. The core functionality (MCP and API) works without it.
 
 ---
 
-## 3. Web View Studio
+## 3. Web View Studio (Planned)
+
+> **Status**: This package is planned but not yet implemented.
 
 ### Overview
 
-The Web View Studio provides a visual interface for:
+The Web View Studio will provide a visual interface for:
 - Browsing curated design presets
 - Previewing components with different token configurations
 - Editing and creating new presets
 - Exporting design tokens
 
-### Accessing the Studio
+### Planned Features
 
-1. Start all services (see Section 2)
-2. Open browser to `http://localhost:3001`
+| Feature | Description |
+|---------|-------------|
+| Preset Gallery | Browse and search design presets |
+| Component Preview | Live preview with token configurations |
+| Token Editor | Visual editor for design tokens |
+| Export | Export to CSS, JSON, or StyleSheet format |
+| Dark Mode | Toggle between light and dark themes |
 
-### Workflow Verification
+### Current Alternative
 
-#### Step 1: Verify Studio Web Loads
+Until Studio Web is implemented, you can:
+1. Use the **MCP Integration** (Section 4) with Claude Code for AI-assisted component generation
+2. Use the **Studio API** directly for preset management
+3. Use the **CLI** (when implemented) for token generation
 
-```bash
-# Check that Next.js dev server is running
-curl http://localhost:3001/api/health
-
-# Expected response:
-# {"status": "ok", "service": "studio-web"}
-```
-
-#### Step 2: Verify API Connection
-
-```bash
-# Check Studio API health
-curl http://localhost:8000/api/v2/health
-
-# Expected response:
-# {"status": "healthy", "database": "connected", "mcp": "connected"}
-```
-
-#### Step 3: Load Preset Gallery
-
-1. Navigate to the Preset Gallery page
-2. Verify presets load from the API
-3. Click on a preset to see the detail view
-4. Verify design tokens are displayed correctly
-
-#### Step 4: Preview Components
-
-1. Select a preset from the gallery
-2. Open the Component Preview panel
-3. Verify components render with correct styling:
-   - Button variations (primary, secondary, outline)
-   - Input fields with states (default, focus, error)
-   - Modal dialogs with backdrop
-
-### Verification Checklist
+### Verification Checklist (Future)
 
 - [ ] Studio Web loads at `http://localhost:3001`
 - [ ] API health check returns healthy status
 - [ ] Preset gallery displays available presets
-- [ ] Preset detail view shows design tokens
 - [ ] Component preview renders correctly
 - [ ] Dark mode toggle works
-- [ ] Token changes reflect in preview
 
 ---
 
@@ -1162,7 +1139,7 @@ Use this checklist to verify the complete Tekton system is working:
 
 - [ ] **Studio MCP** running at `http://localhost:3000`
 - [ ] **Studio API** running at `http://localhost:8000`
-- [ ] **Studio Web** running at `http://localhost:3001`
+- [ ] **Studio Web** *(Planned)* - not yet implemented
 
 ### MCP Integration
 

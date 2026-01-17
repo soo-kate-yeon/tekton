@@ -23,7 +23,7 @@
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage --coverage.reporter=html --coverage.reporter=text --coverage.reporter=json",
     "build": "tsc",
-    "dev": "tsc --watch",
+    "dev": "tsc && nodemon --watch src --ext ts --exec 'tsc && node ./dist/server/index.js'",
     "start": "node ./dist/server/index.js",
     "lint": "eslint src --ext .ts",
     "format": "prettier --write \"src/**/*.ts\" \"tests/**/*.ts\""
@@ -37,6 +37,7 @@
     "@types/node": "^22.10.5",
     "@vitest/coverage-v8": "^2.1.8",
     "eslint": "^9.18.0",
+    "nodemon": "^3.1.9",
     "prettier": "^3.4.2",
     "typescript": "^5.7.3",
     "typescript-eslint": "^8.53.0",
