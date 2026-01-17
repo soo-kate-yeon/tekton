@@ -1,0 +1,801 @@
+[
+  {
+    "hookName": "useButton",
+    "configurationOptions": [
+      {
+        "optionName": "toggle",
+        "optionType": "boolean",
+        "possibleValues": [true, false],
+        "styleRules": [
+          {
+            "condition": "toggle === true && isSelected === false",
+            "cssProperties": {
+              "background": "var(--tekton-neutral-200)",
+              "color": "var(--tekton-neutral-700)",
+              "border": "none"
+            }
+          },
+          {
+            "condition": "toggle === true && isSelected === true",
+            "cssProperties": {
+              "background": "var(--tekton-primary-500)",
+              "color": "white",
+              "border": "none"
+            }
+          }
+        ]
+      },
+      {
+        "optionName": "variant",
+        "optionType": "enum",
+        "possibleValues": ["primary", "secondary", "warning", "danger"],
+        "styleRules": [
+          {
+            "condition": "variant === 'primary'",
+            "cssProperties": {
+              "background": "var(--tekton-primary-500)",
+              "color": "white"
+            }
+          },
+          {
+            "condition": "variant === 'secondary'",
+            "cssProperties": {
+              "background": "var(--tekton-neutral-200)",
+              "color": "var(--tekton-neutral-800)"
+            }
+          },
+          {
+            "condition": "variant === 'warning'",
+            "cssProperties": {
+              "background": "var(--tekton-warning-500)",
+              "color": "white"
+            }
+          },
+          {
+            "condition": "variant === 'danger'",
+            "cssProperties": {
+              "background": "var(--tekton-error-500)",
+              "color": "white"
+            }
+          }
+        ]
+      },
+      {
+        "optionName": "disabled",
+        "optionType": "boolean",
+        "possibleValues": [true, false],
+        "styleRules": [
+          {
+            "condition": "disabled === true",
+            "cssProperties": {
+              "background": "var(--tekton-neutral-200)",
+              "color": "var(--tekton-neutral-400)",
+              "cursor": "not-allowed",
+              "opacity": "0.6"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "hookName": "useToggleButton",
+    "configurationOptions": [
+      {
+        "optionName": "variant",
+        "optionType": "enum",
+        "possibleValues": ["primary", "secondary"],
+        "styleRules": [
+          {
+            "condition": "variant === 'primary'",
+            "cssProperties": {
+              "background": "var(--tekton-primary-500)",
+              "color": "white"
+            }
+          },
+          {
+            "condition": "variant === 'secondary'",
+            "cssProperties": {
+              "background": "var(--tekton-neutral-200)",
+              "color": "var(--tekton-neutral-800)"
+            }
+          }
+        ]
+      },
+      {
+        "optionName": "disabled",
+        "optionType": "boolean",
+        "possibleValues": [true, false],
+        "styleRules": [
+          {
+            "condition": "disabled === true",
+            "cssProperties": {
+              "opacity": "0.6",
+              "cursor": "not-allowed"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "hookName": "useSwitch",
+    "configurationOptions": [
+      {
+        "optionName": "size",
+        "optionType": "enum",
+        "possibleValues": ["sm", "md", "lg"],
+        "styleRules": [
+          {
+            "condition": "size === 'sm'",
+            "cssProperties": {
+              "width": "var(--tekton-spacing-xl)",
+              "height": "var(--tekton-spacing-md)"
+            }
+          },
+          {
+            "condition": "size === 'md'",
+            "cssProperties": {
+              "width": "var(--tekton-spacing-2xl)",
+              "height": "var(--tekton-spacing-lg)"
+            }
+          },
+          {
+            "condition": "size === 'lg'",
+            "cssProperties": {
+              "width": "var(--tekton-spacing-3xl)",
+              "height": "var(--tekton-spacing-xl)"
+            }
+          }
+        ]
+      },
+      {
+        "optionName": "disabled",
+        "optionType": "boolean",
+        "possibleValues": [true, false],
+        "styleRules": [
+          {
+            "condition": "disabled === true",
+            "cssProperties": {
+              "opacity": "0.5",
+              "cursor": "not-allowed"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "hookName": "useCheckbox",
+    "configurationOptions": [
+      {
+        "optionName": "size",
+        "optionType": "enum",
+        "possibleValues": ["sm", "md", "lg"],
+        "styleRules": [
+          {
+            "condition": "size === 'sm'",
+            "cssProperties": {
+              "width": "var(--tekton-spacing-md)",
+              "height": "var(--tekton-spacing-md)"
+            }
+          },
+          {
+            "condition": "size === 'md'",
+            "cssProperties": {
+              "width": "var(--tekton-spacing-lg)",
+              "height": "var(--tekton-spacing-lg)"
+            }
+          },
+          {
+            "condition": "size === 'lg'",
+            "cssProperties": {
+              "width": "var(--tekton-spacing-xl)",
+              "height": "var(--tekton-spacing-xl)"
+            }
+          }
+        ]
+      },
+      {
+        "optionName": "disabled",
+        "optionType": "boolean",
+        "possibleValues": [true, false],
+        "styleRules": [
+          {
+            "condition": "disabled === true",
+            "cssProperties": {
+              "opacity": "0.5",
+              "cursor": "not-allowed"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "hookName": "useRadio",
+    "configurationOptions": [
+      {
+        "optionName": "size",
+        "optionType": "enum",
+        "possibleValues": ["sm", "md", "lg"],
+        "styleRules": [
+          {
+            "condition": "size === 'sm'",
+            "cssProperties": {
+              "width": "var(--tekton-spacing-md)",
+              "height": "var(--tekton-spacing-md)"
+            }
+          },
+          {
+            "condition": "size === 'md'",
+            "cssProperties": {
+              "width": "var(--tekton-spacing-lg)",
+              "height": "var(--tekton-spacing-lg)"
+            }
+          },
+          {
+            "condition": "size === 'lg'",
+            "cssProperties": {
+              "width": "var(--tekton-spacing-xl)",
+              "height": "var(--tekton-spacing-xl)"
+            }
+          }
+        ]
+      },
+      {
+        "optionName": "disabled",
+        "optionType": "boolean",
+        "possibleValues": [true, false],
+        "styleRules": [
+          {
+            "condition": "disabled === true",
+            "cssProperties": {
+              "opacity": "0.5",
+              "cursor": "not-allowed"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "hookName": "useTextField",
+    "configurationOptions": [
+      {
+        "optionName": "size",
+        "optionType": "enum",
+        "possibleValues": ["sm", "md", "lg"],
+        "styleRules": [
+          {
+            "condition": "size === 'sm'",
+            "cssProperties": {
+              "padding": "var(--tekton-spacing-sm)",
+              "font-size": "var(--tekton-font-size-sm)"
+            }
+          },
+          {
+            "condition": "size === 'md'",
+            "cssProperties": {
+              "padding": "var(--tekton-spacing-md)",
+              "font-size": "var(--tekton-font-size-base)"
+            }
+          },
+          {
+            "condition": "size === 'lg'",
+            "cssProperties": {
+              "padding": "var(--tekton-spacing-lg)",
+              "font-size": "var(--tekton-font-size-lg)"
+            }
+          }
+        ]
+      },
+      {
+        "optionName": "variant",
+        "optionType": "enum",
+        "possibleValues": ["outlined", "filled", "underlined"],
+        "styleRules": [
+          {
+            "condition": "variant === 'outlined'",
+            "cssProperties": {
+              "border": "var(--tekton-border-width) solid var(--tekton-neutral-300)"
+            }
+          },
+          {
+            "condition": "variant === 'filled'",
+            "cssProperties": {
+              "background": "var(--tekton-neutral-100)",
+              "border": "none"
+            }
+          },
+          {
+            "condition": "variant === 'underlined'",
+            "cssProperties": {
+              "border": "none",
+              "border-bottom": "var(--tekton-border-width) solid var(--tekton-neutral-300)"
+            }
+          }
+        ]
+      },
+      {
+        "optionName": "disabled",
+        "optionType": "boolean",
+        "possibleValues": [true, false],
+        "styleRules": [
+          {
+            "condition": "disabled === true",
+            "cssProperties": {
+              "background": "var(--tekton-neutral-100)",
+              "color": "var(--tekton-neutral-400)",
+              "cursor": "not-allowed"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "hookName": "useDialog",
+    "configurationOptions": [
+      {
+        "optionName": "size",
+        "optionType": "enum",
+        "possibleValues": ["sm", "md", "lg", "xl"],
+        "styleRules": [
+          {
+            "condition": "size === 'sm'",
+            "cssProperties": {
+              "max-width": "400px"
+            }
+          },
+          {
+            "condition": "size === 'md'",
+            "cssProperties": {
+              "max-width": "600px"
+            }
+          },
+          {
+            "condition": "size === 'lg'",
+            "cssProperties": {
+              "max-width": "800px"
+            }
+          },
+          {
+            "condition": "size === 'xl'",
+            "cssProperties": {
+              "max-width": "1000px"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "hookName": "useModal",
+    "configurationOptions": [
+      {
+        "optionName": "size",
+        "optionType": "enum",
+        "possibleValues": ["sm", "md", "lg", "xl"],
+        "styleRules": [
+          {
+            "condition": "size === 'sm'",
+            "cssProperties": {
+              "max-width": "400px"
+            }
+          },
+          {
+            "condition": "size === 'md'",
+            "cssProperties": {
+              "max-width": "600px"
+            }
+          },
+          {
+            "condition": "size === 'lg'",
+            "cssProperties": {
+              "max-width": "800px"
+            }
+          },
+          {
+            "condition": "size === 'xl'",
+            "cssProperties": {
+              "max-width": "1000px"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "hookName": "usePopover",
+    "configurationOptions": [
+      {
+        "optionName": "placement",
+        "optionType": "enum",
+        "possibleValues": ["top", "bottom", "left", "right"],
+        "styleRules": [
+          {
+            "condition": "placement === 'top'",
+            "cssProperties": {
+              "margin-bottom": "var(--tekton-spacing-sm)"
+            }
+          },
+          {
+            "condition": "placement === 'bottom'",
+            "cssProperties": {
+              "margin-top": "var(--tekton-spacing-sm)"
+            }
+          },
+          {
+            "condition": "placement === 'left'",
+            "cssProperties": {
+              "margin-right": "var(--tekton-spacing-sm)"
+            }
+          },
+          {
+            "condition": "placement === 'right'",
+            "cssProperties": {
+              "margin-left": "var(--tekton-spacing-sm)"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "hookName": "useTooltip",
+    "configurationOptions": [
+      {
+        "optionName": "placement",
+        "optionType": "enum",
+        "possibleValues": ["top", "bottom", "left", "right"],
+        "styleRules": [
+          {
+            "condition": "placement === 'top'",
+            "cssProperties": {
+              "margin-bottom": "var(--tekton-spacing-xs)"
+            }
+          },
+          {
+            "condition": "placement === 'bottom'",
+            "cssProperties": {
+              "margin-top": "var(--tekton-spacing-xs)"
+            }
+          },
+          {
+            "condition": "placement === 'left'",
+            "cssProperties": {
+              "margin-right": "var(--tekton-spacing-xs)"
+            }
+          },
+          {
+            "condition": "placement === 'right'",
+            "cssProperties": {
+              "margin-left": "var(--tekton-spacing-xs)"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "hookName": "useTabs",
+    "configurationOptions": [
+      {
+        "optionName": "orientation",
+        "optionType": "enum",
+        "possibleValues": ["horizontal", "vertical"],
+        "styleRules": [
+          {
+            "condition": "orientation === 'horizontal'",
+            "cssProperties": {
+              "flex-direction": "row"
+            }
+          },
+          {
+            "condition": "orientation === 'vertical'",
+            "cssProperties": {
+              "flex-direction": "column"
+            }
+          }
+        ]
+      },
+      {
+        "optionName": "variant",
+        "optionType": "enum",
+        "possibleValues": ["underlined", "enclosed"],
+        "styleRules": [
+          {
+            "condition": "variant === 'underlined'",
+            "cssProperties": {
+              "border-bottom": "var(--tekton-border-width) solid var(--tekton-neutral-300)"
+            }
+          },
+          {
+            "condition": "variant === 'enclosed'",
+            "cssProperties": {
+              "border": "var(--tekton-border-width) solid var(--tekton-neutral-300)",
+              "border-radius": "var(--tekton-border-radius)"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "hookName": "useBreadcrumbs",
+    "configurationOptions": [
+      {
+        "optionName": "separator",
+        "optionType": "string",
+        "possibleValues": ["/", ">", "·"],
+        "styleRules": [
+          {
+            "condition": "separator === '/'",
+            "cssProperties": {
+              "content": "'/'",
+              "padding": "0 var(--tekton-spacing-sm)"
+            }
+          },
+          {
+            "condition": "separator === '>'",
+            "cssProperties": {
+              "content": "'>'",
+              "padding": "0 var(--tekton-spacing-sm)"
+            }
+          },
+          {
+            "condition": "separator === '·'",
+            "cssProperties": {
+              "content": "'·'",
+              "padding": "0 var(--tekton-spacing-sm)"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "hookName": "useMenu",
+    "configurationOptions": [
+      {
+        "optionName": "variant",
+        "optionType": "enum",
+        "possibleValues": ["default", "context"],
+        "styleRules": [
+          {
+            "condition": "variant === 'default'",
+            "cssProperties": {
+              "border": "var(--tekton-border-width) solid var(--tekton-neutral-300)",
+              "box-shadow": "var(--tekton-shadow-md)"
+            }
+          },
+          {
+            "condition": "variant === 'context'",
+            "cssProperties": {
+              "border": "none",
+              "box-shadow": "var(--tekton-shadow-lg)"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "hookName": "useDropdown",
+    "configurationOptions": [
+      {
+        "optionName": "variant",
+        "optionType": "enum",
+        "possibleValues": ["default", "context"],
+        "styleRules": [
+          {
+            "condition": "variant === 'default'",
+            "cssProperties": {
+              "border": "var(--tekton-border-width) solid var(--tekton-neutral-300)",
+              "box-shadow": "var(--tekton-shadow-md)"
+            }
+          },
+          {
+            "condition": "variant === 'context'",
+            "cssProperties": {
+              "border": "none",
+              "box-shadow": "var(--tekton-shadow-lg)"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "hookName": "useAccordion",
+    "configurationOptions": [
+      {
+        "optionName": "variant",
+        "optionType": "enum",
+        "possibleValues": ["default", "bordered", "separated"],
+        "styleRules": [
+          {
+            "condition": "variant === 'default'",
+            "cssProperties": {
+              "border": "none"
+            }
+          },
+          {
+            "condition": "variant === 'bordered'",
+            "cssProperties": {
+              "border": "var(--tekton-border-width) solid var(--tekton-neutral-300)",
+              "border-radius": "var(--tekton-border-radius)"
+            }
+          },
+          {
+            "condition": "variant === 'separated'",
+            "cssProperties": {
+              "border": "var(--tekton-border-width) solid var(--tekton-neutral-300)",
+              "margin-bottom": "var(--tekton-spacing-sm)"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "hookName": "useTable",
+    "configurationOptions": [
+      {
+        "optionName": "variant",
+        "optionType": "enum",
+        "possibleValues": ["simple", "striped", "bordered"],
+        "styleRules": [
+          {
+            "condition": "variant === 'simple'",
+            "cssProperties": {
+              "border": "none"
+            }
+          },
+          {
+            "condition": "variant === 'striped'",
+            "cssProperties": {
+              "background": "var(--tekton-neutral-50)"
+            }
+          },
+          {
+            "condition": "variant === 'bordered'",
+            "cssProperties": {
+              "border": "var(--tekton-border-width) solid var(--tekton-neutral-300)"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "hookName": "usePagination",
+    "configurationOptions": [
+      {
+        "optionName": "variant",
+        "optionType": "enum",
+        "possibleValues": ["default", "simple"],
+        "styleRules": [
+          {
+            "condition": "variant === 'default'",
+            "cssProperties": {
+              "border": "var(--tekton-border-width) solid var(--tekton-neutral-300)"
+            }
+          },
+          {
+            "condition": "variant === 'simple'",
+            "cssProperties": {
+              "border": "none"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "hookName": "useProgress",
+    "configurationOptions": [
+      {
+        "optionName": "variant",
+        "optionType": "enum",
+        "possibleValues": ["linear", "circular"],
+        "styleRules": [
+          {
+            "condition": "variant === 'linear'",
+            "cssProperties": {
+              "width": "100%",
+              "height": "var(--tekton-spacing-sm)"
+            }
+          },
+          {
+            "condition": "variant === 'circular'",
+            "cssProperties": {
+              "width": "var(--tekton-spacing-3xl)",
+              "height": "var(--tekton-spacing-3xl)"
+            }
+          }
+        ]
+      },
+      {
+        "optionName": "color",
+        "optionType": "enum",
+        "possibleValues": ["primary", "success", "warning", "error"],
+        "styleRules": [
+          {
+            "condition": "color === 'primary'",
+            "cssProperties": {
+              "background": "var(--tekton-primary-500)"
+            }
+          },
+          {
+            "condition": "color === 'success'",
+            "cssProperties": {
+              "background": "var(--tekton-success-500)"
+            }
+          },
+          {
+            "condition": "color === 'warning'",
+            "cssProperties": {
+              "background": "var(--tekton-warning-500)"
+            }
+          },
+          {
+            "condition": "color === 'error'",
+            "cssProperties": {
+              "background": "var(--tekton-error-500)"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "hookName": "useCalendar",
+    "configurationOptions": [
+      {
+        "optionName": "variant",
+        "optionType": "enum",
+        "possibleValues": ["default", "compact"],
+        "styleRules": [
+          {
+            "condition": "variant === 'default'",
+            "cssProperties": {
+              "padding": "var(--tekton-spacing-md)"
+            }
+          },
+          {
+            "condition": "variant === 'compact'",
+            "cssProperties": {
+              "padding": "var(--tekton-spacing-sm)"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "hookName": "useRangeCalendar",
+    "configurationOptions": [
+      {
+        "optionName": "variant",
+        "optionType": "enum",
+        "possibleValues": ["default", "compact"],
+        "styleRules": [
+          {
+            "condition": "variant === 'default'",
+            "cssProperties": {
+              "padding": "var(--tekton-spacing-md)"
+            }
+          },
+          {
+            "condition": "variant === 'compact'",
+            "cssProperties": {
+              "padding": "var(--tekton-spacing-sm)"
+            }
+          }
+        ]
+      }
+    ]
+  }
+]
