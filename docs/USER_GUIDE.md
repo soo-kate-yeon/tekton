@@ -235,6 +235,125 @@ The archetype system provides structured data for AI-driven component generation
 | `archetype.getStructure` | Get Layer 4 (structure templates) |
 | `archetype.query` | Search by criteria (WCAG level, state name) |
 
+### Implementation Details
+
+#### Package Structure
+
+```
+packages/studio-mcp/
+├── src/
+│   ├── index.ts              # Package exports
+│   ├── archetype/
+│   │   └── tools.ts          # ArchetypeTools class
+│   ├── server/
+│   │   ├── index.ts          # Server entry point
+│   │   └── mcp-server.ts     # HTTP MCP server
+│   ├── storage/
+│   │   └── storage.ts        # Generic storage utilities
+│   └── types/
+│       └── design-tokens.ts  # Design token schemas
+└── tests/
+    ├── archetype/
+    │   └── tools.test.ts     # ArchetypeTools tests
+    ├── storage/
+    │   └── storage.test.ts   # Storage tests
+    └── index.test.ts         # Export tests
+```
+
+#### ArchetypeTools Class
+
+The `ArchetypeTools` class provides programmatic access to archetype data:
+
+```typescript
+import { ArchetypeTools, archetypeTools } from '@tekton/studio-mcp';
+
+// Initialize (loads data from @tekton/archetype-system)
+await archetypeTools.initialize();
+
+// List all available hooks
+const hookList = await archetypeTools.list();
+// { success: true, data: ["useButton", "useTextField", ...] }
+
+// Get complete archetype for a hook
+const archetype = await archetypeTools.get("useButton");
+// { success: true, data: { hookName, propRules, stateMappings, variants, structure } }
+
+// Get individual layers
+const propRules = await archetypeTools.getPropRules("useButton");
+const stateMappings = await archetypeTools.getStateMappings("useButton");
+const variants = await archetypeTools.getVariants("useButton");
+const structure = await archetypeTools.getStructure("useButton");
+
+// Query by criteria
+const aaComponents = await archetypeTools.query({ wcagLevel: "AA" });
+const buttonComponents = await archetypeTools.query({ propObject: "buttonProps" });
+```
+
+#### MCP Server Implementation
+
+The MCP server is an HTTP-based implementation with CORS support:
+
+```typescript
+import { createMCPServer, TOOLS } from '@tekton/studio-mcp';
+
+// Start server on port 3000
+const server = createMCPServer(3000);
+
+// Available endpoints:
+// GET  /health              - Health check
+// GET  /tools               - List available tools
+// POST /tools/:toolName     - Execute a tool
+```
+
+**Server Features:**
+- CORS enabled for cross-origin requests
+- JSON request/response format
+- Tool execution via POST requests
+- Graceful shutdown handling (SIGINT, SIGTERM)
+
+#### Storage Utilities
+
+Generic storage functions for persisting archetype data:
+
+```typescript
+import {
+  saveArchetype,
+  loadArchetype,
+  listArchetypes,
+  deleteArchetype,
+  archetypeExists
+} from '@tekton/studio-mcp';
+import { z } from 'zod';
+
+// Define a schema
+const MySchema = z.object({
+  hookName: z.string(),
+  version: z.string(),
+});
+
+// Save data with schema validation
+await saveArchetype('useButton', myData, MySchema);
+
+// Load data with schema validation
+const data = await loadArchetype('useButton', MySchema);
+
+// List all saved archetypes
+const hooks = await listArchetypes();
+// ["useButton", "useTextField", ...]
+
+// Check if archetype exists
+const exists = await archetypeExists('useButton');
+
+// Delete an archetype
+await deleteArchetype('useButton');
+```
+
+**Storage Features:**
+- Zod schema validation on save/load
+- Automatic directory creation
+- JSON file format with metadata (hookName, updatedAt)
+- Custom storage path support
+
 ### Workflow Verification
 
 #### Step 1: Verify MCP Server
