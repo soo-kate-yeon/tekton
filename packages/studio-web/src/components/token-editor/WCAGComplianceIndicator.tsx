@@ -2,7 +2,8 @@
 
 import { forwardRef, type HTMLAttributes } from 'react';
 import { cn } from '@/lib/utils/cn';
-import type { ContrastResult, BatchContrastResult, WCAGSummary } from '@/lib/token-editor';
+import type { ContrastResult, BatchContrastResult } from '@/lib/token-editor';
+import type { WCAGSummary } from '@/hooks/useWCAGValidation';
 import { getComplianceBadge, getComplianceColorClass } from '@/lib/token-editor';
 
 export interface WCAGComplianceIndicatorProps
@@ -43,7 +44,7 @@ const WCAGComplianceIndicator = forwardRef<HTMLDivElement, WCAGComplianceIndicat
 );
 WCAGComplianceIndicator.displayName = 'WCAGComplianceIndicator';
 
-export interface WCAGSummaryPanelProps extends HTMLAttributes<HTMLDivElement> {
+export interface WCAGSummaryPanelProps extends Omit<HTMLAttributes<HTMLDivElement>, 'results'> {
   summary: WCAGSummary;
   results: BatchContrastResult[];
 }

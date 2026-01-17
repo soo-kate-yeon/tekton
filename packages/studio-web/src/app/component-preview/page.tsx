@@ -53,7 +53,7 @@ export default function ComponentPreviewPage() {
   });
 
   // Apply live preview styles
-  useLivePreview(preset?.tokens ?? {}, preset?.composition);
+  useLivePreview(preset?.tokens, preset?.composition);
 
   const handleHookChange = (hookName: HookName) => {
     setSelectedHook(hookName);

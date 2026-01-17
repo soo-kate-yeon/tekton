@@ -91,14 +91,18 @@ function PreviewComponent({ hookName, styles, state }: PreviewComponentProps) {
 
   const label = getLabel();
 
+  // Helper to safely cast boolean values
+  const toBool = (val: unknown): boolean | undefined =>
+    typeof val === 'boolean' ? val : undefined;
+
   switch (hookName) {
     case 'useButton':
     case 'useToggleButton':
       return (
         <button
           style={styles}
-          disabled={state.disabled}
-          aria-pressed={hookName === 'useToggleButton' ? state.pressed : undefined}
+          disabled={toBool(state.disabled)}
+          aria-pressed={hookName === 'useToggleButton' ? toBool(state.pressed) : undefined}
         >
           {label}
         </button>
@@ -110,8 +114,8 @@ function PreviewComponent({ hookName, styles, state }: PreviewComponentProps) {
           type="text"
           placeholder="Enter text..."
           style={styles}
-          disabled={state.disabled}
-          aria-invalid={state.invalid}
+          disabled={toBool(state.disabled)}
+          aria-invalid={toBool(state.invalid)}
         />
       );
 
@@ -120,7 +124,7 @@ function PreviewComponent({ hookName, styles, state }: PreviewComponentProps) {
         <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
           <input
             type="checkbox"
-            checked={state.checked}
+            checked={toBool(state.checked)}
             onChange={() => {}}
             style={{ width: '1rem', height: '1rem' }}
           />

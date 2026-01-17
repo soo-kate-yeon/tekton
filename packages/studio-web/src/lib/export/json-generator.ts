@@ -17,7 +17,7 @@ export interface JSONExportSchema {
   $schema: string;
   version: string;
   name?: string;
-  generatedAt: string;
+  generatedAt?: string;
   tokens: {
     semantic: SemanticToken;
     composition?: CompositionToken;

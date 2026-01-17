@@ -27,7 +27,7 @@ interface ExportState {
 }
 
 interface UseExportProps {
-  semantic: SemanticToken;
+  semantic: Partial<SemanticToken> | undefined | null;
   composition?: CompositionToken;
   presetName?: string;
 }
@@ -81,10 +81,17 @@ export function useExport({
   const content = useMemo(() => {
     const { format, options } = state;
 
+    // Return empty if no semantic tokens
+    if (!semantic || Object.keys(semantic).length === 0) {
+      return '// No tokens to export. Select a preset first.';
+    }
+
+    const safeTokens = semantic as SemanticToken;
+
     switch (format) {
       case 'css':
         return generateCSSExport({
-          semantic,
+          semantic: safeTokens,
           composition,
           includeDarkMode: options.includeDarkMode,
           minify: options.minify,
@@ -92,7 +99,7 @@ export function useExport({
 
       case 'json':
         return generateJSONExport({
-          semantic,
+          semantic: safeTokens,
           composition,
           presetName,
           includeMetadata: true,
@@ -101,7 +108,7 @@ export function useExport({
 
       case 'stylesheet':
         return generateStyleSheetExport({
-          semantic,
+          semantic: safeTokens,
           composition,
           includeTypes: options.includeTypes,
         });
@@ -130,7 +137,7 @@ export function useExport({
  * Create export state from a preset
  */
 export function usePresetExport(preset: Preset | null) {
-  const semantic = preset?.tokens ?? {};
+  const semantic = preset?.tokens;
   const composition = preset?.composition;
   const presetName = preset?.name ?? 'custom';
 

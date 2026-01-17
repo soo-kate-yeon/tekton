@@ -69,15 +69,15 @@ function generateCSSVariables(
  * Inject live preview CSS variables
  */
 export function useLivePreview(
-  semantic: SemanticToken,
+  semantic: Partial<SemanticToken> | undefined | null,
   composition?: CompositionToken,
   enabled = true
 ): void {
   const styleRef = useRef<HTMLStyleElement | null>(null);
 
   useEffect(() => {
-    if (!enabled) {
-      // Remove style element if disabled
+    if (!enabled || !semantic) {
+      // Remove style element if disabled or no tokens
       if (styleRef.current) {
         styleRef.current.remove();
         styleRef.current = null;
@@ -93,7 +93,7 @@ export function useLivePreview(
     }
 
     // Update CSS content
-    const css = generateCSSVariables(semantic, composition);
+    const css = generateCSSVariables(semantic as SemanticToken, composition);
     styleRef.current.textContent = css;
 
     // Cleanup on unmount
@@ -110,13 +110,13 @@ export function useLivePreview(
  * Apply CSS variables to a specific element (for isolated preview)
  */
 export function useElementPreview(
-  elementRef: React.RefObject<HTMLElement>,
-  semantic: SemanticToken,
+  elementRef: React.RefObject<HTMLElement | null>,
+  semantic: Partial<SemanticToken> | undefined | null,
   composition?: CompositionToken
 ): void {
   useEffect(() => {
     const element = elementRef.current;
-    if (!element) {
+    if (!element || !semantic) {
       return;
     }
 

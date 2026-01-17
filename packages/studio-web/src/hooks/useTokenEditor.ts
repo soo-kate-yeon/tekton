@@ -113,13 +113,19 @@ export function useTokenEditor(
     });
   }, []);
 
-  // Remove a semantic token
+  // Remove a semantic token (only removes optional tokens - required ones are preserved)
   const removeSemanticToken = useCallback((tokenName: SemanticTokenName) => {
+    // Don't allow removing required tokens
+    const requiredTokens = ['primary', 'neutral', 'success', 'warning', 'error'];
+    if (requiredTokens.includes(tokenName)) {
+      return;
+    }
+
     setState((prev) => {
       const { [tokenName]: _, ...rest } = prev.semantic;
       return {
         ...prev,
-        semantic: rest,
+        semantic: rest as SemanticToken,
         activeToken: prev.activeToken === tokenName ? 'primary' : prev.activeToken,
       };
     });

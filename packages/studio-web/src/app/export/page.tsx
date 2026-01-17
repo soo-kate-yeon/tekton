@@ -39,7 +39,7 @@ export default function ExportPage() {
     content,
     filename,
   } = useExport({
-    semantic: preset?.tokens ?? {},
+    semantic: preset?.tokens,
     composition: preset?.composition,
     presetName: selectedPreset,
   });

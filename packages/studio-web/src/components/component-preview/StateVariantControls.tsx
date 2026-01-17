@@ -28,6 +28,17 @@ const StateVariantControls = forwardRef<HTMLDivElement, StateVariantControlsProp
       );
     }
 
+    // Type-safe value getters
+    const getBoolValue = (key: string): boolean => {
+      const v = state[key];
+      return typeof v === 'boolean' ? v : false;
+    };
+
+    const getStringValue = (key: string, fallback: string | number | boolean = ''): string => {
+      const v = state[key];
+      return v !== null && v !== undefined ? String(v) : String(fallback);
+    };
+
     return (
       <div ref={ref} className={cn('space-y-4', className)} {...props}>
         {options.map((option) => (
@@ -38,14 +49,14 @@ const StateVariantControls = forwardRef<HTMLDivElement, StateVariantControlsProp
 
             {option.optionType === 'boolean' && (
               <BooleanControl
-                value={state[option.optionName] ?? false}
+                value={getBoolValue(option.optionName)}
                 onChange={(v) => onChange(option.optionName, v)}
               />
             )}
 
             {option.optionType === 'enum' && (
               <EnumControl
-                value={state[option.optionName] ?? option.possibleValues[0]}
+                value={getStringValue(option.optionName, option.possibleValues[0])}
                 options={option.possibleValues}
                 onChange={(v) => onChange(option.optionName, v)}
               />
@@ -53,7 +64,7 @@ const StateVariantControls = forwardRef<HTMLDivElement, StateVariantControlsProp
 
             {option.optionType === 'string' && (
               <StringControl
-                value={state[option.optionName] ?? ''}
+                value={getStringValue(option.optionName)}
                 onChange={(v) => onChange(option.optionName, v)}
               />
             )}
@@ -104,10 +115,10 @@ function EnumControl({ value, options, onChange }: EnumControlProps) {
       {options.map((opt) => (
         <button
           key={String(opt)}
-          onClick={() => onChange(opt)}
+          onClick={() => onChange(String(opt))}
           className={cn(
             'px-3 py-1 rounded-md text-sm transition-colors',
-            value === opt
+            value === String(opt)
               ? 'bg-primary text-primary-foreground'
               : 'bg-muted hover:bg-muted/80'
           )}
