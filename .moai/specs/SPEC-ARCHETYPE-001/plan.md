@@ -163,7 +163,76 @@ Create conditional styling logic based on hook configuration options (toggle, va
 
 ---
 
-## Phase 4: preset_archetypes.md Creation
+## Phase 4: Layer 4 Structure Template System
+
+**Priority**: HIGH
+
+### Objective
+Create HTML structure templates and JSX patterns for all 20 hooks to enable complete AI component generation following Layer 4 architecture.
+
+### Tasks
+
+**Task 4.1: HTML Element Mapping**
+- Define recommended HTML elements for each hook (button, dialog, input, etc.)
+- Document semantic HTML requirements for accessibility compliance
+- Create element selection decision tree (when to use button vs div with role)
+- Establish HTML5 element usage guidelines per hook type
+- Validation: All 20 hooks have recommended HTML element mappings
+
+**Task 4.2: Component Structure Templates**
+- Design JSX template structure for each hook
+- Define child element ordering (icon placement, label position)
+- Document container/wrapper patterns for layout consistency
+- Specify className conventions for styling hooks
+- Validation: JSX templates validated against React best practices
+
+**Task 4.3: Nested Component Structures**
+- Define complex component structures (Dropdown = Trigger + Menu + Items)
+- Document parent-child relationships for composite components
+- Create composition patterns for multi-part components (Dialog, Popover, Tabs)
+- Establish nesting depth guidelines and anti-patterns
+- Validation: Nested structures cover all complex hooks (Dialog, Dropdown, Menu, Tabs, Accordion)
+
+**Task 4.4: Structure-Archetype Integration**
+- Map structure templates to Hook Prop Rules from Phase 1
+- Integrate state-style mappings into JSX templates from Phase 2
+- Apply variant branching to structure variations from Phase 3
+- Document prop spreading patterns for hook prop objects
+- Validation: Structure templates correctly consume Archetype rules
+
+**Task 4.5: SPEC-COMPONENT-003 Alignment**
+- Coordinate with SPEC-COMPONENT-003 (@tekton/components package scope)
+- Define interface between archetype templates and production components
+- Document structure template handoff requirements
+- Establish migration path from archetype templates to production
+- Validation: Templates align with SPEC-COMPONENT-003 component API
+
+**Task 4.6: Accessibility and Semantic Best Practices**
+- Document ARIA attribute placement in structure templates
+- Define landmark region usage for complex components
+- Establish keyboard navigation patterns per template
+- Document focus management for overlay components
+- Validation: All templates pass WCAG 2.1 AA accessibility audit
+
+### Deliverables
+- `structure-templates.json`: HTML/JSX templates for all 20 hooks
+- `element-mapping.md`: Semantic HTML element selection guide
+- `composition-patterns.md`: Nested component structure documentation
+- TypeScript types: `StructureTemplate` interface definition
+- Integration tests: Structure template validation tests
+- Accessibility audit report: WCAG compliance verification
+
+### Success Criteria
+- ✅ All 20 hooks have complete structure templates with semantic HTML
+- ✅ Templates follow React best practices and accessibility standards
+- ✅ Nested structures documented for all complex components
+- ✅ Integration with Phases 1-3 archetype rules validated
+- ✅ Templates align with SPEC-COMPONENT-003 scope and interface
+- ✅ Test coverage ≥85% for structure template code
+
+---
+
+## Phase 5: preset_archetypes.md Creation
 
 **Priority**: HIGH
 
@@ -172,98 +241,114 @@ Create comprehensive archetype documentation consumable by AI for single-prompt 
 
 ### Tasks
 
-**Task 4.1: Documentation Structure Design**
+**Task 5.1: Documentation Structure Design**
 - Define preset_archetypes.md outline and organization
 - Create table of contents with navigation structure
 - Establish markdown formatting conventions
 - Validation: Documentation structure reviewed and approved
 
-**Task 4.2: Hook Prop Rules Section**
+**Task 5.2: Hook Prop Rules Section**
 - Document Hook Prop Rules for all 20 hooks
 - Include prop object listings, base styles, required CSS variables
 - Provide code examples for each hook
 - Validation: Hook Prop Rules section complete and accurate
 
-**Task 4.3: State-Style Mapping Section**
+**Task 5.3: State-Style Mapping Section**
 - Document State-Style Mappings for all hook states
 - Include visual feedback descriptions and CSS property details
 - Provide state transition examples
 - Validation: State-Style section complete and accurate
 
-**Task 4.4: Variant Branching Section**
+**Task 5.4: Variant Branching Section**
 - Document Variant Branching rules for all hooks
 - Include decision trees for complex scenarios
 - Provide variant combination examples
 - Validation: Variant Branching section complete and accurate
 
-**Task 4.5: AI Prompting Examples Section**
+**Task 5.5: Structure Template Section**
+- Document HTML/JSX structure templates from Phase 4
+- Include element selection guidelines and composition patterns
+- Provide nested component structure examples
+- Validation: Structure Template section complete and accurate
+
+**Task 5.6: AI Prompting Examples Section**
 - Create 10+ single-prompt component generation examples
 - Include simple scenarios (basic button) and complex scenarios (toggle button with variant)
 - Document expected AI interpretation and component output
 - Validation: AI prompting examples tested with Claude Sonnet 4.5
 
-**Task 4.6: Token Contract Integration Section**
+**Task 5.7: Token Contract Integration Section**
 - Document CSS variable naming conventions
 - Explain preset integration (Professional, Creative, etc.)
 - Provide dark mode handling guidance
 - Validation: Integration section accurate and complete
 
 ### Deliverables
-- `preset_archetypes.md`: Complete archetype documentation
+- `preset_archetypes.md`: Complete archetype documentation with Layer 4 Structure
 - AI prompting examples: 10+ tested scenarios
 - JSON Schema validation: Schema for archetype structure
 - Integration guide: Token Contract integration documentation
 
 ### Success Criteria
-- ✅ preset_archetypes.md includes all Hook Prop Rules, State-Style Mappings, Variant Branching
+- ✅ preset_archetypes.md includes all Hook Prop Rules, State-Style Mappings, Variant Branching, Structure Templates
 - ✅ AI prompting examples generate working components without clarification
 - ✅ Documentation validates against JSON Schema
 - ✅ User testing confirms documentation clarity
 
 ---
 
-## Phase 5: Integration and Validation
+## Phase 6: Integration and Validation
 
 **Priority**: HIGH
 
 ### Objective
-Validate archetype system integration with SPEC-COMPONENT-001 hooks and SPEC-COMPONENT-002 Token Contract.
+Validate archetype system integration with SPEC-COMPONENT-001 hooks, SPEC-COMPONENT-002 Token Contract, and Layer 4 Structure templates.
 
 ### Tasks
 
-**Task 5.1: Hook API Compatibility Validation**
+**Task 6.1: Hook API Compatibility Validation**
 - Execute integration tests with all 20 hooks from SPEC-COMPONENT-001
 - Verify prop object names match archetype documentation
 - Validate state values match archetype state mappings
 - Validation: Integration tests pass without API mismatches
 
-**Task 5.2: CSS Variable Reference Validation**
+**Task 6.2: CSS Variable Reference Validation**
 - Verify all archetype CSS variable references exist in Token Contract
 - Test archetype styles with all 7 Token Contract presets
 - Validate dark mode CSS variable resolution
 - Validation: CSS variable existence tests pass for all presets
 
-**Task 5.3: AI Prompting Workflow Testing**
+**Task 6.3: Structure Template Integration Testing**
+- Validate HTML structure templates with all 20 hooks
+- Test JSX templates render correctly with hook prop objects
+- Verify nested component structures work with complex hooks
+- Validation: Structure template integration tests pass
+
+**Task 6.4: AI Prompting Workflow Testing**
 - Test single-prompt component generation with Claude Sonnet 4.5
 - Measure prompt success rate (target: 90%+ without clarification)
+- Validate generated components use correct structure templates
 - Document edge cases requiring multi-step dialogue
 - Validation: AI prompting success rate meets target
 
-**Task 5.4: Performance Validation**
+**Task 6.5: Performance Validation**
 - Profile JSON Schema validation performance (target: <5ms per archetype)
 - Measure archetype documentation loading time
 - Validate archetype rule application performance
+- Test structure template parsing performance
 - Validation: Performance metrics meet targets
 
-**Task 5.5: Quality Gate Validation**
+**Task 6.6: Quality Gate Validation**
 - Execute TRUST 5 framework validation (test coverage, readability, security)
 - Verify ≥85% test coverage across all archetype code
 - Run linting and formatting checks
+- Validate accessibility compliance for structure templates
 - Validation: All quality gates pass
 
 ### Deliverables
 - Integration test suite: Hook API compatibility tests
 - CSS variable validation tests: Token Contract integration tests
+- Structure template tests: JSX rendering and composition tests
 - AI prompting test report: Success rate and edge case documentation
 - Performance benchmarks: Validation and loading performance metrics
 - Quality gate report: TRUST 5 framework validation results
@@ -271,6 +356,7 @@ Validate archetype system integration with SPEC-COMPONENT-001 hooks and SPEC-COM
 ### Success Criteria
 - ✅ Integration tests pass with SPEC-COMPONENT-001 hooks
 - ✅ CSS variable references resolve correctly in all 7 presets
+- ✅ Structure templates render correctly with all 20 hooks
 - ✅ AI prompting success rate ≥90%
 - ✅ Performance metrics meet targets (<5ms validation)
 - ✅ Test coverage ≥85% achieved
@@ -315,13 +401,17 @@ Validate archetype system integration with SPEC-COMPONENT-001 hooks and SPEC-COM
 - Deliverable: Variant rules, decision trees, preset integration
 - Acceptance: All configuration options documented, variant rules defined
 
-**Milestone 4: AI Prompting Documentation Complete** (Priority: HIGH)
-- Deliverable: preset_archetypes.md with all sections, AI prompting examples
+**Milestone 4: Layer 4 Structure Templates Complete** (Priority: HIGH)
+- Deliverable: structure-templates.json, element-mapping.md, composition-patterns.md
+- Acceptance: All 20 hooks have structure templates, integration with Phases 1-3 validated
+
+**Milestone 5: AI Prompting Documentation Complete** (Priority: HIGH)
+- Deliverable: preset_archetypes.md with all sections including Structure Templates, AI prompting examples
 - Acceptance: Documentation validates, AI prompting examples tested
 
-**Milestone 5: Integration Validation Complete** (Priority: HIGH)
-- Deliverable: Integration tests, performance benchmarks, quality gate results
-- Acceptance: All tests pass, performance targets met, quality gates satisfied
+**Milestone 6: Integration Validation Complete** (Priority: HIGH)
+- Deliverable: Integration tests, structure template tests, performance benchmarks, quality gate results
+- Acceptance: All tests pass, structure templates validated, performance targets met, quality gates satisfied
 
 ---
 
@@ -381,13 +471,22 @@ Validate archetype system integration with SPEC-COMPONENT-001 hooks and SPEC-COM
 1. Execute `/moai:2-run SPEC-ARCHETYPE-001` to begin TDD implementation
 2. Create `hook-prop-rules.json` schema and TypeScript types
 3. Implement Hook Prop Mapping System (Phase 1)
-4. Write integration tests with SPEC-COMPONENT-001 hooks
+4. Implement State-to-Style Mapping (Phase 2)
+5. Implement Variant Configuration System (Phase 3)
+6. Create Layer 4 Structure Template System (Phase 4) - HTML/JSX templates for all 20 hooks
+7. Write integration tests with SPEC-COMPONENT-001 hooks
 
 **Post-Implementation:**
-1. User testing for preset_archetypes.md clarity
-2. AI prompting workflow optimization based on test results
-3. Documentation refinement based on user feedback
-4. Performance optimization if targets not met
+1. Validate structure template integration with Phases 1-3 archetype rules
+2. User testing for preset_archetypes.md clarity including structure templates
+3. AI prompting workflow optimization based on test results
+4. Documentation refinement based on user feedback
+5. Performance optimization if targets not met
+
+**Dependencies:**
+- Phase 4 (Structure Templates) depends on completion of Phases 1-3
+- Phase 5 (preset_archetypes.md) requires all prior phases including Phase 4
+- Phase 6 (Integration Validation) validates complete system including structure templates
 
 ---
 
