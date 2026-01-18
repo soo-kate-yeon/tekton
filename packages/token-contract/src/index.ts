@@ -48,14 +48,22 @@ export type {
 } from './themes/wcag-compliance.js';
 
 export {
-  PresetNameSchema,
+  ThemeNameSchema,
   ThemeSchema,
+  // Deprecated: use ThemeNameSchema instead
+  ThemeNameSchema as PresetNameSchema,
 } from './themes/types.js';
 
 export type {
-  PresetName,
-  Preset,
-  PresetInfo,
+  ThemeName,
+  Theme,
+  ThemeInfo,
+  // Deprecated: use ThemeName instead
+  ThemeName as PresetName,
+  // Deprecated: use Theme instead
+  Theme as Preset,
+  // Deprecated: use ThemeInfo instead
+  ThemeInfo as PresetInfo,
 } from './themes/types.js';
 
 // ========================================

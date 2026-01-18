@@ -1,15 +1,15 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { createTheme } from '@/lib/api/presets';
-import type { PresetCreate } from '@/lib/api/types';
-import { PRESETS_QUERY_KEY } from './useThemes';
+import { createTheme } from '@/lib/api/themes';
+import type { ThemeCreate } from '@/lib/api/types';
+import { THEMES_QUERY_KEY } from './useThemes';
 
 export function useCreateTheme() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (data: PresetCreate) => createTheme(data),
+    mutationFn: (data: ThemeCreate) => createTheme(data),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [PRESETS_QUERY_KEY] });
+      queryClient.invalidateQueries({ queryKey: [THEMES_QUERY_KEY] });
     },
   });
 }

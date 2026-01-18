@@ -1,10 +1,10 @@
 'use client';
 
-import { PresetCard } from './PresetCard';
-import type { Preset } from '@/lib/api/types';
+import { ThemeCard } from './ThemeCard';
+import type { Theme } from '@/lib/api/types';
 
 interface ThemeGridProps {
-  presets: Preset[];
+  themes: Theme[];
   isLoading?: boolean;
   onDelete?: (id: number) => void;
 }
@@ -35,7 +35,7 @@ function SkeletonCard() {
   );
 }
 
-export function PresetGrid({ presets, isLoading, onDelete }: ThemeGridProps) {
+export function ThemeGrid({ themes, isLoading, onDelete }: ThemeGridProps) {
   if (isLoading) {
     return (
       <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
@@ -46,7 +46,7 @@ export function PresetGrid({ presets, isLoading, onDelete }: ThemeGridProps) {
     );
   }
 
-  if (presets.length === 0) {
+  if (themes.length === 0) {
     return (
       <div className="py-24 text-center">
         <div className="inline-flex items-center justify-center w-16 h-16 mb-6 border-2 border-dashed border-[color:var(--color-border)]">
@@ -65,10 +65,10 @@ export function PresetGrid({ presets, isLoading, onDelete }: ThemeGridProps) {
           </svg>
         </div>
         <h3 className="font-[family-name:var(--heading-font-family,Georgia,serif)] text-xl font-semibold mb-2">
-          No presets found
+          No themes found
         </h3>
         <p className="text-[color:var(--color-muted-foreground)] max-w-sm mx-auto">
-          Try adjusting your filters or create a new preset to get started.
+          Try adjusting your filters or create a new theme to get started.
         </p>
       </div>
     );
@@ -76,8 +76,8 @@ export function PresetGrid({ presets, isLoading, onDelete }: ThemeGridProps) {
 
   return (
     <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-      {presets.map((preset) => (
-        <ThemeCard key={preset.id} preset={preset} onDelete={onDelete} />
+      {themes.map((theme) => (
+        <ThemeCard key={theme.id} theme={theme} onDelete={onDelete} />
       ))}
     </div>
   );

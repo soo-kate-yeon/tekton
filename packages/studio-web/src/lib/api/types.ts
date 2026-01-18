@@ -1,13 +1,13 @@
 import { z } from 'zod';
 
-export const PresetConfigSchema = z.record(z.string(), z.unknown());
+export const ThemeConfigSchema = z.record(z.string(), z.unknown());
 
 export const ThemeSchema = z.object({
   id: z.number(),
   name: z.string(),
   category: z.string(),
   description: z.string().nullable(),
-  config: PresetConfigSchema,
+  config: ThemeConfigSchema,
   tags: z.array(z.string()),
   one_line_definition: z.string().nullable(),
   reference_style: z.string().nullable(),
@@ -16,37 +16,37 @@ export const ThemeSchema = z.object({
   updated_at: z.string(),
 });
 
-export const PresetListSchema = z.object({
+export const ThemeListSchema = z.object({
   items: z.array(ThemeSchema),
   total: z.number(),
   skip: z.number(),
   limit: z.number(),
 });
 
-export const PresetCreateSchema = z.object({
+export const ThemeCreateSchema = z.object({
   name: z.string().min(1).max(255),
   category: z.string().min(1).max(100),
   description: z.string().nullable().optional(),
-  config: PresetConfigSchema.optional().default({}),
+  config: ThemeConfigSchema.optional().default({}),
   tags: z.array(z.string()).optional().default([]),
 });
 
-export const PresetUpdateSchema = z.object({
+export const ThemeUpdateSchema = z.object({
   name: z.string().min(1).max(255).optional(),
   category: z.string().min(1).max(100).optional(),
   description: z.string().nullable().optional(),
-  config: PresetConfigSchema.optional(),
+  config: ThemeConfigSchema.optional(),
   tags: z.array(z.string()).optional(),
   is_active: z.boolean().optional(),
 });
 
-export type Preset = z.infer<typeof ThemeSchema>;
-export type PresetList = z.infer<typeof PresetListSchema>;
-export type PresetCreate = z.infer<typeof PresetCreateSchema>;
-export type PresetUpdate = z.infer<typeof PresetUpdateSchema>;
-export type ThemeConfig = z.infer<typeof PresetConfigSchema>;
+export type Theme = z.infer<typeof ThemeSchema>;
+export type ThemeList = z.infer<typeof ThemeListSchema>;
+export type ThemeCreate = z.infer<typeof ThemeCreateSchema>;
+export type ThemeUpdate = z.infer<typeof ThemeUpdateSchema>;
+export type ThemeConfig = z.infer<typeof ThemeConfigSchema>;
 
-export interface PresetListParams {
+export interface ThemeListParams {
   skip?: number;
   limit?: number;
   category?: string;

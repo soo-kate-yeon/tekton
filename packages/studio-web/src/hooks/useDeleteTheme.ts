@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { deleteTheme } from '@/lib/api/presets';
-import { PRESETS_QUERY_KEY } from './useThemes';
+import { deleteTheme } from '@/lib/api/themes';
+import { THEMES_QUERY_KEY } from './useThemes';
 
 export function useDeleteTheme() {
   const queryClient = useQueryClient();
@@ -8,7 +8,7 @@ export function useDeleteTheme() {
   return useMutation({
     mutationFn: (id: number) => deleteTheme(id),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [PRESETS_QUERY_KEY] });
+      queryClient.invalidateQueries({ queryKey: [THEMES_QUERY_KEY] });
     },
   });
 }

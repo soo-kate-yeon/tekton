@@ -1,10 +1,10 @@
 'use client';
 
 import Link from 'next/link';
-import type { Preset } from '@/lib/api/types';
+import type { Theme } from '@/lib/api/types';
 
 interface ThemeCardProps {
-  preset: Preset;
+  theme: Theme;
   onDelete?: (id: number) => void;
 }
 
@@ -39,8 +39,8 @@ function formatDate(dateString: string): string {
   });
 }
 
-export function PresetCard({ preset, onDelete }: ThemeCardProps) {
-  const colors = extractColors(preset.config);
+export function ThemeCard({ theme, onDelete }: ThemeCardProps) {
+  const colors = extractColors(theme.config);
 
   return (
     <article className="group relative flex flex-col h-full bg-[color:var(--color-card-background)] border border-[color:var(--color-border)] transition-all duration-300 hover:border-[color:var(--color-foreground,#1a1a1a)]/20 hover:shadow-[0_8px_30px_rgba(0,0,0,0.06)]">
@@ -79,7 +79,7 @@ export function PresetCard({ preset, onDelete }: ThemeCardProps) {
         {/* Category Badge */}
         <div className="absolute top-4 left-4">
           <span className="inline-block px-3 py-1 text-[10px] font-medium tracking-[0.1em] uppercase bg-[color:var(--color-card-background)]/90 backdrop-blur-sm text-[color:var(--color-foreground)]">
-            {preset.category}
+            {theme.category}
           </span>
         </div>
       </div>
@@ -88,22 +88,22 @@ export function PresetCard({ preset, onDelete }: ThemeCardProps) {
       <div className="flex-1 flex flex-col p-6">
         {/* Title */}
         <h3 className="font-[family-name:var(--heading-font-family,Georgia,serif)] text-xl font-semibold leading-tight tracking-tight mb-2 group-hover:text-[color:var(--color-primary)] transition-colors">
-          <Link href={`/presets/${preset.id}`} className="after:absolute after:inset-0">
-            {preset.name}
+          <Link href={`/themes/${theme.id}`} className="after:absolute after:inset-0">
+            {theme.name}
           </Link>
         </h3>
 
         {/* Description */}
-        {preset.description && (
+        {theme.description && (
           <p className="text-sm text-[color:var(--color-muted-foreground)] leading-relaxed line-clamp-2 mb-4">
-            {preset.description}
+            {theme.description}
           </p>
         )}
 
         {/* Tags */}
-        {preset.tags.length > 0 && (
+        {theme.tags.length > 0 && (
           <div className="flex flex-wrap gap-2 mb-4">
-            {preset.tags.slice(0, 3).map((tag) => (
+            {theme.tags.slice(0, 3).map((tag) => (
               <span
                 key={tag}
                 className="text-[11px] font-medium tracking-wide text-[color:var(--color-muted-foreground)] before:content-['#']"
@@ -111,9 +111,9 @@ export function PresetCard({ preset, onDelete }: ThemeCardProps) {
                 {tag}
               </span>
             ))}
-            {preset.tags.length > 3 && (
+            {theme.tags.length > 3 && (
               <span className="text-[11px] text-[color:var(--color-muted-foreground)]">
-                +{preset.tags.length - 3} more
+                +{theme.tags.length - 3} more
               </span>
             )}
           </div>
@@ -125,7 +125,7 @@ export function PresetCard({ preset, onDelete }: ThemeCardProps) {
         {/* Footer */}
         <div className="flex items-center justify-between pt-4 border-t border-[color:var(--color-border)]">
           <time className="text-xs text-[color:var(--color-muted-foreground)] tracking-wide">
-            {formatDate(preset.created_at)}
+            {formatDate(theme.created_at)}
           </time>
 
           {onDelete && (
@@ -133,7 +133,7 @@ export function PresetCard({ preset, onDelete }: ThemeCardProps) {
               onClick={(e) => {
                 e.preventDefault();
                 e.stopPropagation();
-                onDelete(preset.id);
+                onDelete(theme.id);
               }}
               className="relative z-10 text-xs font-medium text-[color:var(--color-muted-foreground)] hover:text-[color:var(--color-destructive)] transition-colors"
             >

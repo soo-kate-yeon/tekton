@@ -1,1 +1,1 @@
-export type { Preset, PresetList, PresetCreate, PresetUpdate, ThemeConfig, PresetListParams } from '@/lib/api/types';
+export type { Theme, ThemeList, ThemeCreate, ThemeUpdate, ThemeConfig, ThemeListParams } from '@/lib/api/types';

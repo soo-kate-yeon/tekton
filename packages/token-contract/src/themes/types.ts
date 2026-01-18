@@ -5,10 +5,10 @@ import {
 } from '../schemas/index.js';
 
 /**
- * Preset Name Schema
- * Valid preset identifiers
+ * Theme Name Schema
+ * Valid theme identifiers
  */
-export const PresetNameSchema = z.enum([
+export const ThemeNameSchema = z.enum([
   'professional',
   'creative',
   'minimal',
@@ -18,14 +18,14 @@ export const PresetNameSchema = z.enum([
   'high-contrast',
 ]);
 
-export type PresetName = z.infer<typeof PresetNameSchema>;
+export type ThemeName = z.infer<typeof ThemeNameSchema>;
 
 /**
- * Complete Preset Schema
- * Defines a full design system preset with tokens and composition
+ * Complete Theme Schema
+ * Defines a full design system theme with tokens and composition
  */
 export const ThemeSchema = z.object({
-  name: PresetNameSchema,
+  name: ThemeNameSchema,
   description: z.string(),
   tokens: SemanticTokenSchema,
   composition: CompositionTokenSchema,
@@ -37,14 +37,14 @@ export const ThemeSchema = z.object({
     .optional(),
 });
 
-export type Preset = z.infer<typeof ThemeSchema>;
+export type Theme = z.infer<typeof ThemeSchema>;
 
 /**
- * Preset Metadata
- * Information about available presets
+ * Theme Metadata
+ * Information about available themes
  */
-export interface PresetInfo {
-  name: PresetName;
+export interface ThemeInfo {
+  name: ThemeName;
   description: string;
   targetUseCase: string;
   characteristics: string[];

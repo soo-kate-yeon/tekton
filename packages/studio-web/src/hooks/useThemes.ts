@@ -1,12 +1,12 @@
 import { useQuery } from '@tanstack/react-query';
-import { fetchThemes } from '@/lib/api/presets';
-import type { PresetListParams } from '@/lib/api/types';
+import { fetchThemes } from '@/lib/api/themes';
+import type { ThemeListParams } from '@/lib/api/types';
 
-export const PRESETS_QUERY_KEY = 'presets';
+export const THEMES_QUERY_KEY = 'themes';
 
-export function useThemes(params: PresetListParams = {}) {
+export function useThemes(params: ThemeListParams = {}) {
   return useQuery({
-    queryKey: [PRESETS_QUERY_KEY, params],
+    queryKey: [THEMES_QUERY_KEY, params],
     queryFn: () => fetchThemes(params),
   });
 }
