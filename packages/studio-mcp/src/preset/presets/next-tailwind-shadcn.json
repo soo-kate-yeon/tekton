@@ -1,0 +1,35 @@
+{
+  "id": "next-tailwind-shadcn",
+  "name": "Next.js + Tailwind + shadcn/ui",
+  "description": "Professional web applications with Next.js, Tailwind CSS, and shadcn/ui components. Optimized for enterprise-grade applications with high accessibility standards.",
+  "stackInfo": {
+    "framework": "nextjs",
+    "styling": "tailwindcss",
+    "components": "shadcn-ui"
+  },
+  "brandTone": "professional",
+  "colorPalette": {
+    "primary": { "l": 0.5, "c": 0.15, "h": 220 },
+    "secondary": { "l": 0.6, "c": 0.1, "h": 200 },
+    "accent": { "l": 0.55, "c": 0.2, "h": 250 },
+    "neutral": { "l": 0.5, "c": 0.02, "h": 220 }
+  },
+  "typography": {
+    "fontFamily": "Inter, system-ui, sans-serif",
+    "fontScale": "medium",
+    "headingWeight": 600,
+    "bodyWeight": 400
+  },
+  "componentDefaults": {
+    "borderRadius": "medium",
+    "density": "comfortable",
+    "contrast": "high"
+  },
+  "aiContext": {
+    "brandTone": "professional",
+    "designPhilosophy": "Clean, modern, and accessible design following shadcn/ui conventions. Emphasize clarity and usability over decoration.",
+    "colorGuidance": "Use the primary blue for interactive elements and calls-to-action. Secondary colors for supporting UI. Maintain high contrast ratios for accessibility.",
+    "componentGuidance": "Follow shadcn/ui component patterns. Use consistent spacing with Tailwind's spacing scale. Prefer composition over configuration.",
+    "accessibilityNotes": "All components meet WCAG 2.1 AA standards. Ensure focus states are visible. Use semantic HTML elements."
+  }
+}

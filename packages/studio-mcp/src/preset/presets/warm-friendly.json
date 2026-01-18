@@ -1,0 +1,34 @@
+{
+  "id": "warm-friendly",
+  "name": "Warm & Friendly",
+  "description": "Warm color palette creating an approachable and inviting atmosphere. Perfect for community platforms, wellness apps, and personal brands.",
+  "stackInfo": {
+    "framework": "custom",
+    "styling": "warm-palette"
+  },
+  "brandTone": "warm",
+  "colorPalette": {
+    "primary": { "l": 0.6, "c": 0.18, "h": 30 },
+    "secondary": { "l": 0.55, "c": 0.15, "h": 50 },
+    "accent": { "l": 0.5, "c": 0.12, "h": 10 },
+    "neutral": { "l": 0.55, "c": 0.03, "h": 40 }
+  },
+  "typography": {
+    "fontFamily": "Nunito, Quicksand, sans-serif",
+    "fontScale": "medium",
+    "headingWeight": 600,
+    "bodyWeight": 400
+  },
+  "componentDefaults": {
+    "borderRadius": "large",
+    "density": "spacious",
+    "contrast": "medium"
+  },
+  "aiContext": {
+    "brandTone": "warm",
+    "designPhilosophy": "Create a welcoming, comfortable experience. Soft corners, warm colors, and friendly typography make users feel at home. Prioritize emotional connection.",
+    "colorGuidance": "Warm orange and amber tones evoke friendliness and optimism. Use soft, muted variations for backgrounds. Avoid harsh contrasts.",
+    "componentGuidance": "Rounded corners on all elements. Gentle hover transitions. Use subtle shadows for depth without harshness. Consider micro-animations for delight.",
+    "accessibilityNotes": "Ensure warm colors maintain sufficient contrast. Test amber/orange text carefully for readability. Provide clear focus indicators that fit the aesthetic."
+  }
+}

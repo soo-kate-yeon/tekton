@@ -211,6 +211,19 @@ describe("Storage", () => {
     });
   });
 
+  describe("Error handling", () => {
+    it("should re-throw non-ENOENT errors on delete", async () => {
+      // Create a directory instead of a file with the hook name
+      const hookDir = path.join(storagePath, "useDirectory.json");
+      await fs.mkdir(hookDir, { recursive: true });
+
+      // Trying to unlink a directory should throw EISDIR or EPERM, not ENOENT
+      await expect(
+        deleteArchetype("useDirectory", storagePath),
+      ).rejects.toThrow();
+    });
+  });
+
   describe("Edge cases", () => {
     it("should handle special characters in hook name", async () => {
       const hookName = "use-special_hook123";

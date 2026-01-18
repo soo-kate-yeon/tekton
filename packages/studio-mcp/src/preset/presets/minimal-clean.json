@@ -1,0 +1,34 @@
+{
+  "id": "minimal-clean",
+  "name": "Minimal Clean",
+  "description": "Minimal styling with system fonts. Fast, lightweight, and focused on content. Perfect for documentation, blogs, and content-heavy applications.",
+  "stackInfo": {
+    "framework": "minimal",
+    "styling": "system-fonts"
+  },
+  "brandTone": "minimal",
+  "colorPalette": {
+    "primary": { "l": 0.25, "c": 0.0, "h": 0 },
+    "secondary": { "l": 0.45, "c": 0.0, "h": 0 },
+    "accent": { "l": 0.5, "c": 0.12, "h": 220 },
+    "neutral": { "l": 0.5, "c": 0.0, "h": 0 }
+  },
+  "typography": {
+    "fontFamily": "system-ui, -apple-system, BlinkMacSystemFont, sans-serif",
+    "fontScale": "medium",
+    "headingWeight": 600,
+    "bodyWeight": 400
+  },
+  "componentDefaults": {
+    "borderRadius": "small",
+    "density": "spacious",
+    "contrast": "high"
+  },
+  "aiContext": {
+    "brandTone": "minimal",
+    "designPhilosophy": "Less is more. Remove unnecessary decoration to focus on content and functionality. Use whitespace generously for visual breathing room.",
+    "colorGuidance": "Primarily grayscale with minimal accent color usage. High contrast black text on white backgrounds. Accent color only for critical interactive elements.",
+    "componentGuidance": "Keep components simple and functional. Avoid decorative borders and shadows. Use subtle hover states. Prioritize content hierarchy.",
+    "accessibilityNotes": "High contrast by design. System fonts ensure optimal rendering across platforms. Focus states should be clear but not decorative."
+  }
+}

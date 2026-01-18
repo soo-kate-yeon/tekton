@@ -133,8 +133,34 @@ describe("MCP Server", () => {
   });
 
   describe("Tool count", () => {
-    it("should have exactly 15 tools (7 archetype + 3 project + 5 screen)", () => {
-      expect(TOOLS.length).toBe(15);
+    it("should have 19 tools (7 archetype + 3 project + 5 screen + 4 standalone)", () => {
+      expect(TOOLS.length).toBe(19);
+    });
+  });
+
+  describe("Standalone tools", () => {
+    it("should include preset.list tool", () => {
+      const tool = TOOLS.find((t) => t.name === "preset.list");
+      expect(tool).toBeDefined();
+      expect(tool?.description).toContain("built-in presets");
+    });
+
+    it("should include preset.get tool", () => {
+      const tool = TOOLS.find((t) => t.name === "preset.get");
+      expect(tool).toBeDefined();
+      expect(tool?.inputSchema.required).toContain("presetId");
+    });
+
+    it("should include project.status tool", () => {
+      const tool = TOOLS.find((t) => t.name === "project.status");
+      expect(tool).toBeDefined();
+      expect(tool?.description).toContain("connection mode");
+    });
+
+    it("should include project.useBuiltinPreset tool", () => {
+      const tool = TOOLS.find((t) => t.name === "project.useBuiltinPreset");
+      expect(tool).toBeDefined();
+      expect(tool?.inputSchema.required).toContain("presetId");
     });
   });
 
@@ -146,7 +172,7 @@ describe("MCP Server", () => {
       // Suppress console.log during server startup
       const originalLog = console.log;
       console.log = vi.fn();
-      server = createMCPServer(TEST_PORT);
+      server = await createMCPServer({ port: TEST_PORT, forceStandalone: true });
       console.log = originalLog;
 
       // Wait for server to be ready
@@ -166,10 +192,13 @@ describe("MCP Server", () => {
         expect(status).toBe(200);
         expect(data).toMatchObject({
           status: "ok",
-          service: "studio-mcp",
+          service: "tekton-mcp",
+          mode: "standalone",
         });
         expect((data as { tools: string[] }).tools).toContain("archetype.list");
         expect((data as { tools: string[] }).tools).toContain("project.detectStructure");
+        expect((data as { tools: string[] }).tools).toContain("preset.list");
+        expect((data as { features: { customPresets: boolean } }).features.customPresets).toBe(false);
       });
     });
 
@@ -178,7 +207,7 @@ describe("MCP Server", () => {
         const { status, data } = await makeRequest(TEST_PORT, "GET", "/tools");
 
         expect(status).toBe(200);
-        expect((data as { tools: unknown[] }).tools).toHaveLength(15);
+        expect((data as { tools: unknown[] }).tools).toHaveLength(19);
       });
     });
 

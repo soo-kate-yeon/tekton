@@ -1,0 +1,34 @@
+{
+  "id": "bold-contrast",
+  "name": "Bold Contrast",
+  "description": "Bold colors with high contrast for maximum visual impact. Ideal for landing pages, marketing sites, and applications requiring strong visual presence.",
+  "stackInfo": {
+    "framework": "custom",
+    "styling": "high-contrast"
+  },
+  "brandTone": "bold",
+  "colorPalette": {
+    "primary": { "l": 0.55, "c": 0.25, "h": 340 },
+    "secondary": { "l": 0.45, "c": 0.22, "h": 200 },
+    "accent": { "l": 0.7, "c": 0.2, "h": 80 },
+    "neutral": { "l": 0.15, "c": 0.02, "h": 240 }
+  },
+  "typography": {
+    "fontFamily": "Inter, Helvetica Neue, sans-serif",
+    "fontScale": "large",
+    "headingWeight": 800,
+    "bodyWeight": 500
+  },
+  "componentDefaults": {
+    "borderRadius": "medium",
+    "density": "comfortable",
+    "contrast": "maximum"
+  },
+  "aiContext": {
+    "brandTone": "bold",
+    "designPhilosophy": "Make a statement. Bold typography, vibrant colors, and strong visual hierarchy demand attention. Perfect for brands that want to stand out.",
+    "colorGuidance": "Vibrant magenta primary creates energy and excitement. Use contrasting colors for visual pop. Dark backgrounds with bright accents for drama.",
+    "componentGuidance": "Large, confident buttons and headings. Bold hover states with scale or color shifts. Use shadows and elevation for depth.",
+    "accessibilityNotes": "High contrast meets accessibility requirements naturally. Ensure color is not the only indicator of state. Test with color blindness simulators."
+  }
+}

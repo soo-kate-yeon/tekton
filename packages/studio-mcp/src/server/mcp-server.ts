@@ -1,6 +1,7 @@
 /**
  * Archetype MCP Server
  * HTTP-based MCP server for exposing archetype data to AI assistants
+ * Supports both standalone and connected modes
  *
  * @module server/mcp-server
  */
@@ -10,6 +11,11 @@ import { archetypeTools, type ArchetypeQueryCriteria } from "../archetype/tools.
 import { projectTools } from "../project/tools.js";
 import { screenTools } from "../screen/tools.js";
 import type { ArchetypeName } from "../screen/schemas.js";
+import { presetList, presetGet } from "../preset/tools.js";
+import { projectStatus, useBuiltinPreset } from "../project/standalone.js";
+import { detectMode, type ModeOptions } from "./mode.js";
+import { STANDALONE_TOOLS, getHealthResponse } from "./standalone-tools.js";
+import type { ConnectionMode } from "../project/config-types.js";
 
 /**
  * MCP Tool definition
@@ -311,7 +317,14 @@ const TOOLS: MCPTool[] = [
       required: ["screenName"],
     },
   },
+  // Standalone Preset Tools
+  ...STANDALONE_TOOLS,
 ];
+
+/**
+ * Server state
+ */
+let currentMode: ConnectionMode = "standalone";
 
 /**
  * Parse JSON body from request
@@ -428,6 +441,26 @@ async function executeTool(
         projectPath: params.projectPath as string | undefined,
       });
 
+    // Standalone Preset Tools
+    case "preset.list":
+      return presetList();
+
+    case "preset.get":
+      return presetGet({
+        presetId: params.presetId as string,
+      });
+
+    case "project.status":
+      return projectStatus({
+        projectPath: params.projectPath as string | undefined,
+      });
+
+    case "project.useBuiltinPreset":
+      return useBuiltinPreset({
+        presetId: params.presetId as string,
+        projectPath: params.projectPath as string | undefined,
+      });
+
     default:
       return { success: false, error: `Unknown tool: ${toolName}` };
   }
@@ -456,11 +489,8 @@ async function handleRequest(
 
   // Health check
   if (path === "/health" && req.method === "GET") {
-    sendJSON(res, 200, {
-      status: "ok",
-      service: "studio-mcp",
-      tools: TOOLS.map((t) => t.name),
-    });
+    const healthResponse = getHealthResponse(currentMode, TOOLS.map((t) => t.name));
+    sendJSON(res, 200, healthResponse);
     return;
   }
 
@@ -497,9 +527,24 @@ async function handleRequest(
 }
 
 /**
- * Create and start MCP server
+ * Server configuration options
  */
-export function createMCPServer(port = 3000): ReturnType<typeof createServer> {
+export interface MCPServerOptions extends ModeOptions {
+  port?: number;
+}
+
+/**
+ * Create and start MCP server
+ * Detects mode automatically based on API availability
+ */
+export async function createMCPServer(
+  options: MCPServerOptions = {}
+): Promise<ReturnType<typeof createServer>> {
+  const { port = 3000, ...modeOptions } = options;
+
+  // Detect operation mode
+  currentMode = await detectMode(modeOptions);
+
   const server = createServer(async (req, res) => {
     try {
       await handleRequest(req, res);
@@ -510,7 +555,9 @@ export function createMCPServer(port = 3000): ReturnType<typeof createServer> {
   });
 
   server.listen(port, () => {
-    console.log(`🚀 Archetype MCP Server running at http://localhost:${port}`);
+    const modeLabel = currentMode === "standalone" ? "Standalone" : "Connected";
+    console.log(`🚀 Tekton MCP Server running at http://localhost:${port}`);
+    console.log(`   Mode:   ${modeLabel}`);
     console.log(`   Health: http://localhost:${port}/health`);
     console.log(`   Tools:  http://localhost:${port}/tools`);
   });

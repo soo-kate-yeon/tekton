@@ -1,0 +1,34 @@
+{
+  "id": "next-styled-components",
+  "name": "Next.js + Styled Components",
+  "description": "CSS-in-JS approach with Next.js and Styled Components. Ideal for teams preferring component-scoped styling with full JavaScript integration.",
+  "stackInfo": {
+    "framework": "nextjs",
+    "styling": "styled-components"
+  },
+  "brandTone": "flexible",
+  "colorPalette": {
+    "primary": { "l": 0.5, "c": 0.16, "h": 200 },
+    "secondary": { "l": 0.55, "c": 0.12, "h": 180 },
+    "accent": { "l": 0.6, "c": 0.2, "h": 30 },
+    "neutral": { "l": 0.5, "c": 0.015, "h": 200 }
+  },
+  "typography": {
+    "fontFamily": "system-ui, -apple-system, sans-serif",
+    "fontScale": "medium",
+    "headingWeight": 600,
+    "bodyWeight": 400
+  },
+  "componentDefaults": {
+    "borderRadius": "medium",
+    "density": "comfortable",
+    "contrast": "high"
+  },
+  "aiContext": {
+    "brandTone": "flexible",
+    "designPhilosophy": "Component-driven styling with CSS-in-JS. Styles live with components for better maintainability. Supports dynamic theming and props-based styling.",
+    "colorGuidance": "Teal primary palette for a fresh, modern feel. Use theme providers for consistent color access. Support both light and dark modes.",
+    "componentGuidance": "Create styled components with meaningful names. Use props for style variations. Leverage theme context for global design tokens.",
+    "accessibilityNotes": "Styled Components works well with semantic HTML. Ensure focus styles are properly defined. Use aria attributes appropriately."
+  }
+}

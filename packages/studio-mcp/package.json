@@ -1,7 +1,7 @@
 {
-  "name": "@tekton/studio-mcp",
-  "version": "0.1.0",
-  "description": "Archetype MCP Integration for Tekton Studio - exposes hook archetype data via Model Context Protocol",
+  "name": "@tekton/mcp-server",
+  "version": "1.0.0",
+  "description": "Tekton MCP Server - AI-powered design system tools for any project. Works standalone or connected to Tekton Studio.",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -16,7 +16,14 @@
     }
   },
   "bin": {
-    "studio-mcp": "./dist/server/index.js"
+    "tekton-mcp": "./dist/server/index.js"
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "publishConfig": {
+    "access": "public"
   },
   "scripts": {
     "test": "vitest run",
@@ -26,7 +33,8 @@
     "dev": "tsc && nodemon --watch src --ext ts --exec 'tsc && node ./dist/server/index.js'",
     "start": "node ./dist/server/index.js",
     "lint": "eslint src --ext .ts",
-    "format": "prettier --write \"src/**/*.ts\" \"tests/**/*.ts\""
+    "format": "prettier --write \"src/**/*.ts\" \"tests/**/*.ts\"",
+    "prepublishOnly": "pnpm run build"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.32.1",
@@ -49,10 +57,23 @@
   "keywords": [
     "mcp",
     "model-context-protocol",
-    "archetype",
-    "hooks",
-    "component-generation",
     "design-system",
-    "tekton"
-  ]
+    "ai-tools",
+    "tekton",
+    "archetype",
+    "component-generation",
+    "preset",
+    "styling"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tekton-design/tekton.git",
+    "directory": "packages/studio-mcp"
+  },
+  "homepage": "https://tekton.design",
+  "bugs": {
+    "url": "https://github.com/tekton-design/tekton/issues"
+  },
+  "license": "MIT",
+  "author": "Tekton Design"
 }

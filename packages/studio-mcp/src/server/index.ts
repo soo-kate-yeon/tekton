@@ -11,8 +11,19 @@ import type { Server } from "http";
 // Get port from environment or use default
 const PORT = parseInt(process.env.MCP_PORT || "3000", 10);
 
-// Start server
-const server: Server = createMCPServer(PORT);
+// Start server (async initialization)
+let server: Server;
+
+async function startServer() {
+  server = await createMCPServer({ port: PORT });
+  return server;
+}
+
+// Initialize server
+startServer().catch((error) => {
+  console.error("Failed to start MCP server:", error);
+  process.exit(1);
+});
 
 // Handle graceful shutdown
 process.on("SIGINT", () => {
