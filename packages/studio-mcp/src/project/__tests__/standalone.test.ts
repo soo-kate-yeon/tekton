@@ -10,7 +10,7 @@ import { existsSync, mkdirSync, rmSync, writeFileSync } from "fs";
 import { join } from "path";
 import { tmpdir } from "os";
 import { projectStatus, useBuiltinPreset } from "../standalone.js";
-import { readConfig, writeConfig, getDefaultConfig } from "../config.js";
+import { readConfig, writeConfig } from "../config.js";
 import type { TektonConfig } from "../config-types.js";
 import { BUILTIN_PRESET_IDS } from "../../preset/types.js";
 
@@ -159,36 +159,36 @@ describe("Standalone Project Tools", () => {
 
     it("should persist preset selection to config", async () => {
       await useBuiltinPreset({
-        presetId: "minimal-clean",
+        presetId: "saas-dashboard",
         projectPath: testDir,
       });
 
       const config = readConfig(testDir);
-      expect(config?.preset.activePresetId).toBe("minimal-clean");
+      expect(config?.preset.activePresetId).toBe("saas-dashboard");
     });
 
     it("should return preset info in response", async () => {
       const result = await useBuiltinPreset({
-        presetId: "bold-contrast",
+        presetId: "tech-startup",
         projectPath: testDir,
       });
 
-      expect(result.data?.preset.id).toBe("bold-contrast");
+      expect(result.data?.preset.id).toBe("tech-startup");
       expect(result.data?.preset.name).toBeDefined();
-      expect(result.data?.preset.brandTone).toBe("bold");
+      expect(result.data?.preset.brandTone).toBe("creative");
     });
 
     it("should update selectedAt timestamp", async () => {
       const before = new Date().toISOString();
 
       await useBuiltinPreset({
-        presetId: "warm-friendly",
+        presetId: "premium-editorial",
         projectPath: testDir,
       });
 
       const config = readConfig(testDir);
       expect(config?.preset.selectedAt).toBeDefined();
-      expect(new Date(config?.preset.selectedAt!).getTime()).toBeGreaterThanOrEqual(
+      expect(new Date(config?.preset.selectedAt ?? "").getTime()).toBeGreaterThanOrEqual(
         new Date(before).getTime()
       );
     });

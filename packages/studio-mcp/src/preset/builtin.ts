@@ -17,9 +17,9 @@ import nextTailwindShadcn from "./presets/next-tailwind-shadcn.json" with { type
 import nextTailwindRadix from "./presets/next-tailwind-radix.json" with { type: "json" };
 import viteTailwindShadcn from "./presets/vite-tailwind-shadcn.json" with { type: "json" };
 import nextStyledComponents from "./presets/next-styled-components.json" with { type: "json" };
-import minimalClean from "./presets/minimal-clean.json" with { type: "json" };
-import boldContrast from "./presets/bold-contrast.json" with { type: "json" };
-import warmFriendly from "./presets/warm-friendly.json" with { type: "json" };
+import saasDashboard from "./presets/saas-dashboard.json" with { type: "json" };
+import techStartup from "./presets/tech-startup.json" with { type: "json" };
+import premiumEditorial from "./presets/premium-editorial.json" with { type: "json" };
 
 /**
  * Map of preset ID to preset data
@@ -29,9 +29,9 @@ const PRESETS: Record<BuiltinPresetId, Preset> = {
   "next-tailwind-radix": nextTailwindRadix as Preset,
   "vite-tailwind-shadcn": viteTailwindShadcn as Preset,
   "next-styled-components": nextStyledComponents as Preset,
-  "minimal-clean": minimalClean as Preset,
-  "bold-contrast": boldContrast as Preset,
-  "warm-friendly": warmFriendly as Preset,
+  "saas-dashboard": saasDashboard as Preset,
+  "tech-startup": techStartup as Preset,
+  "premium-editorial": premiumEditorial as Preset,
 };
 
 /**

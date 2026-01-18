@@ -5,7 +5,7 @@
  * @module screen/tools
  */
 
-import { existsSync, readdirSync, readFileSync, writeFileSync, mkdirSync, statSync } from "fs";
+import { existsSync, readdirSync, readFileSync, writeFileSync, mkdirSync } from "fs";
 import { join, resolve, dirname, basename } from "path";
 import {
   type CreateScreenInput,
@@ -29,7 +29,6 @@ import {
   generateNextAppTemplate,
   generateNextPagesTemplate,
   generateViteTemplate,
-  toPascalCase,
   generateComponentCode,
   generateComponentImport,
   insertComponentIntoContent,

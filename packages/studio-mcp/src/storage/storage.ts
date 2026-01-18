@@ -1,6 +1,6 @@
 import * as fs from "fs/promises";
 import * as path from "path";
-import { z, type ZodSchema } from "zod";
+import type { ZodSchema } from "zod";
 
 /**
  * Default storage base path for archetypes

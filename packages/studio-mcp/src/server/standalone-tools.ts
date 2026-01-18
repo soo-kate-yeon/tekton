@@ -66,7 +66,7 @@ export const STANDALONE_TOOLS: MCPTool[] = [
         presetId: {
           type: "string",
           description:
-            "Preset ID (e.g., 'next-tailwind-shadcn', 'minimal-clean')",
+            "Preset ID (e.g., 'next-tailwind-shadcn', 'saas-dashboard')",
         },
       },
       required: ["presetId"],

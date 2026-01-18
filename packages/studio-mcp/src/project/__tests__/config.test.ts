@@ -185,7 +185,7 @@ describe("Config Manager", () => {
           name: "project-2",
         },
         preset: {
-          activePresetId: "minimal-clean",
+          activePresetId: "saas-dashboard",
           selectedAt: new Date().toISOString(),
         },
       };
@@ -195,7 +195,7 @@ describe("Config Manager", () => {
 
       const savedConfig = readConfig(testDir);
       expect(savedConfig?.project.name).toBe("project-2");
-      expect(savedConfig?.preset.activePresetId).toBe("minimal-clean");
+      expect(savedConfig?.preset.activePresetId).toBe("saas-dashboard");
     });
   });
 
@@ -203,13 +203,13 @@ describe("Config Manager", () => {
     it("should create config with defaults when no config exists", () => {
       const updated = updateConfig(testDir, {
         preset: {
-          activePresetId: "bold-contrast",
+          activePresetId: "tech-startup",
           selectedAt: new Date().toISOString(),
         },
       });
 
       expect(updated.mode).toBe("standalone");
-      expect(updated.preset.activePresetId).toBe("bold-contrast");
+      expect(updated.preset.activePresetId).toBe("tech-startup");
     });
 
     it("should preserve existing config values when updating", () => {
@@ -232,7 +232,7 @@ describe("Config Manager", () => {
 
       const updated = updateConfig(testDir, {
         preset: {
-          activePresetId: "warm-friendly",
+          activePresetId: "premium-editorial",
           selectedAt: new Date().toISOString(),
         },
       });
@@ -241,7 +241,7 @@ describe("Config Manager", () => {
       expect(updated.project.name).toBe("existing-project");
       expect(updated.project.frameworkType).toBe("next-pages");
       // Preset should be updated
-      expect(updated.preset.activePresetId).toBe("warm-friendly");
+      expect(updated.preset.activePresetId).toBe("premium-editorial");
     });
 
     it("should merge nested objects correctly", () => {

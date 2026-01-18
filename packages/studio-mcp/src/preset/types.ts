@@ -173,9 +173,9 @@ export const BUILTIN_PRESET_IDS = [
   "next-tailwind-radix",
   "vite-tailwind-shadcn",
   "next-styled-components",
-  "minimal-clean",
-  "bold-contrast",
-  "warm-friendly",
+  "saas-dashboard",
+  "tech-startup",
+  "premium-editorial",
 ] as const;
 
 export type BuiltinPresetId = (typeof BUILTIN_PRESET_IDS)[number];

@@ -1,0 +1,35 @@
+{
+  "id": "premium-editorial",
+  "name": "Premium Editorial",
+  "description": "Sophisticated magazine-style typography and layouts. Elegant serif fonts, generous whitespace, and refined visual hierarchy for content-rich experiences.",
+  "stackInfo": {
+    "framework": "nextjs",
+    "styling": "tailwindcss",
+    "components": "custom"
+  },
+  "brandTone": "elegant",
+  "colorPalette": {
+    "primary": { "l": 0.25, "c": 0.05, "h": 30 },
+    "secondary": { "l": 0.45, "c": 0.08, "h": 25 },
+    "accent": { "l": 0.5, "c": 0.15, "h": 15 },
+    "neutral": { "l": 0.5, "c": 0.02, "h": 40 }
+  },
+  "typography": {
+    "fontFamily": "Playfair Display, Georgia, serif",
+    "fontScale": "large",
+    "headingWeight": 500,
+    "bodyWeight": 400
+  },
+  "componentDefaults": {
+    "borderRadius": "none",
+    "density": "spacious",
+    "contrast": "medium"
+  },
+  "aiContext": {
+    "brandTone": "elegant",
+    "designPhilosophy": "Typography-driven design inspired by premium publications. Let content breathe with generous margins and line heights. Use restraint in decoration to maintain sophistication.",
+    "colorGuidance": "Rich, warm neutrals with subtle brown undertones. Terracotta or burgundy accents for editorial callouts. High contrast for body text readability. Muted backgrounds that complement imagery.",
+    "componentGuidance": "Prioritize reading experience with optimal line lengths (60-75 characters). Use pull quotes and drop caps for visual interest. Images should be large and impactful with proper aspect ratios. Minimal use of cards; prefer open layouts.",
+    "accessibilityNotes": "Ensure serif fonts meet readability standards at all sizes. Line height should be 1.5-1.75 for body text. Provide sufficient contrast between text and warm-toned backgrounds."
+  }
+}

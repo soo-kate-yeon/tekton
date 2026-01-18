@@ -5,12 +5,10 @@
  * @module server/__tests__/standalone-server.test
  */
 
-import { describe, it, expect, beforeAll, afterAll, vi } from "vitest";
-import { createServer, type Server as HttpServer } from "http";
+import { describe, it, expect } from "vitest";
 import {
   STANDALONE_TOOLS,
   getHealthResponse,
-  type HealthResponse,
 } from "../standalone-tools.js";
 
 describe("Standalone Server Integration", () => {

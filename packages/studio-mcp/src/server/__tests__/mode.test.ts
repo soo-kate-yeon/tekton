@@ -6,7 +6,7 @@
  */
 
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
-import { detectMode, checkApiHealth, type ModeOptions } from "../mode.js";
+import { detectMode, checkApiHealth } from "../mode.js";
 
 describe("Mode Detection Module", () => {
   beforeEach(() => {

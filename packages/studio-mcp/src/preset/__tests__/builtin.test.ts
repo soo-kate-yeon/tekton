@@ -5,7 +5,7 @@
  * @module preset/__tests__/builtin.test
  */
 
-import { describe, it, expect, beforeAll } from "vitest";
+import { describe, it, expect } from "vitest";
 import {
   getBuiltinPresets,
   getBuiltinPreset,
@@ -15,8 +15,6 @@ import {
   PresetSchema,
   PresetMetaSchema,
   BUILTIN_PRESET_IDS,
-  type Preset,
-  type PresetMeta,
 } from "../types.js";
 
 describe("Builtin Preset Loader", () => {
@@ -170,35 +168,45 @@ describe("Builtin Preset Loader", () => {
       });
     });
 
-    describe("minimal-clean", () => {
-      it("should have minimal brand tone", () => {
-        const preset = getBuiltinPreset("minimal-clean");
+    describe("saas-dashboard", () => {
+      it("should have professional brand tone", () => {
+        const preset = getBuiltinPreset("saas-dashboard");
 
-        expect(preset?.brandTone).toBe("minimal");
+        expect(preset?.brandTone).toBe("professional");
+      });
+
+      it("should have compact density for dashboards", () => {
+        const preset = getBuiltinPreset("saas-dashboard");
+
+        expect(preset?.componentDefaults.density).toBe("compact");
       });
     });
 
-    describe("bold-contrast", () => {
-      it("should have bold brand tone", () => {
-        const preset = getBuiltinPreset("bold-contrast");
+    describe("tech-startup", () => {
+      it("should have creative brand tone", () => {
+        const preset = getBuiltinPreset("tech-startup");
 
-        expect(preset?.brandTone).toBe("bold");
+        expect(preset?.brandTone).toBe("creative");
       });
 
-      it("should have high or maximum contrast", () => {
-        const preset = getBuiltinPreset("bold-contrast");
+      it("should have large border radius for modern aesthetic", () => {
+        const preset = getBuiltinPreset("tech-startup");
 
-        expect(["high", "maximum"]).toContain(
-          preset?.componentDefaults.contrast
-        );
+        expect(preset?.componentDefaults.borderRadius).toBe("large");
       });
     });
 
-    describe("warm-friendly", () => {
-      it("should have warm brand tone", () => {
-        const preset = getBuiltinPreset("warm-friendly");
+    describe("premium-editorial", () => {
+      it("should have elegant brand tone", () => {
+        const preset = getBuiltinPreset("premium-editorial");
 
-        expect(preset?.brandTone).toBe("warm");
+        expect(preset?.brandTone).toBe("elegant");
+      });
+
+      it("should have spacious density for editorial content", () => {
+        const preset = getBuiltinPreset("premium-editorial");
+
+        expect(preset?.componentDefaults.density).toBe("spacious");
       });
     });
   });
