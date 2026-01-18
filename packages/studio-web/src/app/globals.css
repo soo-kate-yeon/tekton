@@ -48,6 +48,44 @@
   --color-ring: oklch(65% 0.2 260);
 }
 
+/* Premium Editorial Theme (NYTimes-inspired)
+ * Applied via MCP: project.setActivePreset(presetId: 10)
+ * Reference: New York Times design language
+ */
+[data-theme='premium-editorial'] {
+  /* Colors - Elegant monochrome with subtle accent */
+  --color-background: #FAFAFA;
+  --color-foreground: #121212;
+  --color-card-background: #FFFFFF;
+  --color-card-foreground: #121212;
+  --color-primary: #567B95;
+  --color-primary-foreground: #FFFFFF;
+  --color-secondary: #F5F5F5;
+  --color-secondary-foreground: #121212;
+  --color-muted: #F0F0F0;
+  --color-muted-foreground: #666666;
+  --color-accent: #567B95;
+  --color-accent-foreground: #FFFFFF;
+  --color-destructive: #D32F2F;
+  --color-destructive-foreground: #FFFFFF;
+  --color-border: #E0E0E0;
+  --color-input: #F5F5F5;
+  --color-ring: #567B95;
+
+  /* Radius - Sharp corners (editorial aesthetic) */
+  --radius-lg: 0;
+  --radius-md: 0;
+  --radius-sm: 0;
+
+  /* Typography - Serif focus for reading */
+  --font-family-heading: 'Georgia', 'Times New Roman', serif;
+  --font-family-body: 'Georgia', 'Times New Roman', serif;
+  --font-size-heading: 40px;
+  --font-size-body: 18px;
+  --line-height-body: 1.8;
+  --content-max-width: 680px;
+}
+
 @layer base {
   * {
     @apply border-border;
@@ -56,5 +94,36 @@
   body {
     @apply bg-background text-foreground;
     font-feature-settings: 'rlig' 1, 'calt' 1;
+  }
+
+  /* Premium Editorial typography overrides */
+  [data-theme='premium-editorial'] body {
+    font-family: var(--font-family-body);
+    font-size: var(--font-size-body);
+    line-height: var(--line-height-body);
+  }
+
+  [data-theme='premium-editorial'] h1,
+  [data-theme='premium-editorial'] h2,
+  [data-theme='premium-editorial'] h3,
+  [data-theme='premium-editorial'] h4 {
+    font-family: var(--font-family-heading);
+  }
+
+  [data-theme='premium-editorial'] h1 {
+    font-size: var(--font-size-heading);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+
+  /* Editorial content container */
+  [data-theme='premium-editorial'] .container {
+    max-width: var(--content-max-width, 680px);
+  }
+
+  /* Editorial card style - no shadows, subtle borders */
+  [data-theme='premium-editorial'] .card {
+    box-shadow: none;
+    border: 1px solid var(--color-border);
   }
 }

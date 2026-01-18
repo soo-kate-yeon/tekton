@@ -7,7 +7,7 @@ Web application for the Tekton Design System - design token management and compo
 - **Preset Gallery**: Browse and manage curated design token presets
 - **Preset CRUD**: Create, view, and delete presets
 - **Filtering**: Filter presets by category and tags
-- **Dark Mode**: System-aware dark mode toggle
+- **Multi-Theme Support**: System-aware theming with multiple presets (Default, Dark, Premium Editorial)
 - **Responsive**: Mobile-friendly responsive design
 
 ## Getting Started
@@ -63,6 +63,7 @@ src/
 │   ├── layout/         # Layout components (Header)
 │   ├── presets/        # Preset-specific components
 │   └── ui/             # Reusable UI components
+│       └── ThemeSelector.tsx  # Theme selection dropdown
 ├── hooks/              # React Query hooks
 ├── lib/
 │   ├── api/            # API client and types
@@ -85,6 +86,36 @@ src/
 - **State**: TanStack Query (React Query)
 - **Validation**: Zod
 - **Testing**: Vitest + Testing Library
+
+## Theme System
+
+Studio Web includes a flexible multi-theme system with the following themes:
+
+| Theme | Description |
+|-------|-------------|
+| Default | Light theme with modern styling |
+| Dark | Dark theme for low-light environments |
+| Premium Editorial | NYTimes-inspired elegant reading experience |
+
+### Usage
+
+```tsx
+import { useTheme } from '@/providers/ThemeProvider';
+
+function MyComponent() {
+  const { theme, setTheme, availableThemes } = useTheme();
+
+  return (
+    <select value={theme} onChange={(e) => setTheme(e.target.value)}>
+      {availableThemes.map((t) => (
+        <option key={t} value={t}>{t}</option>
+      ))}
+    </select>
+  );
+}
+```
+
+Themes are applied via the `data-theme` attribute on the root element and use CSS custom properties defined in `globals.css`.
 
 ## Future Roadmap
 

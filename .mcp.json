@@ -2,7 +2,19 @@
   "mcpServers": {
     "context7": {
       "command": "npx",
-      "args": ["-y", "@upstash/context7-mcp@latest"]
+      "args": [
+        "-y",
+        "@upstash/context7-mcp@latest"
+      ]
+    },
+    "tekton-studio": {
+      "command": "node",
+      "args": [
+        "packages/studio-mcp/dist/index.js"
+      ],
+      "env": {
+        "STUDIO_API_URL": "http://localhost:8000"
+      }
     }
   },
   "staggeredStartup": {

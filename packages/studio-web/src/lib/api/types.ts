@@ -9,6 +9,8 @@ export const PresetSchema = z.object({
   description: z.string().nullable(),
   config: PresetConfigSchema,
   tags: z.array(z.string()),
+  one_line_definition: z.string().nullable(),
+  reference_style: z.string().nullable(),
   is_active: z.boolean(),
   created_at: z.string(),
   updated_at: z.string(),

@@ -239,6 +239,143 @@ MCP (Model Context Protocol) 서버는 AI 어시스턴트가 다음을 수행할
 | `archetype.getStructure` | 레이어 4 (구조 템플릿) 가져오기 |
 | `archetype.query` | 기준으로 검색 (WCAG 레벨, 상태명 등) |
 
+#### 프로젝트 도구
+
+| 도구 | 설명 |
+|------|-------------|
+| `project.detectStructure` | 프로젝트 프레임워크 감지 (Next.js App/Pages, Vite) |
+| `project.getActivePreset` | 프로젝트의 현재 활성 프리셋 가져오기 |
+| `project.setActivePreset` | 큐레이션된 프리셋을 프로젝트에 활성화 |
+
+#### 화면 도구
+
+| 도구 | 설명 |
+|------|-------------|
+| `screen.create` | 라우팅 설정과 함께 새 화면 생성 |
+| `screen.addComponent` | 기존 화면에 컴포넌트 추가 |
+| `screen.applyArchetype` | 화면에 스타일 아키타입 적용 |
+| `screen.list` | 프로젝트의 모든 화면 나열 |
+| `screen.preview` | 화면의 미리보기 URL 가져오기 |
+
+### MCP를 통한 큐레이션 프리셋 적용
+
+MCP 서버는 큐레이션된 디자인 프리셋을 프로젝트에 적용하여 AI 기반 UI 리디자인을 가능하게 합니다. 이 워크플로우를 통해 사전 정의된 스타일 아키타입을 사용하여 애플리케이션의 디자인을 변경할 수 있습니다.
+
+#### 사용 가능한 큐레이션 프리셋
+
+| 프리셋 이름 | 카테고리 | 참조 스타일 | 설명 |
+|-------------|----------|-----------------|-------------|
+| SaaS Modern | productivity | Notion, Linear | 깔끔하고 정보 밀도가 높은 UI |
+| Dynamic Fitness | sports | Nike | 높은 에너지의 볼드하고 역동적인 스타일 |
+| **Premium Editorial** | media | New York Times | 읽기에 집중된 우아한 매거진 스타일 |
+| Media Streaming | entertainment | Netflix | 콘텐츠 중심의 몰입형 다크 UI |
+| Calm Wellness | wellness | Calm, Headspace | 블러 효과가 있는 명상적 스타일 |
+| Korean Fintech | finance | Toss | 큰 반경의 친근한 카드 스타일 |
+| Warm Humanist | conversational | Claude, Pi | 따뜻한 세리프 폰트와 크림 배경 |
+
+#### 워크플로우: Premium Editorial 테마 적용
+
+이 예시는 Next.js 프로젝트에 "Premium Editorial" 프리셋을 적용하는 완전한 MCP 플로우를 보여줍니다:
+
+**1단계: 프로젝트 구조 감지**
+
+```bash
+curl -X POST http://localhost:3000/tools/project.detectStructure \
+  -H "Content-Type: application/json" \
+  -d '{"projectPath": "/path/to/your/project"}'
+
+# 응답:
+# {
+#   "success": true,
+#   "data": {
+#     "frameworkType": "next-app",
+#     "rootPath": "/path/to/your/project",
+#     "appDirectory": "/path/to/your/project/src/app",
+#     "configFiles": ["package.json", "tsconfig.json", "next.config.ts", "tailwind.config.ts"]
+#   }
+# }
+```
+
+**2단계: 사용 가능한 프리셋 목록 조회**
+
+```bash
+curl http://localhost:8000/api/v2/presets | jq '.items[] | {id, name, category}'
+
+# 응답에서 모든 프리셋과 ID를 확인할 수 있습니다
+```
+
+**3단계: 활성 프리셋 설정**
+
+```bash
+curl -X POST http://localhost:3000/tools/project.setActivePreset \
+  -H "Content-Type: application/json" \
+  -d '{"presetId": 10, "projectPath": "/path/to/your/project"}'
+
+# 응답:
+# {
+#   "success": true,
+#   "data": {
+#     "name": "Premium Editorial",
+#     "category": "media",
+#     "config": {
+#       "colors": { "background": "#FAFAFA", "text-primary": "#121212", ... },
+#       "typography": { "font-family-body": "Georgia, serif", ... },
+#       "radius": "0px"
+#     }
+#   }
+# }
+```
+
+**4단계: 애플리케이션에 테마 적용**
+
+활성 프리셋을 설정한 후, 애플리케이션의 CSS 변수를 프리셋 설정에 맞게 업데이트합니다:
+
+```css
+/* globals.css - 프리셋 설정에 기반한 테마 추가 */
+[data-theme='premium-editorial'] {
+  --color-background: #FAFAFA;
+  --color-foreground: #121212;
+  --color-primary: #567B95;
+  --font-family-heading: 'Georgia', 'Times New Roman', serif;
+  --font-family-body: 'Georgia', 'Times New Roman', serif;
+  --radius-lg: 0;
+  --radius-md: 0;
+  --radius-sm: 0;
+}
+```
+
+**5단계: UI에서 테마 전환 활성화**
+
+애플리케이션에 테마 선택기를 추가합니다 (Studio Web의 `ThemeSelector` 컴포넌트 참조):
+
+```tsx
+import { useTheme } from '@/providers/ThemeProvider';
+
+function ThemeSelector() {
+  const { theme, setTheme, availableThemes } = useTheme();
+
+  return (
+    <select value={theme} onChange={(e) => setTheme(e.target.value)}>
+      {availableThemes.map((t) => (
+        <option key={t} value={t}>{t}</option>
+      ))}
+    </select>
+  );
+}
+```
+
+#### 프리셋 적용 검증 체크리스트
+
+- [ ] 프로젝트 구조가 올바르게 감지됨
+- [ ] API에서 프리셋 목록 조회됨
+- [ ] MCP를 통해 활성 프리셋 설정됨
+- [ ] 프리셋 설정에서 CSS 변수 생성됨
+- [ ] 테마 선택기 컴포넌트 추가됨
+- [ ] 브라우저에서 테마 전환 작동
+- [ ] 타이포그래피 변경 적용됨 (에디토리얼용 세리프 폰트)
+- [ ] 색상 스킴 적용됨
+- [ ] 테두리 반경 적용됨 (에디토리얼 미학을 위한 0px)
+
 ### 구현 세부사항
 
 #### 패키지 구조

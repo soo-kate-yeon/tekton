@@ -202,6 +202,8 @@ The archetype system provides structured data for AI-driven component generation
 
 ### MCP Tools Available
 
+#### Archetype Tools
+
 | Tool | Description |
 |------|-------------|
 | `archetype.list` | List all available hooks |
@@ -211,6 +213,143 @@ The archetype system provides structured data for AI-driven component generation
 | `archetype.getVariants` | Get Layer 3 (variant branching) |
 | `archetype.getStructure` | Get Layer 4 (structure templates) |
 | `archetype.query` | Search by criteria (WCAG level, state name) |
+
+#### Project Tools
+
+| Tool | Description |
+|------|-------------|
+| `project.detectStructure` | Detect project framework (Next.js App/Pages, Vite) |
+| `project.getActivePreset` | Get the currently active preset for a project |
+| `project.setActivePreset` | Set a curated preset as active for a project |
+
+#### Screen Tools
+
+| Tool | Description |
+|------|-------------|
+| `screen.create` | Create a new screen with routing setup |
+| `screen.addComponent` | Add a component to an existing screen |
+| `screen.applyArchetype` | Apply a style archetype to a screen |
+| `screen.list` | List all screens in the project |
+| `screen.preview` | Get preview URL for a screen |
+
+### Applying Curated Presets via MCP
+
+The MCP server enables AI-driven UI redesign by applying curated design presets to your project. This workflow allows you to transform your application's look and feel using pre-defined style archetypes.
+
+#### Available Curated Presets
+
+| Preset Name | Category | Reference Style | Description |
+|-------------|----------|-----------------|-------------|
+| SaaS Modern | productivity | Notion, Linear | Clean, information-dense UI |
+| Dynamic Fitness | sports | Nike | Bold and dynamic with high energy |
+| **Premium Editorial** | media | New York Times | Elegant magazine-style, reading-focused |
+| Media Streaming | entertainment | Netflix | Content-first immersive dark UI |
+| Calm Wellness | wellness | Calm, Headspace | Meditative with blur effects |
+| Korean Fintech | finance | Toss | Friendly cards with large radius |
+| Warm Humanist | conversational | Claude, Pi | Warm serif fonts, cream background |
+
+#### Workflow: Apply Premium Editorial Theme
+
+This example demonstrates the complete MCP flow for applying the "Premium Editorial" preset to a Next.js project:
+
+**Step 1: Detect Project Structure**
+
+```bash
+curl -X POST http://localhost:3000/tools/project.detectStructure \
+  -H "Content-Type: application/json" \
+  -d '{"projectPath": "/path/to/your/project"}'
+
+# Response:
+# {
+#   "success": true,
+#   "data": {
+#     "frameworkType": "next-app",
+#     "rootPath": "/path/to/your/project",
+#     "appDirectory": "/path/to/your/project/src/app",
+#     "configFiles": ["package.json", "tsconfig.json", "next.config.ts", "tailwind.config.ts"]
+#   }
+# }
+```
+
+**Step 2: List Available Presets**
+
+```bash
+curl http://localhost:8000/api/v2/presets | jq '.items[] | {id, name, category}'
+
+# Response shows all presets with their IDs
+```
+
+**Step 3: Set Active Preset**
+
+```bash
+curl -X POST http://localhost:3000/tools/project.setActivePreset \
+  -H "Content-Type: application/json" \
+  -d '{"presetId": 10, "projectPath": "/path/to/your/project"}'
+
+# Response:
+# {
+#   "success": true,
+#   "data": {
+#     "name": "Premium Editorial",
+#     "category": "media",
+#     "config": {
+#       "colors": { "background": "#FAFAFA", "text-primary": "#121212", ... },
+#       "typography": { "font-family-body": "Georgia, serif", ... },
+#       "radius": "0px"
+#     }
+#   }
+# }
+```
+
+**Step 4: Apply Theme to Application**
+
+After setting the active preset, update your application's CSS variables to match the preset configuration:
+
+```css
+/* globals.css - Add theme based on preset config */
+[data-theme='premium-editorial'] {
+  --color-background: #FAFAFA;
+  --color-foreground: #121212;
+  --color-primary: #567B95;
+  --font-family-heading: 'Georgia', 'Times New Roman', serif;
+  --font-family-body: 'Georgia', 'Times New Roman', serif;
+  --radius-lg: 0;
+  --radius-md: 0;
+  --radius-sm: 0;
+}
+```
+
+**Step 5: Enable Theme Switching in UI**
+
+Add a theme selector to your application (see Studio Web's `ThemeSelector` component for reference):
+
+```tsx
+import { useTheme } from '@/providers/ThemeProvider';
+
+function ThemeSelector() {
+  const { theme, setTheme, availableThemes } = useTheme();
+
+  return (
+    <select value={theme} onChange={(e) => setTheme(e.target.value)}>
+      {availableThemes.map((t) => (
+        <option key={t} value={t}>{t}</option>
+      ))}
+    </select>
+  );
+}
+```
+
+#### Verification Checklist for Preset Application
+
+- [ ] Project structure detected correctly
+- [ ] Preset list retrieved from API
+- [ ] Active preset set via MCP
+- [ ] CSS variables generated from preset config
+- [ ] Theme selector component added
+- [ ] Theme switching works in browser
+- [ ] Typography changes applied (serif fonts for editorial)
+- [ ] Color scheme applied
+- [ ] Border radius applied (0px for editorial aesthetic)
 
 ### Implementation Details
 

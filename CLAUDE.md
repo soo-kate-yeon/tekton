@@ -799,6 +799,45 @@ Mandatory Verification Steps:
 
 ---
 
+## Tekton MCP Integration
+
+### Mandatory MCP Tool Consideration
+
+[HARD] Before ANY implementation task in a Tekton project, check if MCP tools can assist.
+WHY: Tekton MCP provides specialized tools for screen generation, archetype application, and preset management.
+
+### Tekton MCP Tool Triggers
+
+When user request contains these keywords, MUST consider Tekton MCP tools:
+
+Screen/Page Operations:
+- EN: screen, page, create page, new screen, add component, layout, routing
+- KO: 스크린, 페이지, 페이지생성, 새화면, 컴포넌트추가, 레이아웃, 라우팅
+
+Design/Style Operations:
+- EN: style, archetype, preset, design token, theme, color, typography, redesign
+- KO: 스타일, 아키타입, 프리셋, 디자인토큰, 테마, 색상, 타이포, 리디자인
+
+Project Structure:
+- EN: detect structure, framework, active preset, project settings
+- KO: 구조감지, 프레임워크, 활성프리셋, 프로젝트설정
+
+### MCP Tool Decision Tree
+
+Before implementing:
+1. Is this a page/screen creation? → Consider `screen.create` tool
+2. Is this a component addition? → Consider `screen.addComponent` tool
+3. Is this a style/theme change? → Consider `project.getActivePreset`, `screen.applyArchetype` tools
+4. Need to understand project structure? → Use `project.detectStructure` tool
+5. Need archetype rules? → Use `archetype.get` or `archetype.query` tools
+
+### MCP Server Endpoint
+
+Default: `http://localhost:3000` (studio-mcp)
+API Backend: `http://localhost:8000` (studio-api)
+
+---
+
 ## Success Metrics and Quality Standards
 
 ### Alfred Success Metrics

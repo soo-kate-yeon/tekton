@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { DarkModeToggle } from '@/components/ui/DarkModeToggle';
+import { ThemeSelector } from '@/components/ui/ThemeSelector';
 import { cn } from '@/lib/utils/cn';
 
 const navigation = [
@@ -41,7 +41,7 @@ export function Header() {
           </nav>
         </div>
         <div className="flex flex-1 items-center justify-end space-x-2">
-          <DarkModeToggle />
+          <ThemeSelector />
         </div>
       </div>
     </header>
