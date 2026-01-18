@@ -7,6 +7,16 @@ from studio_api.schemas.curated_preset import (
     CuratedPresetResponse,
     CuratedPresetUpdate,
 )
+from studio_api.schemas.project import (
+    LayoutBreakpointCreate,
+    LayoutBreakpointResponse,
+    LayoutBreakpointUpdate,
+    ProjectCreate,
+    ProjectListResponse,
+    ProjectResponse,
+    ProjectSummary,
+    ProjectUpdate,
+)
 from studio_api.schemas.project_settings import (
     ActivePresetResponse,
     ProjectSettingsResponse,
@@ -20,6 +30,14 @@ __all__ = [
     "CuratedPresetUpdate",
     "CuratedPresetResponse",
     "CuratedPresetList",
+    "LayoutBreakpointCreate",
+    "LayoutBreakpointResponse",
+    "LayoutBreakpointUpdate",
+    "ProjectCreate",
+    "ProjectListResponse",
+    "ProjectResponse",
+    "ProjectSummary",
+    "ProjectUpdate",
     "SetActivePresetRequest",
     "ActivePresetResponse",
     "ProjectSettingsResponse",
