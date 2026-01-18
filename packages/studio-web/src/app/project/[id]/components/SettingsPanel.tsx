@@ -1,11 +1,17 @@
 import React from 'react';
 import { NavCategory, NavItem } from './EditorSidebar';
 
+interface PresetItem {
+    id: number;
+    name: string;
+    description?: string | null;
+}
+
 interface SettingsPanelProps {
     activeCategory: NavCategory | null;
     activeItem: NavItem;
-    // Props needed for Theme/Color settings (using generic types for now as placeholder for actual types)
-    presets?: any[];
+    // Props needed for Theme/Color settings
+    presets?: PresetItem[];
     activePresetId?: number;
     onSelectPreset?: (id: number) => void;
 }
@@ -49,7 +55,7 @@ export function SettingsPanel({
 
 // Sub-components for specific settings
 
-function ColorSettings({ presets, activePresetId, onSelectPreset }: { presets: any[], activePresetId?: number, onSelectPreset?: (id: number) => void }) {
+function ColorSettings({ presets, activePresetId, onSelectPreset }: { presets: PresetItem[], activePresetId?: number, onSelectPreset?: (id: number) => void }) {
     return (
         <div className="space-y-6">
             <div className="space-y-2">

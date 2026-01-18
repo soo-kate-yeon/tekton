@@ -10,7 +10,7 @@ interface EditorSidebarProps {
     onSelect: (category: NavCategory, item: NavItem) => void;
 }
 
-export function EditorSidebar({ activeCategory, activeItem, onSelect }: EditorSidebarProps) {
+export function EditorSidebar({ activeCategory: _activeCategory, activeItem, onSelect }: EditorSidebarProps) {
     const [expanded, setExpanded] = React.useState<Record<NavCategory, boolean>>({
         template: true,
         layout: true,
