@@ -21,7 +21,7 @@ class ProjectSettings(Base):
     Attributes:
         id: Primary key
         project_path: Unique path to the project directory
-        active_preset_id: FK to curated_presets (SET NULL on delete)
+        active_preset_id: FK to curated_themes (SET NULL on delete)
         framework_type: Detected or configured framework (react, vue, nextjs, etc.)
         detected_at: Timestamp when framework was last auto-detected
         created_at: Record creation timestamp
@@ -36,7 +36,7 @@ class ProjectSettings(Base):
     )
     active_preset_id: Mapped[int | None] = mapped_column(
         Integer,
-        ForeignKey("curated_presets.id", ondelete="SET NULL"),
+        ForeignKey("curated_themes.id", ondelete="SET NULL"),
         nullable=True,
         index=True,
     )
@@ -56,9 +56,9 @@ class ProjectSettings(Base):
         onupdate=lambda: datetime.now(timezone.utc),
     )
 
-    # Relationship to CuratedPreset (optional, for eager loading if needed)
-    active_preset = relationship(
-        "CuratedPreset",
+    # Relationship to CuratedTheme (optional, for eager loading if needed)
+    active_theme = relationship(
+        "CuratedTheme",
         foreign_keys=[active_preset_id],
         lazy="selectin",
     )

@@ -36,22 +36,22 @@ Phase A의 개별 패키지를 통합 관리하는 pnpm workspace 기반 monorep
 
 **M1.2: Phase A 패키지 추출**
 - 기존 src/ 디렉토리를 packages/ 하위로 이동
-  - `packages/preset/`: Phase A1 프리셋 시스템
+  - `packages/theme/`: Phase A1 프리셋 시스템
   - `packages/token-generator/`: Phase A2 토큰 생성기
   - `packages/contracts/`: Phase A3 컴포넌트 계약
 - 각 패키지의 package.json 생성
-  - Package name: `@tekton/preset`, `@tekton/token-generator`, `@tekton/contracts`
+  - Package name: `@tekton/theme`, `@tekton/token-generator`, `@tekton/contracts`
   - Exports 설정: `"exports": { ".": "./src/index.ts" }`
-- Workspace protocol 사용: `"@tekton/preset": "workspace:*"`
+- Workspace protocol 사용: `"@tekton/theme": "workspace:*"`
 
 **M1.3: 빌드 및 테스트 검증**
 - Root에서 `pnpm install` 실행
 - 모든 Phase A 테스트 실행 및 통과 확인
-  - `pnpm --filter @tekton/preset test`
+  - `pnpm --filter @tekton/theme test`
   - `pnpm --filter @tekton/token-generator test`
   - `pnpm --filter @tekton/contracts test`
 - 테스트 커버리지 유지 확인:
-  - preset: ≥97.77%
+  - theme: ≥97.77%
   - token-generator: 100% (critical paths)
   - contracts: 100% (208 tests)
 
@@ -99,7 +99,7 @@ Phase A의 개별 패키지를 통합 관리하는 pnpm workspace 기반 monorep
   - execa (v9.x): subprocess 실행
   - fs-extra (v11.x): 파일 유틸리티
 - Workspace dependencies:
-  - `@tekton/preset`, `@tekton/token-generator`
+  - `@tekton/theme`, `@tekton/token-generator`
 
 **M2.2: 프레임워크 감지 (detect 명령어)**
 - `src/detectors/framework.ts` 구현
@@ -142,11 +142,11 @@ Phase A의 개별 패키지를 통합 관리하는 pnpm workspace 기반 monorep
   - Phase A token-generator import
   - enquirer를 사용한 Q&A 워크플로우:
     - Primary color 입력 (hex code)
-    - Preset 선택 (Default Palette / Accessible / Vibrant 등)
+    - Theme 선택 (Default Palette / Accessible / Vibrant 등)
   - Token generation 실행:
     ```typescript
     import { generateTokens } from '@tekton/token-generator';
-    const tokens = await generateTokens({ primaryColor, preset });
+    const tokens = await generateTokens({ primaryColor, theme });
     ```
   - 파일 출력:
     - `src/styles/tokens.css`: CSS variables
@@ -331,7 +331,7 @@ Phase C 준비 및 추가 프레임워크 지원
 - Prettier: ^3.4.2
 
 **Phase A Package References** (Workspace):
-- @tekton/preset: workspace:*
+- @tekton/theme: workspace:*
 - @tekton/token-generator: workspace:*
 - @tekton/contracts: workspace:*
 
@@ -498,7 +498,7 @@ Phase B 완료 후 진행할 항목:
 
 ### Phase A 문서
 - Phase A 완료 보고서: `.moai/docs/phase-a-completion.md`
-- Preset System 문서: `packages/preset/README.md`
+- Theme System 문서: `packages/theme/README.md`
 - Token Generator 문서: `packages/token-generator/README.md`
 - Component Contracts 문서: `packages/contracts/README.md`
 

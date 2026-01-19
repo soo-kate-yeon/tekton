@@ -29,7 +29,7 @@ interface ExportState {
 interface UseExportProps {
   semantic: Partial<SemanticToken> | undefined | null;
   composition?: CompositionToken;
-  presetName?: string;
+  themeName?: string;
 }
 
 interface UseExportReturn {
@@ -54,7 +54,7 @@ const DEFAULT_OPTIONS: Omit<ExportOptions, 'format'> = {
 export function useExport({
   semantic,
   composition,
-  presetName = 'tokens',
+  themeName = 'tokens',
 }: UseExportProps): UseExportReturn {
   const [state, setState] = useState<ExportState>({
     format: 'css',
@@ -101,7 +101,7 @@ export function useExport({
         return generateJSONExport({
           semantic: safeTokens,
           composition,
-          presetName,
+          themeName,
           includeMetadata: true,
           prettyPrint: options.prettyPrint,
         });
@@ -116,12 +116,12 @@ export function useExport({
       default:
         return '';
     }
-  }, [semantic, composition, presetName, state]);
+  }, [semantic, composition, themeName, state]);
 
   const filename = useMemo(() => {
-    const base = presetName.toLowerCase().replace(/\s+/g, '-');
+    const base = themeName.toLowerCase().replace(/\s+/g, '-');
     return `${base}-tokens`;
-  }, [presetName]);
+  }, [themeName]);
 
   return {
     format: state.format,
@@ -139,7 +139,7 @@ export function useExport({
 export function usePresetExport(preset: Preset | null) {
   const semantic = preset?.tokens;
   const composition = preset?.composition;
-  const presetName = preset?.name ?? 'custom';
+  const themeName = preset?.name ?? 'custom';
 
-  return useExport({ semantic, composition, presetName });
+  return useExport({ semantic, composition, themeName });
 }

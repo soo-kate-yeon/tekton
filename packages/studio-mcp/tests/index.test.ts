@@ -21,10 +21,10 @@ describe("Package exports", () => {
   });
 
   it("should export storage functions", () => {
-    expect(typeof StudioMCP.saveArchetype).toBe("function");
-    expect(typeof StudioMCP.loadArchetype).toBe("function");
+    expect(typeof StudioMCP.saveComponent).toBe("function");
+    expect(typeof StudioMCP.loadComponent).toBe("function");
     expect(typeof StudioMCP.listArchetypes).toBe("function");
-    expect(typeof StudioMCP.deleteArchetype).toBe("function");
+    expect(typeof StudioMCP.deleteComponent).toBe("function");
     expect(typeof StudioMCP.archetypeExists).toBe("function");
   });
 

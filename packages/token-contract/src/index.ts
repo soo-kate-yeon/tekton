@@ -30,33 +30,41 @@ export type {
 } from './schemas/index.js';
 
 // ========================================
-// Presets
+// Themes
 // ========================================
 export {
-  loadPreset,
+  loadTheme,
   getAvailablePresets,
   validatePreset,
-} from './presets/preset-loader.js';
+} from './themes/theme-loader.js';
 
 export {
   validateWCAGCompliance,
-} from './presets/wcag-compliance.js';
+} from './themes/wcag-compliance.js';
 
 export type {
   WCAGCheck,
   WCAGComplianceResult,
-} from './presets/wcag-compliance.js';
+} from './themes/wcag-compliance.js';
 
 export {
-  PresetNameSchema,
-  PresetSchema,
-} from './presets/types.js';
+  ThemeNameSchema,
+  ThemeSchema,
+  // Deprecated: use ThemeNameSchema instead
+  ThemeNameSchema as PresetNameSchema,
+} from './themes/types.js';
 
 export type {
-  PresetName,
-  Preset,
-  PresetInfo,
-} from './presets/types.js';
+  ThemeName,
+  Theme,
+  ThemeInfo,
+  // Deprecated: use ThemeName instead
+  ThemeName as PresetName,
+  // Deprecated: use Theme instead
+  Theme as Preset,
+  // Deprecated: use ThemeInfo instead
+  ThemeInfo as PresetInfo,
+} from './themes/types.js';
 
 // ========================================
 // CSS Generator

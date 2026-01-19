@@ -8,7 +8,7 @@ import type { SemanticToken, CompositionToken, Preset } from '@tekton/token-cont
 export interface JSONExportOptions {
   semantic: SemanticToken;
   composition?: CompositionToken;
-  presetName?: string;
+  themeName?: string;
   includeMetadata?: boolean;
   prettyPrint?: boolean;
 }
@@ -33,14 +33,14 @@ const SCHEMA_URL = 'https://tekton.design/schemas/tokens/v1.json';
 export function generateJSONExport({
   semantic,
   composition,
-  presetName,
+  themeName,
   includeMetadata = true,
   prettyPrint = true,
 }: JSONExportOptions): string {
   const exportData: JSONExportSchema = {
     $schema: SCHEMA_URL,
     version: SCHEMA_VERSION,
-    ...(presetName && { name: presetName }),
+    ...(themeName && { name: themeName }),
     ...(includeMetadata && { generatedAt: new Date().toISOString() }),
     tokens: {
       semantic,

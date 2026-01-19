@@ -63,13 +63,13 @@ export const STANDALONE_TOOLS: MCPTool[] = [
     inputSchema: {
       type: "object",
       properties: {
-        presetId: {
+        themeId: {
           type: "string",
           description:
             "Preset ID (e.g., 'next-tailwind-shadcn', 'saas-dashboard')",
         },
       },
-      required: ["presetId"],
+      required: ["themeId"],
     },
   },
   {
@@ -95,7 +95,7 @@ export const STANDALONE_TOOLS: MCPTool[] = [
     inputSchema: {
       type: "object",
       properties: {
-        presetId: {
+        themeId: {
           type: "string",
           description: "Built-in preset ID to activate",
         },
@@ -105,7 +105,7 @@ export const STANDALONE_TOOLS: MCPTool[] = [
             "Optional project path (defaults to current working directory)",
         },
       },
-      required: ["presetId"],
+      required: ["themeId"],
     },
   },
 ];

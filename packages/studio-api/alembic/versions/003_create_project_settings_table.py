@@ -5,7 +5,7 @@ Revises: 002
 Create Date: 2026-01-18 10:00:00.000000
 
 Design-TAG: SPEC-MCP-001 natural language screen generation database infrastructure
-Function-TAG: Migration creates project_settings table with FK to curated_presets
+Function-TAG: Migration creates project_settings table with FK to curated_themes
 """
 from typing import Sequence, Union
 
@@ -20,7 +20,7 @@ depends_on: Union[str, Sequence[str], None] = None
 
 
 def upgrade() -> None:
-    """Create project_settings table with FK to curated_presets."""
+    """Create project_settings table with FK to curated_themes."""
     op.create_table(
         'project_settings',
         sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
@@ -28,7 +28,7 @@ def upgrade() -> None:
         sa.Column(
             'active_preset_id',
             sa.Integer(),
-            sa.ForeignKey('curated_presets.id', ondelete='SET NULL'),
+            sa.ForeignKey('curated_themes.id', ondelete='SET NULL'),
             nullable=True,
         ),
         sa.Column('framework_type', sa.String(length=50), nullable=True),

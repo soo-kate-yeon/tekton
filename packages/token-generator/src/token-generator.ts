@@ -1,5 +1,5 @@
-import type { OKLCHColor, TokenDefinition, ColorScale, TokenOutputFormat } from '@tekton/preset';
-import { OKLCHColorSchema } from '@tekton/preset';
+import type { OKLCHColor, TokenDefinition, ColorScale, TokenOutputFormat } from '@tekton/theme';
+import { OKLCHColorSchema } from '@tekton/theme';
 import { generateLightnessScale } from './scale-generator';
 import { oklchToRgb, oklchToHex } from './color-conversion';
 

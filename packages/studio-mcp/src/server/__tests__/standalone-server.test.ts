@@ -22,7 +22,7 @@ describe("Standalone Server Integration", () => {
     it("should include preset.get tool", () => {
       const tool = STANDALONE_TOOLS.find((t) => t.name === "preset.get");
       expect(tool).toBeDefined();
-      expect(tool?.inputSchema.required).toContain("presetId");
+      expect(tool?.inputSchema.required).toContain("themeId");
     });
 
     it("should include project.status tool", () => {
@@ -34,7 +34,7 @@ describe("Standalone Server Integration", () => {
     it("should include project.useBuiltinPreset tool", () => {
       const tool = STANDALONE_TOOLS.find((t) => t.name === "project.useBuiltinPreset");
       expect(tool).toBeDefined();
-      expect(tool?.inputSchema.required).toContain("presetId");
+      expect(tool?.inputSchema.required).toContain("themeId");
     });
 
     it("should have 4 standalone tools", () => {

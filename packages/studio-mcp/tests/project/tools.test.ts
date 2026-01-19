@@ -360,7 +360,7 @@ describe("ProjectTools", () => {
           json: () => Promise.resolve({ success: true, active_preset: mockPreset }),
         });
 
-        const result = await tools.setActivePreset({ presetId: 2 });
+        const result = await tools.setActivePreset({ themeId: 2 });
 
         expect(result.success).toBe(true);
         expect(result.data).toEqual(mockPreset);
@@ -368,7 +368,7 @@ describe("ProjectTools", () => {
           expect.stringContaining("/api/v2/settings/active-preset"),
           expect.objectContaining({
             method: "PUT",
-            body: expect.stringContaining('"preset_id":2'),
+            body: expect.stringContaining('"theme_id":2'),
           })
         );
       });
@@ -380,7 +380,7 @@ describe("ProjectTools", () => {
         });
 
         await tools.setActivePreset({
-          presetId: 1,
+          themeId: 1,
           projectPath: "/test/project",
         });
 
@@ -395,21 +395,21 @@ describe("ProjectTools", () => {
 
     describe("Validation errors", () => {
       it("should return error for invalid preset ID (negative)", async () => {
-        const result = await tools.setActivePreset({ presetId: -1 });
+        const result = await tools.setActivePreset({ themeId: -1 });
 
         expect(result.success).toBe(false);
         expect(result.error).toContain("Invalid input");
       });
 
       it("should return error for invalid preset ID (zero)", async () => {
-        const result = await tools.setActivePreset({ presetId: 0 });
+        const result = await tools.setActivePreset({ themeId: 0 });
 
         expect(result.success).toBe(false);
         expect(result.error).toContain("Invalid input");
       });
 
       it("should return error for invalid preset ID (float)", async () => {
-        const result = await tools.setActivePreset({ presetId: 1.5 });
+        const result = await tools.setActivePreset({ themeId: 1.5 });
 
         expect(result.success).toBe(false);
         expect(result.error).toContain("Invalid input");
@@ -424,7 +424,7 @@ describe("ProjectTools", () => {
           json: () => Promise.resolve({ detail: "Preset not found" }),
         });
 
-        const result = await tools.setActivePreset({ presetId: 9999 });
+        const result = await tools.setActivePreset({ themeId: 9999 });
 
         expect(result.success).toBe(false);
         expect(result.error).toContain("Preset not found");
@@ -433,7 +433,7 @@ describe("ProjectTools", () => {
       it("should handle network errors", async () => {
         global.fetch = vi.fn().mockRejectedValue(new Error("Connection refused"));
 
-        const result = await tools.setActivePreset({ presetId: 1 });
+        const result = await tools.setActivePreset({ themeId: 1 });
 
         expect(result.success).toBe(false);
         expect(result.error).toContain("Failed to set active preset");
@@ -444,7 +444,7 @@ describe("ProjectTools", () => {
         timeoutError.name = "AbortError";
         global.fetch = vi.fn().mockRejectedValue(timeoutError);
 
-        const result = await tools.setActivePreset({ presetId: 1 });
+        const result = await tools.setActivePreset({ themeId: 1 });
 
         expect(result.success).toBe(false);
         expect(result.error).toContain("timed out");

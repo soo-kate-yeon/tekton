@@ -1,4 +1,4 @@
-import type { RGBColor, AccessibilityCheck } from '@tekton/preset';
+import type { RGBColor, AccessibilityCheck } from '@tekton/theme';
 
 /**
  * Calculate relative luminance of an RGB color

@@ -4,15 +4,15 @@ import pytest
 import pytest_asyncio
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from studio_api.models.curated_preset import CuratedPreset
-from studio_api.repositories.curated_preset import CuratedPresetRepository
-from studio_api.schemas.curated_preset import CuratedPresetCreate, CuratedPresetUpdate
+from studio_api.models.curated_theme import CuratedTheme
+from studio_api.repositories.curated_theme import CuratedPresetRepository
+from studio_api.schemas.curated_theme import CuratedPresetCreate, CuratedPresetUpdate
 
 
 @pytest_asyncio.fixture
-async def sample_preset(db_session: AsyncSession) -> CuratedPreset:
+async def sample_preset(db_session: AsyncSession) -> CuratedTheme:
     """Create a sample preset for testing."""
-    preset = CuratedPreset(
+    preset = CuratedTheme(
         name="Sample Preset",
         category="test",
         description="Test description",
@@ -29,7 +29,7 @@ async def sample_preset(db_session: AsyncSession) -> CuratedPreset:
 class TestRepositoryEdgeCases:
     """Test repository edge cases and error paths for coverage."""
 
-    async def test_get_by_id_inactive_preset(self, db_session: AsyncSession, sample_preset: CuratedPreset):
+    async def test_get_by_id_inactive_preset(self, db_session: AsyncSession, sample_preset: CuratedTheme):
         """Test that get_by_id returns None for inactive presets."""
         repository = CuratedPresetRepository(db_session)
 
@@ -46,7 +46,7 @@ class TestRepositoryEdgeCases:
         repository = CuratedPresetRepository(db_session)
 
         # Create presets with different tags
-        preset1 = CuratedPreset(
+        preset1 = CuratedTheme(
             name="Preset 1",
             category="test",
             description="Has special tag",
@@ -54,7 +54,7 @@ class TestRepositoryEdgeCases:
             tags=["special", "other"],
             is_active=True,
         )
-        preset2 = CuratedPreset(
+        preset2 = CuratedTheme(
             name="Preset 2",
             category="test",
             description="No special tag",
@@ -78,7 +78,7 @@ class TestRepositoryEdgeCases:
         repository = CuratedPresetRepository(db_session)
 
         # Create preset with None tags
-        preset = CuratedPreset(
+        preset = CuratedTheme(
             name="No Tags Preset",
             category="test",
             description="Has no tags",
@@ -102,7 +102,7 @@ class TestRepositoryEdgeCases:
 
         # Create 5 presets
         for i in range(5):
-            preset = CuratedPreset(
+            preset = CuratedTheme(
                 name=f"Preset {i}",
                 category="test",
                 description=f"Description {i}",
@@ -123,7 +123,7 @@ class TestRepositoryEdgeCases:
         """Test create preset - covers lines 86-90."""
         repository = CuratedPresetRepository(db_session)
 
-        preset_data = CuratedPresetCreate(
+        theme_data = CuratedPresetCreate(
             name="New Preset",
             category="business",
             description="A new preset",
@@ -131,7 +131,7 @@ class TestRepositoryEdgeCases:
             tags=["new", "test"],
         )
 
-        created = await repository.create(preset_data)
+        created = await repository.create(theme_data)
 
         assert created.id is not None
         assert created.name == "New Preset"
@@ -139,7 +139,7 @@ class TestRepositoryEdgeCases:
         assert created.created_at is not None
         assert created.updated_at is not None
 
-    async def test_update_preset_success(self, db_session: AsyncSession, sample_preset: CuratedPreset):
+    async def test_update_preset_success(self, db_session: AsyncSession, sample_preset: CuratedTheme):
         """Test successful preset update - covers lines 105-116."""
         repository = CuratedPresetRepository(db_session)
 
@@ -168,7 +168,7 @@ class TestRepositoryEdgeCases:
 
         assert result is None
 
-    async def test_update_partial_fields(self, db_session: AsyncSession, sample_preset: CuratedPreset):
+    async def test_update_partial_fields(self, db_session: AsyncSession, sample_preset: CuratedTheme):
         """Test partial update - covers lines 110-112."""
         repository = CuratedPresetRepository(db_session)
 
@@ -185,7 +185,7 @@ class TestRepositoryEdgeCases:
         assert updated.category == original_category  # Unchanged
         assert updated.description == "Only description changed"
 
-    async def test_delete_preset_success(self, db_session: AsyncSession, sample_preset: CuratedPreset):
+    async def test_delete_preset_success(self, db_session: AsyncSession, sample_preset: CuratedTheme):
         """Test successful preset deletion - covers lines 124-130."""
         repository = CuratedPresetRepository(db_session)
 
@@ -195,7 +195,7 @@ class TestRepositoryEdgeCases:
         assert result is True
 
         # Verify preset is soft-deleted (is_active=False)
-        deleted_preset = await db_session.get(CuratedPreset, sample_preset.id)
+        deleted_preset = await db_session.get(CuratedTheme, sample_preset.id)
         assert deleted_preset is not None
         assert deleted_preset.is_active is False
 

@@ -1,4 +1,4 @@
-import type { ColorScale } from '@tekton/preset';
+import type { ColorScale } from '@tekton/theme';
 
 /**
  * Neutral palette configuration

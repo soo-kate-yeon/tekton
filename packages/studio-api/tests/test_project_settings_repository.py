@@ -10,7 +10,7 @@ from datetime import datetime, timezone
 import pytest
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from studio_api.models.curated_preset import CuratedPreset
+from studio_api.models.curated_theme import CuratedTheme
 from studio_api.models.project_settings import ProjectSettings
 from studio_api.repositories.project_settings import ProjectSettingsRepository
 
@@ -59,7 +59,7 @@ class TestProjectSettingsRepositorySetActivePreset:
     ) -> None:
         """Test that set_active_preset creates settings if not exists."""
         # Create a preset
-        preset = CuratedPreset(
+        preset = CuratedTheme(
             name="Test Preset",
             category="website",
             config={},
@@ -76,8 +76,8 @@ class TestProjectSettingsRepositorySetActivePreset:
         assert settings is not None
         assert settings.project_path == "/auto-created/project"
         assert settings.active_preset_id == preset.id
-        assert settings.active_preset is not None
-        assert settings.active_preset.name == "Test Preset"
+        assert settings.active_theme is not None
+        assert settings.active_theme.name == "Test Preset"
 
     @pytest.mark.asyncio
     async def test_set_active_preset_updates_existing(
@@ -85,8 +85,8 @@ class TestProjectSettingsRepositorySetActivePreset:
     ) -> None:
         """Test that set_active_preset updates existing settings."""
         # Create presets
-        preset1 = CuratedPreset(name="First", category="web", config={})
-        preset2 = CuratedPreset(name="Second", category="app", config={})
+        preset1 = CuratedTheme(name="First", category="web", config={})
+        preset2 = CuratedTheme(name="Second", category="app", config={})
         db_session.add(preset1)
         db_session.add(preset2)
         await db_session.commit()
@@ -107,7 +107,7 @@ class TestProjectSettingsRepositorySetActivePreset:
         )
 
         assert settings.active_preset_id == preset2.id
-        assert settings.active_preset.name == "Second"
+        assert settings.active_theme.name == "Second"
 
 
 class TestProjectSettingsRepositoryGetActivePreset:
@@ -118,7 +118,7 @@ class TestProjectSettingsRepositoryGetActivePreset:
         self, db_session: AsyncSession
     ) -> None:
         """Test getting active preset when one is set."""
-        preset = CuratedPreset(
+        preset = CuratedTheme(
             name="Active Preset",
             category="dashboard",
             config={"theme": "dark"},
@@ -135,11 +135,11 @@ class TestProjectSettingsRepositoryGetActivePreset:
         await db_session.commit()
 
         repository = ProjectSettingsRepository(db_session)
-        active_preset = await repository.get_active_preset("/with/active/preset")
+        active_theme = await repository.get_active_preset("/with/active/preset")
 
-        assert active_preset is not None
-        assert active_preset.id == preset.id
-        assert active_preset.name == "Active Preset"
+        assert active_theme is not None
+        assert active_theme.id == preset.id
+        assert active_theme.name == "Active Preset"
 
     @pytest.mark.asyncio
     async def test_get_active_preset_returns_none_no_settings(
@@ -147,9 +147,9 @@ class TestProjectSettingsRepositoryGetActivePreset:
     ) -> None:
         """Test getting active preset when no settings exist."""
         repository = ProjectSettingsRepository(db_session)
-        active_preset = await repository.get_active_preset("/nonexistent/project")
+        active_theme = await repository.get_active_preset("/nonexistent/project")
 
-        assert active_preset is None
+        assert active_theme is None
 
     @pytest.mark.asyncio
     async def test_get_active_preset_returns_none_no_preset_set(
@@ -161,9 +161,9 @@ class TestProjectSettingsRepositoryGetActivePreset:
         await db_session.commit()
 
         repository = ProjectSettingsRepository(db_session)
-        active_preset = await repository.get_active_preset("/no/preset/set")
+        active_theme = await repository.get_active_preset("/no/preset/set")
 
-        assert active_preset is None
+        assert active_theme is None
 
 
 class TestProjectSettingsRepositoryUpdateFrameworkType:
@@ -237,7 +237,7 @@ class TestProjectSettingsRepositoryGetByProjectPath:
         self, db_session: AsyncSession
     ) -> None:
         """Test getting settings with eager-loaded preset."""
-        preset = CuratedPreset(
+        preset = CuratedTheme(
             name="Eager Load Preset",
             category="web",
             config={},
@@ -258,8 +258,8 @@ class TestProjectSettingsRepositoryGetByProjectPath:
         loaded = await repository.get_by_project_path("/eager/load/project")
 
         assert loaded is not None
-        assert loaded.active_preset is not None
-        assert loaded.active_preset.name == "Eager Load Preset"
+        assert loaded.active_theme is not None
+        assert loaded.active_theme.name == "Eager Load Preset"
 
     @pytest.mark.asyncio
     async def test_get_by_project_path_not_found(

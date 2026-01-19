@@ -8,9 +8,9 @@ from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from studio_api.core.database import get_db
-from studio_api.repositories.curated_preset import CuratedPresetRepository
+from studio_api.repositories.curated_theme import CuratedPresetRepository
 from studio_api.repositories.project_settings import ProjectSettingsRepository
-from studio_api.schemas.curated_preset import CuratedPresetResponse
+from studio_api.schemas.curated_theme import CuratedPresetResponse
 from studio_api.schemas.project_settings import (
     ActivePresetResponse,
     ProjectSettingsResponse,
@@ -36,17 +36,17 @@ async def get_active_preset(
 
     Returns:
     - success: Always true for this endpoint
-    - active_preset: The active preset or null
+    - active_theme: The active preset or null
     """
     repository = ProjectSettingsRepository(db)
     preset = await repository.get_active_preset(project_path)
 
     if preset is None:
-        return ActivePresetResponse(success=True, active_preset=None)
+        return ActivePresetResponse(success=True, active_theme=None)
 
     return ActivePresetResponse(
         success=True,
-        active_preset=CuratedPresetResponse.model_validate(preset),
+        active_theme=CuratedPresetResponse.model_validate(preset),
     )
 
 
@@ -60,33 +60,33 @@ async def set_active_preset(
     Creates project settings if they don't exist, then sets the active preset.
 
     Parameters:
-    - preset_id: ID of the preset to set as active
+    - theme_id: ID of the preset to set as active
     - project_path: Path to the project directory
 
     Returns:
     - success: True if the operation succeeded
-    - active_preset: The newly active preset
+    - active_theme: The newly active preset
 
     Raises:
     - 404: Preset not found or inactive
     """
     # Verify preset exists and is active
     preset_repository = CuratedPresetRepository(db)
-    preset = await preset_repository.get_by_id(request.preset_id)
+    preset = await preset_repository.get_by_id(request.theme_id)
 
     if preset is None:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail=f"Preset with id {request.preset_id} not found or inactive",
+            detail=f"Preset with id {request.theme_id} not found or inactive",
         )
 
     # Set the active preset
     settings_repository = ProjectSettingsRepository(db)
-    await settings_repository.set_active_preset(request.project_path, request.preset_id)
+    await settings_repository.set_active_preset(request.project_path, request.theme_id)
 
     return ActivePresetResponse(
         success=True,
-        active_preset=CuratedPresetResponse.model_validate(preset),
+        active_theme=CuratedPresetResponse.model_validate(preset),
     )
 
 
@@ -115,9 +115,9 @@ async def get_project_settings(
 
     # Build response with nested preset
     settings_response = ProjectSettingsResponse.model_validate(settings)
-    if settings.active_preset:
-        settings_response.active_preset = CuratedPresetResponse.model_validate(
-            settings.active_preset
+    if settings.active_theme:
+        settings_response.active_theme = CuratedPresetResponse.model_validate(
+            settings.active_theme
         )
 
     return ProjectSettingsSuccessResponse(success=True, settings=settings_response)

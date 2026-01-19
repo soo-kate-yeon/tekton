@@ -13,7 +13,7 @@ priority: "HIGH"
 ### 2026-01-15 - Initial Creation
 - Created SPEC-COMPONENT-002 for Token Contract & CSS Variable System
 - Defined Zod schema for token validation
-- Established 7 curated presets (Professional, Creative, Minimal, Bold, Warm, Cool, High-Contrast)
+- Established 7 curated themes (Professional, Creative, Minimal, Bold, Warm, Cool, High-Contrast)
 - Integrated with existing OKLCH token system and WCAG validation
 - Reference: Tekton Component Architecture Implementation Plan
 
@@ -23,9 +23,9 @@ priority: "HIGH"
 
 ## Executive Summary
 
-**Purpose**: Build a comprehensive token contract system with Zod validation, 7 curated presets, CSS variable generation, and dynamic theme switching. Ensures type-safe token management and seamless integration with Tekton's OKLCH-based design token system.
+**Purpose**: Build a comprehensive token contract system with Zod validation, 7 curated themes, CSS variable generation, and dynamic theme switching. Ensures type-safe token management and seamless integration with Tekton's OKLCH-based design token system.
 
-**Scope**: Implementation of token validation schema, 7 curated presets with semantic meaning, CSS variable generator, state token management (hover, active, focus, disabled), composition token system, and preset-to-CSS-variable transformer. Bridges OKLCH token generation with CSS variable consumption.
+**Scope**: Implementation of token validation schema, 7 curated themes with semantic meaning, CSS variable generator, state token management (hover, active, focus, disabled), composition token system, and theme-to-CSS-variable transformer. Bridges OKLCH token generation with CSS variable consumption.
 
 **Priority**: HIGH - Foundation for Styled Component Wrappers (SPEC-COMPONENT-003)
 
@@ -43,11 +43,11 @@ priority: "HIGH"
 - **WCAG Validation**: Automatic contrast checking for AA/AAA compliance
 - **Token Generation**: `generateToken()` creates deterministic token IDs
 - **Export Formats**: CSS, JSON, JavaScript, TypeScript
-- **Component Presets**: 8 UI components (Button, Input, Card, Badge, Alert, Link, Checkbox, Radio)
+- **Component Themes**: 8 UI components (Button, Input, Card, Badge, Alert, Link, Checkbox, Radio)
 
 **Target Token Contract System:**
 - **Zod Validation**: Runtime type safety for token schemas
-- **Curated Presets**: 7 pre-configured design systems with semantic meaning
+- **Curated Themes**: 7 pre-configured design systems with semantic meaning
 - **CSS Variables**: Automatic generation of CSS custom properties from tokens
 - **State Tokens**: Hover, active, focus, disabled, error state management
 - **Composition Tokens**: Border, shadow, spacing, typography combinations
@@ -106,19 +106,19 @@ priority: "HIGH"
 
 ### Business Assumptions
 
-**A-004: Preset Sufficiency**
-- **Assumption**: 7 curated presets cover 80% of common design system needs
+**A-004: Theme Sufficiency**
+- **Assumption**: 7 curated themes cover 80% of common design system needs
 - **Confidence**: MEDIUM
 - **Evidence**: Analysis of popular design systems (Material, Ant Design, Chakra UI) shows 5-7 core themes
-- **Risk if Wrong**: Users request additional presets, expanding scope
-- **Validation**: User feedback collection, preset usage analytics post-deployment
+- **Risk if Wrong**: Users request additional themes, expanding scope
+- **Validation**: User feedback collection, theme usage analytics post-deployment
 
-**A-005: Preset Naming Clarity**
-- **Assumption**: Preset names (Professional, Creative, Minimal, etc.) are intuitive and self-explanatory
+**A-005: Theme Naming Clarity**
+- **Assumption**: Theme names (Professional, Creative, Minimal, etc.) are intuitive and self-explanatory
 - **Confidence**: MEDIUM
 - **Evidence**: User research on design system nomenclature
-- **Risk if Wrong**: Users confused by preset selection, require renaming
-- **Validation**: User testing during preset selection, feedback collection
+- **Risk if Wrong**: Users confused by theme selection, require renaming
+- **Validation**: User testing during theme selection, feedback collection
 
 ### Integration Assumptions
 
@@ -162,10 +162,10 @@ priority: "HIGH"
 
 ### Event-Driven Requirements (Trigger-Response)
 
-**E-001: Preset Selection**
-- **WHEN** user selects a curated preset **THEN** load preset configuration and generate CSS variables
+**E-001: Theme Selection**
+- **WHEN** user selects a curated theme **THEN** load theme configuration and generate CSS variables
 - **Rationale**: Instant theme application for rapid prototyping
-- **Test Strategy**: Preset loading tests, CSS variable generation validation
+- **Test Strategy**: Theme loading tests, CSS variable generation validation
 
 **E-002: Token Update**
 - **WHEN** token value changes **THEN** regenerate affected CSS variables and update DOM
@@ -199,10 +199,10 @@ priority: "HIGH"
 - **Rationale**: Respect user OS preference for accessibility
 - **Test Strategy**: prefers-color-scheme media query tests, auto-theme switching
 
-**S-004: Preset Override**
-- **IF** custom tokens provided **THEN** override preset defaults while maintaining schema validation
-- **Rationale**: Flexibility for custom brand colors within preset structure
-- **Test Strategy**: Preset override tests, merge validation
+**S-004: Theme Override**
+- **IF** custom tokens provided **THEN** override theme defaults while maintaining schema validation
+- **Rationale**: Flexibility for custom brand colors within theme structure
+- **Test Strategy**: Theme override tests, merge validation
 
 ### Unwanted Behaviors (Prohibited Actions)
 
@@ -319,9 +319,9 @@ const CompositionTokenSchema = z.object({
 });
 ```
 
-### Curated Presets (7 Total)
+### Curated Themes (7 Total)
 
-#### 1. Professional Preset
+#### 1. Professional Theme
 **Target Use Case**: Corporate websites, SaaS dashboards, B2B applications
 **Color Palette**:
 - Primary: Blue (H: 220, moderate chroma)
@@ -336,7 +336,7 @@ const CompositionTokenSchema = z.object({
 - Moderate spacing density
 - Professional typography (medium font weights)
 
-#### 2. Creative Preset
+#### 2. Creative Theme
 **Target Use Case**: Design agencies, portfolios, marketing sites
 **Color Palette**:
 - Primary: Vibrant purple (H: 280, high chroma)
@@ -352,7 +352,7 @@ const CompositionTokenSchema = z.object({
 - Generous spacing
 - Expressive typography (varied font weights)
 
-#### 3. Minimal Preset
+#### 3. Minimal Theme
 **Target Use Case**: Blogs, documentation, content-focused sites
 **Color Palette**:
 - Primary: Dark gray (low chroma, L: 0.3)
@@ -367,7 +367,7 @@ const CompositionTokenSchema = z.object({
 - Minimal spacing
 - Simple typography (consistent font weights)
 
-#### 4. Bold Preset
+#### 4. Bold Theme
 **Target Use Case**: E-commerce, conversion-focused apps, call-to-action heavy
 **Color Palette**:
 - Primary: Vibrant red (H: 0, high chroma)
@@ -383,7 +383,7 @@ const CompositionTokenSchema = z.object({
 - Tight spacing for density
 - Bold typography (heavier font weights)
 
-#### 5. Warm Preset
+#### 5. Warm Theme
 **Target Use Case**: Lifestyle brands, food/hospitality, wellness
 **Color Palette**:
 - Primary: Warm orange (H: 25)
@@ -399,7 +399,7 @@ const CompositionTokenSchema = z.object({
 - Comfortable spacing
 - Friendly typography (rounded feel)
 
-#### 6. Cool Preset
+#### 6. Cool Theme
 **Target Use Case**: Tech startups, fintech, healthcare
 **Color Palette**:
 - Primary: Cool blue (H: 210)
@@ -415,7 +415,7 @@ const CompositionTokenSchema = z.object({
 - Precise spacing
 - Clean typography (modern font weights)
 
-#### 7. High-Contrast Preset
+#### 7. High-Contrast Theme
 **Target Use Case**: Accessibility-focused apps, government sites, educational platforms
 **Color Palette**:
 - Primary: Pure black (L: 0.15) and white (L: 0.95)
@@ -475,8 +475,8 @@ const CompositionTokenSchema = z.object({
 **React Context API**:
 ```typescript
 interface ThemeContextValue {
-  preset: PresetName;
-  setPreset: (preset: PresetName) => void;
+  theme: PresetName;
+  setPreset: (theme: PresetName) => void;
   tokens: TokenContract;
   darkMode: boolean;
   toggleDarkMode: () => void;
@@ -486,10 +486,10 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode, defaultPreset?
   children,
   defaultPreset = 'professional',
 }) => {
-  const [preset, setPreset] = useState(defaultPreset);
+  const [theme, setPreset] = useState(defaultPreset);
   const [darkMode, setDarkMode] = useState(false);
 
-  const tokens = useMemo(() => loadPreset(preset), [preset]);
+  const tokens = useMemo(() => loadPreset(theme), [theme]);
 
   useEffect(() => {
     // Apply CSS variables to :root
@@ -497,7 +497,7 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode, defaultPreset?
   }, [tokens, darkMode]);
 
   return (
-    <ThemeContext.Provider value={{ preset, setPreset, tokens, darkMode, toggleDarkMode: () => setDarkMode(!darkMode) }}>
+    <ThemeContext.Provider value={{ theme, setPreset, tokens, darkMode, toggleDarkMode: () => setDarkMode(!darkMode) }}>
       {children}
     </ThemeContext.Provider>
   );
@@ -515,7 +515,7 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode, defaultPreset?
 | U-001 | AC-001 | Zod validation |
 | U-002 | AC-002 | WCAG integration |
 | U-003 | AC-003 | CSS variable generation |
-| E-001 | AC-004 | Preset loading |
+| E-001 | AC-004 | Theme loading |
 | E-002 | AC-005 | Dynamic token updates |
 | S-001 | AC-006 | Fallback handling |
 | S-003 | AC-007 | Dark mode auto-detection |
@@ -525,7 +525,7 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode, defaultPreset?
 
 - **[SPEC-COMPONENT-002]**: All commits related to token contract system
 - **[SCHEMA]**: Zod schema definitions
-- **[PRESETS]**: Curated preset configurations
+- **[THEMES]**: Curated theme configurations
 - **[CSS-VARS]**: CSS variable generation
 - **[THEME]**: ThemeProvider implementation
 
@@ -575,11 +575,11 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode, defaultPreset?
 
 ### Medium-Risk Areas
 
-**Risk 4: Preset Selection Confusion**
+**Risk 4: Theme Selection Confusion**
 - **Likelihood**: MEDIUM
 - **Impact**: LOW
-- **Mitigation**: Clear preset naming, preview UI, user testing
-- **Contingency**: Rename presets based on user feedback
+- **Mitigation**: Clear theme naming, preview UI, user testing
+- **Contingency**: Rename themes based on user feedback
 
 **Risk 5: OKLCH Token System Breaking Changes**
 - **Likelihood**: LOW
@@ -593,7 +593,7 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode, defaultPreset?
 
 ### Implementation Success Criteria
 - ✅ Zod schemas validate all token types correctly (U-001)
-- ✅ 7 curated presets implemented with semantic meaning (E-001)
+- ✅ 7 curated themes implemented with semantic meaning (E-001)
 - ✅ CSS variables generated with correct syntax (U-003)
 - ✅ State tokens provided for all interactive components (U-004)
 - ✅ Test coverage ≥85% for all code (U-005)
@@ -608,7 +608,7 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode, defaultPreset?
 - ✅ Integrates with OKLCH token system (Phase A)
 - ✅ Integrates with SPEC-COMPONENT-001 headless hooks
 - ✅ Integrates with SPEC-COMPONENT-003 styled wrappers
-- ✅ Documentation includes preset preview and usage examples
+- ✅ Documentation includes theme preview and usage examples
 
 ---
 

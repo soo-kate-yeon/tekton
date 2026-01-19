@@ -12,7 +12,7 @@ import {
 } from '@tekton/contracts';
 import { generateScreenFiles, checkDuplicateScreen } from '../generators/screen-generator.js';
 import { MCPClient, CompleteArchetype } from '../clients/mcp-client.js';
-import { PresetClient, PresetConfig } from '../clients/preset-client.js';
+import { ThemeClient, ThemeConfig } from '../clients/theme-client.js';
 
 /**
  * Create screen command options
@@ -63,7 +63,7 @@ export interface CreateScreenResult {
   };
   error?: string;
   archetypes?: Map<string, CompleteArchetype>;
-  presetTokens?: PresetConfig;
+  presetTokens?: ThemeConfig;
   warnings?: string[];
 }
 
@@ -142,7 +142,7 @@ function getSuggestedComponents(intent: string): string[] {
 export async function createScreen(options: CreateScreenOptions): Promise<CreateScreenResult> {
   const warnings: string[] = [];
   let archetypes: Map<string, CompleteArchetype> | undefined;
-  let presetTokens: PresetConfig | undefined;
+  let presetTokens: ThemeConfig | undefined;
 
   try {
     // Validate screen name
@@ -238,7 +238,7 @@ export async function createScreen(options: CreateScreenOptions): Promise<Create
     // Fetch preset tokens if --preset provided
     if (options.preset && !options.skipApi) {
       try {
-        const presetClient = new PresetClient();
+        const presetClient = new ThemeClient();
         const preset = await presetClient.getPresetByName(options.preset);
         if (preset) {
           presetTokens = preset.config;
@@ -355,7 +355,7 @@ export async function createScreen(options: CreateScreenOptions): Promise<Create
       }
 
       // Extract tokens from preset config if available
-      const tokens = presetTokens?.tokens as import('@tekton/preset').ExtendedTokenPreset | undefined;
+      const tokens = presetTokens?.tokens as import('@tekton/theme').ExtendedTokenPreset | undefined;
 
       const generationResult = await generateScreenFiles({
         name: options.name,

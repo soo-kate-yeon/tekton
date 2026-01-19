@@ -1,10 +1,10 @@
 'use client';
 
 /**
- * Project Editor Page - SaaS Dashboard Style
+ * Project Editor Page - Redesigned Layout
  * 
- * Design-TAG: SPEC-STUDIO-WEB-001 SaaS Dashboard editor
- * Function-TAG: 3-pane editor layout (Navigation | Canvas | Properties)
+ * Design-TAG: SPEC-STUDIO-WEB-002 Redesigned Split-View Editor
+ * Structure: Left Nav | Settings Panel | Preview Panel
  */
 
 import { useState, useEffect } from 'react';
@@ -13,32 +13,21 @@ import {
     ArrowLeft,
     Save,
     Loader2,
-    Layers,
-    Palette,
-    Smartphone,
-    Monitor,
-    Tablet,
-    Settings,
-    ZoomIn,
-    ZoomOut,
     Play,
-    Box,
-    Grid
 } from 'lucide-react';
 import { useProject, useUpdateProject } from '@/hooks/useProjects';
-import { usePresets } from '@/hooks/usePresets';
+import { useThemes } from '@/hooks/useThemes';
 import { Button } from '@/components/ui/Button';
+import { EditorSidebar, NavCategory, NavItem } from './components/EditorSidebar';
+import { SettingsPanel } from './components/SettingsPanel';
+import { PreviewPanel } from './components/PreviewPanel';
 
-// Editor sections
-type LeftSidebarTab = 'layers' | 'assets' | 'pages';
-type RightSidebarTab = 'properties' | 'interaction' | 'theme';
 type ViewportMode = 'mobile' | 'tablet' | 'desktop';
 
 interface EditorState {
-    leftTab: LeftSidebarTab;
-    rightTab: RightSidebarTab;
+    activeCategory: NavCategory;
+    activeItem: NavItem;
     viewport: ViewportMode;
-    zoom: number;
     hasUnsavedChanges: boolean;
     lastSaved: Date | null;
 }
@@ -68,14 +57,13 @@ export default function ProjectEditorPage() {
     const projectId = Number(params.id);
 
     const { data: project, isLoading, error } = useProject(projectId);
-    const { data: presetsData } = usePresets({ limit: 100 });
+    const { data: presetsData } = useThemes({ limit: 100 });
     const updateProject = useUpdateProject();
 
     const [editorState, setEditorState] = useState<EditorState>({
-        leftTab: 'layers',
-        rightTab: 'properties',
+        activeCategory: 'template',
+        activeItem: 'color',
         viewport: 'desktop',
-        zoom: 100,
         hasUnsavedChanges: false,
         lastSaved: null,
     });
@@ -117,18 +105,18 @@ export default function ProjectEditorPage() {
         setEditorState((prev) => ({ ...prev, hasUnsavedChanges: true }));
     };
 
-    const handleSelectPreset = async (presetId: number) => {
+    const handleSelectPreset = async (themeId: number) => {
         if (!project) {
             return;
         }
 
-        const preset = presetsData?.items.find((p) => p.id === presetId);
+        const preset = presetsData?.items.find((p) => p.id === themeId);
         if (preset) {
             setTokenConfig(preset.config);
             await updateProject.mutateAsync({
                 projectId: project.id,
                 data: {
-                    active_template_id: presetId,
+                    active_template_id: themeId,
                     token_config: preset.config,
                 },
             });
@@ -138,6 +126,26 @@ export default function ProjectEditorPage() {
                 lastSaved: new Date(),
             }));
         }
+    };
+
+    const handleNavigation = (category: NavCategory, item: NavItem) => {
+        setEditorState(prev => {
+            let nextViewport = prev.viewport;
+
+            // Auto-switch viewport if a layout item is selected
+            if (category === 'layout') {
+                if (item === 'mobile' || item === 'tablet' || item === 'desktop') {
+                    nextViewport = item as ViewportMode;
+                }
+            }
+
+            return {
+                ...prev,
+                activeCategory: category,
+                activeItem: item,
+                viewport: nextViewport
+            };
+        });
     };
 
     if (error) {
@@ -187,25 +195,6 @@ export default function ProjectEditorPage() {
                 </div>
 
                 <div className="flex items-center gap-2">
-                    {/* Viewport Controls */}
-                    <div className="flex items-center bg-muted/50 rounded-md p-0.5 border border-border mr-4">
-                        <ViewportButton
-                            active={editorState.viewport === 'desktop'}
-                            icon={<Monitor className="w-3.5 h-3.5" />}
-                            onClick={() => setEditorState(p => ({ ...p, viewport: 'desktop' }))}
-                        />
-                        <ViewportButton
-                            active={editorState.viewport === 'tablet'}
-                            icon={<Tablet className="w-3.5 h-3.5" />}
-                            onClick={() => setEditorState(p => ({ ...p, viewport: 'tablet' }))}
-                        />
-                        <ViewportButton
-                            active={editorState.viewport === 'mobile'}
-                            icon={<Smartphone className="w-3.5 h-3.5" />}
-                            onClick={() => setEditorState(p => ({ ...p, viewport: 'mobile' }))}
-                        />
-                    </div>
-
                     <span className="text-xs text-muted-foreground mr-2">
                         {formatSaveStatus(editorState.lastSaved, editorState.hasUnsavedChanges)}
                     </span>
@@ -223,243 +212,62 @@ export default function ProjectEditorPage() {
 
                     <Button size="sm" className="btn-primary h-8">
                         <Play className="w-3 h-3 mr-2 fill-current" />
-                        Preview
+                        Publish
                     </Button>
                 </div>
             </header>
 
-            {/* 2. Main Workspace (3-Pane Layout) */}
+            {/* 2. Main Workspace (Redesigned Layout) */}
             <div className="flex-1 flex overflow-hidden">
 
-                {/* Left Pane: Navigation & Assets */}
-                <aside className="w-[240px] border-r border-border bg-card flex flex-col shrink-0">
-                    <div className="flex border-b border-border">
-                        <PanelTab
-                            active={editorState.leftTab === 'layers'}
-                            icon={<Layers className="w-4 h-4" />}
-                            label="Layers"
-                            onClick={() => setEditorState(p => ({ ...p, leftTab: 'layers' }))}
-                        />
-                        <PanelTab
-                            active={editorState.leftTab === 'assets'}
-                            icon={<Grid className="w-4 h-4" />}
-                            label="Assets"
-                            onClick={() => setEditorState(p => ({ ...p, leftTab: 'assets' }))}
-                        />
-                    </div>
+                {/* Left Navigation */}
+                <EditorSidebar
+                    activeCategory={editorState.activeCategory}
+                    activeItem={editorState.activeItem}
+                    onSelect={handleNavigation}
+                />
 
-                    <div className="flex-1 overflow-y-auto p-4">
-                        {editorState.leftTab === 'layers' && (
-                            <div className="space-y-4">
-                                <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">Structure</div>
-                                <div className="space-y-1">
-                                    <LayerItem label="Homepage" type="page" depth={0} active />
-                                    <LayerItem label="Navigation" type="component" depth={1} />
-                                    <LayerItem label="Hero Section" type="component" depth={1} />
-                                    <LayerItem label="Features" type="component" depth={1} />
-                                    <LayerItem label="Pricing" type="component" depth={1} />
-                                    <LayerItem label="Footer" type="component" depth={1} />
+                {/* Center Split View */}
+                <main className="flex-1 flex overflow-hidden">
+                    {/* Settings Panel (Dynamic) */}
+                    <SettingsPanel
+                        activeCategory={editorState.activeCategory}
+                        activeItem={editorState.activeItem}
+                        presets={presetsData?.items}
+                        activePresetId={project.active_template_id ?? undefined}
+                        onSelectPreset={handleSelectPreset}
+                    />
+
+                    {/* Preview Area */}
+                    <PreviewPanel viewportMode={editorState.viewport}>
+                        {/* 
+                          In a real implementation, this would be the actual renderer/iframe.
+                          For now, we render a placeholder block to represent the canvas. 
+                        */}
+                        <div className="w-full h-full bg-white flex flex-col pointer-events-none select-none">
+                            <div className="h-12 border-b flex items-center justify-between px-4 bg-white">
+                                <div className="w-24 h-4 bg-muted rounded"></div>
+                                <div className="flex gap-2">
+                                    <div className="w-16 h-4 bg-muted rounded"></div>
+                                    <div className="w-16 h-4 bg-muted rounded"></div>
                                 </div>
                             </div>
-                        )}
-                        {editorState.leftTab === 'assets' && (
-                            <div className="text-center py-8 text-muted-foreground text-xs">
-                                No assets imported yet.
-                            </div>
-                        )}
-                    </div>
-                </aside>
-
-                {/* Center Pane: Canvas */}
-                <main className="flex-1 bg-muted/20 relative overflow-hidden flex flex-col">
-                    {/* Quick Tools */}
-                    <div className="h-10 border-b border-border bg-background/50 backdrop-blur-sm flex items-center px-4 gap-2 justify-between">
-                        <div className="flex items-center gap-1">
-                            <span className="text-xs text-muted-foreground">Page: /home</span>
-                        </div>
-                        <div className="flex items-center gap-1">
-                            <IconButton icon={<ZoomOut className="w-3.5 h-3.5" />} />
-                            <span className="text-xs w-10 text-center">{editorState.zoom}%</span>
-                            <IconButton icon={<ZoomIn className="w-3.5 h-3.5" />} />
-                        </div>
-                    </div>
-
-                    {/* Canvas Area */}
-                    <div className="flex-1 flex items-center justify-center p-8 overflow-auto">
-                        <div
-                            className={`bg-white shadow-lg transition-all duration-300 border border-border/50 relative ${editorState.viewport === 'mobile' ? 'w-[375px] h-[667px]' :
-                                editorState.viewport === 'tablet' ? 'w-[768px] h-[1024px]' :
-                                    'w-[1280px] h-[800px]'
-                                }`}
-                        >
-                            {/* Iframe placeholder for actual preview */}
-                            <div className="w-full h-full flex flex-col">
-                                <div className="h-12 border-b flex items-center justify-between px-4 bg-white">
-                                    <div className="w-24 h-4 bg-muted rounded"></div>
-                                    <div className="flex gap-2">
-                                        <div className="w-16 h-4 bg-muted rounded"></div>
-                                        <div className="w-16 h-4 bg-muted rounded"></div>
-                                    </div>
+                            <div className="flex-1 p-8">
+                                <div className="w-2/3 h-8 bg-muted rounded mb-4"></div>
+                                <div className="w-full h-32 bg-secondary/30 rounded mb-8 border border-secondary flex items-center justify-center">
+                                    <p className="text-secondary-foreground font-medium">Canvas Content</p>
                                 </div>
-                                <div className="flex-1 p-8">
-                                    <div className="w-2/3 h-8 bg-muted rounded mb-4"></div>
-                                    <div className="w-full h-32 bg-secondary/30 rounded mb-8 border border-secondary">
-                                        <div className="w-full h-full flex items-center justify-center text-secondary-foreground text-sm font-medium">
-                                            Canvas Preview
-                                        </div>
-                                    </div>
-                                    <div className="grid grid-cols-3 gap-4">
-                                        <div className="h-24 bg-muted rounded"></div>
-                                        <div className="h-24 bg-muted rounded"></div>
-                                        <div className="h-24 bg-muted rounded"></div>
-                                    </div>
+                                <div className="grid grid-cols-3 gap-4">
+                                    <div className="h-24 bg-muted rounded"></div>
+                                    <div className="h-24 bg-muted rounded"></div>
+                                    <div className="h-24 bg-muted rounded"></div>
                                 </div>
                             </div>
-
-                            {/* Interactive Overlay Hints */}
-                            <div className="absolute inset-0 pointer-events-none ring-1 ring-black/5"></div>
                         </div>
-                    </div>
+                    </PreviewPanel>
                 </main>
-
-                {/* Right Pane: Properties & Settings */}
-                <aside className="w-[280px] border-l border-border bg-card flex flex-col shrink-0">
-                    <div className="flex border-b border-border">
-                        <PanelTab
-                            active={editorState.rightTab === 'properties'}
-                            icon={<Settings className="w-4 h-4" />}
-                            label="Properties"
-                            onClick={() => setEditorState(p => ({ ...p, rightTab: 'properties' }))}
-                        />
-                        <PanelTab
-                            active={editorState.rightTab === 'theme'}
-                            icon={<Palette className="w-4 h-4" />}
-                            label="Theme"
-                            onClick={() => setEditorState(p => ({ ...p, rightTab: 'theme' }))}
-                        />
-                    </div>
-
-                    <div className="flex-1 overflow-y-auto p-0">
-                        {editorState.rightTab === 'properties' && (
-                            <div className="p-4 space-y-6">
-                                <div className="space-y-3">
-                                    <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Selection</div>
-                                    <div className="p-3 bg-muted/50 rounded border border-border text-sm">
-                                        Hero Section
-                                    </div>
-                                </div>
-
-                                <div className="space-y-3">
-                                    <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Layout</div>
-                                    <div className="grid grid-cols-2 gap-2">
-                                        <div className="p-2 border border-border rounded text-center text-xs hover:bg-muted cursor-pointer">Flex</div>
-                                        <div className="p-2 border border-border rounded text-center text-xs bg-primary/10 border-primary text-primary font-medium cursor-pointer">Grid</div>
-                                    </div>
-                                </div>
-
-                                <div className="space-y-3">
-                                    <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Spacing</div>
-                                    <div className="grid grid-cols-2 gap-2 text-xs">
-                                        <div className="flex items-center justify-between p-2 border border-border rounded">
-                                            <span className="text-muted-foreground">Gap</span>
-                                            <span>24px</span>
-                                        </div>
-                                        <div className="flex items-center justify-between p-2 border border-border rounded">
-                                            <span className="text-muted-foreground">Padding</span>
-                                            <span>16px</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        )}
-
-                        {editorState.rightTab === 'theme' && (
-                            <div className="p-4 space-y-6">
-                                <div className="space-y-3">
-                                    <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Active Applied Preset</div>
-                                    <div className="p-3 bg-primary/5 border border-primary/20 rounded-md">
-                                        <div className="text-sm font-medium text-primary mb-1">
-                                            {presetsData?.items.find(p => p.id === project.active_template_id)?.name || 'Custom Theme'}
-                                        </div>
-                                        <div className="text-xs text-muted-foreground">
-                                            {presetsData?.items.find(p => p.id === project.active_template_id)?.description?.substring(0, 60)}...
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div className="space-y-3">
-                                    <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Design System</div>
-                                    <div className="grid grid-cols-2 gap-2">
-                                        {presetsData?.items.map((preset) => (
-                                            <button
-                                                key={preset.id}
-                                                onClick={() => handleSelectPreset(preset.id)}
-                                                className={`text-left p-2 rounded border text-xs transition-colors ${project.active_template_id === preset.id
-                                                    ? 'border-primary bg-primary/10 text-primary'
-                                                    : 'border-border hover:border-sidebar-foreground'
-                                                    }`}
-                                            >
-                                                {preset.name}
-                                            </button>
-                                        ))}
-                                    </div>
-                                </div>
-                            </div>
-                        )}
-                    </div>
-                </aside>
             </div>
         </div>
     );
 }
 
-// UI Helper Components
-
-function ViewportButton({ active, icon, onClick }: { active: boolean, icon: React.ReactNode, onClick: () => void }) {
-    return (
-        <button
-            onClick={onClick}
-            className={`p-1.5 rounded-sm transition-colors ${active ? 'bg-background shadow-sm text-foreground' : 'text-muted-foreground hover:text-foreground'}`}
-        >
-            {icon}
-        </button>
-    );
-}
-
-function IconButton({ icon }: { icon: React.ReactNode }) {
-    return (
-        <button className="p-1.5 rounded-md text-muted-foreground hover:bg-muted hover:text-foreground transition-colors">
-            {icon}
-        </button>
-    );
-}
-
-function PanelTab({ active, icon, label, onClick }: { active: boolean, icon: React.ReactNode, label: string, onClick: () => void }) {
-    return (
-        <button
-            onClick={onClick}
-            className={`flex-1 flex items-center justify-center gap-2 py-3 text-xs font-medium border-b-2 transition-colors ${active
-                ? 'border-primary text-primary'
-                : 'border-transparent text-muted-foreground hover:text-foreground hover:bg-muted/50'
-                }`}
-        >
-            {icon}
-            {label}
-        </button>
-    );
-}
-
-function LayerItem({ label, type, depth, active }: { label: string, type: 'page' | 'component', depth: number, active?: boolean }) {
-    return (
-        <div
-            className={`flex items-center gap-2 px-2 py-1.5 rounded cursor-pointer text-xs ${active
-                ? 'bg-primary/10 text-primary font-medium'
-                : 'text-foreground hover:bg-muted'
-                }`}
-            style={{ paddingLeft: `${(depth * 12) + 8}px` }}
-        >
-            {type === 'page' ? <Smartphone className="w-3.5 h-3.5" /> : <Box className="w-3.5 h-3.5 text-muted-foreground" />}
-            {label}
-        </div>
-    );
-}

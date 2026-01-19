@@ -1,5 +1,5 @@
 ---
-id: SPEC-ARCHETYPE-001
+id: SPEC-COMPONENT-001
 version: "1.0.0"
 status: "completed"
 created: "2026-01-17"
@@ -10,15 +10,15 @@ priority: "HIGH"
 
 ## HISTORY
 - 2026-01-17 v1.0.0: Implementation complete - All 6 phases finished with 142 tests passing, 87.78% coverage, TRUST 5 PASS
-- 2026-01-17: Initial SPEC creation - Hook Archetype Integration System
+- 2026-01-17: Initial SPEC creation - Hook Component Integration System
 
 ---
 
-# SPEC-ARCHETYPE-001: Hook Archetype Integration System
+# SPEC-COMPONENT-001: Hook Component Integration System
 
 ## Executive Summary
 
-**Purpose**: Establish hook-prop-based archetype system enabling AI-driven component generation through single-prompt interactions. Maps 20 headless hooks to prop objects, state-style relationships, and variant branching rules.
+**Purpose**: Establish hook-prop-based component system enabling AI-driven component generation through single-prompt interactions. Maps 20 headless hooks to prop objects, state-style relationships, and variant branching rules.
 
 **Scope**: Create Hook Prop Mapping inventory, State-to-Style mapping system, Variant configuration branching, preset_archetypes.md documentation, and Token Contract CSS variable integration.
 
@@ -41,23 +41,23 @@ priority: "HIGH"
 
 **Existing Token Contract System (SPEC-COMPONENT-002):**
 - **CSS Variables**: `--tekton-{semantic}-{step}` naming convention
-- **7 Curated Presets**: Professional, Creative, Minimal, Bold, Warm, Cool, High-Contrast
+- **7 Curated Themes**: Professional, Creative, Minimal, Bold, Warm, Cool, High-Contrast
 - **OKLCH Color Space**: Perceptually uniform color system
 - **State Tokens**: hover, active, focus, disabled, error state styling
 - **WCAG Validation**: AA/AAA compliance enforcement
 
-**Target Archetype Integration System:**
+**Target Component Integration System:**
 - **Hook Prop Rules**: Direct mapping from hook signatures to prop object styling
 - **State-Style Mapping**: Visual feedback rules for all hook state values
 - **Variant Branching**: Conditional styling based on hook configuration
 - **AI Prompting Integration**: Single-prompt component generation capability
-- **Documentation Schema**: Structured archetype definitions for AI consumption
+- **Documentation Schema**: Structured component definitions for AI consumption
 
 ### Technology Stack
 
 **Core:**
-- TypeScript 5.9+ (type definitions for archetypes)
-- JSON Schema (archetype validation)
+- TypeScript 5.9+ (type definitions for components)
+- JSON Schema (component validation)
 - Markdown (preset_archetypes.md documentation)
 - CSS Custom Properties (Token Contract integration)
 
@@ -68,7 +68,7 @@ priority: "HIGH"
 - ARIA patterns (roles, states, properties)
 
 **Testing:**
-- Vitest (archetype schema validation)
+- Vitest (component schema validation)
 - @testing-library/react (component integration tests)
 - Zod (runtime validation - optional)
 
@@ -87,26 +87,26 @@ priority: "HIGH"
 - **Assumption**: 20 headless hooks (SPEC-COMPONENT-001) have stable APIs without breaking changes
 - **Confidence**: HIGH
 - **Evidence**: Hooks finalized in SPEC-COMPONENT-001 with complete implementation
-- **Risk if Wrong**: Archetype rules become outdated requiring re-mapping
+- **Risk if Wrong**: Component rules become outdated requiring re-mapping
 - **Validation**: Integration tests with hook system, semantic versioning monitoring
 
 **A-002: CSS Variable Integration**
 - **Assumption**: Token Contract CSS variables (SPEC-COMPONENT-002) are production-ready and stable
 - **Confidence**: HIGH
 - **Evidence**: Token Contract system completed with CSS variable generation
-- **Risk if Wrong**: Archetype rules reference non-existent CSS variables
+- **Risk if Wrong**: Component rules reference non-existent CSS variables
 - **Validation**: CSS variable existence tests, Token Contract integration verification
 
 **A-003: AI Prompting Effectiveness**
-- **Assumption**: Structured archetype documentation enables single-prompt AI component generation
+- **Assumption**: Structured component documentation enables single-prompt AI component generation
 - **Confidence**: MEDIUM
 - **Evidence**: Similar approaches in Shadcn UI, Radix Themes documentation patterns
-- **Risk if Wrong**: AI misinterprets archetype rules requiring multi-step clarification
+- **Risk if Wrong**: AI misinterprets component rules requiring multi-step clarification
 - **Validation**: AI prompting tests, iterative documentation refinement
 
 ### Business Assumptions
 
-**A-004: Archetype Coverage Completeness**
+**A-004: Component Coverage Completeness**
 - **Assumption**: Hook Prop Rules + State Mapping + Variant Branching cover 90%+ component generation scenarios
 - **Confidence**: MEDIUM
 - **Evidence**: Analysis of common component patterns in Material UI, Chakra UI, Ant Design
@@ -123,7 +123,7 @@ priority: "HIGH"
 ### Integration Assumptions
 
 **A-006: JSON Schema Validation Performance**
-- **Assumption**: JSON Schema validation for archetype definitions completes in <5ms per schema
+- **Assumption**: JSON Schema validation for component definitions completes in <5ms per schema
 - **Confidence**: HIGH
 - **Evidence**: JSON Schema validators (Ajv) perform sub-millisecond validation
 - **Risk if Wrong**: Schema validation becomes development bottleneck
@@ -136,12 +136,12 @@ priority: "HIGH"
 ### Ubiquitous Requirements (Always Active)
 
 **U-001: Complete Hook Coverage**
-- The system **shall** provide archetype rules for all 20 headless hooks from SPEC-COMPONENT-001
+- The system **shall** provide component rules for all 20 headless hooks from SPEC-COMPONENT-001
 - **Rationale**: Complete coverage ensures no hook lacks AI generation support
 - **Test Strategy**: Hook inventory verification, coverage completeness tests
 
 **U-002: Token Contract CSS Variable References**
-- The system **shall** reference only existing Token Contract CSS variables in archetype style definitions
+- The system **shall** reference only existing Token Contract CSS variables in component style definitions
 - **Rationale**: Prevents broken style references and ensures design system consistency
 - **Test Strategy**: CSS variable existence validation, reference integrity tests
 
@@ -151,12 +151,12 @@ priority: "HIGH"
 - **Test Strategy**: State inventory verification, mapping completeness tests
 
 **U-004: Schema Validation Compliance**
-- The system **shall** validate all archetype definitions against JSON Schema before AI consumption
+- The system **shall** validate all component definitions against JSON Schema before AI consumption
 - **Rationale**: Schema compliance ensures AI receives structured, predictable documentation
-- **Test Strategy**: JSON Schema validation tests, malformed archetype rejection
+- **Test Strategy**: JSON Schema validation tests, malformed component rejection
 
 **U-005: Test Coverage Requirement**
-- The system **shall** maintain ≥85% test coverage for archetype validation and integration code
+- The system **shall** maintain ≥85% test coverage for component validation and integration code
 - **Rationale**: TRUST 5 framework Test-first pillar enforcement
 - **Test Strategy**: Vitest coverage reporting, automated coverage gates in CI/CD
 
@@ -168,12 +168,12 @@ priority: "HIGH"
 - **Test Strategy**: Keyword matching tests, hook identification accuracy validation
 
 **E-002: Hook Identification**
-- **WHEN** target hook identified **THEN** load corresponding archetype rules from preset_archetypes.md
-- **Rationale**: Archetype rules provide complete styling context for component generation
-- **Test Strategy**: Archetype loading tests, rule retrieval validation
+- **WHEN** target hook identified **THEN** load corresponding component rules from preset_archetypes.md
+- **Rationale**: Component rules provide complete styling context for component generation
+- **Test Strategy**: Component loading tests, rule retrieval validation
 
-**E-003: Archetype Rule Application**
-- **WHEN** archetype rules loaded **THEN** map rules to hook prop objects with Token Contract CSS variables
+**E-003: Component Rule Application**
+- **WHEN** component rules loaded **THEN** map rules to hook prop objects with Token Contract CSS variables
 - **Rationale**: CSS variable mapping ensures design system consistency
 - **Test Strategy**: Rule application tests, CSS variable reference validation
 
@@ -195,7 +195,7 @@ priority: "HIGH"
 - **Test Strategy**: Missing state tests, fallback validation
 
 **S-003: Invalid CSS Variable Reference**
-- **IF** archetype rule references non-existent CSS variable **THEN** validation fails with detailed error
+- **IF** component rule references non-existent CSS variable **THEN** validation fails with detailed error
 - **Rationale**: Early error detection prevents runtime style failures
 - **Test Strategy**: CSS variable validation tests, error message verification
 
@@ -207,39 +207,39 @@ priority: "HIGH"
 ### Unwanted Behaviors (Prohibited Actions)
 
 **UW-001: No Hardcoded CSS Values**
-- The system **shall not** include hardcoded hex/rgb/hsl color values in archetype definitions
+- The system **shall not** include hardcoded hex/rgb/hsl color values in component definitions
 - **Rationale**: All colors must reference Token Contract CSS variables for design system consistency
 - **Test Strategy**: Hardcoded value detection, CSS variable reference enforcement
 
 **UW-002: No Non-Existent Hook References**
-- The system **shall not** define archetype rules for hooks not implemented in SPEC-COMPONENT-001
-- **Rationale**: Prevents documentation drift and invalid archetype rules
+- The system **shall not** define component rules for hooks not implemented in SPEC-COMPONENT-001
+- **Rationale**: Prevents documentation drift and invalid component rules
 - **Test Strategy**: Hook existence validation, cross-reference integrity tests
 
 **UW-003: No State-Style Mismatches**
 - The system **shall not** allow state-style mappings for states not returned by target hook
-- **Rationale**: Prevents archetype rules from referencing impossible hook states
+- **Rationale**: Prevents component rules from referencing impossible hook states
 - **Test Strategy**: Hook return value verification, state mapping validation
 
 **UW-004: No Schema Violations**
-- The system **shall not** accept archetype definitions failing JSON Schema validation
+- The system **shall not** accept component definitions failing JSON Schema validation
 - **Rationale**: Schema compliance ensures AI receives consistent, parseable documentation
 - **Test Strategy**: Schema validation enforcement, malformed definition rejection
 
 ### Optional Requirements (Future Enhancements)
 
 **O-001: Migration Tools**
-- **Where possible**, provide CLI tools for converting existing component styles to archetype format
+- **Where possible**, provide CLI tools for converting existing component styles to component format
 - **Priority**: DEFERRED to post-Phase 1
-- **Rationale**: Migration tools accelerate archetype adoption but not MVP-critical
+- **Rationale**: Migration tools accelerate component adoption but not MVP-critical
 
 **O-002: TypeScript Type Generation**
-- **Where possible**, generate TypeScript types from archetype JSON Schema
+- **Where possible**, generate TypeScript types from component JSON Schema
 - **Priority**: DEFERRED to post-Phase 1
-- **Rationale**: Type safety valuable but archetype system functions without it
+- **Rationale**: Type safety valuable but component system functions without it
 
 **O-003: Visual Preview UI**
-- **Where possible**, create interactive UI for previewing archetype-generated components
+- **Where possible**, create interactive UI for previewing component-generated components
 - **Priority**: DEFERRED to post-Phase 1
 - **Rationale**: Preview aids development but not required for AI generation workflow
 
@@ -537,7 +537,7 @@ interface VariantBranching {
 **File Organization:**
 
 ```markdown
-# Hook Archetype System
+# Hook Component System
 
 ## Overview
 - Purpose and usage
@@ -573,7 +573,7 @@ interface VariantBranching {
 ### Single-Prompt Component Generation
 Example: "Create button using useButton hook with 32px height"
 - AI identifies useButton hook
-- Loads buttonProps archetype rules
+- Loads buttonProps component rules
 - Applies height: 32px override
 - References Token Contract CSS variables
 
@@ -581,7 +581,7 @@ Example: "Create button using useButton hook with 32px height"
 
 ## Integration with Token Contract
 - CSS variable naming convention
-- Preset integration (Professional, Creative, etc.)
+- Theme integration (Professional, Creative, etc.)
 - Dark mode handling
 ```
 
@@ -597,18 +597,18 @@ Example: "Create button using useButton hook with 32px height"
 | U-002 | AC-002 | CSS variable reference validation |
 | U-003 | AC-003 | State mapping completeness |
 | E-001 | AC-004 | AI prompt hook identification |
-| E-002 | AC-005 | Archetype rule loading |
+| E-002 | AC-005 | Component rule loading |
 | E-003 | AC-006 | Rule application with CSS variables |
 | S-001 | AC-007 | Variant branching conditional |
 | UW-001 | AC-008 | Hardcoded value prohibition |
 
 ### SPEC-to-Implementation Tags
 
-- **[SPEC-ARCHETYPE-001]**: All commits related to hook archetype system
+- **[SPEC-COMPONENT-001]**: All commits related to hook component system
 - **[HOOK-PROP]**: Hook prop mapping implementation
 - **[STATE-STYLE]**: State-to-style mapping implementation
 - **[VARIANT]**: Variant branching implementation
-- **[PRESET-DOC]**: preset_archetypes.md documentation
+- **[THEME-DOC]**: preset_archetypes.md documentation
 
 ---
 
@@ -616,11 +616,11 @@ Example: "Create button using useButton hook with 32px height"
 
 ### Internal Dependencies
 - **SPEC-COMPONENT-001**: 20 headless hooks with stable APIs
-- **SPEC-COMPONENT-002**: Token Contract CSS variables and 7 curated presets
+- **SPEC-COMPONENT-002**: Token Contract CSS variables and 7 curated themes
 - **OKLCH Token System**: Perceptually uniform color generation
 
 ### External Dependencies
-- **JSON Schema**: Archetype validation library
+- **JSON Schema**: Component validation library
 - **React 19**: Headless hooks runtime
 - **CSS Custom Properties**: Browser support for CSS variables
 
@@ -639,7 +639,7 @@ Example: "Create button using useButton hook with 32px height"
 - **Likelihood**: LOW
 - **Impact**: HIGH
 - **Mitigation**: Semantic versioning monitoring, integration tests, breaking change detection
-- **Contingency**: Archetype rule update workflow, backward compatibility layer
+- **Contingency**: Component rule update workflow, backward compatibility layer
 
 **Risk 2: AI Prompting Misalignment**
 - **Likelihood**: MEDIUM
@@ -658,7 +658,7 @@ Example: "Create button using useButton hook with 32px height"
 **Risk 4: Documentation Scalability**
 - **Likelihood**: MEDIUM
 - **Impact**: LOW
-- **Mitigation**: Structured documentation organization, modular archetype definitions
+- **Mitigation**: Structured documentation organization, modular component definitions
 - **Contingency**: Documentation restructuring, automated generation from schema
 
 **Risk 5: Schema Validation Overhead**
@@ -672,16 +672,16 @@ Example: "Create button using useButton hook with 32px height"
 ## SUCCESS CRITERIA
 
 ### Implementation Success Criteria
-- ✅ All 20 hooks have archetype rules defined (U-001) - COMPLETE
+- ✅ All 20 hooks have component rules defined (U-001) - COMPLETE
 - ✅ All hook states have state-style mappings (U-003) - COMPLETE
-- ✅ All archetype rules reference valid Token Contract CSS variables (U-002) - COMPLETE
+- ✅ All component rules reference valid Token Contract CSS variables (U-002) - COMPLETE
 - ✅ preset_archetypes.md validates against JSON Schema (U-004) - COMPLETE
 - ✅ Test coverage ≥85% for all code (U-005) - COMPLETE (87.78%)
 
 ### Quality Success Criteria
 - ✅ AI prompting examples generate working components without clarification - COMPLETE
-- ✅ CSS variable references resolve correctly in all presets - COMPLETE
-- ✅ Schema validation completes in <5ms per archetype (A-006) - COMPLETE
+- ✅ CSS variable references resolve correctly in all themes - COMPLETE
+- ✅ Schema validation completes in <5ms per component (A-006) - COMPLETE
 - ✅ Documentation clarity validated through user testing - COMPLETE
 
 ### Integration Success Criteria
@@ -710,5 +710,5 @@ Example: "Create button using useButton hook with 32px height"
 - ✅ docs/element-mapping.md - HTML element selection reference
 - ✅ docs/composition-patterns.md - Nested component patterns
 - ✅ docs/variant-decision-trees.md - Conditional styling logic
-- ✅ packages/archetype-system/src/schemas/ - JSON Schema definitions
-- ✅ packages/archetype-system/src/validators/ - Validation utilities
+- ✅ packages/component-system/src/schemas/ - JSON Schema definitions
+- ✅ packages/component-system/src/validators/ - Validation utilities

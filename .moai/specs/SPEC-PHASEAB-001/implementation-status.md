@@ -19,58 +19,58 @@ This document tracks the implementation status of SPEC-PHASEAB-001: FigmArchitec
 
 | Phase | Package | Status | Completion |
 |-------|---------|--------|------------|
-| **A1** | **Preset Definition System** | **Complete** | **100%** |
+| **A1** | **Theme Definition System** | **Complete** | **100%** |
 | **A2** | **Token Generator** | **Complete** | **100%** |
 | **A3** | **Component Contracts** | **Complete** | **100%** |
 
 ---
 
-## A1: Preset Definition System - Detailed Status
+## A1: Theme Definition System - Detailed Status
 
 ### Completed Requirements ✅
 
 #### Event-Driven Requirements
 
-**EDR-001: Preset Loading Event** ✅
+**EDR-001: Theme Loading Event** ✅
 - **Status**: COMPLETE (Phase 2 Implementation)
-- **Implementation**: `src/presets/loader.ts` (114 lines)
+- **Implementation**: `src/themes/loader.ts` (114 lines)
 - **Features**:
-  - `loadPreset(presetData)` - Load and validate presets from unknown data
-  - `loadDefaultPreset(presetId)` - Load built-in preset by ID
+  - `loadPreset(presetData)` - Load and validate themes from unknown data
+  - `loadDefaultPreset(presetId)` - Load built-in theme by ID
   - `PresetValidationError` - Custom error with field-level details
 - **Validation**: Zod schema validation before processing
 - **Test Coverage**: 15 tests (94.73% coverage)
-- **Evidence**: `tests/presets/loader.test.ts`
+- **Evidence**: `tests/themes/loader.test.ts`
 
 ### A1 Implementation Summary
 
 **New Files Created** (Phase 2 - A1 Integration):
-1. `src/presets/types.ts` (99 lines) - Preset type definitions and Zod schemas
-2. `src/presets/loader.ts` (114 lines) - Preset loading and validation
-3. `src/presets/index.ts` (96 lines) - Public API and token generator integration
-4. `src/presets/defaults/next-tailwind-shadcn.json` - Default Next.js preset
+1. `src/themes/types.ts` (99 lines) - Theme type definitions and Zod schemas
+2. `src/themes/loader.ts` (114 lines) - Theme loading and validation
+3. `src/themes/index.ts` (96 lines) - Public API and token generator integration
+4. `src/themes/defaults/next-tailwind-shadcn.json` - Default Next.js theme
 
 **Test Files**:
-1. `tests/presets/types.test.ts` (9 tests) - Schema validation tests
-2. `tests/presets/loader.test.ts` (15 tests) - Loader function tests
-3. `tests/presets/integration.test.ts` (10 tests) - End-to-end integration tests
+1. `tests/themes/types.test.ts` (9 tests) - Schema validation tests
+2. `tests/themes/loader.test.ts` (15 tests) - Loader function tests
+3. `tests/themes/integration.test.ts` (10 tests) - End-to-end integration tests
 
 **Key Features**:
-- Type-safe preset loading with Zod validation
+- Type-safe theme loading with Zod validation
 - EDR-001 compliance: validation before processing
 - Multi-format token export (CSS, DTCG, Tailwind)
-- Default preset: next-tailwind-shadcn
+- Default theme: next-tailwind-shadcn
 - Field-level error messages for validation failures
 
 **Quality Metrics**:
 - **Tests**: 34 new tests (all passing)
-- **Coverage**: 97.77% for preset module
+- **Coverage**: 97.77% for theme module
 - **TypeScript**: Zero type errors
 - **ESLint**: Zero errors (2 warnings)
 
 **Commits**:
-- `9ef15b9` - feat(presets): Implement A1 Preset Definition System
-- `fecd3fb` - docs(readme): Add preset system usage examples
+- `9ef15b9` - feat(themes): Implement A1 Theme Definition System
+- `fecd3fb` - docs(readme): Add theme system usage examples
 
 ---
 
@@ -363,11 +363,11 @@ _(No partially complete requirements at this time)_
 **SDR-001: Light Mode State** ✅
 - **Status**: COMPLETE (Phase 2 Integration)
 - **Implementation**: Integrated via `generateTokensFromPreset()` with mode: 'light'
-- **Evidence**: Light mode neutral palette generated from presets
+- **Evidence**: Light mode neutral palette generated from themes
 
 **SDR-002: Dark Mode State** ✅
 - **Status**: COMPLETE (Phase 1 + Phase 2)
-- **Implementation**: `generateDarkModeVariant()` + preset-based generation
+- **Implementation**: `generateDarkModeVariant()` + theme-based generation
 - **Evidence**: Dark mode generation functional with neutral palette support
 
 **SDR-003: High Contrast Mode State** ❌
@@ -430,7 +430,7 @@ Time:        ~3.5s
 
 **Coverage Breakdown** (Phase A1 + A2 + A3):
 - color-conversion.ts: 100%
-- component-presets.ts: 100%
+- component-themes.ts: 100%
 - scale-generator.ts: 100%
 - schemas.ts: 100%
 - token-generator.ts: 91.12%
@@ -439,9 +439,9 @@ Time:        ~3.5s
 - semantic-mapper.ts: 100% (Phase A1)
 - output.ts: 100% (Phase A1)
 - questionnaire.ts: 100% (Phase A1)
-- presets/types.ts: 100% (Phase A2)
-- presets/loader.ts: 94.73% (Phase A2)
-- presets/index.ts: 100% (Phase A2)
+- themes/types.ts: 100% (Phase A2)
+- themes/loader.ts: 94.73% (Phase A2)
+- themes/index.ts: 100% (Phase A2)
 - **contracts/types.ts: 100%** ✨ (Phase A3)
 - **contracts/registry.ts: 92.98%** ✨ (Phase A3)
 - **contracts/rules/*.ts: 100%** ✨ (Phase A3, 6 files)
@@ -488,15 +488,15 @@ src/
 ├── scale-generator.ts      # SDR-004 (Custom colors) ✅
 ├── wcag-validator.ts       # UR-004 (WCAG compliance) ✅
 ├── token-generator.ts      # EDR-002, EDR-003, CR-001 ✅
-├── component-presets.ts    # 8 component presets ✅
+├── component-themes.ts    # 8 component themes ✅
 ├── generator/              # Token generation modules (A1)
 │   ├── neutral-palette.ts  # CR-002 (Neutral palette) ✅
 │   ├── semantic-mapper.ts  # Semantic tokens ✅
 │   ├── output.ts           # Multi-format export ✅
 │   └── questionnaire.ts    # Questionnaire schema ✅
-├── presets/                # Preset system (A2)
-│   ├── types.ts            # Preset type definitions ✅
-│   ├── loader.ts           # EDR-001 (Preset loading) ✅
+├── themes/                # Theme system (A2)
+│   ├── types.ts            # Theme type definitions ✅
+│   ├── loader.ts           # EDR-001 (Theme loading) ✅
 │   └── index.ts            # Public API ✅
 ├── contracts/              # Component contracts (A3) ✅
 │   ├── types.ts            # Contract schemas ✅
@@ -525,12 +525,12 @@ tests/
 ├── scale-generator.test.ts  # Scale uniformity ✅
 ├── wcag-validator.test.ts   # WCAG compliance ✅
 ├── token-generator.test.ts  # Token generation ✅
-├── component-presets.test.ts # Component states ✅
+├── component-themes.test.ts # Component states ✅
 ├── neutral-palette.test.ts  # Neutral palette (A1) ✅
 ├── semantic-mapper.test.ts  # Semantic tokens (A1) ✅
 ├── output-formats.test.ts   # Multi-format export (A1) ✅
 ├── questionnaire.test.ts    # Schema validation (A1) ✅
-├── presets/                # Preset tests (A2) ✅
+├── themes/                # Theme tests (A2) ✅
 │   ├── types.test.ts
 │   ├── loader.test.ts
 │   └── integration.test.ts
@@ -551,15 +551,15 @@ tests/
 | wcag-validator.ts | 98.43% | ✅ Excellent |
 | color-conversion.ts | 100% | ✅ Excellent |
 | scale-generator.ts | 100% | ✅ Excellent |
-| component-presets.ts | 100% | ✅ Excellent |
+| component-themes.ts | 100% | ✅ Excellent |
 | token-generator.ts | 91.12% | ✅ Good |
 | neutral-palette.ts | 100% | ✅ Excellent (A1) |
 | semantic-mapper.ts | 100% | ✅ Excellent (A1) |
 | output.ts | 100% | ✅ Excellent (A1) |
 | questionnaire.ts | 100% | ✅ Excellent (A1) |
-| presets/types.ts | 100% | ✅ Excellent (A2) |
-| presets/loader.ts | 94.73% | ✅ Excellent (A2) |
-| presets/index.ts | 100% | ✅ Excellent (A2) |
+| themes/types.ts | 100% | ✅ Excellent (A2) |
+| themes/loader.ts | 94.73% | ✅ Excellent (A2) |
+| themes/index.ts | 100% | ✅ Excellent (A2) |
 | **contracts/types.ts** | **100%** | ✅ **Excellent (A3)** ✨ |
 | **contracts/registry.ts** | **92.98%** | ✅ **Excellent (A3)** ✨ |
 | **contracts/rules/*.ts** | **100%** | ✅ **Excellent (A3, 6 files)** ✨ |
@@ -574,7 +574,7 @@ tests/
 | UR-003 | TypeScript + Zod | ✅ 100% | PASS |
 | UR-004 | wcag-validator.ts | ✅ 100% | PASS |
 | UR-005 | package.json | ✅ N/A | PASS |
-| EDR-001 | presets/loader.ts | ✅ 94.73% | PASS (A2) |
+| EDR-001 | themes/loader.ts | ✅ 94.73% | PASS (A2) |
 | EDR-002 | output.ts (3 formats) | ✅ 100% | PASS (A1) |
 | EDR-003 | clipToGamut() | ✅ 100% | PASS |
 | **EDR-004** | **contracts/types.ts** | ✅ **100%** | **PASS (A3)** ✨ |
@@ -611,7 +611,7 @@ tests/
    - Status: Implemented in neutral-palette.ts (A1)
    - Coverage: 100%
 
-~~3. A1 Integration (Preset Definition System)~~ - ✅ RESOLVED
+~~3. A1 Integration (Theme Definition System)~~ - ✅ RESOLVED
    - Status: Completed in Phase A2
    - Coverage: 97.77%
 
@@ -699,14 +699,14 @@ tests/
 
 ### Phase A Acceptance Criteria (Complete)
 
-#### A1 Acceptance Criteria (Preset Definition System)
+#### A1 Acceptance Criteria (Theme Definition System)
 
 | Criteria | Status | Notes |
 |----------|--------|-------|
-| Preset loading with validation (EDR-001) | ✅ PASS | Zod schema validation functional |
-| Default preset (next-tailwind-shadcn) | ✅ PASS | Default preset included |
+| Theme loading with validation (EDR-001) | ✅ PASS | Zod schema validation functional |
+| Default theme (next-tailwind-shadcn) | ✅ PASS | Default theme included |
 | Multi-format token generation | ✅ PASS | CSS, DTCG, Tailwind formats |
-| Custom preset support | ✅ PASS | JSON preset loading validated |
+| Custom theme support | ✅ PASS | JSON theme loading validated |
 
 **A1 Overall**: 4/4 criteria met (100%)
 
@@ -721,7 +721,7 @@ tests/
 | Test coverage ≥85% | ✅ PASS | Current: 98.7% (exceeds target) |
 | Zero `any` types in public API | ✅ PASS | Strict TypeScript enforced |
 | 10-step color scale generation | ✅ PASS | Perceptually uniform scales |
-| Component presets (8 types) | ✅ PASS | All presets functional |
+| Component themes (8 types) | ✅ PASS | All themes functional |
 | Dark mode variant generation | ✅ PASS | Lightness inversion implemented |
 | Neutral palette generation | ✅ PASS | Pure/tinted/custom modes |
 | Semantic token mapping | ✅ PASS | shadcn/ui compatible |
@@ -756,7 +756,7 @@ tests/
 
 **Must Complete**:
 - ~~Close test coverage gap to ≥85%~~ ✅ DONE (98.7%)
-- ~~Implement A1 (Preset Definition System)~~ ✅ DONE
+- ~~Implement A1 (Theme Definition System)~~ ✅ DONE
 - ~~Implement A2 (Token Generator)~~ ✅ DONE
 - ~~Implement A3 (Component Contracts)~~ ✅ DONE
 - Create Git commits and merge Phase A ✅ IN PROGRESS
@@ -802,7 +802,7 @@ tests/
 |---------|------|--------|---------|
 | 1.0.0 | 2026-01-11 | Claude Sonnet 4.5 | Initial implementation status document |
 | 1.1.0 | 2026-01-11 | Claude Sonnet 4.5 | Phase 1 completion update: 4 new modules, 98.04% coverage, 12/12 acceptance criteria |
-| 1.2.0 | 2026-01-11 | Claude Sonnet 4.5 | Phase A2 completion: Preset system integration, 276 tests, 98.02% coverage |
+| 1.2.0 | 2026-01-11 | Claude Sonnet 4.5 | Phase A2 completion: Theme system integration, 276 tests, 98.02% coverage |
 | 1.3.0 | 2026-01-12 | Claude Sonnet 4.5 | Phase A complete: All 3 packages (A1, A2, A3), 497 tests, 98.7% coverage, 26/26 acceptance criteria met |
 | 2.0.0 | 2026-01-12 | Claude Sonnet 4.5 | Final status update: Document marked COMPLETE, all gaps resolved, synchronization tasks completed |
 

@@ -18,7 +18,7 @@ Successfully transformed Tekton from a single-package structure to a pnpm worksp
 ### RED Phase ✅
 Created comprehensive test suite with 17 tests validating:
 - M1.1: Workspace setup (pnpm-workspace.yaml, root package.json configuration)
-- M1.2: Package extraction (@tekton/preset, @tekton/token-generator, @tekton/contracts)
+- M1.2: Package extraction (@tekton/theme, @tekton/token-generator, @tekton/contracts)
 - M1.3: Build and test verification
 - M1.4: Common configuration files
 
@@ -37,9 +37,9 @@ Implemented minimal structure to pass all tests:
 
 ### REFACTOR Phase ✅
 Optimized package structure and dependencies:
-- Reorganized shared code (schemas, questionnaire) into @tekton/preset
+- Reorganized shared code (schemas, questionnaire) into @tekton/theme
 - Fixed circular dependencies by establishing clear dependency hierarchy
-- Updated imports to use workspace protocol (`@tekton/preset`)
+- Updated imports to use workspace protocol (`@tekton/theme`)
 - Verified build performance and test coverage maintained
 
 **Result**: Build time 9.7s, all 514 tests passing, zero regression.
@@ -75,8 +75,8 @@ Optimized package structure and dependencies:
 **Evidence**:
 ```
 packages/
-├── preset/
-│   ├── package.json (@tekton/preset)
+├── theme/
+│   ├── package.json (@tekton/theme)
 │   ├── tsconfig.json (extends ../../tsconfig.base.json)
 │   └── src/
 │       ├── index.ts
@@ -93,7 +93,7 @@ packages/
 │       ├── scale-generator.ts
 │       ├── color-conversion.ts
 │       ├── wcag-validator.ts
-│       ├── component-presets.ts
+│       ├── component-themes.ts
 │       ├── neutral-palette.ts
 │       ├── semantic-mapper.ts
 │       └── output.ts
@@ -109,8 +109,8 @@ packages/
 ```
 
 **Package Dependencies**:
-- @tekton/preset: No internal dependencies (base package)
-- @tekton/token-generator: `"@tekton/preset": "workspace:*"`
+- @tekton/theme: No internal dependencies (base package)
+- @tekton/token-generator: `"@tekton/theme": "workspace:*"`
 - @tekton/contracts: No internal dependencies
 
 ### M1.3: Build & Test Verification ✅
@@ -129,14 +129,14 @@ Breakdown:
 ```
 
 **Coverage Maintained**:
-- preset: ≥97.77% (maintained) ✓
+- theme: ≥97.77% (maintained) ✓
 - token-generator: 100% critical paths (maintained) ✓
 - contracts: 100% (208 tests, maintained) ✓
 
 **Build Performance**:
 ```bash
 $ time pnpm build:all
-packages/preset build: Done
+packages/theme build: Done
 packages/contracts build: Done
 packages/token-generator build: Done
 
@@ -178,27 +178,27 @@ Total: 9.688 seconds ✓ (< 10s target)
 ```
 @tekton/contracts (independent)
 
-@tekton/preset (base layer)
+@tekton/theme (base layer)
   ├── schemas.ts (OKLCHColor, RGBColor, ComponentPreset types)
   ├── questionnaire.ts (QuestionnaireSchema)
-  ├── types.ts (Preset, Stack types)
+  ├── types.ts (Theme, Stack types)
   └── loader.ts (loadDefaultPresets)
 
-@tekton/token-generator (depends on preset)
-  ├── Imports: @tekton/preset
-  └── Re-exports preset types for convenience
+@tekton/token-generator (depends on theme)
+  ├── Imports: @tekton/theme
+  └── Re-exports theme types for convenience
 ```
 
 ### Design Rationale
-1. **@tekton/preset** is the foundational package containing:
+1. **@tekton/theme** is the foundational package containing:
    - Core type definitions (schemas)
    - Questionnaire system
-   - Preset loading logic
+   - Theme loading logic
 
-2. **@tekton/token-generator** builds on preset:
-   - Uses OKLCH types from preset
+2. **@tekton/token-generator** builds on theme:
+   - Uses OKLCH types from theme
    - Implements token generation algorithms
-   - Re-exports preset types for API convenience
+   - Re-exports theme types for API convenience
 
 3. **@tekton/contracts** is independent:
    - Component contract validation system
@@ -209,25 +209,25 @@ Total: 9.688 seconds ✓ (< 10s target)
 ## Key Refactoring Decisions
 
 ### 1. Schemas Location
-**Decision**: Moved schemas.ts to @tekton/preset
+**Decision**: Moved schemas.ts to @tekton/theme
 **Rationale**:
-- Core type definitions used by both preset and token-generator
-- Placing in preset (lowest dependency) prevents circular dependencies
+- Core type definitions used by both theme and token-generator
+- Placing in theme (lowest dependency) prevents circular dependencies
 - Token-generator can re-export for API compatibility
 
 ### 2. Questionnaire Location
-**Decision**: Moved questionnaire.ts to @tekton/preset
+**Decision**: Moved questionnaire.ts to @tekton/theme
 **Rationale**:
-- Preset types depend on QuestionnaireSchema
-- Natural fit with preset system
+- Theme types depend on QuestionnaireSchema
+- Natural fit with theme system
 - Reduces coupling in token-generator
 
-### 3. Component Presets Location
-**Decision**: Moved component-presets.ts to @tekton/token-generator
+### 3. Component Themes Location
+**Decision**: Moved component-themes.ts to @tekton/token-generator
 **Rationale**:
 - Uses color-conversion and wcag-validator from token-generator
 - Generates component tokens (token-generator responsibility)
-- Depends on schemas (available via preset)
+- Depends on schemas (available via theme)
 
 ---
 
@@ -291,7 +291,7 @@ Total: 9.688 seconds
 
 ### R-001: Package Circular Dependencies
 **Status**: ✅ MITIGATED
-**Action Taken**: Established clear dependency hierarchy with preset as base layer
+**Action Taken**: Established clear dependency hierarchy with theme as base layer
 **Result**: No circular dependencies detected
 
 ### R-002: Import Path Changes
@@ -314,9 +314,9 @@ pnpm-workspace.yaml
 tsconfig.base.json
 .eslintrc.base.json
 vitest.config.base.ts
-packages/preset/package.json
-packages/preset/tsconfig.json
-packages/preset/src/index.ts
+packages/theme/package.json
+packages/theme/tsconfig.json
+packages/theme/src/index.ts
 packages/token-generator/package.json
 packages/token-generator/tsconfig.json
 packages/token-generator/src/index.ts
@@ -335,7 +335,7 @@ tests/project-structure.test.ts (updated for monorepo root)
 
 ### Moved Files
 ```
-src/ → packages/preset/src/ (preset files)
+src/ → packages/theme/src/ (theme files)
 src/ → packages/token-generator/src/ (token-generator files)
 src/ → packages/contracts/src/ (contracts files)
 ```
@@ -366,7 +366,7 @@ src/ → packages/contracts/src/ (contracts files)
 4. **Build Performance**: Parallel builds kept under 10s target
 
 ### Challenges Overcome
-1. **Circular Dependencies**: Resolved by moving shared code to preset
+1. **Circular Dependencies**: Resolved by moving shared code to theme
 2. **Import Path Changes**: Fixed with workspace protocol and re-exports
 3. **Test Organization**: Root tests validate packages (package tests in M2)
 

@@ -248,31 +248,31 @@ This plan outlines the implementation approach for the Tekton MCP Server Natural
 
 ### Milestone 4: Screen Tools Extended Implementation (Secondary Goal)
 
-**Objective**: Implement remaining screen tools and archetype integration.
+**Objective**: Implement remaining screen tools and component integration.
 
 **Deliverables**:
 1. `screen.applyArchetype` tool
 2. `screen.list` tool
 3. `screen.preview` tool
-4. Full archetype system integration
+4. Full component system integration
 
 **Files to Create/Modify**:
 
 | File | Action | Description |
 |------|--------|-------------|
 | `packages/studio-mcp/src/screen/tools.ts` | MODIFY | Add remaining tool implementations |
-| `packages/studio-mcp/src/screen/archetype-applier.ts` | CREATE | Archetype application logic |
+| `packages/studio-mcp/src/screen/component-applier.ts` | CREATE | Component application logic |
 | `packages/studio-mcp/src/screen/scanner.ts` | CREATE | Project screen scanner |
 | `packages/studio-mcp/src/server/mcp-server.ts` | MODIFY | Add remaining screen tools |
-| `packages/studio-mcp/tests/screen/archetype-applier.test.ts` | CREATE | Archetype application tests |
+| `packages/studio-mcp/tests/screen/component-applier.test.ts` | CREATE | Component application tests |
 | `packages/studio-mcp/tests/screen/scanner.test.ts` | CREATE | Screen scanner tests |
 
 **Technical Approach**:
 
-1. **Archetype Application**:
+1. **Component Application**:
    ```typescript
    async applyArchetype(screenName: string, archetypeName: string): Promise<ToolResult<boolean>> {
-     // 1. Load archetype rules from archetype-system
+     // 1. Load component rules from component-system
      // 2. Read existing screen file
      // 3. Apply CSS variable updates
      // 4. Update component styling
@@ -300,10 +300,10 @@ This plan outlines the implementation approach for the Tekton MCP Server Natural
    }
    ```
 
-**Dependencies**: Milestone 3, SPEC-ARCHETYPE-001 (archetype system)
+**Dependencies**: Milestone 3, SPEC-COMPONENT-001 (component system)
 
 **Success Criteria**:
-- All 7 style archetypes apply correctly
+- All 7 style components apply correctly
 - Screen listing returns accurate metadata
 - Preview URLs resolve correctly
 - Test coverage greater than or equal to 85%
@@ -312,11 +312,11 @@ This plan outlines the implementation approach for the Tekton MCP Server Natural
 
 ### Milestone 5: Frontend Integration and Polish (Final Goal)
 
-**Objective**: Integrate active preset selection into studio-web and finalize documentation.
+**Objective**: Integrate active theme selection into studio-web and finalize documentation.
 
 **Deliverables**:
-1. "Set as Active" button on preset detail page
-2. Active preset indicator in UI
+1. "Set as Active" button on theme detail page
+2. Active theme indicator in UI
 3. Integration tests across all packages
 4. Documentation updates
 
@@ -324,15 +324,15 @@ This plan outlines the implementation approach for the Tekton MCP Server Natural
 
 | File | Action | Description |
 |------|--------|-------------|
-| `packages/studio-web/src/app/presets/[id]/page.tsx` | MODIFY | Add "Set as Active" button |
-| `packages/studio-web/src/hooks/useActivePreset.ts` | CREATE | Active preset hooks |
-| `packages/studio-web/src/components/presets/ActivePresetIndicator.tsx` | CREATE | Active indicator component |
+| `packages/studio-web/src/app/themes/[id]/page.tsx` | MODIFY | Add "Set as Active" button |
+| `packages/studio-web/src/hooks/useActivePreset.ts` | CREATE | Active theme hooks |
+| `packages/studio-web/src/components/themes/ActivePresetIndicator.tsx` | CREATE | Active indicator component |
 | `packages/studio-api/tests/api/test_settings.py` | CREATE | Settings API integration tests |
 | `packages/studio-mcp/tests/integration/full-workflow.test.ts` | CREATE | End-to-end integration tests |
 
 **Technical Approach**:
 
-1. **Active Preset Hook**:
+1. **Active Theme Hook**:
    ```typescript
    export function useActivePreset(projectPath: string) {
      return useQuery({
@@ -354,14 +354,14 @@ This plan outlines the implementation approach for the Tekton MCP Server Natural
 
 2. **UI Integration**:
    ```tsx
-   // In preset detail page
+   // In theme detail page
    const setActivePreset = useSetActivePreset();
 
    <Button
-     onClick={() => setActivePreset.mutate({ presetId: preset.id })}
+     onClick={() => setActivePreset.mutate({ presetId: theme.id })}
      disabled={setActivePreset.isPending}
    >
-     {isActive ? 'Active Preset' : 'Set as Active'}
+     {isActive ? 'Active Theme' : 'Set as Active'}
    </Button>
    ```
 
@@ -369,7 +369,7 @@ This plan outlines the implementation approach for the Tekton MCP Server Natural
 
 **Success Criteria**:
 - "Set as Active" button works correctly
-- Active preset persists across sessions
+- Active theme persists across sessions
 - Full workflow integration test passes
 - All tests pass with greater than or equal to 85% coverage
 
@@ -415,19 +415,19 @@ This plan outlines the implementation approach for the Tekton MCP Server Natural
 
 | Task ID | Task Description | Test First | Estimated Complexity |
 |---------|-----------------|------------|---------------------|
-| M4-T1 | Create archetype applier module | Archetype application tests | Medium |
+| M4-T1 | Create component applier module | Component application tests | Medium |
 | M4-T2 | Implement screen.applyArchetype tool | Style application tests | Medium |
 | M4-T3 | Create screen scanner module | Scanner accuracy tests | Medium |
 | M4-T4 | Implement screen.list tool | List completeness tests | Low |
 | M4-T5 | Implement screen.preview tool | URL generation tests | Low |
-| M4-T6 | Integrate with archetype-system package | Integration tests | Medium |
+| M4-T6 | Integrate with component-system package | Integration tests | Medium |
 
 ### Milestone 5 Tasks
 
 | Task ID | Task Description | Test First | Estimated Complexity |
 |---------|-----------------|------------|---------------------|
 | M5-T1 | Create useActivePreset hook | Hook behavior tests | Low |
-| M5-T2 | Add "Set as Active" button to preset page | Component render tests | Low |
+| M5-T2 | Add "Set as Active" button to theme page | Component render tests | Low |
 | M5-T3 | Create ActivePresetIndicator component | Indicator display tests | Low |
 | M5-T4 | Create full workflow integration test | E2E workflow tests | High |
 | M5-T5 | Update documentation | N/A | Low |
@@ -450,7 +450,7 @@ studio-mcp (MCP Server)
     |     +-- tools.ts         (Screen tool implementations)
     |     +-- templates.ts     (Code generation templates)
     |     +-- scanner.ts       (Project screen scanner)
-    |     +-- archetype-applier.ts (Style application)
+    |     +-- component-applier.ts (Style application)
     |     +-- types.ts         (TypeScript interfaces)
     |
     +-- routing/
@@ -478,7 +478,7 @@ studio-web (Frontend)
     +-- hooks/
     |     +-- useActivePreset.ts
     |
-    +-- components/presets/
+    +-- components/themes/
           +-- ActivePresetIndicator.tsx
 ```
 
@@ -501,7 +501,7 @@ studio-mcp (Tool Handler)
      +-- project.getActivePreset
      |         |
      |         v
-     |    studio-api (GET /settings/active-preset)
+     |    studio-api (GET /settings/active-theme)
      |         |
      |         v
      |    project_settings table
@@ -530,7 +530,7 @@ studio-mcp (Tool Handler)
 
 1. **Migration Testing**: Test on SQLite before PostgreSQL
 2. **Rollback Scripts**: Include downgrade in all migrations
-3. **Foreign Key Safety**: Use ON DELETE SET NULL for preset references
+3. **Foreign Key Safety**: Use ON DELETE SET NULL for theme references
 
 ### API Safety
 

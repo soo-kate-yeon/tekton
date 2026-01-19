@@ -301,7 +301,7 @@ MIT © Tekton Team
 
 - **[@tekton/contracts](../contracts/README.md)** - Component Contract validation system
 - **[@tekton/token-generator](../token-generator/README.md)** - OKLCH design token system
-- **[@tekton/presets](../presets/README.md)** - Pre-configured component presets
+- **[@tekton/themes](../themes/README.md)** - Pre-configured component themes
 
 ## Roadmap
 

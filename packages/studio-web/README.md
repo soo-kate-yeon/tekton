@@ -4,10 +4,10 @@ Web application for the Tekton Design System - design token management and compo
 
 ## Features (MVP)
 
-- **Preset Gallery**: Browse and manage curated design token presets
-- **Preset CRUD**: Create, view, and delete presets
-- **Filtering**: Filter presets by category and tags
-- **Multi-Theme Support**: System-aware theming with multiple presets (Default, Dark, Premium Editorial)
+- **Theme Gallery**: Browse and manage curated design token themes
+- **Theme CRUD**: Create, view, and delete themes
+- **Filtering**: Filter themes by category and tags
+- **Multi-Theme Support**: System-aware theming with multiple themes (Default, Dark, Premium Editorial)
 - **Responsive**: Mobile-friendly responsive design
 
 ## Getting Started
@@ -58,10 +58,10 @@ src/
 ├── app/                 # Next.js App Router pages
 │   ├── layout.tsx      # Root layout with providers
 │   ├── page.tsx        # Home page
-│   └── presets/        # Preset gallery pages
+│   └── themes/        # Theme gallery pages
 ├── components/
 │   ├── layout/         # Layout components (Header)
-│   ├── presets/        # Preset-specific components
+│   ├── themes/        # Theme-specific components
 │   └── ui/             # Reusable UI components
 │       └── ThemeSelector.tsx  # Theme selection dropdown
 ├── hooks/              # React Query hooks
@@ -76,8 +76,8 @@ src/
 
 | Service | URL | Purpose |
 |---------|-----|---------|
-| Studio API | localhost:8000 | Preset CRUD operations |
-| Studio MCP | localhost:3000 | Archetype data (future) |
+| Studio API | localhost:8000 | Theme CRUD operations |
+| Studio MCP | localhost:3000 | Component data (future) |
 
 ## Technology Stack
 

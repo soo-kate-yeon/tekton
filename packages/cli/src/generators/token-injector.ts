@@ -1,4 +1,4 @@
-import type { ExtendedTokenPreset, BrandLevel } from '@tekton/preset';
+import type { ExtendedTokenPreset, BrandLevel } from '@tekton/theme';
 
 /**
  * OKLCH color type

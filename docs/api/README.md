@@ -8,7 +8,7 @@ Complete reference documentation for all public exports from Tekton.
 - [Color Conversion Module](#color-conversion-module)
 - [Scale Generation Module](#scale-generation-module)
 - [Token Generator Module](#token-generator-module)
-- [Component Presets Module](#component-presets-module)
+- [Component Themes Module](#component-themes-module)
 - [WCAG Validator Module](#wcag-validator-module)
 - [Usage Patterns](#usage-patterns)
 
@@ -132,12 +132,12 @@ const check: AccessibilityCheck = {
 
 ### ComponentPresetSchema
 
-Validates component preset structure.
+Validates component theme structure.
 
 ```typescript
 import { type ComponentPreset } from 'tekton';
 
-const preset: ComponentPreset = {
+const theme: ComponentPreset = {
   name: 'button',
   states: {
     default: { l: 0.5, c: 0.15, h: 220 },
@@ -488,7 +488,7 @@ generator.clearCache();
 
 ---
 
-## Component Presets Module
+## Component Themes Module
 
 Pre-configured tokens for common UI components.
 
@@ -625,18 +625,18 @@ const radio = radioPreset(baseColor);
 
 ### generateComponentPresets
 
-Generate all 8 presets at once.
+Generate all 8 themes at once.
 
 ```typescript
 import { generateComponentPresets } from 'tekton';
 
 const allPresets = generateComponentPresets(baseColor);
-// Returns ComponentPreset[] with all 8 presets
+// Returns ComponentPreset[] with all 8 themes
 ```
 
 ### COMPONENT_PRESETS
 
-Export object with all preset functions.
+Export object with all theme functions.
 
 ```typescript
 import { COMPONENT_PRESETS } from 'tekton';
@@ -783,9 +783,9 @@ const primaryToken = generateToken('primary', brandColor);
 const generator = new TokenGenerator({ generateDarkMode: true });
 const css = generator.exportTokens({ primary: brandColor }, 'css');
 
-// 4. Generate component presets
-const presets = generateComponentPresets(brandColor);
-const buttonStates = presets.find(p => p.name === 'button');
+// 4. Generate component themes
+const themes = generateComponentPresets(brandColor);
+const buttonStates = themes.find(p => p.name === 'button');
 
 // 5. Validate accessibility
 const fg = oklchToRgb(buttonStates.states.default);

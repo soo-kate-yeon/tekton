@@ -1,6 +1,6 @@
-# Implementation Plan: SPEC-ARCHETYPE-001
+# Implementation Plan: SPEC-COMPONENT-001
 
-**SPEC ID**: SPEC-ARCHETYPE-001
+**SPEC ID**: SPEC-COMPONENT-001
 **Version**: 1.0.0
 **Status**: Draft
 **Priority**: HIGH
@@ -9,9 +9,9 @@
 
 ## Overview
 
-**Purpose**: Implement hook-prop-based archetype system enabling AI-driven component generation through single-prompt interactions.
+**Purpose**: Implement hook-prop-based component system enabling AI-driven component generation through single-prompt interactions.
 
-**Approach**: Create systematic mapping from 20 headless hooks to styling archetypes with three-layer structure: Hook Prop Rules, State-Style Mapping, and Variant Branching.
+**Approach**: Create systematic mapping from 20 headless hooks to styling components with three-layer structure: Hook Prop Rules, State-Style Mapping, and Variant Branching.
 
 **Target**: Enable single-prompt AI component generation workflow integrated with Token Contract CSS variables.
 
@@ -143,11 +143,11 @@ Create conditional styling logic based on hook configuration options (toggle, va
 - Document variant combinations (e.g., toggle + variant + disabled)
 - Validation: Variant rules cover all documented option combinations
 
-**Task 3.4: Preset Integration**
-- Map variant styles to 7 Token Contract presets (Professional, Creative, etc.)
-- Ensure variant styles respect preset color semantics
-- Document preset-specific variant overrides
-- Validation: Variant styles work correctly with all 7 presets
+**Task 3.4: Theme Integration**
+- Map variant styles to 7 Token Contract themes (Professional, Creative, etc.)
+- Ensure variant styles respect theme color semantics
+- Document theme-specific variant overrides
+- Validation: Variant styles work correctly with all 7 themes
 
 ### Deliverables
 - `variant-branching.json`: Variant rules for all 20 hooks
@@ -193,18 +193,18 @@ Create HTML structure templates and JSX patterns for all 20 hooks to enable comp
 - Establish nesting depth guidelines and anti-patterns
 - Validation: Nested structures cover all complex hooks (Dialog, Dropdown, Menu, Tabs, Accordion)
 
-**Task 4.4: Structure-Archetype Integration**
+**Task 4.4: Structure-Component Integration**
 - Map structure templates to Hook Prop Rules from Phase 1
 - Integrate state-style mappings into JSX templates from Phase 2
 - Apply variant branching to structure variations from Phase 3
 - Document prop spreading patterns for hook prop objects
-- Validation: Structure templates correctly consume Archetype rules
+- Validation: Structure templates correctly consume Component rules
 
 **Task 4.5: SPEC-COMPONENT-003 Alignment**
 - Coordinate with SPEC-COMPONENT-003 (@tekton/components package scope)
-- Define interface between archetype templates and production components
+- Define interface between component templates and production components
 - Document structure template handoff requirements
-- Establish migration path from archetype templates to production
+- Establish migration path from component templates to production
 - Validation: Templates align with SPEC-COMPONENT-003 component API
 
 **Task 4.6: Accessibility and Semantic Best Practices**
@@ -226,7 +226,7 @@ Create HTML structure templates and JSX patterns for all 20 hooks to enable comp
 - ✅ All 20 hooks have complete structure templates with semantic HTML
 - ✅ Templates follow React best practices and accessibility standards
 - ✅ Nested structures documented for all complex components
-- ✅ Integration with Phases 1-3 archetype rules validated
+- ✅ Integration with Phases 1-3 component rules validated
 - ✅ Templates align with SPEC-COMPONENT-003 scope and interface
 - ✅ Test coverage ≥85% for structure template code
 
@@ -237,7 +237,7 @@ Create HTML structure templates and JSX patterns for all 20 hooks to enable comp
 **Priority**: HIGH
 
 ### Objective
-Create comprehensive archetype documentation consumable by AI for single-prompt component generation.
+Create comprehensive component documentation consumable by AI for single-prompt component generation.
 
 ### Tasks
 
@@ -279,14 +279,14 @@ Create comprehensive archetype documentation consumable by AI for single-prompt 
 
 **Task 5.7: Token Contract Integration Section**
 - Document CSS variable naming conventions
-- Explain preset integration (Professional, Creative, etc.)
+- Explain theme integration (Professional, Creative, etc.)
 - Provide dark mode handling guidance
 - Validation: Integration section accurate and complete
 
 ### Deliverables
-- `preset_archetypes.md`: Complete archetype documentation with Layer 4 Structure
+- `preset_archetypes.md`: Complete component documentation with Layer 4 Structure
 - AI prompting examples: 10+ tested scenarios
-- JSON Schema validation: Schema for archetype structure
+- JSON Schema validation: Schema for component structure
 - Integration guide: Token Contract integration documentation
 
 ### Success Criteria
@@ -302,21 +302,21 @@ Create comprehensive archetype documentation consumable by AI for single-prompt 
 **Priority**: HIGH
 
 ### Objective
-Validate archetype system integration with SPEC-COMPONENT-001 hooks, SPEC-COMPONENT-002 Token Contract, and Layer 4 Structure templates.
+Validate component system integration with SPEC-COMPONENT-001 hooks, SPEC-COMPONENT-002 Token Contract, and Layer 4 Structure templates.
 
 ### Tasks
 
 **Task 6.1: Hook API Compatibility Validation**
 - Execute integration tests with all 20 hooks from SPEC-COMPONENT-001
-- Verify prop object names match archetype documentation
-- Validate state values match archetype state mappings
+- Verify prop object names match component documentation
+- Validate state values match component state mappings
 - Validation: Integration tests pass without API mismatches
 
 **Task 6.2: CSS Variable Reference Validation**
-- Verify all archetype CSS variable references exist in Token Contract
-- Test archetype styles with all 7 Token Contract presets
+- Verify all component CSS variable references exist in Token Contract
+- Test component styles with all 7 Token Contract themes
 - Validate dark mode CSS variable resolution
-- Validation: CSS variable existence tests pass for all presets
+- Validation: CSS variable existence tests pass for all themes
 
 **Task 6.3: Structure Template Integration Testing**
 - Validate HTML structure templates with all 20 hooks
@@ -332,15 +332,15 @@ Validate archetype system integration with SPEC-COMPONENT-001 hooks, SPEC-COMPON
 - Validation: AI prompting success rate meets target
 
 **Task 6.5: Performance Validation**
-- Profile JSON Schema validation performance (target: <5ms per archetype)
-- Measure archetype documentation loading time
-- Validate archetype rule application performance
+- Profile JSON Schema validation performance (target: <5ms per component)
+- Measure component documentation loading time
+- Validate component rule application performance
 - Test structure template parsing performance
 - Validation: Performance metrics meet targets
 
 **Task 6.6: Quality Gate Validation**
 - Execute TRUST 5 framework validation (test coverage, readability, security)
-- Verify ≥85% test coverage across all archetype code
+- Verify ≥85% test coverage across all component code
 - Run linting and formatting checks
 - Validate accessibility compliance for structure templates
 - Validation: All quality gates pass
@@ -355,7 +355,7 @@ Validate archetype system integration with SPEC-COMPONENT-001 hooks, SPEC-COMPON
 
 ### Success Criteria
 - ✅ Integration tests pass with SPEC-COMPONENT-001 hooks
-- ✅ CSS variable references resolve correctly in all 7 presets
+- ✅ CSS variable references resolve correctly in all 7 themes
 - ✅ Structure templates render correctly with all 20 hooks
 - ✅ AI prompting success rate ≥90%
 - ✅ Performance metrics meet targets (<5ms validation)
@@ -366,8 +366,8 @@ Validate archetype system integration with SPEC-COMPONENT-001 hooks, SPEC-COMPON
 ## Technical Stack
 
 **Core Technologies:**
-- TypeScript 5.9+ (archetype type definitions)
-- JSON Schema (archetype validation)
+- TypeScript 5.9+ (component type definitions)
+- JSON Schema (component validation)
 - Markdown (preset_archetypes.md documentation)
 - CSS Custom Properties (Token Contract integration)
 
@@ -398,7 +398,7 @@ Validate archetype system integration with SPEC-COMPONENT-001 hooks, SPEC-COMPON
 - Acceptance: All hook states mapped, transition definitions complete
 
 **Milestone 3: Variant Branching Complete** (Priority: MEDIUM)
-- Deliverable: Variant rules, decision trees, preset integration
+- Deliverable: Variant rules, decision trees, theme integration
 - Acceptance: All configuration options documented, variant rules defined
 
 **Milestone 4: Layer 4 Structure Templates Complete** (Priority: HIGH)
@@ -421,7 +421,7 @@ Validate archetype system integration with SPEC-COMPONENT-001 hooks, SPEC-COMPON
 
 **Risk 1: Hook API Changes** (Likelihood: LOW, Impact: HIGH)
 - **Mitigation**: Semantic versioning monitoring, integration tests, breaking change detection
-- **Contingency**: Archetype rule update workflow, backward compatibility layer
+- **Contingency**: Component rule update workflow, backward compatibility layer
 
 **Risk 2: AI Prompting Misalignment** (Likelihood: MEDIUM, Impact: MEDIUM)
 - **Mitigation**: Iterative AI prompting tests, documentation refinement, example expansion
@@ -434,7 +434,7 @@ Validate archetype system integration with SPEC-COMPONENT-001 hooks, SPEC-COMPON
 ### Medium-Risk Areas
 
 **Risk 4: Documentation Scalability** (Likelihood: MEDIUM, Impact: LOW)
-- **Mitigation**: Structured documentation organization, modular archetype definitions
+- **Mitigation**: Structured documentation organization, modular component definitions
 - **Contingency**: Documentation restructuring, automated generation from schema
 
 **Risk 5: Schema Validation Overhead** (Likelihood: LOW, Impact: LOW)
@@ -454,9 +454,9 @@ Validate archetype system integration with SPEC-COMPONENT-001 hooks, SPEC-COMPON
 - Measurement: AI prompting test suite results
 
 **Performance:**
-- JSON Schema validation: <5ms per archetype
+- JSON Schema validation: <5ms per component
 - Documentation loading: <100ms for preset_archetypes.md
-- Archetype rule application: <1ms per hook
+- Component rule application: <1ms per hook
 
 **Documentation Quality:**
 - Clarity validation through user testing
@@ -468,7 +468,7 @@ Validate archetype system integration with SPEC-COMPONENT-001 hooks, SPEC-COMPON
 ## Next Steps
 
 **Immediate Actions:**
-1. Execute `/moai:2-run SPEC-ARCHETYPE-001` to begin TDD implementation
+1. Execute `/moai:2-run SPEC-COMPONENT-001` to begin TDD implementation
 2. Create `hook-prop-rules.json` schema and TypeScript types
 3. Implement Hook Prop Mapping System (Phase 1)
 4. Implement State-to-Style Mapping (Phase 2)
@@ -477,7 +477,7 @@ Validate archetype system integration with SPEC-COMPONENT-001 hooks, SPEC-COMPON
 7. Write integration tests with SPEC-COMPONENT-001 hooks
 
 **Post-Implementation:**
-1. Validate structure template integration with Phases 1-3 archetype rules
+1. Validate structure template integration with Phases 1-3 component rules
 2. User testing for preset_archetypes.md clarity including structure templates
 3. AI prompting workflow optimization based on test results
 4. Documentation refinement based on user feedback
@@ -490,7 +490,7 @@ Validate archetype system integration with SPEC-COMPONENT-001 hooks, SPEC-COMPON
 
 ---
 
-**Tags**: [SPEC-ARCHETYPE-001], [HOOK-PROP], [STATE-STYLE], [VARIANT], [PRESET-DOC]
+**Tags**: [SPEC-COMPONENT-001], [HOOK-PROP], [STATE-STYLE], [VARIANT], [THEME-DOC]
 
 **Last Updated**: 2026-01-17
 **Status**: Ready for Implementation

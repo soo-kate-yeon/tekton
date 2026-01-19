@@ -9,7 +9,7 @@
 ## 목표 유저 플로우
 
 ```
-유저: tekton create-screen Dashboard --preset "MyBrand"
+유저: tekton create-screen Dashboard --theme "MyBrand"
 
 → AI 에이전트가 자동으로:
   1. Intent 분석 → 필요한 컴포넌트 추천 (Card, Progress, Badge)
@@ -27,7 +27,7 @@
 
 | 레이어 | 구현체 | 설명 |
 |--------|--------|------|
-| **Archetype System** | `@tekton/archetype-system` | 20개 훅의 스타일 규칙 정의 |
+| **Component System** | `@tekton/component-system` | 20개 훅의 스타일 규칙 정의 |
 | **Token Contract** | `@tekton/token-contract` | OKLCH 토큰 스키마, 7개 프리셋 |
 | **Studio MCP** | `@tekton/studio-mcp` | AI용 아키타입 조회 API |
 | **Studio API** | `studio-api` | 프리셋 CRUD REST API |
@@ -58,11 +58,11 @@
 │         → ["Card", "Progress", "Badge"]                     │
 │                                                              │
 │  2. 아키타입 조회 (MCP)                 ← 현재 연결 안됨 ❌   │
-│     └─→ archetype.get("useCard")                            │
+│     └─→ component.get("useCard")                            │
 │         → { baseStyles, stateMappings, variants }           │
 │                                                              │
 │  3. 프리셋 토큰 조회 (API)             ← 현재 연결 안됨 ❌    │
-│     └─→ GET /api/v2/presets/:id                             │
+│     └─→ GET /api/v2/themes/:id                             │
 │         → { primary-500: "oklch(...)", radius-md: "8px" }   │
 │                                                              │
 │  4. 코드 생성 (템플릿)                  ← 현재 빈 스켈레톤만   │
@@ -129,5 +129,5 @@
 | `packages/cli/src/index.ts` | CLI 진입점 |
 | `packages/cli/src/commands/create-screen.ts` | 화면 생성 로직 |
 | `packages/cli/src/generators/screen-generator.ts` | 파일 생성기 |
-| `packages/studio-mcp/src/archetype/tools.ts` | 아키타입 MCP 도구 |
-| `packages/studio-api/src/studio_api/api/v2/presets.py` | 프리셋 API |
+| `packages/studio-mcp/src/component/tools.ts` | 아키타입 MCP 도구 |
+| `packages/studio-api/src/studio_api/api/v2/themes.py` | 프리셋 API |

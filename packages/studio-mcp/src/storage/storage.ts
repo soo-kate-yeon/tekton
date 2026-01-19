@@ -24,7 +24,7 @@ function getArchetypeFilePath(hookName: string, basePath?: string): string {
  * @param basePath - Optional base path for storage
  * @throws Error if validation or save operation fails
  */
-export async function saveArchetype<T>(
+export async function saveComponent<T>(
   hookName: string,
   data: T,
   schema: ZodSchema<T>,
@@ -60,7 +60,7 @@ export async function saveArchetype<T>(
  * @returns Validated archetype data
  * @throws Error if file does not exist or validation fails
  */
-export async function loadArchetype<T>(
+export async function loadComponent<T>(
   hookName: string,
   schema: ZodSchema<T>,
   basePath?: string,
@@ -121,7 +121,7 @@ export async function listArchetypes(basePath?: string): Promise<string[]> {
  * @param basePath - Optional base path for storage
  * @throws Error if file does not exist
  */
-export async function deleteArchetype(
+export async function deleteComponent(
   hookName: string,
   basePath?: string,
 ): Promise<void> {

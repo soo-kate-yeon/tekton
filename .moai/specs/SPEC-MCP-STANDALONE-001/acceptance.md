@@ -21,13 +21,13 @@ This document defines the acceptance criteria and test scenarios for SPEC-MCP-ST
 | AC-002 | Backward compatibility | HIGH | Pending |
 | AC-003 | Zero configuration startup | HIGH | Pending |
 | AC-004 | Local configuration persistence | HIGH | Pending |
-| AC-005 | Bundled preset verification | HIGH | Pending |
-| AC-006 | preset.list tool | HIGH | Pending |
-| AC-007 | preset.get tool | HIGH | Pending |
+| AC-005 | Bundled theme verification | HIGH | Pending |
+| AC-006 | theme.list tool | HIGH | Pending |
+| AC-007 | theme.get tool | HIGH | Pending |
 | AC-008 | project.status tool | HIGH | Pending |
 | AC-009 | project.useBuiltinPreset tool | HIGH | Pending |
 | AC-010 | Mode selection logic | MEDIUM | Pending |
-| AC-011 | Preset source selection | MEDIUM | Pending |
+| AC-011 | Theme source selection | MEDIUM | Pending |
 | AC-012 | npx execution | HIGH | Pending |
 
 ---
@@ -74,10 +74,10 @@ And /health returns mode "standalone"
 
 **Requirement**: U-002 - Maintain backward compatibility with existing MCP tool interfaces
 
-**Scenario 1: Existing Archetype Tools Unchanged**
+**Scenario 1: Existing Component Tools Unchanged**
 ```gherkin
 Given the MCP server is running
-When archetype.list is invoked
+When component.list is invoked
 Then the response format matches existing schema
 And all hook names are returned as before
 ```
@@ -129,8 +129,8 @@ And /tools returns the list of available tools
 **Scenario 3: No Config File Required**
 ```gherkin
 Given the .tekton/config.json file does not exist
-When preset.list is invoked
-Then all 7 built-in presets are returned
+When theme.list is invoked
+Then all 7 built-in themes are returned
 And no error is thrown about missing configuration
 ```
 
@@ -181,16 +181,16 @@ And a warning is logged about corrupted config
 
 ---
 
-### AC-005: Bundled Preset Verification
+### AC-005: Bundled Theme Verification
 
-**Requirement**: U-005 - Bundle all 7 built-in presets as JSON
+**Requirement**: U-005 - Bundle all 7 built-in themes as JSON
 
-**Scenario 1: All Presets Available**
+**Scenario 1: All Themes Available**
 ```gherkin
 Given the MCP server is running in standalone mode
-When preset.list is invoked
-Then exactly 7 presets are returned
-And the presets include:
+When theme.list is invoked
+Then exactly 7 themes are returned
+And the themes include:
   | id                       |
   | next-tailwind-shadcn     |
   | next-tailwind-radix      |
@@ -201,18 +201,18 @@ And the presets include:
   | premium-editorial        |
 ```
 
-**Scenario 2: Preset Schema Validation**
+**Scenario 2: Theme Schema Validation**
 ```gherkin
-Given any built-in preset is loaded
+Given any built-in theme is loaded
 When validated against PresetSchema
-Then the preset passes all validation rules
+Then the theme passes all validation rules
 And contains required fields: id, version, name, description, stack, questionnaire
 ```
 
-**Scenario 3: Preset Data Completeness**
+**Scenario 3: Theme Data Completeness**
 ```gherkin
-Given the "next-tailwind-shadcn" preset
-When preset.get is invoked with presetId "next-tailwind-shadcn"
+Given the "next-tailwind-shadcn" theme
+When theme.get is invoked with presetId "next-tailwind-shadcn"
 Then the response includes:
   | field              | type   |
   | id                 | string |
@@ -229,29 +229,29 @@ Then the response includes:
 
 ---
 
-### AC-006: preset.list Tool
+### AC-006: theme.list Tool
 
-**Requirement**: E-001 - Return list of all 7 built-in presets
+**Requirement**: E-001 - Return list of all 7 built-in themes
 
 **Scenario 1: Successful List**
 ```gherkin
 Given the MCP server is running
-When POST /tools/preset.list is called with empty body
+When POST /tools/theme.list is called with empty body
 Then response status is 200
 And response.success is true
-And response.data is an array of 7 presets
-And each preset contains id, name, description, stack
+And response.data is an array of 7 themes
+And each theme contains id, name, description, stack
 ```
 
 **Scenario 2: List Format**
 ```gherkin
 Given the MCP server is running
-When preset.list is invoked
-Then each preset in response contains:
+When theme.list is invoked
+Then each theme in response contains:
   | field       | example value                        |
   | id          | "next-tailwind-shadcn"               |
   | name        | "Next.js + Tailwind CSS + shadcn/ui" |
-  | description | "Default preset for..."              |
+  | description | "Default theme for..."              |
   | stack       | { framework, styling, components }   |
 ```
 
@@ -259,36 +259,36 @@ Then each preset in response contains:
 
 ---
 
-### AC-007: preset.get Tool
+### AC-007: theme.get Tool
 
-**Requirement**: E-002 - Return complete preset data including AI context
+**Requirement**: E-002 - Return complete theme data including AI context
 
-**Scenario 1: Valid Preset Retrieval**
+**Scenario 1: Valid Theme Retrieval**
 ```gherkin
 Given the MCP server is running
-When POST /tools/preset.get is called with:
+When POST /tools/theme.get is called with:
   | field    | value                |
   | presetId | next-tailwind-shadcn |
 Then response status is 200
 And response.success is true
-And response.data contains complete preset with questionnaire
+And response.data contains complete theme with questionnaire
 ```
 
-**Scenario 2: Invalid Preset ID**
+**Scenario 2: Invalid Theme ID**
 ```gherkin
 Given the MCP server is running
-When POST /tools/preset.get is called with:
+When POST /tools/theme.get is called with:
   | field    | value           |
   | presetId | non-existent-id |
 Then response status is 200
 And response.success is false
-And response.error contains "Preset not found"
+And response.error contains "Theme not found"
 ```
 
 **Scenario 3: AI Context Included**
 ```gherkin
 Given the MCP server is running
-When preset.get is invoked for "next-tailwind-shadcn"
+When theme.get is invoked for "next-tailwind-shadcn"
 Then response includes questionnaire with:
   | field        | purpose                    |
   | brandTone    | AI styling decisions       |
@@ -304,9 +304,9 @@ Then response includes questionnaire with:
 
 ### AC-008: project.status Tool
 
-**Requirement**: E-003 - Return connection status and active preset
+**Requirement**: E-003 - Return connection status and active theme
 
-**Scenario 1: Status with Active Preset**
+**Scenario 1: Status with Active Theme**
 ```gherkin
 Given .tekton/config.json contains activePresetId "tech-startup"
 And detected frameworkType is "next-app"
@@ -343,9 +343,9 @@ And frameworkType is detected from /path/to/project
 
 ### AC-009: project.useBuiltinPreset Tool
 
-**Requirement**: E-004 - Set active preset in local config
+**Requirement**: E-004 - Set active theme in local config
 
-**Scenario 1: Select Valid Preset**
+**Scenario 1: Select Valid Theme**
 ```gherkin
 Given the MCP server is running in standalone mode
 When POST /tools/project.useBuiltinPreset is called with:
@@ -356,18 +356,18 @@ And .tekton/config.json contains activePresetId "saas-dashboard"
 And response contains selectedAt timestamp
 ```
 
-**Scenario 2: Select Invalid Preset**
+**Scenario 2: Select Invalid Theme**
 ```gherkin
 Given the MCP server is running
 When project.useBuiltinPreset is invoked with:
   | field    | value       |
   | presetId | invalid-id  |
 Then response.success is false
-And response.error contains "Invalid preset ID"
+And response.error contains "Invalid theme ID"
 And .tekton/config.json is not modified
 ```
 
-**Scenario 3: Switch Between Presets**
+**Scenario 3: Switch Between Themes**
 ```gherkin
 Given activePresetId is currently "saas-dashboard"
 When project.useBuiltinPreset is invoked with "tech-startup"
@@ -422,25 +422,25 @@ And no API check is attempted
 
 ---
 
-### AC-011: Preset Source Selection
+### AC-011: Theme Source Selection
 
-**Requirement**: S-002 - Load presets from appropriate source based on mode
+**Requirement**: S-002 - Load themes from appropriate source based on mode
 
 **Scenario 1: Standalone Mode Uses Bundled**
 ```gherkin
 Given the server is in standalone mode
-When preset.list is invoked
-Then presets are loaded from bundled JSON
-And exactly 7 presets are available
+When theme.list is invoked
+Then themes are loaded from bundled JSON
+And exactly 7 themes are available
 And no API calls are made
 ```
 
 **Scenario 2: Connected Mode Uses API**
 ```gherkin
 Given the server is in connected mode
-When preset operations are performed
-Then presets are loaded from studio-api
-And custom presets are available if defined
+When theme operations are performed
+Then themes are loaded from studio-api
+And custom themes are available if defined
 ```
 
 **Verification Method**: Source verification, mode isolation tests
@@ -486,7 +486,7 @@ And download time is acceptable for CLI experience
 
 | Module | Minimum Coverage |
 |--------|------------------|
-| src/preset/builtin.ts | 100% |
+| src/theme/builtin.ts | 100% |
 | src/project/config.ts | 95% |
 | src/project/config-manager.ts | 95% |
 | src/project/standalone.ts | 95% |

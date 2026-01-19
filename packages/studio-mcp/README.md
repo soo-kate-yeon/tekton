@@ -1,15 +1,15 @@
 # @tekton/studio-mcp
 
-Archetype MCP Integration for Tekton Studio - Model Context Protocol integration enabling AI assistants to query and use hook archetypes for component generation.
+Component MCP Integration for Tekton Studio - Model Context Protocol integration enabling AI assistants to query and use hook components for component generation.
 
 ## Overview
 
-This package provides MCP (Model Context Protocol) integration for the Tekton Archetype System, implementing:
+This package provides MCP (Model Context Protocol) integration for the Tekton Component System, implementing:
 
-- **Archetype MCP Tools** - Query hook archetypes via HTTP-based MCP protocol
-- **4-Layer Archetype Access** - Prop rules, state mappings, variants, and structure templates
-- **Query Interface** - Search archetypes by WCAG level, state name, variants, etc.
-- **Storage Utilities** - Generalized archetype data persistence
+- **Component MCP Tools** - Query hook components via HTTP-based MCP protocol
+- **4-Layer Component Access** - Prop rules, state mappings, variants, and structure templates
+- **Query Interface** - Search components by WCAG level, state name, variants, etc.
+- **Storage Utilities** - Generalized component data persistence
 
 ## Installation
 
@@ -28,7 +28,7 @@ import { archetypeTools } from '@tekton/studio-mcp';
 const hooks = await archetypeTools.list();
 console.log(hooks.data); // ['useButton', 'useTextField', ...]
 
-// Get complete archetype for a hook
+// Get complete component for a hook
 const buttonArchetype = await archetypeTools.get('useButton');
 console.log(buttonArchetype.data);
 // {
@@ -39,7 +39,7 @@ console.log(buttonArchetype.data);
 //   structure: { ... }
 // }
 
-// Query archetypes by criteria
+// Query components by criteria
 const aaCompliant = await archetypeTools.query({ wcagLevel: 'AA' });
 console.log(aaCompliant.data); // All hooks with WCAG AA compliance
 ```
@@ -69,13 +69,13 @@ The server exposes the following tools via HTTP:
 
 | Tool | Description |
 |------|-------------|
-| `archetype.list` | List all 20+ available hooks |
-| `archetype.get` | Get complete archetype for a hook |
-| `archetype.getPropRules` | Get Layer 1 (hook prop rules) |
-| `archetype.getStateMappings` | Get Layer 2 (state-style mappings) |
-| `archetype.getVariants` | Get Layer 3 (variant branching) |
-| `archetype.getStructure` | Get Layer 4 (structure templates) |
-| `archetype.query` | Search by criteria (WCAG level, state name) |
+| `component.list` | List all 20+ available hooks |
+| `component.get` | Get complete component for a hook |
+| `component.getPropRules` | Get Layer 1 (hook prop rules) |
+| `component.getStateMappings` | Get Layer 2 (state-style mappings) |
+| `component.getVariants` | Get Layer 3 (variant branching) |
+| `component.getStructure` | Get Layer 4 (structure templates) |
+| `component.query` | Search by criteria (WCAG level, state name) |
 
 ### API Endpoints
 
@@ -101,20 +101,20 @@ Content-Type: application/json
 curl http://localhost:3000/health
 
 # List all hooks
-curl -X POST http://localhost:3000/tools/archetype.list
+curl -X POST http://localhost:3000/tools/component.list
 
-# Get useButton archetype
-curl -X POST http://localhost:3000/tools/archetype.get \
+# Get useButton component
+curl -X POST http://localhost:3000/tools/component.get \
   -H "Content-Type: application/json" \
   -d '{"hookName": "useButton"}'
 
 # Query by WCAG level
-curl -X POST http://localhost:3000/tools/archetype.query \
+curl -X POST http://localhost:3000/tools/component.query \
   -H "Content-Type: application/json" \
   -d '{"wcagLevel": "AA"}'
 ```
 
-## 4-Layer Archetype System
+## 4-Layer Component System
 
 ### Layer 1: Hook Prop Rules
 
@@ -197,7 +197,7 @@ const structure = await archetypeTools.getStructure('useButton');
 
 ## Storage Utilities
 
-Generalized storage functions for archetype data persistence:
+Generalized storage functions for component data persistence:
 
 ```typescript
 import { saveArchetype, loadArchetype, listArchetypes } from '@tekton/studio-mcp';
@@ -212,7 +212,7 @@ await saveArchetype('myHook', { name: 'test' }, MySchema);
 // Load data
 const data = await loadArchetype('myHook', MySchema);
 
-// List stored archetypes
+// List stored components
 const stored = await listArchetypes();
 ```
 
@@ -224,7 +224,7 @@ Configure Claude Code to use the MCP server:
 // .claude/settings.json
 {
   "mcpServers": {
-    "tekton-archetypes": {
+    "tekton-components": {
       "command": "node",
       "args": ["packages/studio-mcp/dist/server/index.js"],
       "env": {
@@ -235,10 +235,10 @@ Configure Claude Code to use the MCP server:
 }
 ```
 
-In Claude, query archetypes:
+In Claude, query components:
 ```
 > What hooks are available?
-> Show me the useButton archetype
+> Show me the useButton component
 > Find all AA-compliant components
 ```
 
@@ -291,17 +291,17 @@ pnpm format
 - Zod 3.23.8 (schema validation)
 - Node.js 20+ (ES2022 modules)
 - Vitest 2.1.8 (testing)
-- @tekton/archetype-system (data source)
+- @tekton/component-system (data source)
 
 **Design Decisions:**
 1. **HTTP-based MCP** - Simple, universal protocol support
-2. **Lazy data loading** - Archetype data loaded on first request
-3. **4-layer architecture** - Clear separation of archetype concerns
+2. **Lazy data loading** - Component data loaded on first request
+3. **4-layer architecture** - Clear separation of component concerns
 4. **Query interface** - Flexible filtering for AI assistants
 
 ## Dependencies
 
-- **@tekton/archetype-system** - Source of hook archetype data
+- **@tekton/component-system** - Source of hook component data
 - **@anthropic-ai/sdk** - MCP protocol support
 - **zod** - Runtime type validation
 

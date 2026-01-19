@@ -1,7 +1,7 @@
 {
   "name": "@tekton/token-contract",
   "version": "0.1.0",
-  "description": "Token Contract & CSS Variable System with Zod validation and curated presets",
+  "description": "Token Contract & CSS Variable System with Zod validation and curated themes",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -14,9 +14,9 @@
       "types": "./dist/schemas/index.d.ts",
       "import": "./dist/schemas/index.js"
     },
-    "./presets": {
-      "types": "./dist/presets/index.d.ts",
-      "import": "./dist/presets/index.js"
+    "./themes": {
+      "types": "./dist/themes/index.d.ts",
+      "import": "./dist/themes/index.js"
     },
     "./css-generator": {
       "types": "./dist/css-generator/index.d.ts",
@@ -47,7 +47,7 @@
     "react": "^19.0.0"
   },
   "devDependencies": {
-    "@tekton/preset": "workspace:*",
+    "@tekton/theme": "workspace:*",
     "@tekton/token-generator": "workspace:*",
     "@testing-library/react": "^16.1.0",
     "@types/node": "^22.10.5",

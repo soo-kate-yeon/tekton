@@ -1,0 +1,51 @@
+{
+    "id": "korean-fintech",
+    "name": "Korean Fintech",
+    "description": "Friendly and trustworthy financial UI with large radius and card-centered layout.",
+    "stackInfo": {
+        "framework": "nextjs",
+        "styling": "tailwindcss",
+        "components": "shadcn-ui"
+    },
+    "brandTone": "friendly",
+    "colorPalette": {
+        "primary": {
+            "l": 0.60,
+            "c": 0.18,
+            "h": 255
+        },
+        "secondary": {
+            "l": 0.98,
+            "c": 0.00,
+            "h": 0
+        },
+        "accent": {
+            "l": 0.90,
+            "c": 0.05,
+            "h": 255
+        },
+        "neutral": {
+            "l": 0.95,
+            "c": 0.01,
+            "h": 250
+        }
+    },
+    "typography": {
+        "fontFamily": "Pretendard",
+        "fontScale": "medium",
+        "headingWeight": 700,
+        "bodyWeight": 400
+    },
+    "componentDefaults": {
+        "borderRadius": "large",
+        "density": "comfortable",
+        "contrast": "high"
+    },
+    "aiContext": {
+        "brandTone": "friendly",
+        "designPhilosophy": "Friendly but secure. Trustworthy finance. Card-based layout with clear hierarchy.",
+        "colorGuidance": "Bring blue for actions (Trust). Light gray backgrounds with white cards.",
+        "componentGuidance": "Large border radius (16px+). Chunky buttons. Clear numbers/data display with bold weights.",
+        "accessibilityNotes": "High legibility for financial data."
+    }
+}

@@ -118,7 +118,7 @@ packages/token-contract/
 │   │   ├── semantic-token.ts
 │   │   ├── state-token.ts
 │   │   └── composition-token.ts
-│   ├── presets/               # Curated design presets
+│   ├── themes/               # Curated design themes
 │   │   ├── professional.ts
 │   │   ├── creative.ts
 │   │   ├── minimal.ts
@@ -141,7 +141,7 @@ packages/token-contract/
 │   └── index.ts               # Public API exports
 ├── tests/                     # Test files
 │   ├── schemas.test.ts
-│   ├── presets.test.ts
+│   ├── themes.test.ts
 │   ├── css-generator.test.ts
 │   ├── theme-provider.test.tsx
 │   └── utils.test.ts
@@ -194,7 +194,7 @@ Follow [Commit Message Guidelines](#commit-message-guidelines):
 
 ```bash
 git add .
-git commit -m "feat: add new preset validation function"
+git commit -m "feat: add new theme validation function"
 ```
 
 ### 4. Push and Create PR
@@ -251,28 +251,28 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { ThemeProvider, useTheme } from '../src/theme-provider';
 
 function TestComponent() {
-  const { preset, setPreset } = useTheme();
+  const { theme, setPreset } = useTheme();
   return (
     <div>
-      <p data-testid="preset">{preset}</p>
+      <p data-testid="theme">{theme}</p>
       <button onClick={() => setPreset('creative')}>Switch</button>
     </div>
   );
 }
 
 describe('ThemeProvider', () => {
-  it('allows preset switching', () => {
+  it('allows theme switching', () => {
     render(
       <ThemeProvider defaultPreset="professional">
         <TestComponent />
       </ThemeProvider>
     );
 
-    expect(screen.getByTestId('preset')).toHaveTextContent('professional');
+    expect(screen.getByTestId('theme')).toHaveTextContent('professional');
 
     fireEvent.click(screen.getByText('Switch'));
 
-    expect(screen.getByTestId('preset')).toHaveTextContent('creative');
+    expect(screen.getByTestId('theme')).toHaveTextContent('creative');
   });
 });
 ```
@@ -305,8 +305,8 @@ All contributions should include appropriate documentation:
 // ✅ Good: Clear, self-contained example
 import { loadPreset, generateCSSVariables } from '@tekton/token-contract';
 
-const preset = loadPreset('professional');
-const css = generateCSSVariables(preset.tokens);
+const theme = loadPreset('professional');
+const css = generateCSSVariables(theme.tokens);
 console.log(css);
 ```
 
@@ -319,7 +319,7 @@ console.log(css);
  * @returns CSS string with :root selector and variables
  *
  * @example
- * const css = generateCSSVariables(preset.tokens);
+ * const css = generateCSSVariables(theme.tokens);
  * console.log(css);
  * // :root {
  * //   --tekton-primary-500: oklch(0.6 0.15 220);
@@ -475,11 +475,11 @@ pnpm lint:fix
 ### Examples
 
 ```
-feat(presets): add new warm preset with orange primary color
+feat(themes): add new warm theme with orange primary color
 
-- Add warm preset configuration
-- Update preset loader to include warm preset
-- Add tests for warm preset validation
+- Add warm theme configuration
+- Update theme loader to include warm theme
+- Add tests for warm theme validation
 
 Closes #123
 ```
@@ -506,7 +506,7 @@ Clear description of what the bug is.
 
 **To Reproduce**
 Steps to reproduce the behavior:
-1. Load preset 'professional'
+1. Load theme 'professional'
 2. Call generateCSSVariables()
 3. See error
 

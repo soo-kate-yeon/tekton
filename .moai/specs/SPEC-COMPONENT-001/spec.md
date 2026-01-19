@@ -46,7 +46,7 @@ priority: "HIGH"
 ### Current System Context
 
 **Tekton Project Architecture:**
-- **Monorepo Structure**: pnpm workspaces with packages for contracts, presets, token-generator, CLI, VS Code extension
+- **Monorepo Structure**: pnpm workspaces with packages for contracts, themes, token-generator, CLI, VS Code extension
 - **Component Contract System**: 8 MVP contracts (Button, Input, Dialog, Form, Card, Alert, Select, Checkbox) with 82 total constraints
 - **Contract Types**: Accessibility, Prop-Combination, Children, Context, Composition, State validation
 - **Screen Contract Architecture**: 4-layer system (Environment, Skeleton, Intent, Composition)

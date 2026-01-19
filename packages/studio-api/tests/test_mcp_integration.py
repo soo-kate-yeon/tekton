@@ -17,12 +17,12 @@ class TestMCPIntegration:
 
     async def test_suggestions_endpoint_exists(self, async_client: AsyncClient):
         """Test that suggestions endpoint is available"""
-        response = await async_client.get("/api/v2/presets/suggestions")
+        response = await async_client.get("/api/v2/themes/suggestions")
         assert response.status_code in [200, 500, 503]  # Exists, may fail
 
     async def test_suggestions_returns_preset_list(self, async_client: AsyncClient):
         """Test that suggestions endpoint returns list of presets"""
-        response = await async_client.get("/api/v2/presets/suggestions")
+        response = await async_client.get("/api/v2/themes/suggestions")
         assert response.status_code == 200
         data = response.json()
         assert isinstance(data, list)
@@ -30,7 +30,7 @@ class TestMCPIntegration:
 
     async def test_suggestions_preset_structure(self, async_client: AsyncClient):
         """Test that suggested presets have expected structure"""
-        response = await async_client.get("/api/v2/presets/suggestions")
+        response = await async_client.get("/api/v2/themes/suggestions")
         assert response.status_code == 200
         presets = response.json()
 
@@ -62,7 +62,7 @@ class TestMCPIntegration:
             }
         ]
 
-        response = await async_client.get("/api/v2/presets/suggestions")
+        response = await async_client.get("/api/v2/themes/suggestions")
         assert response.status_code == 200
         data = response.json()
         assert len(data) >= 1
@@ -75,7 +75,7 @@ class TestMCPIntegration:
         """Test fallback to default presets when MCP fails"""
         mock_mcp.side_effect = Exception("MCP connection failed")
 
-        response = await async_client.get("/api/v2/presets/suggestions")
+        response = await async_client.get("/api/v2/themes/suggestions")
         assert response.status_code == 200
         data = response.json()
         assert isinstance(data, list)
@@ -89,7 +89,7 @@ class TestMCPIntegration:
         mock_mcp.return_value = []
 
         response = await async_client.get(
-            "/api/v2/presets/suggestions",
+            "/api/v2/themes/suggestions",
             params={"context": "ecommerce website"}
         )
         assert response.status_code == 200
@@ -103,7 +103,7 @@ class TestMCPIntegration:
         import asyncio
         mock_mcp.side_effect = asyncio.TimeoutError("MCP timeout")
 
-        response = await async_client.get("/api/v2/presets/suggestions")
+        response = await async_client.get("/api/v2/themes/suggestions")
         assert response.status_code == 200  # Falls back gracefully
         data = response.json()
         assert isinstance(data, list)

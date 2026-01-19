@@ -4,7 +4,7 @@ import pytest
 import pytest_asyncio
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from studio_api.models.curated_preset import CuratedPreset
+from studio_api.models.curated_theme import CuratedTheme
 
 
 class TestDatabaseUtilities:
@@ -16,7 +16,7 @@ class TestDatabaseUtilities:
         assert isinstance(db_session, AsyncSession)
 
         # Perform operation to ensure session works
-        preset = CuratedPreset(
+        preset = CuratedTheme(
             name="Test Preset",
             category="test",
             description="Test",
@@ -33,7 +33,7 @@ class TestDatabaseUtilities:
         """Test get_db error handling and rollback - covers lines 47-49."""
         try:
             # Create a preset
-            preset = CuratedPreset(
+            preset = CuratedTheme(
                 name="Test",
                 category="test",
                 description="Test",
@@ -44,7 +44,7 @@ class TestDatabaseUtilities:
             await db_session.flush()
 
             # Force an error by violating unique constraint
-            preset2 = CuratedPreset(
+            preset2 = CuratedTheme(
                 id=preset.id,  # Same ID - will cause integrity error
                 name="Test 2",
                 category="test",

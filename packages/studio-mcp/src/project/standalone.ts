@@ -7,8 +7,8 @@
 
 import { readConfig, updateConfig, getDefaultConfig } from "./config.js";
 import type { TektonConfig, ConnectionMode } from "./config-types.js";
-import { getBuiltinPreset, isValidPresetId } from "../preset/builtin.js";
-import type { PresetMeta } from "../preset/types.js";
+import { getBuiltinPreset, isValidPresetId } from '../theme/builtin.js';
+import type { PresetMeta } from '../theme/types.js';
 import { ProjectTools } from "./tools.js";
 
 /**
@@ -31,7 +31,7 @@ export interface ProjectStatusInput {
  * Input schema for project.useBuiltinPreset tool
  */
 export interface UseBuiltinPresetInput {
-  presetId: string;
+  themeId: string;
   projectPath?: string;
 }
 
@@ -45,7 +45,7 @@ export interface ProjectStatusResponse {
     frameworkType: string;
     detectedAt: string;
   } | null;
-  activePreset: {
+  activeTheme: {
     id: string;
     name: string;
     brandTone: string;
@@ -100,14 +100,14 @@ export async function projectStatus(
         frameworkType: config.project.frameworkType,
         detectedAt: config.project.detectedAt,
       },
-      activePreset: null,
+      activeTheme: null,
     };
 
     // If there's an active preset, include its info
     if (config.preset.activePresetId) {
       const preset = getBuiltinPreset(config.preset.activePresetId);
       if (preset) {
-        response.activePreset = {
+        response.activeTheme = {
           id: preset.id,
           name: preset.name,
           brandTone: preset.brandTone,
@@ -132,36 +132,36 @@ export async function projectStatus(
  * Select a built-in preset as active for the project
  * MCP Tool: project.useBuiltinPreset
  *
- * @param input - Contains presetId and optional projectPath
+ * @param input - Contains themeId and optional projectPath
  * @returns Confirmation with preset info
  */
 export async function useBuiltinPreset(
   input: UseBuiltinPresetInput
 ): Promise<ToolResult<UseBuiltinPresetResponse>> {
   try {
-    const { presetId, projectPath = process.cwd() } = input;
+    const { themeId, projectPath = process.cwd() } = input;
 
     // Validate preset ID
-    if (!presetId || presetId.trim() === "") {
+    if (!themeId || themeId.trim() === "") {
       return {
         success: false,
         error: "Preset ID is required",
       };
     }
 
-    if (!isValidPresetId(presetId)) {
+    if (!isValidPresetId(themeId)) {
       return {
         success: false,
-        error: `Invalid preset ID: ${presetId}. Use preset.list to see available presets.`,
+        error: `Invalid preset ID: ${themeId}. Use preset.list to see available presets.`,
       };
     }
 
     // Get preset data
-    const preset = getBuiltinPreset(presetId);
+    const preset = getBuiltinPreset(themeId);
     if (!preset) {
       return {
         success: false,
-        error: `Preset not found: ${presetId}`,
+        error: `Preset not found: ${themeId}`,
       };
     }
 
@@ -169,7 +169,7 @@ export async function useBuiltinPreset(
     const now = new Date().toISOString();
     const updatedConfig = updateConfig(projectPath, {
       preset: {
-        activePresetId: presetId,
+        activePresetId: themeId,
         selectedAt: now,
       },
     });

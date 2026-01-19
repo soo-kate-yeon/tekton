@@ -4,14 +4,14 @@
  */
 
 import { describe, it, expect } from 'vitest';
-import { loadPreset } from '../../src/presets/preset-loader.js';
+import { loadTheme } from '../../src/presets/theme-loader.js';
 import { generateCSSFromTokens } from '../../src/css-generator/generator.js';
 import { validateWCAGCompliance } from '../../src/presets/wcag-compliance.js';
 
 describe('OKLCH Integration', () => {
   describe('Preset Loading', () => {
     it('should load presets with valid OKLCH colors', () => {
-      const preset = loadPreset('professional');
+      const preset = loadTheme('professional');
 
       // Presets should contain ColorToken objects, not strings
       expect(preset.tokens.primary['500']).toHaveProperty('l');
@@ -24,8 +24,8 @@ describe('OKLCH Integration', () => {
     it('should maintain OKLCH format through all presets', () => {
       const presets = ['professional', 'creative', 'minimal', 'bold', 'warm', 'cool', 'high-contrast'] as const;
 
-      for (const presetName of presets) {
-        const preset = loadPreset(presetName);
+      for (const themeName of presets) {
+        const preset = loadTheme(themeName);
 
         for (const [tokenName, scale] of Object.entries(preset.tokens)) {
           if (scale && typeof scale === 'object') {
@@ -46,7 +46,7 @@ describe('OKLCH Integration', () => {
 
   describe('CSS Generation', () => {
     it('should generate valid CSS with OKLCH colors', () => {
-      const preset = loadPreset('professional');
+      const preset = loadTheme('professional');
       const css = generateCSSFromTokens({
         semantic: preset.tokens,
         composition: preset.composition,
@@ -58,7 +58,7 @@ describe('OKLCH Integration', () => {
     });
 
     it('should preserve OKLCH color space in generated CSS', () => {
-      const preset = loadPreset('creative');
+      const preset = loadTheme('creative');
       const css = generateCSSFromTokens({
         semantic: preset.tokens,
       });
@@ -77,7 +77,7 @@ describe('OKLCH Integration', () => {
 
   describe('WCAG Compliance', () => {
     it('should validate OKLCH colors for WCAG compliance', () => {
-      const preset = loadPreset('high-contrast');
+      const preset = loadTheme('high-contrast');
       const compliance = validateWCAGCompliance(preset);
 
       // Verify that WCAG checks are performed
@@ -92,8 +92,8 @@ describe('OKLCH Integration', () => {
     it('should handle all preset WCAG validations', () => {
       const presets = ['professional', 'creative', 'minimal', 'bold', 'warm', 'cool', 'high-contrast'] as const;
 
-      for (const presetName of presets) {
-        const preset = loadPreset(presetName);
+      for (const themeName of presets) {
+        const preset = loadTheme(themeName);
         const compliance = validateWCAGCompliance(preset);
 
         // Verify checks are performed for all presets
@@ -105,7 +105,7 @@ describe('OKLCH Integration', () => {
 
   describe('Token Contract Compatibility', () => {
     it('should maintain color scale structure', () => {
-      const preset = loadPreset('professional');
+      const preset = loadTheme('professional');
 
       // Updated to include '950' step for 11-step Tailwind-compatible scale
       const expectedSteps = ['50', '100', '200', '300', '400', '500', '600', '700', '800', '900', '950'];
@@ -119,7 +119,7 @@ describe('OKLCH Integration', () => {
     });
 
     it('should support all required semantic tokens', () => {
-      const preset = loadPreset('professional');
+      const preset = loadTheme('professional');
 
       expect(preset.tokens.primary).toBeDefined();
       expect(preset.tokens.neutral).toBeDefined();
@@ -129,7 +129,7 @@ describe('OKLCH Integration', () => {
     });
 
     it('should support composition tokens', () => {
-      const preset = loadPreset('professional');
+      const preset = loadTheme('professional');
 
       expect(preset.composition.border).toBeDefined();
       expect(preset.composition.shadow).toBeDefined();
@@ -141,7 +141,7 @@ describe('OKLCH Integration', () => {
   describe('End-to-End Integration', () => {
     it('should complete full workflow: load → validate → generate CSS', () => {
       // 1. Load preset
-      const preset = loadPreset('professional');
+      const preset = loadTheme('professional');
       expect(preset).toBeDefined();
 
       // 2. Validate WCAG compliance
@@ -162,8 +162,8 @@ describe('OKLCH Integration', () => {
     it('should handle preset switching workflow', () => {
       const presets = ['professional', 'creative', 'bold'] as const;
 
-      for (const presetName of presets) {
-        const preset = loadPreset(presetName);
+      for (const themeName of presets) {
+        const preset = loadTheme(themeName);
         const css = generateCSSFromTokens({
           semantic: preset.tokens,
           composition: preset.composition,

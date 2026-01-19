@@ -34,7 +34,7 @@
 │   ┌─────────────────┐    ┌─────────────────┐    ┌──────────────┐ │
 │   │  Studio Web     │    │  Studio API     │    │  Studio MCP  │ │
 │   │  (PLANNED)      │◄──►│  (FastAPI)      │◄──►│  (MCP Server)│ │
-│   │  - UI Preview   │    │  - Presets CRUD │    │  - Archetype │ │
+│   │  - UI Preview   │    │  - Themes CRUD │    │  - Component │ │
 │   │  - Editor       │    │  - PostgreSQL   │    │  - MCP Tools │ │
 │   └────────┬────────┘    └────────┬────────┘    └──────┬───────┘ │
 │            │                      │                     │         │
@@ -51,7 +51,7 @@
 │   └────────┬────────────────────────────────────────────────────┘ │
 │            │                                                      │
 │   ┌────────▼────────────────────────────────────────────────────┐ │
-│   │           ARCHETYPE SYSTEM (@tekton/archetype-system)        │ │
+│   │           COMPONENT SYSTEM (@tekton/component-system)        │ │
 │   │   - Hook Prop Rules      - State-Style Mapping              │ │
 │   │   - Variant Branching    - Structure Templates              │ │
 │   └────────┬────────────────────────────────────────────────────┘ │
@@ -70,11 +70,11 @@
 | Package | Purpose | Location | Status |
 |---------|---------|----------|--------|
 | `@tekton/studio-web` | Web-based design studio UI | `packages/studio-web/` | **Planned** |
-| `@tekton/studio-api` | REST API for presets management | `packages/studio-api/` | Implemented |
-| `@tekton/studio-mcp` | MCP server for Archetypes | `packages/studio-mcp/` | Implemented |
+| `@tekton/studio-api` | REST API for themes management | `packages/studio-api/` | Implemented |
+| `@tekton/studio-mcp` | MCP server for Components | `packages/studio-mcp/` | Implemented |
 | `@tekton/token-contract` | Design token → CSS mapping | `packages/token-contract/` | Implemented |
 | `@tekton/headless-components` | Unstyled React hooks | `packages/headless-components/` | Planned |
-| `@tekton/archetype-system` | Component archetype rules | `packages/archetype-system/` | Implemented |
+| `@tekton/component-system` | Component component rules | `packages/component-system/` | Implemented |
 | `@tekton/cli` | Command-line interface | `packages/cli/` | Planned |
 | `@tekton/contracts` | Type definitions & schemas | `packages/contracts/` | Planned |
 
@@ -87,7 +87,7 @@
 - **Node.js**: 22.x LTS or later
 - **pnpm**: 9.x or later
 - **Python**: 3.13+ (for Studio API)
-- **PostgreSQL**: 16+ (for preset storage)
+- **PostgreSQL**: 16+ (for theme storage)
 
 ### Installation
 
@@ -148,16 +148,16 @@ uv run uvicorn studio_api.main:app --reload --host 0.0.0.0 --port 8000
 ### Overview
 
 The Web View Studio will provide a visual interface for:
-- Browsing curated design presets
+- Browsing curated design themes
 - Previewing components with different token configurations
-- Editing and creating new presets
+- Editing and creating new themes
 - Exporting design tokens
 
 ### Planned Features
 
 | Feature | Description |
 |---------|-------------|
-| Preset Gallery | Browse and search design presets |
+| Theme Gallery | Browse and search design themes |
 | Component Preview | Live preview with token configurations |
 | Token Editor | Visual editor for design tokens |
 | Export | Export to CSS, JSON, or StyleSheet format |
@@ -167,14 +167,14 @@ The Web View Studio will provide a visual interface for:
 
 Until Studio Web is implemented, you can:
 1. Use the **MCP Integration** (Section 4) with Claude Code for AI-assisted component generation
-2. Use the **Studio API** directly for preset management
+2. Use the **Studio API** directly for theme management
 3. Use the **CLI** (when implemented) for token generation
 
 ### Verification Checklist (Future)
 
 - [ ] Studio Web loads at `http://localhost:3001`
 - [ ] API health check returns healthy status
-- [ ] Preset gallery displays available presets
+- [ ] Theme gallery displays available themes
 - [ ] Component preview renders correctly
 - [ ] Dark mode toggle works
 
@@ -185,13 +185,13 @@ Until Studio Web is implemented, you can:
 ### Overview
 
 The MCP (Model Context Protocol) server enables AI assistants to:
-- Query hook archetypes for component generation
-- Access 4-layer archetype data (prop rules, state mappings, variants, structures)
-- Search archetypes by WCAG level, state names, and other criteria
+- Query hook components for component generation
+- Access 4-layer component data (prop rules, state mappings, variants, structures)
+- Search components by WCAG level, state names, and other criteria
 
-### Archetype System Architecture
+### Component System Architecture
 
-The archetype system provides structured data for AI-driven component generation:
+The component system provides structured data for AI-driven component generation:
 
 | Layer | Description | Content |
 |-------|-------------|---------|
@@ -202,25 +202,25 @@ The archetype system provides structured data for AI-driven component generation
 
 ### MCP Tools Available
 
-#### Archetype Tools
+#### Component Tools
 
 | Tool | Description |
 |------|-------------|
-| `archetype.list` | List all available hooks |
-| `archetype.get` | Get complete archetype for a hook |
-| `archetype.getPropRules` | Get Layer 1 (hook prop rules) |
-| `archetype.getStateMappings` | Get Layer 2 (state-style mappings) |
-| `archetype.getVariants` | Get Layer 3 (variant branching) |
-| `archetype.getStructure` | Get Layer 4 (structure templates) |
-| `archetype.query` | Search by criteria (WCAG level, state name) |
+| `component.list` | List all available hooks |
+| `component.get` | Get complete component for a hook |
+| `component.getPropRules` | Get Layer 1 (hook prop rules) |
+| `component.getStateMappings` | Get Layer 2 (state-style mappings) |
+| `component.getVariants` | Get Layer 3 (variant branching) |
+| `component.getStructure` | Get Layer 4 (structure templates) |
+| `component.query` | Search by criteria (WCAG level, state name) |
 
 #### Project Tools
 
 | Tool | Description |
 |------|-------------|
 | `project.detectStructure` | Detect project framework (Next.js App/Pages, Vite) |
-| `project.getActivePreset` | Get the currently active preset for a project |
-| `project.setActivePreset` | Set a curated preset as active for a project |
+| `project.getActivePreset` | Get the currently active theme for a project |
+| `project.setActivePreset` | Set a curated theme as active for a project |
 
 #### Screen Tools
 
@@ -228,17 +228,17 @@ The archetype system provides structured data for AI-driven component generation
 |------|-------------|
 | `screen.create` | Create a new screen with routing setup |
 | `screen.addComponent` | Add a component to an existing screen |
-| `screen.applyArchetype` | Apply a style archetype to a screen |
+| `screen.applyArchetype` | Apply a style component to a screen |
 | `screen.list` | List all screens in the project |
 | `screen.preview` | Get preview URL for a screen |
 
-### Applying Curated Presets via MCP
+### Applying Curated Themes via MCP
 
-The MCP server enables AI-driven UI redesign by applying curated design presets to your project. This workflow allows you to transform your application's look and feel using pre-defined style archetypes.
+The MCP server enables AI-driven UI redesign by applying curated design themes to your project. This workflow allows you to transform your application's look and feel using pre-defined style components.
 
-#### Available Curated Presets
+#### Available Curated Themes
 
-| Preset Name | Category | Reference Style | Description |
+| Theme Name | Category | Reference Style | Description |
 |-------------|----------|-----------------|-------------|
 | SaaS Modern | productivity | Notion, Linear | Clean, information-dense UI |
 | Dynamic Fitness | sports | Nike | Bold and dynamic with high energy |
@@ -250,7 +250,7 @@ The MCP server enables AI-driven UI redesign by applying curated design presets 
 
 #### Workflow: Apply Premium Editorial Theme
 
-This example demonstrates the complete MCP flow for applying the "Premium Editorial" preset to a Next.js project:
+This example demonstrates the complete MCP flow for applying the "Premium Editorial" theme to a Next.js project:
 
 **Step 1: Detect Project Structure**
 
@@ -271,15 +271,15 @@ curl -X POST http://localhost:3000/tools/project.detectStructure \
 # }
 ```
 
-**Step 2: List Available Presets**
+**Step 2: List Available Themes**
 
 ```bash
-curl http://localhost:8000/api/v2/presets | jq '.items[] | {id, name, category}'
+curl http://localhost:8000/api/v2/themes | jq '.items[] | {id, name, category}'
 
-# Response shows all presets with their IDs
+# Response shows all themes with their IDs
 ```
 
-**Step 3: Set Active Preset**
+**Step 3: Set Active Theme**
 
 ```bash
 curl -X POST http://localhost:3000/tools/project.setActivePreset \
@@ -303,10 +303,10 @@ curl -X POST http://localhost:3000/tools/project.setActivePreset \
 
 **Step 4: Apply Theme to Application**
 
-After setting the active preset, update your application's CSS variables to match the preset configuration:
+After setting the active theme, update your application's CSS variables to match the theme configuration:
 
 ```css
-/* globals.css - Add theme based on preset config */
+/* globals.css - Add theme based on theme config */
 [data-theme='premium-editorial'] {
   --color-background: #FAFAFA;
   --color-foreground: #121212;
@@ -339,12 +339,12 @@ function ThemeSelector() {
 }
 ```
 
-#### Verification Checklist for Preset Application
+#### Verification Checklist for Theme Application
 
 - [ ] Project structure detected correctly
-- [ ] Preset list retrieved from API
-- [ ] Active preset set via MCP
-- [ ] CSS variables generated from preset config
+- [ ] Theme list retrieved from API
+- [ ] Active theme set via MCP
+- [ ] CSS variables generated from theme config
 - [ ] Theme selector component added
 - [ ] Theme switching works in browser
 - [ ] Typography changes applied (serif fonts for editorial)
@@ -359,7 +359,7 @@ function ThemeSelector() {
 packages/studio-mcp/
 ├── src/
 │   ├── index.ts              # Package exports
-│   ├── archetype/
+│   ├── component/
 │   │   └── tools.ts          # ArchetypeTools class
 │   ├── server/
 │   │   ├── index.ts          # Server entry point
@@ -369,7 +369,7 @@ packages/studio-mcp/
 │   └── types/
 │       └── design-tokens.ts  # Design token schemas
 └── tests/
-    ├── archetype/
+    ├── component/
     │   └── tools.test.ts     # ArchetypeTools tests
     ├── storage/
     │   └── storage.test.ts   # Storage tests
@@ -378,20 +378,20 @@ packages/studio-mcp/
 
 #### ArchetypeTools Class
 
-The `ArchetypeTools` class provides programmatic access to archetype data:
+The `ArchetypeTools` class provides programmatic access to component data:
 
 ```typescript
 import { ArchetypeTools, archetypeTools } from '@tekton/studio-mcp';
 
-// Initialize (loads data from @tekton/archetype-system)
+// Initialize (loads data from @tekton/component-system)
 await archetypeTools.initialize();
 
 // List all available hooks
 const hookList = await archetypeTools.list();
 // { success: true, data: ["useButton", "useTextField", ...] }
 
-// Get complete archetype for a hook
-const archetype = await archetypeTools.get("useButton");
+// Get complete component for a hook
+const component = await archetypeTools.get("useButton");
 // { success: true, data: { hookName, propRules, stateMappings, variants, structure } }
 
 // Get individual layers
@@ -429,7 +429,7 @@ const server = createMCPServer(3000);
 
 #### Storage Utilities
 
-Generic storage functions for persisting archetype data:
+Generic storage functions for persisting component data:
 
 ```typescript
 import {
@@ -453,14 +453,14 @@ await saveArchetype('useButton', myData, MySchema);
 // Load data with schema validation
 const data = await loadArchetype('useButton', MySchema);
 
-// List all saved archetypes
+// List all saved components
 const hooks = await listArchetypes();
 // ["useButton", "useTextField", ...]
 
-// Check if archetype exists
+// Check if component exists
 const exists = await archetypeExists('useButton');
 
-// Delete an archetype
+// Delete an component
 await deleteArchetype('useButton');
 ```
 
@@ -479,38 +479,38 @@ await deleteArchetype('useButton');
 curl http://localhost:3000/health
 
 # Expected response:
-# {"status": "ok", "service": "studio-mcp", "tools": ["archetype.list", ...]}
+# {"status": "ok", "service": "studio-mcp", "tools": ["component.list", ...]}
 ```
 
 #### Step 2: List Available Hooks
 
 ```bash
-# List all hooks with archetypes
-curl -X POST http://localhost:3000/tools/archetype.list
+# List all hooks with components
+curl -X POST http://localhost:3000/tools/component.list
 
 # Expected: { "success": true, "data": ["useButton", "useTextField", ...] }
 ```
 
-#### Step 3: Get Hook Archetype
+#### Step 3: Get Hook Component
 
 ```bash
-# Get complete archetype for useButton
-curl -X POST http://localhost:3000/tools/archetype.get \
+# Get complete component for useButton
+curl -X POST http://localhost:3000/tools/component.get \
   -H "Content-Type: application/json" \
   -d '{"hookName": "useButton"}'
 
-# Expected: Complete archetype with all 4 layers
+# Expected: Complete component with all 4 layers
 ```
 
 #### Step 4: Query by Criteria
 
 ```bash
-# Find all AA-compliant archetypes
-curl -X POST http://localhost:3000/tools/archetype.query \
+# Find all AA-compliant components
+curl -X POST http://localhost:3000/tools/component.query \
   -H "Content-Type: application/json" \
   -d '{"wcagLevel": "AA"}'
 
-# Expected: Array of matching archetypes
+# Expected: Array of matching components
 ```
 
 #### Step 5: Verify Claude Integration
@@ -521,7 +521,7 @@ Configure Claude Code to use the MCP server:
 // .claude/settings.json
 {
   "mcpServers": {
-    "tekton-archetypes": {
+    "tekton-components": {
       "command": "node",
       "args": ["packages/studio-mcp/dist/server/index.js"],
       "env": {
@@ -535,7 +535,7 @@ Configure Claude Code to use the MCP server:
 In Claude, verify access:
 ```
 > What hooks are available?
-> Show me the useButton archetype
+> Show me the useButton component
 > Find all AA-compliant components
 ```
 
@@ -544,7 +544,7 @@ In Claude, verify access:
 - [ ] MCP server starts without errors
 - [ ] Health endpoint returns tool list
 - [ ] Hook listing returns all 20 hooks
-- [ ] Archetype retrieval returns 4-layer data
+- [ ] Component retrieval returns 4-layer data
 - [ ] Query filtering works correctly
 - [ ] Claude can access MCP tools
 
@@ -696,7 +696,7 @@ The Token Contract system maps design tokens to CSS variables:
 ```bash
 # Generate CSS variables
 npx @tekton/cli generate-tokens \
-  --preset next-tailwind-shadcn \
+  --theme next-tailwind-shadcn \
   --output ./styles/tokens.css
 ```
 
@@ -727,7 +727,7 @@ Expected output (`styles/tokens.css`):
 ```bash
 # Generate with dark mode
 npx @tekton/cli generate-tokens \
-  --preset next-tailwind-shadcn \
+  --theme next-tailwind-shadcn \
   --dark-mode \
   --output ./styles/tokens.css
 ```
@@ -795,7 +795,7 @@ For React Native projects:
 
 ```bash
 npx @tekton/cli generate-tokens \
-  --preset react-native \
+  --theme react-native \
   --format stylesheet \
   --output ./styles/tokens.ts
 ```
@@ -837,7 +837,7 @@ export const tokens = {
 
 ### Overview
 
-The Archetype System defines how headless hooks connect to design tokens:
+The Component System defines how headless hooks connect to design tokens:
 - **Hook Prop Rules**: Map hook props to CSS properties
 - **State-Style Mapping**: Define styles for component states
 - **Variant Branching**: Handle component variants
@@ -904,10 +904,10 @@ interface BaseStyle {
 
 ```bash
 # List all hook prop rules
-npx @tekton/cli list-archetypes
+npx @tekton/cli list-components
 
 # Expected output:
-# Available Hook Archetypes:
+# Available Hook Components:
 # ├── useButton (buttonProps)
 # ├── useInput (inputProps, labelProps)
 # ├── useModal (overlayProps, modalProps)
@@ -918,7 +918,7 @@ npx @tekton/cli list-archetypes
 
 ```bash
 # Get details for useButton
-npx @tekton/cli show-archetype useButton
+npx @tekton/cli show-component useButton
 ```
 
 Expected output:
@@ -946,7 +946,7 @@ RequiredCSSVariables:
 
 ```bash
 # Validate all rules against token contract
-npx @tekton/cli validate-archetypes
+npx @tekton/cli validate-components
 
 # Expected output:
 # Validating Hook Prop Rules...
@@ -1082,9 +1082,9 @@ The screen creation workflow generates complete page structures:
 | `Error` | Error page | Button, Card |
 | `Custom` | Custom layout | (user-specified) |
 
-### Skeleton Presets
+### Skeleton Themes
 
-| Preset | Structure |
+| Theme | Structure |
 |--------|-----------|
 | `full-screen` | Content only, no chrome |
 | `with-header` | Header + Content |
@@ -1105,7 +1105,7 @@ Interactive prompts:
 ```
 ? Screen name: UserDashboard
 ? Environment: web
-? Skeleton preset: dashboard
+? Skeleton theme: dashboard
 ? Screen intent: Dashboard
 ? Components (auto-suggested): Card, Progress, Badge, Chart
 ? Output path: src/screens
@@ -1253,7 +1253,7 @@ const styles = StyleSheet.create({
 - [ ] Interactive mode prompts correctly
 - [ ] Screen name validation (PascalCase)
 - [ ] Environment detection works
-- [ ] Skeleton presets apply correctly
+- [ ] Skeleton themes apply correctly
 - [ ] Intent suggests appropriate components
 - [ ] File structure generates correctly
 - [ ] Contract validation passes
@@ -1284,7 +1284,7 @@ Use this checklist to verify the complete Tekton system is working:
 
 - [ ] MCP health check passes
 - [ ] Hook listing returns all hooks
-- [ ] Archetype retrieval works
+- [ ] Component retrieval works
 - [ ] Query filtering works correctly
 - [ ] Claude Code can access MCP tools
 
@@ -1315,7 +1315,7 @@ Use this checklist to verify the complete Tekton system is working:
 
 - [ ] Interactive mode works
 - [ ] Non-interactive mode works
-- [ ] All skeleton presets generate
+- [ ] All skeleton themes generate
 - [ ] All intents suggest components
 - [ ] Web output uses Tailwind
 - [ ] Mobile output uses StyleSheet
@@ -1323,7 +1323,7 @@ Use this checklist to verify the complete Tekton system is working:
 
 ### Integration Flow
 
-- [ ] Archetype → Component Generation → CSS Variables → Component Styling
+- [ ] Component → Component Generation → CSS Variables → Component Styling
 - [ ] Environment Detection → Platform-Specific Generation
 - [ ] Intent → Component Suggestions → Screen Generation
 
@@ -1363,18 +1363,18 @@ alembic upgrade head
 #### Token Generation Fails
 
 ```bash
-# Check preset exists
-ls packages/token-contract/dist/presets/defaults/
+# Check theme exists
+ls packages/token-contract/dist/themes/defaults/
 
-# Validate preset JSON
-cat packages/token-contract/dist/presets/defaults/next-tailwind-shadcn.json | jq .
+# Validate theme JSON
+cat packages/token-contract/dist/themes/defaults/next-tailwind-shadcn.json | jq .
 ```
 
 #### Hook Validation Errors
 
 ```bash
 # Check for hardcoded colors
-grep -r "rgb\|hsl\|#[0-9a-fA-F]" packages/archetype-system/src/
+grep -r "rgb\|hsl\|#[0-9a-fA-F]" packages/component-system/src/
 
 # Validate CSS variables exist
 npx @tekton/cli validate-tokens
@@ -1411,20 +1411,20 @@ mkdir -p src/screens
 npx @tekton/cli detect-env
 
 # Tokens
-npx @tekton/cli generate-tokens --preset <name> --output <path>
+npx @tekton/cli generate-tokens --theme <name> --output <path>
 npx @tekton/cli validate-tokens
 
-# Archetypes
-npx @tekton/cli list-archetypes
-npx @tekton/cli show-archetype <hookName>
-npx @tekton/cli validate-archetypes
+# Components
+npx @tekton/cli list-components
+npx @tekton/cli show-component <hookName>
+npx @tekton/cli validate-components
 
 # Components
 npx @tekton/cli generate-component --hook <name> --output <path>
 
 # Screens
 npx @tekton/cli create-screen --interactive
-npx @tekton/cli create-screen --name <Name> --skeleton <preset> --intent <type>
+npx @tekton/cli create-screen --name <Name> --skeleton <theme> --intent <type>
 npx @tekton/cli validate-screen <path>
 ```
 
@@ -1434,24 +1434,24 @@ npx @tekton/cli validate-screen <path>
 # Health Checks
 GET /api/v2/health
 
-# Presets
-GET    /api/v2/presets
-POST   /api/v2/presets
-GET    /api/v2/presets/{id}
-PUT    /api/v2/presets/{id}
-DELETE /api/v2/presets/{id}
+# Themes
+GET    /api/v2/themes
+POST   /api/v2/themes
+GET    /api/v2/themes/{id}
+PUT    /api/v2/themes/{id}
+DELETE /api/v2/themes/{id}
 ```
 
 ### MCP Tools
 
 ```bash
-archetype.list          # List all hooks
-archetype.get           # Get complete archetype
-archetype.getPropRules  # Get Layer 1 (prop rules)
-archetype.getStateMappings  # Get Layer 2 (state mappings)
-archetype.getVariants   # Get Layer 3 (variants)
-archetype.getStructure  # Get Layer 4 (structure)
-archetype.query         # Search by criteria
+component.list          # List all hooks
+component.get           # Get complete component
+component.getPropRules  # Get Layer 1 (prop rules)
+component.getStateMappings  # Get Layer 2 (state mappings)
+component.getVariants   # Get Layer 3 (variants)
+component.getStructure  # Get Layer 4 (structure)
+component.query         # Search by criteria
 ```
 
 ---

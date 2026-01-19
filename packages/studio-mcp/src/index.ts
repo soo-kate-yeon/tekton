@@ -12,17 +12,17 @@ export {
   type CompleteArchetype,
   type ArchetypeQueryCriteria,
   type ToolResult,
-} from "./archetype/tools.js";
+} from './component/tools.js';
 
 // MCP Server exports
 export { createMCPServer, TOOLS } from "./server/mcp-server.js";
 
 // Storage exports
 export {
-  saveArchetype,
-  loadArchetype,
+  saveComponent,
+  loadComponent,
   listArchetypes,
-  deleteArchetype,
+  deleteComponent,
   archetypeExists,
 } from "./storage/storage.js";
 

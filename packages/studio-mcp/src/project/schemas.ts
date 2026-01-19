@@ -30,7 +30,7 @@ export type GetActivePresetInput = z.infer<typeof GetActivePresetInputSchema>;
  * Schema for project.setActivePreset tool input
  */
 export const SetActivePresetInputSchema = z.object({
-  presetId: z.number().int().positive("Preset ID must be a positive integer"),
+  themeId: z.number().int().positive("Preset ID must be a positive integer"),
   projectPath: z.string().optional(),
 });
 

@@ -47,7 +47,7 @@ describe('json-generator', () => {
     it('includes preset name when provided', () => {
       const result = generateJSONExport({
         semantic: mockTokens,
-        presetName: 'professional',
+        themeName: 'professional',
       });
       const parsed = JSON.parse(result);
 

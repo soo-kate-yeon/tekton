@@ -7,11 +7,11 @@
  */
 
 import { createServer, type IncomingMessage, type ServerResponse } from "http";
-import { archetypeTools, type ArchetypeQueryCriteria } from "../archetype/tools.js";
+import { archetypeTools, type ArchetypeQueryCriteria } from '../component/tools.js';
 import { projectTools } from "../project/tools.js";
 import { screenTools } from "../screen/tools.js";
 import type { ArchetypeName } from "../screen/schemas.js";
-import { presetList, presetGet } from "../preset/tools.js";
+import { presetList, presetGet } from '../theme/tools.js';
 import { projectStatus, useBuiltinPreset } from "../project/standalone.js";
 import { detectMode, type ModeOptions } from "./mode.js";
 import { STANDALONE_TOOLS, getHealthResponse } from "./standalone-tools.js";
@@ -178,7 +178,7 @@ const TOOLS: MCPTool[] = [
     inputSchema: {
       type: "object",
       properties: {
-        presetId: {
+        themeId: {
           type: "integer",
           description: "ID of the preset to set as active",
         },
@@ -187,7 +187,7 @@ const TOOLS: MCPTool[] = [
           description: "Optional project path",
         },
       },
-      required: ["presetId"],
+      required: ["themeId"],
     },
   },
   // Screen Tools
@@ -272,7 +272,7 @@ const TOOLS: MCPTool[] = [
           type: "string",
           description: "Target screen name",
         },
-        archetypeName: {
+        componentName: {
           type: "string",
           enum: ["Professional", "Creative", "Minimal", "Bold", "Warm", "Cool", "High-Contrast"],
           description: "Style archetype to apply",
@@ -282,7 +282,7 @@ const TOOLS: MCPTool[] = [
           description: "Optional project path",
         },
       },
-      required: ["screenName", "archetypeName"],
+      required: ["screenName", "componentName"],
     },
   },
   {
@@ -401,7 +401,7 @@ async function executeTool(
 
     case "project.setActivePreset":
       return projectTools.setActivePreset({
-        presetId: params.presetId as number,
+        themeId: params.themeId as number,
         projectPath: params.projectPath as string | undefined,
       });
 
@@ -426,7 +426,7 @@ async function executeTool(
     case "screen.applyArchetype":
       return screenTools.applyArchetype({
         screenName: params.screenName as string,
-        archetypeName: params.archetypeName as ArchetypeName,
+        componentName: params.componentName as ArchetypeName,
         projectPath: params.projectPath as string | undefined,
       });
 
@@ -447,7 +447,7 @@ async function executeTool(
 
     case "preset.get":
       return presetGet({
-        presetId: params.presetId as string,
+        themeId: params.themeId as string,
       });
 
     case "project.status":
@@ -457,7 +457,7 @@ async function executeTool(
 
     case "project.useBuiltinPreset":
       return useBuiltinPreset({
-        presetId: params.presetId as string,
+        themeId: params.themeId as string,
         projectPath: params.projectPath as string | undefined,
       });
 

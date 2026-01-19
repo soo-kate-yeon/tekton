@@ -15,47 +15,47 @@ This plan outlines the implementation strategy for transforming studio-mcp into 
 
 ## Milestone Structure
 
-### Milestone 1: Built-in Preset Bundling (Primary Goal)
+### Milestone 1: Built-in Theme Bundling (Primary Goal)
 
-**Objective**: Create and bundle 7 built-in presets as JSON files within the MCP package.
+**Objective**: Create and bundle 7 built-in themes as JSON files within the MCP package.
 
 **Tasks**:
 
-1. **Create Preset JSON Files** [MCP-PRESET]
-   - Create `src/preset/presets/` directory structure
+1. **Create Theme JSON Files** [MCP-THEME]
+   - Create `src/theme/themes/` directory structure
    - Copy existing `next-tailwind-shadcn.json` as base template
-   - Create 6 additional preset JSON files:
+   - Create 6 additional theme JSON files:
      - next-tailwind-radix.json
      - vite-tailwind-shadcn.json
      - next-styled-components.json
      - saas-dashboard.json
      - tech-startup.json
      - premium-editorial.json
-   - Validate all presets against PresetSchema from @tekton/preset
+   - Validate all themes against PresetSchema from @tekton/theme
    - Dependencies: None (can start immediately)
 
-2. **Implement Preset Loader** [MCP-PRESET]
-   - Create `src/preset/builtin.ts` module
-   - Import all 7 preset JSON files with type assertions
+2. **Implement Theme Loader** [MCP-THEME]
+   - Create `src/theme/builtin.ts` module
+   - Import all 7 theme JSON files with type assertions
    - Implement `listBuiltinPresets()` function
    - Implement `getBuiltinPreset(presetId)` function
    - Implement `validatePreset()` for runtime validation
    - Export PresetInfo type for AI context
-   - Dependencies: Task 1 (preset files exist)
+   - Dependencies: Task 1 (theme files exist)
 
-3. **Write Preset Tests** [MCP-PRESET]
-   - Create `tests/preset/builtin.test.ts`
-   - Test preset listing returns all 7 presets
-   - Test individual preset retrieval
-   - Test invalid preset ID handling
-   - Test preset schema validation
-   - Target: 100% coverage for preset module
+3. **Write Theme Tests** [MCP-THEME]
+   - Create `tests/theme/builtin.test.ts`
+   - Test theme listing returns all 7 themes
+   - Test individual theme retrieval
+   - Test invalid theme ID handling
+   - Test theme schema validation
+   - Target: 100% coverage for theme module
    - Dependencies: Task 2 (loader implemented)
 
 **Completion Criteria**:
-- All 7 preset JSON files created and validated
+- All 7 theme JSON files created and validated
 - Loader functions working correctly
-- Test coverage at 100% for preset module
+- Test coverage at 100% for theme module
 
 ---
 
@@ -68,7 +68,7 @@ This plan outlines the implementation strategy for transforming studio-mcp into 
 4. **Define Configuration Schema** [MCP-CONFIG]
    - Create `src/project/config.ts` module
    - Define TektonConfig Zod schema
-   - Define ConfigSchema with version, mode, project, preset sections
+   - Define ConfigSchema with version, mode, project, theme sections
    - Export TypeScript types derived from schema
    - Dependencies: None (can start in parallel with M1)
 
@@ -104,17 +104,17 @@ This plan outlines the implementation strategy for transforming studio-mcp into 
 
 **Tasks**:
 
-7. **Implement preset.list Tool** [MCP-PRESET]
+7. **Implement theme.list Tool** [MCP-THEME]
    - Add tool definition to TOOLS array in mcp-server.ts
    - Implement handler calling `listBuiltinPresets()`
    - Return array of {id, name, description, stack} objects
-   - Dependencies: M1 complete (preset loader ready)
+   - Dependencies: M1 complete (theme loader ready)
 
-8. **Implement preset.get Tool** [MCP-PRESET]
+8. **Implement theme.get Tool** [MCP-THEME]
    - Add tool definition to TOOLS array
    - Implement handler calling `getBuiltinPreset(presetId)`
-   - Return complete preset with questionnaire and metadata
-   - Return error for invalid preset ID
+   - Return complete theme with questionnaire and metadata
+   - Return error for invalid theme ID
    - Dependencies: M1 complete
 
 9. **Implement project.status Tool** [MCP-CONFIG]
@@ -126,16 +126,16 @@ This plan outlines the implementation strategy for transforming studio-mcp into 
 
 10. **Implement project.useBuiltinPreset Tool** [MCP-CONFIG]
     - Add tool definition to TOOLS array
-    - Validate presetId against builtin presets
-    - Update local config with selected preset
+    - Validate presetId against builtin themes
+    - Update local config with selected theme
     - Return updated status with confirmation
-    - Dependencies: M2 complete, Task 7 (preset.list for validation)
+    - Dependencies: M2 complete, Task 7 (theme.list for validation)
 
-11. **Write Standalone Tool Tests** [MCP-PRESET, MCP-CONFIG]
+11. **Write Standalone Tool Tests** [MCP-THEME, MCP-CONFIG]
     - Create `tests/project/standalone-tools.test.ts`
     - Test all 4 tools in isolation
     - Test integration between tools
-    - Test error cases (invalid preset, missing config)
+    - Test error cases (invalid theme, missing config)
     - Target: 95% coverage for standalone tools
     - Dependencies: Tasks 7-10 complete
 
@@ -222,7 +222,7 @@ This plan outlines the implementation strategy for transforming studio-mcp into 
     - Dependencies: M3 complete (tools documented)
 
 19. **Configure Build for Publishing** [MCP-NPM]
-    - Ensure dist/ includes all bundled presets
+    - Ensure dist/ includes all bundled themes
     - Verify source maps excluded from publish
     - Add prepublishOnly script for safety
     - Test package with `npm pack` and inspect contents
@@ -258,14 +258,14 @@ This plan outlines the implementation strategy for transforming studio-mcp into 
 22. **Claude Desktop Integration Test**
     - Configure Claude Desktop with local MCP server
     - Test tool discovery
-    - Test preset listing and selection
-    - Test screen generation with selected preset
+    - Test theme listing and selection
+    - Test screen generation with selected theme
     - Document any issues
     - Dependencies: Task 21
 
 23. **Regression Test Suite**
     - Run full existing test suite
-    - Verify no regressions in archetype tools
+    - Verify no regressions in component tools
     - Verify no regressions in screen tools
     - Verify connected mode still works
     - Dependencies: M4 complete
@@ -312,11 +312,11 @@ Target (Connected - unchanged):
 ```
 packages/studio-mcp/
   src/
-    archetype/
+    component/
       tools.ts                    # Unchanged
-    preset/
-      builtin.ts                  # NEW - preset loader
-      presets/                    # NEW - bundled JSON
+    theme/
+      builtin.ts                  # NEW - theme loader
+      themes/                    # NEW - bundled JSON
         next-tailwind-shadcn.json
         next-tailwind-radix.json
         vite-tailwind-shadcn.json
@@ -346,7 +346,7 @@ packages/studio-mcp/
       design-tokens.ts            # Unchanged
     index.ts                      # Updated exports
   tests/
-    preset/
+    theme/
       builtin.test.ts             # NEW
     project/
       config-manager.test.ts      # NEW
@@ -374,7 +374,7 @@ packages/studio-mcp/
 
 ### Risk: Bundle Size Exceeds Limit
 - **Monitor**: Check size after each JSON addition in M1
-- **Fallback**: Minify JSON, consider external CDN for presets
+- **Fallback**: Minify JSON, consider external CDN for themes
 
 ### Risk: Mode Detection Flaky
 - **Mitigation**: Conservative timeout (2s), clear failure = standalone
@@ -404,7 +404,7 @@ Overall SPEC is complete when:
 
 | Milestone | Tasks | Complexity | Estimated Effort |
 |-----------|-------|------------|------------------|
-| M1: Preset Bundling | 3 | Medium | 4-6 hours |
+| M1: Theme Bundling | 3 | Medium | 4-6 hours |
 | M2: Config Management | 3 | Medium | 4-6 hours |
 | M3: Standalone Tools | 5 | Medium | 6-8 hours |
 | M4: Mode Detection | 5 | High | 6-8 hours |

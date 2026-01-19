@@ -8,7 +8,7 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
-from studio_api.models.curated_preset import CuratedPreset
+from studio_api.models.curated_theme import CuratedTheme
 from studio_api.models.project_settings import ProjectSettings
 
 
@@ -30,7 +30,7 @@ class ProjectSettingsRepository:
         """
         result = await self.session.execute(
             select(ProjectSettings)
-            .options(selectinload(ProjectSettings.active_preset))
+            .options(selectinload(ProjectSettings.active_theme))
             .where(ProjectSettings.project_path == project_path)
         )
         return result.scalar_one_or_none()
@@ -53,30 +53,30 @@ class ProjectSettingsRepository:
         return settings
 
     async def set_active_preset(
-        self, project_path: str, preset_id: int
+        self, project_path: str, theme_id: int
     ) -> ProjectSettings:
         """Set the active preset for a project.
 
         Args:
             project_path: The path to the project directory.
-            preset_id: The ID of the preset to set as active.
+            theme_id: The ID of the preset to set as active.
 
         Returns:
             The updated project settings.
         """
         settings = await self.get_or_create(project_path)
-        settings.active_preset_id = preset_id
+        settings.active_preset_id = theme_id
         await self.session.commit()
         await self.session.refresh(settings)
         # Load the relationship
         result = await self.session.execute(
             select(ProjectSettings)
-            .options(selectinload(ProjectSettings.active_preset))
+            .options(selectinload(ProjectSettings.active_theme))
             .where(ProjectSettings.id == settings.id)
         )
         return result.scalar_one()
 
-    async def get_active_preset(self, project_path: str) -> CuratedPreset | None:
+    async def get_active_preset(self, project_path: str) -> CuratedTheme | None:
         """Get the active preset for a project.
 
         Args:
@@ -88,7 +88,7 @@ class ProjectSettingsRepository:
         settings = await self.get_by_project_path(project_path)
         if settings is None or settings.active_preset_id is None:
             return None
-        return settings.active_preset
+        return settings.active_theme
 
     async def update_framework_type(
         self, project_path: str, framework_type: str

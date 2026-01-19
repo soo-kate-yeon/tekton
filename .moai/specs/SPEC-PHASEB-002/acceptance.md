@@ -15,10 +15,10 @@
 **Given** (초기 조건):
 - 기존 모놀리식 프로젝트 구조 존재
 - Phase A 패키지가 src/ 하위에 위치
-  - `src/preset/`
+  - `src/theme/`
   - `src/token-generator/`
   - `src/contracts/`
-- 모든 Phase A 테스트 통과 상태 (preset 97.77%, token-generator 100%, contracts 100%)
+- 모든 Phase A 테스트 통과 상태 (theme 97.77%, token-generator 100%, contracts 100%)
 
 **When** (실행 동작):
 - Monorepo 전환 스크립트 실행:
@@ -36,17 +36,17 @@
     - 'packages/*'
   ```
 - 패키지 구조 확인:
-  - `packages/preset/` 존재
+  - `packages/theme/` 존재
   - `packages/token-generator/` 존재
   - `packages/contracts/` 존재
 - 모든 Phase A 테스트 통과 (회귀 없음):
   ```bash
-  pnpm --filter @tekton/preset test        # 통과
+  pnpm --filter @tekton/theme test        # 통과
   pnpm --filter @tekton/token-generator test # 통과
   pnpm --filter @tekton/contracts test     # 통과
   ```
 - 테스트 커버리지 유지:
-  - preset: ≥97.77%
+  - theme: ≥97.77%
   - token-generator: 100% (critical paths)
   - contracts: 100% (208 tests)
 - 빌드 시간 < 10초 (3개 패키지 병렬 빌드)
@@ -265,7 +265,7 @@
   ```
 - Q&A 프롬프트 진행:
   1. Primary color 입력: `#3b82f6` (blue-500)
-  2. Preset 선택: `Default Palette`
+  2. Theme 선택: `Default Palette`
 
 **Then** (예상 결과):
 - Phase A token-generator 호출:
@@ -273,7 +273,7 @@
   import { generateTokens } from '@tekton/token-generator';
   const tokens = await generateTokens({
     primaryColor: '#3b82f6',
-    preset: 'default-palette'
+    theme: 'default-palette'
   });
   ```
 - CSS variables 파일 생성 (`src/app/globals.css`):
@@ -537,7 +537,7 @@
 
 Phase B Monorepo 전환 후에도 Phase A의 모든 기능이 정상 동작해야 합니다.
 
-- [ ] **A1: Preset System**:
+- [ ] **A1: Theme System**:
   - 6개 프리셋 정상 로드
   - WCAG 검증 통과
   - 테스트 ≥97.77%
@@ -556,12 +556,12 @@ Phase B Monorepo 전환 후에도 Phase A의 모든 기능이 정상 동작해�
 
 ```bash
 # Phase A 패키지별 테스트 실행
-pnpm --filter @tekton/preset test
+pnpm --filter @tekton/theme test
 pnpm --filter @tekton/token-generator test
 pnpm --filter @tekton/contracts test
 
 # 커버리지 확인
-pnpm --filter @tekton/preset test:coverage
+pnpm --filter @tekton/theme test:coverage
 ```
 
 ---

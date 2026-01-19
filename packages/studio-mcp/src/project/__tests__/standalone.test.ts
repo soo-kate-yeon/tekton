@@ -12,7 +12,7 @@ import { tmpdir } from "os";
 import { projectStatus, useBuiltinPreset } from "../standalone.js";
 import { readConfig, writeConfig } from "../config.js";
 import type { TektonConfig } from "../config-types.js";
-import { BUILTIN_PRESET_IDS } from "../../preset/types.js";
+import { BUILTIN_PRESET_IDS } from "../../theme/types.js";
 
 describe("Standalone Project Tools", () => {
   let testDir: string;
@@ -42,10 +42,10 @@ describe("Standalone Project Tools", () => {
       expect(result.data?.mode).toBe("standalone");
     });
 
-    it("should return null activePreset when no preset selected", async () => {
+    it("should return null activeTheme when no preset selected", async () => {
       const result = await projectStatus({ projectPath: testDir });
 
-      expect(result.data?.activePreset).toBeNull();
+      expect(result.data?.activeTheme).toBeNull();
     });
 
     it("should return detected framework info when available", async () => {
@@ -79,8 +79,8 @@ describe("Standalone Project Tools", () => {
 
       const result = await projectStatus({ projectPath: testDir });
 
-      expect(result.data?.activePreset?.id).toBe("next-tailwind-shadcn");
-      expect(result.data?.activePreset?.name).toBeDefined();
+      expect(result.data?.activeTheme?.id).toBe("next-tailwind-shadcn");
+      expect(result.data?.activeTheme?.name).toBeDefined();
     });
 
     it("should use current working directory when projectPath not provided", async () => {
@@ -117,7 +117,7 @@ describe("Standalone Project Tools", () => {
   describe("useBuiltinPreset", () => {
     it("should return success when selecting valid preset", async () => {
       const result = await useBuiltinPreset({
-        presetId: "next-tailwind-shadcn",
+        themeId: "next-tailwind-shadcn",
         projectPath: testDir,
       });
 
@@ -127,7 +127,7 @@ describe("Standalone Project Tools", () => {
 
     it("should return error for invalid preset ID", async () => {
       const result = await useBuiltinPreset({
-        presetId: "invalid-preset",
+        themeId: "invalid-preset",
         projectPath: testDir,
       });
 
@@ -137,7 +137,7 @@ describe("Standalone Project Tools", () => {
 
     it("should return error for empty preset ID", async () => {
       const result = await useBuiltinPreset({
-        presetId: "",
+        themeId: "",
         projectPath: testDir,
       });
 
@@ -148,7 +148,7 @@ describe("Standalone Project Tools", () => {
 
     it("should return error for whitespace-only preset ID", async () => {
       const result = await useBuiltinPreset({
-        presetId: "   ",
+        themeId: "   ",
         projectPath: testDir,
       });
 
@@ -159,7 +159,7 @@ describe("Standalone Project Tools", () => {
 
     it("should persist preset selection to config", async () => {
       await useBuiltinPreset({
-        presetId: "saas-dashboard",
+        themeId: "saas-dashboard",
         projectPath: testDir,
       });
 
@@ -169,7 +169,7 @@ describe("Standalone Project Tools", () => {
 
     it("should return preset info in response", async () => {
       const result = await useBuiltinPreset({
-        presetId: "tech-startup",
+        themeId: "tech-startup",
         projectPath: testDir,
       });
 
@@ -182,7 +182,7 @@ describe("Standalone Project Tools", () => {
       const before = new Date().toISOString();
 
       await useBuiltinPreset({
-        presetId: "premium-editorial",
+        themeId: "premium-editorial",
         projectPath: testDir,
       });
 
@@ -212,7 +212,7 @@ describe("Standalone Project Tools", () => {
       writeConfig(testDir, initialConfig);
 
       await useBuiltinPreset({
-        presetId: "vite-tailwind-shadcn",
+        themeId: "vite-tailwind-shadcn",
         projectPath: testDir,
       });
 
@@ -223,7 +223,7 @@ describe("Standalone Project Tools", () => {
     });
 
     it("should work for all built-in preset IDs", async () => {
-      for (const presetId of BUILTIN_PRESET_IDS) {
+      for (const themeId of BUILTIN_PRESET_IDS) {
         // Clean up and recreate test dir for each iteration
         if (existsSync(testDir)) {
           rmSync(testDir, { recursive: true, force: true });
@@ -231,18 +231,18 @@ describe("Standalone Project Tools", () => {
         mkdirSync(testDir, { recursive: true });
 
         const result = await useBuiltinPreset({
-          presetId,
+          themeId,
           projectPath: testDir,
         });
 
         expect(result.success).toBe(true);
-        expect(result.data?.preset.id).toBe(presetId);
+        expect(result.data?.preset.id).toBe(themeId);
       }
     });
 
     it("should create .tekton directory if it does not exist", async () => {
       await useBuiltinPreset({
-        presetId: "next-tailwind-shadcn",
+        themeId: "next-tailwind-shadcn",
         projectPath: testDir,
       });
 

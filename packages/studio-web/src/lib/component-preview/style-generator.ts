@@ -3,7 +3,7 @@
  * Generate CSS from archetype layer configurations
  */
 
-import type { VariantConfigurationOption } from '@tekton/archetype-system';
+import type { VariantConfigurationOption } from '@tekton/component-system';
 
 export interface ComponentState {
   [key: string]: string | number | boolean | null | undefined;

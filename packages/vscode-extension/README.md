@@ -162,7 +162,7 @@ Generate OKLCH-based design tokens with WCAG AA compliance.
 2. Type "Tekton: Generate Design Tokens"
 3. Follow the interactive prompts:
    - **Enter primary color**: Provide a hex code (e.g., `#3B82F6`)
-   - **Select preset**: Choose from available presets
+   - **Select theme**: Choose from available themes
    - **Confirm generation**: Review settings and confirm
 
 **Interactive Workflow:**
@@ -172,8 +172,8 @@ Step 1: Enter Primary Color
 Enter your brand color in hex format:
 > #3B82F6
 
-Step 2: Select Preset
-Choose a preset:
+Step 2: Select Theme
+Choose a theme:
 ○ Default Palette (Balanced colors)
 ● Accessible (WCAG AAA compliance)
 ○ Vibrant (High chroma colors)

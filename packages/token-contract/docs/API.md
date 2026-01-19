@@ -7,7 +7,7 @@ Complete API documentation for @tekton/token-contract v0.1.0.
 ## Table of Contents
 
 - [Schemas](#schemas)
-- [Presets](#presets)
+- [Themes](#themes)
 - [CSS Generator](#css-generator)
 - [Theme Provider](#theme-provider-react)
 - [Utils](#utils)
@@ -165,59 +165,59 @@ const result = CompositionTokenSchema.safeParse(compositionTokens);
 
 ---
 
-## Presets
+## Themes
 
-Functions for loading and managing curated design presets.
+Functions for loading and managing curated design themes.
 
 ### loadPreset
 
-Load a curated preset by name.
+Load a curated theme by name.
 
 ```typescript
-function loadPreset(name: PresetName): Preset
+function loadPreset(name: PresetName): Theme
 ```
 
 **Parameters**:
 - `name` (PresetName): One of 'professional', 'creative', 'minimal', 'bold', 'warm', 'cool', 'high-contrast'
 
 **Returns**:
-- `Preset`: Complete preset object with tokens and composition
+- `Theme`: Complete theme object with tokens and composition
 
 **Example**:
 ```typescript
 import { loadPreset } from '@tekton/token-contract';
 
-const preset = loadPreset('professional');
+const theme = loadPreset('professional');
 
-console.log(preset.name);         // 'professional'
-console.log(preset.description);  // 'Clean, trustworthy design...'
-console.log(preset.tokens);       // SemanticToken object
-console.log(preset.composition);  // CompositionToken object
+console.log(theme.name);         // 'professional'
+console.log(theme.description);  // 'Clean, trustworthy design...'
+console.log(theme.tokens);       // SemanticToken object
+console.log(theme.composition);  // CompositionToken object
 ```
 
 **Throws**:
-- Error if preset name is invalid
+- Error if theme name is invalid
 
 ### getAvailablePresets
 
-Get information about all available presets.
+Get information about all available themes.
 
 ```typescript
 function getAvailablePresets(): PresetInfo[]
 ```
 
 **Returns**:
-- `PresetInfo[]`: Array of preset metadata
+- `PresetInfo[]`: Array of theme metadata
 
 **Example**:
 ```typescript
 import { getAvailablePresets } from '@tekton/token-contract';
 
-const presets = getAvailablePresets();
+const themes = getAvailablePresets();
 
-presets.forEach(preset => {
-  console.log(`${preset.name}: ${preset.description}`);
-  console.log(`Best for: ${preset.bestFor.join(', ')}`);
+themes.forEach(theme => {
+  console.log(`${theme.name}: ${theme.description}`);
+  console.log(`Best for: ${theme.bestFor.join(', ')}`);
 });
 
 // Output:
@@ -230,14 +230,14 @@ presets.forEach(preset => {
 
 ### validatePreset
 
-Validate a preset configuration.
+Validate a theme configuration.
 
 ```typescript
-function validatePreset(preset: Preset): ValidationResult
+function validatePreset(theme: Theme): ValidationResult
 ```
 
 **Parameters**:
-- `preset` (Preset): Preset object to validate
+- `theme` (Theme): Theme object to validate
 
 **Returns**:
 - `ValidationResult`: Validation result with `valid` boolean and `errors` array
@@ -246,11 +246,11 @@ function validatePreset(preset: Preset): ValidationResult
 ```typescript
 import { validatePreset, loadPreset } from '@tekton/token-contract';
 
-const preset = loadPreset('professional');
-const result = validatePreset(preset);
+const theme = loadPreset('professional');
+const result = validatePreset(theme);
 
 if (result.valid) {
-  console.log('Preset is valid!');
+  console.log('Theme is valid!');
 } else {
   console.error('Validation errors:', result.errors);
 }
@@ -274,8 +274,8 @@ function validateWCAGCompliance(tokens: SemanticToken): WCAGComplianceResult
 ```typescript
 import { validateWCAGCompliance, loadPreset } from '@tekton/token-contract';
 
-const preset = loadPreset('professional');
-const compliance = validateWCAGCompliance(preset.tokens);
+const theme = loadPreset('professional');
+const compliance = validateWCAGCompliance(theme.tokens);
 
 if (compliance.passed) {
   console.log('All tokens are WCAG compliant!');
@@ -362,8 +362,8 @@ function generateCSSVariables(tokens: SemanticToken): string
 ```typescript
 import { generateCSSVariables, loadPreset } from '@tekton/token-contract';
 
-const preset = loadPreset('professional');
-const css = generateCSSVariables(preset.tokens);
+const theme = loadPreset('professional');
+const css = generateCSSVariables(theme.tokens);
 
 console.log(css);
 // Output:
@@ -397,10 +397,10 @@ function generateCSSFromTokens(options: {
 ```typescript
 import { generateCSSFromTokens, loadPreset } from '@tekton/token-contract';
 
-const preset = loadPreset('professional');
+const theme = loadPreset('professional');
 const css = generateCSSFromTokens({
-  semantic: preset.tokens,
-  composition: preset.composition,
+  semantic: theme.tokens,
+  composition: theme.composition,
 });
 
 console.log(css);
@@ -434,9 +434,9 @@ function generateDarkModeCSS(darkTokens: SemanticToken): string
 ```typescript
 import { generateDarkModeCSS, loadPreset } from '@tekton/token-contract';
 
-const preset = loadPreset('professional');
+const theme = loadPreset('professional');
 // Invert lightness for dark mode
-const darkTokens = invertTokensForDarkMode(preset.tokens);
+const darkTokens = invertTokensForDarkMode(theme.tokens);
 
 const darkCSS = generateDarkModeCSS(darkTokens);
 
@@ -494,7 +494,7 @@ function ThemeProvider(props: ThemeProviderProps): JSX.Element
 ```
 
 **Props**:
-- `defaultPreset?` (PresetName): Initial preset (default: 'professional')
+- `defaultPreset?` (PresetName): Initial theme (default: 'professional')
 - `defaultDarkMode?` (boolean): Initial dark mode state (default: false)
 - `detectSystemTheme?` (boolean): Auto-detect system dark mode (default: false)
 - `children` (ReactNode): Child components
@@ -539,7 +539,7 @@ import { useTheme } from '@tekton/token-contract';
 
 function MyComponent() {
   const {
-    preset,
+    theme,
     setPreset,
     tokens,
     composition,
@@ -549,7 +549,7 @@ function MyComponent() {
 
   return (
     <div>
-      <p>Current preset: {preset}</p>
+      <p>Current theme: {theme}</p>
       <button onClick={() => setPreset('creative')}>Switch to Creative</button>
       <button onClick={toggleDarkMode}>
         {darkMode ? 'Light Mode' : 'Dark Mode'}
@@ -560,8 +560,8 @@ function MyComponent() {
 ```
 
 **ThemeContextValue Properties**:
-- `preset` (PresetName): Current preset name
-- `setPreset` ((preset: PresetName) => void): Change preset
+- `theme` (PresetName): Current theme name
+- `setPreset` ((theme: PresetName) => void): Change theme
 - `tokens` (SemanticToken): Current semantic tokens
 - `composition` (CompositionToken): Current composition tokens
 - `darkMode` (boolean): Dark mode state
@@ -582,8 +582,8 @@ function applyCSSVariables(css: string): void
 ```typescript
 import { applyCSSVariables, generateCSSVariables, loadPreset } from '@tekton/token-contract';
 
-const preset = loadPreset('professional');
-const css = generateCSSVariables(preset.tokens);
+const theme = loadPreset('professional');
+const css = generateCSSVariables(theme.tokens);
 
 applyCSSVariables(css);
 ```
@@ -642,13 +642,13 @@ function getTokenWithFallback(
 ```typescript
 import { getTokenWithFallback, loadPreset } from '@tekton/token-contract';
 
-const preset = loadPreset('professional');
+const theme = loadPreset('professional');
 
 // Get existing token
-const primary500 = getTokenWithFallback(preset.tokens, 'primary', '500');
+const primary500 = getTokenWithFallback(theme.tokens, 'primary', '500');
 
 // Get missing token with fallback
-const accent500 = getTokenWithFallback(preset.tokens, 'accent', '500', {
+const accent500 = getTokenWithFallback(theme.tokens, 'accent', '500', {
   l: 0.6,
   c: 0.12,
   h: 30,
@@ -662,7 +662,7 @@ const accent500 = getTokenWithFallback(preset.tokens, 'accent', '500', {
 
 ### overridePresetTokens
 
-Override preset tokens with custom values.
+Override theme tokens with custom values.
 
 ```typescript
 function overridePresetTokens(
@@ -672,7 +672,7 @@ function overridePresetTokens(
 ```
 
 **Parameters**:
-- `baseTokens` (SemanticToken): Base preset tokens
+- `baseTokens` (SemanticToken): Base theme tokens
 - `overrides` (Partial<SemanticToken>): Custom token overrides
 
 **Returns**:
@@ -682,9 +682,9 @@ function overridePresetTokens(
 ```typescript
 import { overridePresetTokens, loadPreset } from '@tekton/token-contract';
 
-const preset = loadPreset('professional');
+const theme = loadPreset('professional');
 
-const customTokens = overridePresetTokens(preset.tokens, {
+const customTokens = overridePresetTokens(theme.tokens, {
   primary: {
     '500': { l: 0.65, c: 0.15, h: 200 }, // Custom blue
   },
@@ -865,7 +865,7 @@ type TypographyToken = {
 
 ### PresetName
 
-Available preset names.
+Available theme names.
 
 ```typescript
 type PresetName =
@@ -878,12 +878,12 @@ type PresetName =
   | 'high-contrast';
 ```
 
-### Preset
+### Theme
 
-Complete preset structure.
+Complete theme structure.
 
 ```typescript
-type Preset = {
+type Theme = {
   name: PresetName;
   description: string;
   tokens: SemanticToken;
@@ -894,7 +894,7 @@ type Preset = {
 
 ### PresetInfo
 
-Preset metadata.
+Theme metadata.
 
 ```typescript
 type PresetInfo = {
@@ -981,7 +981,7 @@ if (!compliance.passed) {
 **Zod Validation**:
 - ColorToken validation: <0.1ms
 - SemanticToken validation: <0.5ms
-- Complete preset validation: <1ms
+- Complete theme validation: <1ms
 
 **CSS Generation**:
 - Single color scale: <0.2ms

@@ -24,7 +24,7 @@
   },
   "dependencies": {
     "@tekton/contracts": "workspace:*",
-    "@tekton/preset": "workspace:*",
+    "@tekton/theme": "workspace:*",
     "@tekton/token-generator": "workspace:*",
     "chalk": "^5.3.0",
     "commander": "^12.1.0",

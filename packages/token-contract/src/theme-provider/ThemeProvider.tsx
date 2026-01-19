@@ -5,9 +5,9 @@
 
 import React, { useState, useCallback, useMemo, useEffect } from 'react';
 import { ThemeContext } from './ThemeContext.js';
-import { loadPreset } from '../presets/preset-loader.js';
+import { loadTheme } from '../themes/theme-loader.js';
 import { applyCSSVariables } from './apply-css-variables.js';
-import type { PresetName } from '../presets/types.js';
+import type { PresetName } from '../themes/types.js';
 
 /**
  * ThemeProvider Props
@@ -16,7 +16,7 @@ export interface ThemeProviderProps {
   /** Child components */
   children: React.ReactNode;
   /** Default preset to load */
-  defaultPreset?: PresetName;
+  defaultTheme?: PresetName;
   /** Default dark mode state */
   defaultDarkMode?: boolean;
   /** Detect system theme preference */
@@ -37,7 +37,7 @@ function detectSystemDarkMode(): boolean {
  */
 export function ThemeProvider({
   children,
-  defaultPreset = 'professional',
+  defaultTheme = 'professional',
   defaultDarkMode = false,
   detectSystemTheme = false,
 }: ThemeProviderProps) {
@@ -50,8 +50,8 @@ export function ThemeProvider({
   const [preset, setPresetState] = useState<PresetName>(() => {
     // Validate preset or fall back to professional
     try {
-      loadPreset(defaultPreset);
-      return defaultPreset;
+      loadTheme(defaultTheme);
+      return defaultTheme;
     } catch {
       return 'professional';
     }
@@ -62,14 +62,14 @@ export function ThemeProvider({
   // Load tokens from preset
   const { tokens, composition } = useMemo(() => {
     try {
-      const loadedPreset = loadPreset(preset);
+      const loadedPreset = loadTheme(preset);
       return {
         tokens: loadedPreset.tokens,
         composition: loadedPreset.composition,
       };
     } catch {
       // Fallback to professional if preset fails to load
-      const fallbackPreset = loadPreset('professional');
+      const fallbackPreset = loadTheme('professional');
       return {
         tokens: fallbackPreset.tokens,
         composition: fallbackPreset.composition,
@@ -78,7 +78,7 @@ export function ThemeProvider({
   }, [preset]);
 
   // Stable callback for setting preset
-  const setPreset = useCallback((newPreset: PresetName) => {
+  const setTheme = useCallback((newPreset: PresetName) => {
     setPresetState(newPreset);
   }, []);
 
@@ -109,13 +109,13 @@ export function ThemeProvider({
   const contextValue = useMemo(
     () => ({
       preset,
-      setPreset,
+      setTheme,
       tokens,
       composition,
       darkMode,
       toggleDarkMode,
     }),
-    [preset, setPreset, tokens, composition, darkMode, toggleDarkMode]
+    [preset, setTheme, tokens, composition, darkMode, toggleDarkMode]
   );
 
   return (

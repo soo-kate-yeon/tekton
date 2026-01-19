@@ -281,7 +281,7 @@ export class MCPClient {
   /**
    * Get complete archetype for a specific hook (all 4 layers)
    */
-  async getArchetype(hookName: string): Promise<MCPToolResult<CompleteArchetype>> {
+  async getComponent(hookName: string): Promise<MCPToolResult<CompleteArchetype>> {
     return this.request<CompleteArchetype>('archetype.get', { hookName });
   }
 
@@ -344,7 +344,7 @@ export class MCPClient {
 
     // Fetch archetypes in parallel
     const promises = Array.from(hookNames).map(async (hookName) => {
-      const result = await this.getArchetype(hookName);
+      const result = await this.getComponent(hookName);
       if (result.success && result.data) {
         return { hookName, archetype: result.data };
       }

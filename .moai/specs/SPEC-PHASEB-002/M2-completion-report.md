@@ -40,7 +40,7 @@ Successfully implemented the Tekton CLI package with 3 core commands using Test-
 - enquirer v2.4.1 - Interactive prompts
 - execa v9.5.2 - Subprocess execution
 - fs-extra v11.2.0 - File utilities
-- Workspace: `@tekton/preset`, `@tekton/token-generator`
+- Workspace: `@tekton/theme`, `@tekton/token-generator`
 
 **Status**: Complete (2.5s install time)
 
@@ -102,11 +102,11 @@ Successfully implemented the Tekton CLI package with 3 core commands using Test-
 - `tests/utils/file-helpers.test.ts` - 13 tests
 
 **Features**:
-- ✅ Interactive Q&A with enquirer (primary color, preset selection)
+- ✅ Interactive Q&A with enquirer (primary color, theme selection)
 - ✅ Hex color validation (#3b82f6 format)
-- ✅ Preset options: default, accessible, vibrant, pastel, dark
+- ✅ Theme options: default, accessible, vibrant, pastel, dark
 - ✅ File output: `src/styles/tokens.css`, `tailwind.config.js`
-- ✅ Non-interactive mode support (--primary-color, --preset flags)
+- ✅ Non-interactive mode support (--primary-color, --theme flags)
 - ✅ WCAG validation warnings
 - ✅ Force flag for overriding warnings
 
@@ -321,7 +321,7 @@ packages/cli/
 - ✅ fs-extra@11.2.0
 
 ### Workspace Dependencies
-- ✅ @tekton/preset@0.1.0
+- ✅ @tekton/theme@0.1.0
 - ✅ @tekton/token-generator@0.1.0
 
 ### Dev Dependencies

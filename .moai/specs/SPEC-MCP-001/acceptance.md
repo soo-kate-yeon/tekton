@@ -43,7 +43,7 @@ And each tool should have a valid inputSchema property
 Given the studio-mcp server is running
 When I send a GET request to /tools endpoint
 Then I should receive all 15 tools (7 existing + 8 new)
-And the existing archetype tools should remain unchanged
+And the existing component tools should remain unchanged
 ```
 
 ---
@@ -313,11 +313,11 @@ Then I should receive an error response:
 
 ---
 
-## AC-007: Archetype Application Workflow
+## AC-007: Component Application Workflow
 
-**Requirement**: E-003 (Archetype Application)
+**Requirement**: E-003 (Component Application)
 
-### Scenario: Apply Professional archetype to screen
+### Scenario: Apply Professional component to screen
 
 ```gherkin
 Given a screen exists at /test/project/app/dashboard/page.tsx
@@ -325,19 +325,19 @@ When I invoke screen.applyArchetype with:
   | Parameter     | Value        |
   | screenName    | dashboard    |
   | archetypeName | Professional |
-Then the screen should have CSS variable references for Professional archetype:
+Then the screen should have CSS variable references for Professional component:
   - --tekton-primary-500
   - --tekton-neutral-50
   - Professional color palette applied
 And I should receive success response
 ```
 
-### Scenario: Apply all 7 archetypes successfully
+### Scenario: Apply all 7 components successfully
 
 ```gherkin
 Given a screen exists at /test/project/app/test/page.tsx
-When I invoke screen.applyArchetype with each archetype:
-  | Archetype      |
+When I invoke screen.applyArchetype with each component:
+  | Component      |
   | Professional   |
   | Creative       |
   | Minimal        |
@@ -346,10 +346,10 @@ When I invoke screen.applyArchetype with each archetype:
   | Cool           |
   | High-Contrast  |
 Then each application should succeed
-And each archetype should apply unique styling
+And each component should apply unique styling
 ```
 
-### Scenario: Invalid archetype name fails
+### Scenario: Invalid component name fails
 
 ```gherkin
 Given a screen exists at /test/project/app/dashboard/page.tsx
@@ -361,7 +361,7 @@ Then I should receive an error response:
   """
   {
     "success": false,
-    "error": "Invalid archetype name: InvalidArch. Valid options: Professional, Creative, Minimal, Bold, Warm, Cool, High-Contrast"
+    "error": "Invalid component name: InvalidArch. Valid options: Professional, Creative, Minimal, Bold, Warm, Cool, High-Contrast"
   }
   """
 ```
@@ -401,15 +401,15 @@ And I should receive valid framework detection result
 
 ---
 
-## AC-009: Active Preset Retrieval
+## AC-009: Active Theme Retrieval
 
-**Requirement**: E-005 (Active Preset Get)
+**Requirement**: E-005 (Active Theme Get)
 
-### Scenario: Get active preset when set
+### Scenario: Get active theme when set
 
 ```gherkin
 Given project settings exist with active_preset_id = 5
-And preset with id 5 exists with name "Professional Dark"
+And theme with id 5 exists with name "Professional Dark"
 When I invoke project.getActivePreset
 Then I should receive:
   """
@@ -425,7 +425,7 @@ Then I should receive:
   """
 ```
 
-### Scenario: Get active preset when not set
+### Scenario: Get active theme when not set
 
 ```gherkin
 Given project settings exist with active_preset_id = null
@@ -439,7 +439,7 @@ Then I should receive:
   """
 ```
 
-### Scenario: Get active preset for new project
+### Scenario: Get active theme for new project
 
 ```gherkin
 Given no project settings exist for the current project
@@ -456,14 +456,14 @@ And I should receive:
 
 ---
 
-## AC-010: Active Preset Update
+## AC-010: Active Theme Update
 
-**Requirement**: E-006 (Active Preset Set)
+**Requirement**: E-006 (Active Theme Set)
 
-### Scenario: Set valid active preset
+### Scenario: Set valid active theme
 
 ```gherkin
-Given a preset exists with id = 3
+Given a theme exists with id = 3
 When I invoke project.setActivePreset with:
   | Parameter | Value |
   | presetId  | 3     |
@@ -477,10 +477,10 @@ And I should receive:
   """
 ```
 
-### Scenario: Set active preset with invalid ID
+### Scenario: Set active theme with invalid ID
 
 ```gherkin
-Given no preset exists with id = 999
+Given no theme exists with id = 999
 When I invoke project.setActivePreset with:
   | Parameter | Value |
   | presetId  | 999   |
@@ -488,13 +488,13 @@ Then I should receive:
   """
   {
     "success": false,
-    "error": "Preset not found: 999"
+    "error": "Theme not found: 999"
   }
   """
 And project_settings should remain unchanged
 ```
 
-### Scenario: Clear active preset
+### Scenario: Clear active theme
 
 ```gherkin
 Given project settings have active_preset_id = 5
@@ -666,11 +666,11 @@ Then I should receive:
 
 **Requirement**: API Integration
 
-### Scenario: PUT /settings/active-preset
+### Scenario: PUT /settings/active-theme
 
 ```gherkin
 Given the studio-api server is running
-When I send PUT request to /api/v2/settings/active-preset with:
+When I send PUT request to /api/v2/settings/active-theme with:
   """
   {
     "preset_id": 5,
@@ -681,12 +681,12 @@ Then I should receive status 200
 And response should contain updated active_preset
 ```
 
-### Scenario: GET /settings/active-preset
+### Scenario: GET /settings/active-theme
 
 ```gherkin
 Given the studio-api server is running
 And project settings exist for "/test/project"
-When I send GET request to /api/v2/settings/active-preset?project_path=/test/project
+When I send GET request to /api/v2/settings/active-theme?project_path=/test/project
 Then I should receive status 200
 And response should contain active_preset or null
 ```
@@ -709,29 +709,29 @@ And response should contain complete project settings
 ### Scenario: "Set as Active" button displays correctly
 
 ```gherkin
-Given I am viewing a preset detail page
-And the preset is not currently active
+Given I am viewing a theme detail page
+And the theme is not currently active
 When the page renders
 Then I should see a "Set as Active" button
 And the button should be enabled
 ```
 
-### Scenario: Setting active preset updates UI
+### Scenario: Setting active theme updates UI
 
 ```gherkin
-Given I am viewing a preset detail page
+Given I am viewing a theme detail page
 When I click the "Set as Active" button
 Then the button should show loading state
-And after success, the button should change to "Active Preset"
+And after success, the button should change to "Active Theme"
 And a success toast should appear
 ```
 
-### Scenario: Active preset indicator shows correctly
+### Scenario: Active theme indicator shows correctly
 
 ```gherkin
-Given a preset is set as active for the current project
-When I navigate to the preset gallery
-Then the active preset card should have an "Active" badge
+Given a theme is set as active for the current project
+When I navigate to the theme gallery
+Then the active theme card should have an "Active" badge
 And the badge should use distinct styling
 ```
 

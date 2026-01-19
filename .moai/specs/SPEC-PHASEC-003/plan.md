@@ -16,11 +16,11 @@
    - Layout Behavior 정의: navigation, cardLayout, dataDensity, interactionModel
    - 환경별 기본 구성 매핑: `environmentBehaviors` Record 객체
 
-2. **Skeleton 계층 스키마 및 Preset**
+2. **Skeleton 계층 스키마 및 Theme**
    - SkeletonPreset enum 정의: FullScreen, WithHeader, WithSidebar, WithHeaderSidebar, WithHeaderFooter, Dashboard
    - `skeletonContractSchema` 구현: header, sidebar, footer, content 속성 정의
    - Preset별 기본 구성: sticky, height, width, collapsible, maxWidth, padding 기본값
-   - Override 시스템 설계: 사용자가 preset 선택 후 개별 속성 수정 허용
+   - Override 시스템 설계: 사용자가 theme 선택 후 개별 속성 수정 허용
 
 3. **Intent 계층 스키마 및 Compound Pattern 매핑**
    - ScreenIntent enum 정의: DataList, DataDetail, Dashboard, Form, Wizard, Auth, Settings, EmptyState, Error, Custom (총 10개)
@@ -45,7 +45,7 @@
 - [ ] Environment enum 9개 타입 정의 완료
 - [ ] Grid 시스템 6개 환경별 매핑 완료
 - [ ] Layout Behavior 스키마 정의 및 환경별 기본값 설정
-- [ ] Skeleton preset 6개 구현 완료
+- [ ] Skeleton theme 6개 구현 완료
 - [ ] Intent enum 10개 타입 정의 완료
 - [ ] Intent → Compound Pattern 매핑 테이블 작성
 - [ ] 단위 테스트 커버리지 80% 이상
@@ -194,7 +194,7 @@
 1. **Agent Context JSON 생성기**
    - `agent-context.json` 자동 생성: 프로젝트 루트 또는 `.moai/` 디렉토리에 배치
    - Environment 정보 포함: Grid 시스템, Layout Behavior
-   - Skeleton 정보 포함: Preset 목록 및 기본 구성
+   - Skeleton 정보 포함: Theme 목록 및 기본 구성
    - Intent 정보 포함: Compound Pattern 매핑, 추천 컴포넌트
    - ComponentContract 정보 포함: 사용 가능한 컴포넌트 목록 및 Contract ID
    - 토큰 정보 포함: Brand colors, Semantic colors, Spacing, Radius
@@ -245,7 +245,7 @@
 
 ### Phase B 의존성
 
-- ✅ @tekton/preset (완료) - Preset 시스템 재사용
+- ✅ @tekton/theme (완료) - Theme 시스템 재사용
 - ✅ @tekton/token-generator (완료) - Extended Token System 통합
 - ✅ @tekton/contracts (완료) - Component Contract 검증
 - ✅ CLI 도구 (완료) - 기존 CLI 인프라 재사용
@@ -322,9 +322,9 @@
 **설명**: Skeleton Preset이 사용자의 요구사항과 정확히 일치하지 않을 수 있음
 
 **완화 전략**:
-- Skeleton Preset 선택 후 개별 속성 수정 허용: Override 시스템 구현
+- Skeleton Theme 선택 후 개별 속성 수정 허용: Override 시스템 구현
 - 커스텀 템플릿 등록 시스템 제공: 사용자가 자신만의 템플릿 추가 가능
-- Override 시스템 구현: `tekton.config.json`에서 preset override 정의
+- Override 시스템 구현: `tekton.config.json`에서 theme override 정의
 
 **구현 우선순위**: M2 단계에서 Override 시스템 설계 및 구현
 

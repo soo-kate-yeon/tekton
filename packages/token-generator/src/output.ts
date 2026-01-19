@@ -1,4 +1,4 @@
-import type { OKLCHColor } from '@tekton/preset';
+import type { OKLCHColor } from '@tekton/theme';
 import type { SemanticTokens } from './semantic-mapper';
 import { oklchToHex } from './color-conversion.js';
 

@@ -15,7 +15,7 @@ import pytest
 from httpx import AsyncClient
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from studio_api.models.curated_preset import CuratedPreset
+from studio_api.models.curated_theme import CuratedTheme
 from studio_api.models.project_settings import ProjectSettings
 
 
@@ -28,7 +28,7 @@ class TestGetActivePreset:
     ) -> None:
         """Test getting active preset for a project with preset set."""
         # Create a curated preset
-        preset = CuratedPreset(
+        preset = CuratedTheme(
             name="Test Preset",
             category="website",
             config={"test": "value"},
@@ -55,9 +55,9 @@ class TestGetActivePreset:
         assert response.status_code == 200
         data = response.json()
         assert data["success"] is True
-        assert data["active_preset"] is not None
-        assert data["active_preset"]["id"] == preset.id
-        assert data["active_preset"]["name"] == "Test Preset"
+        assert data["active_theme"] is not None
+        assert data["active_theme"]["id"] == preset.id
+        assert data["active_theme"]["name"] == "Test Preset"
 
     @pytest.mark.asyncio
     async def test_get_active_preset_with_no_preset_set(
@@ -79,7 +79,7 @@ class TestGetActivePreset:
         assert response.status_code == 200
         data = response.json()
         assert data["success"] is True
-        assert data["active_preset"] is None
+        assert data["active_theme"] is None
 
     @pytest.mark.asyncio
     async def test_get_active_preset_with_unknown_project(
@@ -94,7 +94,7 @@ class TestGetActivePreset:
         assert response.status_code == 200
         data = response.json()
         assert data["success"] is True
-        assert data["active_preset"] is None
+        assert data["active_theme"] is None
 
     @pytest.mark.asyncio
     async def test_get_active_preset_missing_project_path(
@@ -113,9 +113,9 @@ class TestPutActivePreset:
     async def test_set_active_preset_with_valid_preset_id(
         self, async_client: AsyncClient, db_session: AsyncSession
     ) -> None:
-        """Test setting active preset with valid preset_id."""
+        """Test setting active preset with valid theme_id."""
         # Create a curated preset
-        preset = CuratedPreset(
+        preset = CuratedTheme(
             name="New Active Preset",
             category="dashboard",
             config={"theme": "dark"},
@@ -127,7 +127,7 @@ class TestPutActivePreset:
         response = await async_client.put(
             "/api/v2/settings/active-preset",
             json={
-                "preset_id": preset.id,
+                "theme_id": preset.id,
                 "project_path": "/test/set-preset",
             },
         )
@@ -135,9 +135,9 @@ class TestPutActivePreset:
         assert response.status_code == 200
         data = response.json()
         assert data["success"] is True
-        assert data["active_preset"] is not None
-        assert data["active_preset"]["id"] == preset.id
-        assert data["active_preset"]["name"] == "New Active Preset"
+        assert data["active_theme"] is not None
+        assert data["active_theme"]["id"] == preset.id
+        assert data["active_theme"]["name"] == "New Active Preset"
 
     @pytest.mark.asyncio
     async def test_set_active_preset_updates_existing_project(
@@ -145,12 +145,12 @@ class TestPutActivePreset:
     ) -> None:
         """Test updating active preset for existing project settings."""
         # Create two curated presets
-        preset1 = CuratedPreset(
+        preset1 = CuratedTheme(
             name="First Preset",
             category="website",
             config={},
         )
-        preset2 = CuratedPreset(
+        preset2 = CuratedTheme(
             name="Second Preset",
             category="dashboard",
             config={},
@@ -173,7 +173,7 @@ class TestPutActivePreset:
         response = await async_client.put(
             "/api/v2/settings/active-preset",
             json={
-                "preset_id": preset2.id,
+                "theme_id": preset2.id,
                 "project_path": "/test/update-preset",
             },
         )
@@ -181,18 +181,18 @@ class TestPutActivePreset:
         assert response.status_code == 200
         data = response.json()
         assert data["success"] is True
-        assert data["active_preset"]["id"] == preset2.id
-        assert data["active_preset"]["name"] == "Second Preset"
+        assert data["active_theme"]["id"] == preset2.id
+        assert data["active_theme"]["name"] == "Second Preset"
 
     @pytest.mark.asyncio
     async def test_set_active_preset_with_invalid_preset_id(
         self, async_client: AsyncClient
     ) -> None:
-        """Test setting active preset with non-existent preset_id returns error."""
+        """Test setting active preset with non-existent theme_id returns error."""
         response = await async_client.put(
             "/api/v2/settings/active-preset",
             json={
-                "preset_id": 99999,
+                "theme_id": 99999,
                 "project_path": "/test/invalid-preset",
             },
         )
@@ -207,7 +207,7 @@ class TestPutActivePreset:
     ) -> None:
         """Test setting active preset with inactive preset returns error."""
         # Create an inactive preset
-        preset = CuratedPreset(
+        preset = CuratedTheme(
             name="Inactive Preset",
             category="website",
             config={},
@@ -220,7 +220,7 @@ class TestPutActivePreset:
         response = await async_client.put(
             "/api/v2/settings/active-preset",
             json={
-                "preset_id": preset.id,
+                "theme_id": preset.id,
                 "project_path": "/test/inactive-preset",
             },
         )
@@ -237,11 +237,11 @@ class TestPutActivePreset:
         # Missing project_path
         response = await async_client.put(
             "/api/v2/settings/active-preset",
-            json={"preset_id": 1},
+            json={"theme_id": 1},
         )
         assert response.status_code == 422
 
-        # Missing preset_id
+        # Missing theme_id
         response = await async_client.put(
             "/api/v2/settings/active-preset",
             json={"project_path": "/test/project"},
@@ -258,7 +258,7 @@ class TestGetProjectSettings:
     ) -> None:
         """Test getting project settings for existing project."""
         # Create a curated preset
-        preset = CuratedPreset(
+        preset = CuratedTheme(
             name="Settings Test Preset",
             category="website",
             config={"color": "blue"},
@@ -288,8 +288,8 @@ class TestGetProjectSettings:
         assert data["settings"]["project_path"] == "/test/project-settings"
         assert data["settings"]["framework_type"] == "nextjs"
         assert data["settings"]["active_preset_id"] == preset.id
-        assert data["settings"]["active_preset"] is not None
-        assert data["settings"]["active_preset"]["name"] == "Settings Test Preset"
+        assert data["settings"]["active_theme"] is not None
+        assert data["settings"]["active_theme"]["name"] == "Settings Test Preset"
 
     @pytest.mark.asyncio
     async def test_get_project_settings_nonexistent_project(
@@ -331,7 +331,7 @@ class TestGetProjectSettings:
         assert data["settings"]["project_path"] == "/test/no-preset-settings"
         assert data["settings"]["framework_type"] == "vite"
         assert data["settings"]["active_preset_id"] is None
-        assert data["settings"]["active_preset"] is None
+        assert data["settings"]["active_theme"] is None
 
     @pytest.mark.asyncio
     async def test_get_project_settings_missing_project_path(

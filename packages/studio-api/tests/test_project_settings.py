@@ -2,7 +2,7 @@
 
 TASK-001: Create project_settings SQLAlchemy model
 - Design-TAG: SPEC-MCP-001 natural language screen generation database infrastructure
-- Function-TAG: ProjectSettings model with FK to curated_presets
+- Function-TAG: ProjectSettings model with FK to curated_themes
 - Test-TAG: Model creation, FK constraint, unique constraint on project_path
 """
 
@@ -14,7 +14,7 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from studio_api.models.project_settings import ProjectSettings
-from studio_api.models.curated_preset import CuratedPreset
+from studio_api.models.curated_theme import CuratedTheme
 
 
 class TestProjectSettingsModelCreation:
@@ -24,7 +24,7 @@ class TestProjectSettingsModelCreation:
     async def test_project_settings_creation(self, db_session: AsyncSession) -> None:
         """Test creating a project settings record with all fields."""
         # First create a curated preset to reference
-        preset = CuratedPreset(
+        preset = CuratedTheme(
             name="Test Preset",
             category="website",
             config={"test": "value"},
@@ -138,13 +138,13 @@ class TestProjectSettingsUniqueConstraint:
 
 
 class TestProjectSettingsForeignKey:
-    """Test foreign key relationship to curated_presets."""
+    """Test foreign key relationship to curated_themes."""
 
     @pytest.mark.asyncio
     async def test_fk_to_curated_presets(self, db_session: AsyncSession) -> None:
-        """Test FK relationship to curated_presets table."""
+        """Test FK relationship to curated_themes table."""
         # Create a curated preset
-        preset = CuratedPreset(
+        preset = CuratedTheme(
             name="FK Test Preset",
             category="website",
             config={"fk": "test"},
@@ -174,7 +174,7 @@ class TestProjectSettingsForeignKey:
         For SQLite testing, we verify the FK relationship is properly defined.
         """
         # Create a curated preset
-        preset = CuratedPreset(
+        preset = CuratedTheme(
             name="Delete Test Preset",
             category="website",
             config={"delete": "test"},
@@ -182,19 +182,19 @@ class TestProjectSettingsForeignKey:
         db_session.add(preset)
         await db_session.commit()
         await db_session.refresh(preset)
-        preset_id = preset.id
+        theme_id = preset.id
 
         # Create project settings with FK reference
         settings = ProjectSettings(
             project_path="/delete/test/project",
-            active_preset_id=preset_id,
+            active_preset_id=theme_id,
         )
         db_session.add(settings)
         await db_session.commit()
         await db_session.refresh(settings)
 
         # Verify the FK relationship is correctly set
-        assert settings.active_preset_id == preset_id
+        assert settings.active_preset_id == theme_id
 
         # Verify the model's FK definition includes ondelete="SET NULL"
         from sqlalchemy import inspect
@@ -214,7 +214,7 @@ class TestProjectSettingsForeignKey:
         The migration tests verify the FK constraint definition.
         """
         # First create a valid preset
-        preset = CuratedPreset(
+        preset = CuratedTheme(
             name="Valid FK Preset",
             category="website",
             config={"valid": "test"},
@@ -235,8 +235,8 @@ class TestProjectSettingsForeignKey:
         # Verify FK relationship works correctly
         assert settings.active_preset_id == preset.id
         # Verify the relationship can load the preset
-        assert settings.active_preset is not None
-        assert settings.active_preset.name == "Valid FK Preset"
+        assert settings.active_theme is not None
+        assert settings.active_theme.name == "Valid FK Preset"
 
 
 class TestProjectSettingsQueries:
@@ -266,7 +266,7 @@ class TestProjectSettingsQueries:
     @pytest.mark.asyncio
     async def test_query_by_active_preset(self, db_session: AsyncSession) -> None:
         """Test querying project settings by active_preset_id."""
-        preset = CuratedPreset(
+        preset = CuratedTheme(
             name="Query Test Preset",
             category="website",
             config={},

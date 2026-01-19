@@ -92,10 +92,10 @@ graph LR
     E[wcag-validator.ts] --> C
     E --> D
 
-    F[component-presets.ts] --> D
+    F[component-themes.ts] --> D
 
-    G[presets/types.ts] --> H[presets/loader.ts]
-    H --> I[presets/index.ts]
+    G[themes/types.ts] --> H[themes/loader.ts]
+    H --> I[themes/index.ts]
     I --> D
 
     J[contracts/types.ts] --> K[contracts/registry.ts]
@@ -132,10 +132,10 @@ graph LR
 - `wcag-validator.ts` - WCAG AA/AAA compliance validation
 - `contracts/` - Component contract validation system
 
-**Preset Modules** (Depend on Generation)
-- `presets/types.ts` - Preset type definitions
-- `presets/loader.ts` - Preset loading with validation
-- `presets/index.ts` - Preset-to-token integration
+**Theme Modules** (Depend on Generation)
+- `themes/types.ts` - Theme type definitions
+- `themes/loader.ts` - Theme loading with validation
+- `themes/index.ts` - Theme-to-token integration
 
 **Export Modules** (Depend on All)
 - `generator/output.ts` - Multi-format export (CSS, DTCG, Tailwind)
@@ -151,9 +151,9 @@ graph LR
 flowchart TD
     A[User Input: Q&A] --> B{Input Source}
     B -->|Direct API| C[TokenGenerator]
-    B -->|Preset System| D[loadPreset]
+    B -->|Theme System| D[loadPreset]
 
-    D --> E[Preset Validation]
+    D --> E[Theme Validation]
     E -->|Valid| F[generateTokensFromPreset]
     E -->|Invalid| G[PresetValidationError]
 
@@ -198,7 +198,7 @@ flowchart TD
     style Y fill:#4CAF50,stroke:#2E7D32,stroke-width:2px,color:#fff
 ```
 
-### Preset-Driven Workflow
+### Theme-Driven Workflow
 
 ```mermaid
 sequenceDiagram
@@ -210,10 +210,10 @@ sequenceDiagram
 
     User->>Loader: loadDefaultPreset('next-tailwind-shadcn')
     Loader->>Validator: Validate JSON structure
-    Validator-->>Loader: Validated preset
-    Loader-->>User: Preset object
+    Validator-->>Loader: Validated theme
+    Loader-->>User: Theme object
 
-    User->>Generator: generateTokensFromPreset(preset, {format: 'css'})
+    User->>Generator: generateTokensFromPreset(theme, {format: 'css'})
     Generator->>Generator: Extract questionnaire
     Generator->>Generator: Generate OKLCH palettes
     Generator->>Generator: Apply semantic mapping
@@ -467,7 +467,7 @@ if (button.hasIcon && !button.hasText && !button.ariaLabel) {
 - Single color scale (10 steps): ~2ms
 - Complete palette (4 colors × 10 steps): ~8ms
 - Full design system (50+ tokens): ~50ms
-- Preset-based generation: ~60ms (includes validation)
+- Theme-based generation: ~60ms (includes validation)
 
 **Optimization Strategies**:
 1. **Lazy Evaluation**: Generate tokens only when requested
@@ -479,7 +479,7 @@ if (button.hasIcon && !button.hasText && !button.ariaLabel) {
 
 **Bundle Sizes**:
 - Core library (tree-shaken): ~15KB gzipped
-- With preset system: ~22KB gzipped
+- With theme system: ~22KB gzipped
 - With contract system: ~45KB gzipped
 - Full package: ~60KB gzipped
 

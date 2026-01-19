@@ -19,7 +19,7 @@ priority: "HIGH"
 
 ## 개요
 
-Phase B는 Tekton 디자인 시스템을 개발자 워크플로우에 통합하는 IDE 도구를 제공합니다. CLI 패키지와 VS Code extension을 통해 프로젝트 스택 감지, shadcn 자동 설치, 토큰 생성을 자동화하며, Monorepo 전환을 통해 Phase A의 패키지(preset, token-generator, contracts)를 통합 관리합니다.
+Phase B는 Tekton 디자인 시스템을 개발자 워크플로우에 통합하는 IDE 도구를 제공합니다. CLI 패키지와 VS Code extension을 통해 프로젝트 스택 감지, shadcn 자동 설치, 토큰 생성을 자동화하며, Monorepo 전환을 통해 Phase A의 패키지(theme, token-generator, contracts)를 통합 관리합니다.
 
 ## 목표
 
@@ -39,7 +39,7 @@ Phase B는 Tekton 디자인 시스템을 개발자 워크플로우에 통합하�
 
 Phase B는 Phase A의 완성된 구현체를 기반으로 합니다:
 
-- **A1: Preset System** (완료 ✅)
+- **A1: Theme System** (완료 ✅)
   - 테스트 커버리지: 97.77%
   - 6개 프리셋 구현 완료 (color, typography, spacing, shadow, radius, opacity)
   - WCAG 준수 검증 통과
@@ -186,7 +186,7 @@ Phase B는 Phase A의 완성된 구현체를 기반으로 합니다:
 ### Phase A Package References
 
 CLI 및 Extension은 다음 Phase A 패키지를 workspace dependency로 참조:
-- `@tekton/preset`: 프리셋 시스템
+- `@tekton/theme`: 프리셋 시스템
 - `@tekton/token-generator`: 토큰 생성 엔진
 - `@tekton/contracts`: 컴포넌트 계약
 
@@ -196,7 +196,7 @@ CLI 및 Extension은 다음 Phase A 패키지를 workspace dependency로 참조:
 
 ```
 packages/
-├── preset/              # Phase A - Preset System
+├── theme/              # Phase A - Theme System
 │   ├── src/
 │   └── tests/
 ├── token-generator/     # Phase A - Token Generator

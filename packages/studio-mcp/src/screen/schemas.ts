@@ -64,7 +64,7 @@ export type AddComponentInput = z.infer<typeof AddComponentInputSchema>;
  */
 export const ApplyArchetypeInputSchema = z.object({
   screenName: z.string().min(1, "Screen name is required"),
-  archetypeName: ArchetypeNameSchema,
+  componentName: ArchetypeNameSchema,
   projectPath: z.string().optional(),
 });
 
@@ -130,7 +130,7 @@ export type AddComponentResponse = z.infer<typeof AddComponentResponseSchema>;
  */
 export const ApplyArchetypeResponseSchema = z.object({
   archetypeApplied: z.boolean(),
-  archetypeName: ArchetypeNameSchema,
+  componentName: ArchetypeNameSchema,
   screenPath: z.string(),
 });
 

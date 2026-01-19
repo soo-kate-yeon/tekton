@@ -1,11 +1,11 @@
 # @tekton/token-contract
 
-Token Contract & CSS Variable System with Zod validation and curated presets.
+Token Contract & CSS Variable System with Zod validation and curated themes.
 
 ## Features
 
 - ✅ **Type-Safe Tokens**: Zod schemas for runtime validation
-- ✅ **7 Curated Presets**: Professional, Creative, Minimal, Bold, Warm, Cool, High-Contrast
+- ✅ **7 Curated Themes**: Professional, Creative, Minimal, Bold, Warm, Cool, High-Contrast
 - ✅ **WCAG Compliance**: Automatic contrast validation
 - ✅ **CSS Variable Generation**: Generate valid CSS custom properties
 - ✅ **Dark Mode Support**: Built-in dark theme variants
@@ -13,7 +13,7 @@ Token Contract & CSS Variable System with Zod validation and curated presets.
 - ✅ **OKLCH Color Space**: Modern perceptually uniform colors
 - ✅ **State Tokens**: Interactive component states (hover, active, focus, disabled, error)
 - ✅ **Fallback Handling**: Graceful degradation with warnings
-- ✅ **Preset Override**: Customize presets with validation
+- ✅ **Theme Override**: Customize themes with validation
 
 ## Installation
 
@@ -30,13 +30,13 @@ pnpm add @tekton/token-contract
 ```typescript
 import { loadPreset, generateCSSFromTokens } from '@tekton/token-contract';
 
-// Load a preset
-const preset = loadPreset('professional');
+// Load a theme
+const theme = loadPreset('professional');
 
 // Generate CSS variables
 const css = generateCSSFromTokens({
-  semantic: preset.tokens,
-  composition: preset.composition,
+  semantic: theme.tokens,
+  composition: theme.composition,
 });
 
 console.log(css);
@@ -62,11 +62,11 @@ function App() {
 }
 
 function YourComponent() {
-  const { preset, tokens, darkMode, setPreset, toggleDarkMode } = useTheme();
+  const { theme, tokens, darkMode, setPreset, toggleDarkMode } = useTheme();
 
   return (
     <div>
-      <p>Current preset: {preset}</p>
+      <p>Current theme: {theme}</p>
       <button onClick={() => setPreset('creative')}>Switch to Creative</button>
       <button onClick={toggleDarkMode}>Toggle Dark Mode</button>
     </div>
@@ -74,7 +74,7 @@ function YourComponent() {
 }
 ```
 
-## Available Presets
+## Available Themes
 
 ### Professional
 Clean, trustworthy design for business applications.
@@ -116,7 +116,7 @@ Maximum accessibility with WCAG AAA compliance.
 The Token Contract system provides a comprehensive token management layer with:
 
 - **Token Transformation Pipeline**: Validates tokens through Zod schemas, ensures WCAG compliance, and generates CSS variables
-- **7 Curated Presets**: Professional, Creative, Minimal, Bold, Warm, Cool, High-Contrast design systems
+- **7 Curated Themes**: Professional, Creative, Minimal, Bold, Warm, Cool, High-Contrast design systems
 - **CSS Variable Generation**: Automatic conversion to CSS custom properties with dark mode support
 - **React Integration**: ThemeProvider context with optimized re-rendering
 
@@ -128,24 +128,24 @@ For detailed architecture documentation including system diagrams, see [docs/ARC
 
 ## API Reference
 
-### Presets
+### Themes
 
-#### `loadPreset(name: PresetName): Preset`
+#### `loadPreset(name: PresetName): Theme`
 
-Load a curated preset by name.
+Load a curated theme by name.
 
 ```typescript
-const preset = loadPreset('professional');
-console.log(preset.tokens.primary['500']); // oklch(0.60 0.15 220)
+const theme = loadPreset('professional');
+console.log(theme.tokens.primary['500']); // oklch(0.60 0.15 220)
 ```
 
 #### `getAllPresets(): PresetInfo[]`
 
-Get information about all available presets.
+Get information about all available themes.
 
 ```typescript
-const presets = getAllPresets();
-presets.forEach(p => console.log(p.name, p.description));
+const themes = getAllPresets();
+themes.forEach(p => console.log(p.name, p.description));
 ```
 
 ### CSS Generation
@@ -155,7 +155,7 @@ presets.forEach(p => console.log(p.name, p.description));
 Generate CSS variables from semantic tokens.
 
 ```typescript
-const css = generateCSSVariables(preset.tokens);
+const css = generateCSSVariables(theme.tokens);
 // :root { --tekton-primary-500: oklch(...); ... }
 ```
 
@@ -165,8 +165,8 @@ Generate complete CSS with semantic and composition tokens.
 
 ```typescript
 const css = generateCSSFromTokens({
-  semantic: preset.tokens,
-  composition: preset.composition,
+  semantic: theme.tokens,
+  composition: theme.composition,
 });
 ```
 
@@ -186,7 +186,7 @@ const darkCSS = generateDarkModeCSS(darkTokens);
 React context provider for theme management.
 
 **Props:**
-- `defaultPreset?: PresetName` - Initial preset (default: 'professional')
+- `defaultPreset?: PresetName` - Initial theme (default: 'professional')
 - `defaultDarkMode?: boolean` - Initial dark mode state (default: false)
 - `detectSystemTheme?: boolean` - Auto-detect system dark mode (default: false)
 
@@ -201,15 +201,15 @@ React context provider for theme management.
 Hook to access theme context.
 
 **Returns:**
-- `preset: PresetName` - Current preset name
-- `setPreset: (preset: PresetName) => void` - Change preset
+- `theme: PresetName` - Current theme name
+- `setPreset: (theme: PresetName) => void` - Change theme
 - `tokens: SemanticToken` - Current semantic tokens
 - `composition: CompositionToken` - Current composition tokens
 - `darkMode: boolean` - Dark mode state
 - `toggleDarkMode: () => void` - Toggle dark mode
 
 ```tsx
-const { preset, setPreset, darkMode, toggleDarkMode } = useTheme();
+const { theme, setPreset, darkMode, toggleDarkMode } = useTheme();
 ```
 
 ### Validation
@@ -219,7 +219,7 @@ const { preset, setPreset, darkMode, toggleDarkMode } = useTheme();
 Validate tokens against WCAG contrast requirements.
 
 ```typescript
-const compliance = validateWCAGCompliance(preset.tokens);
+const compliance = validateWCAGCompliance(theme.tokens);
 if (compliance.passed) {
   console.log('WCAG compliant!');
 } else {
@@ -240,10 +240,10 @@ const color = getTokenWithFallback(tokens, 'accent', '500');
 
 #### `overridePresetTokens(baseTokens, overrides)`
 
-Override preset tokens with custom values.
+Override theme tokens with custom values.
 
 ```typescript
-const customTokens = overridePresetTokens(preset.tokens, {
+const customTokens = overridePresetTokens(theme.tokens, {
   primary: {
     '500': 'oklch(0.65 0.15 200)',
   },
@@ -293,11 +293,11 @@ All CSS variables follow the `--tekton-{semantic}-{step}` convention:
 
 ## WCAG Compliance
 
-All presets are validated for WCAG AA compliance:
+All themes are validated for WCAG AA compliance:
 
 - Text contrast ratio ≥ 4.5:1 (normal text)
 - Large text contrast ratio ≥ 3:1
-- High-contrast preset meets WCAG AAA
+- High-contrast theme meets WCAG AAA
 
 ## Dark Mode
 
@@ -410,6 +410,6 @@ MIT
 
 ## Related Packages
 
-- `@tekton/preset` - Preset schemas and utilities
+- `@tekton/theme` - Theme schemas and utilities
 - `@tekton/token-generator` - OKLCH token generation
 - `@tekton/hooks` - Headless UI hooks (SPEC-COMPONENT-001)

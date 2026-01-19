@@ -1,4 +1,4 @@
-import type { OKLCHColor, ColorScale } from '@tekton/preset';
+import type { OKLCHColor, ColorScale } from '@tekton/theme';
 
 /**
  * Scale step values and their target lightness adjustments

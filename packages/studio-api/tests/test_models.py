@@ -6,13 +6,13 @@ import pytest
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from studio_api.models.curated_preset import CuratedPreset
+from studio_api.models.curated_theme import CuratedTheme
 
 
 @pytest.mark.asyncio
 async def test_curated_preset_creation(db_session: AsyncSession) -> None:
     """Test creating a curated preset."""
-    preset = CuratedPreset(
+    preset = CuratedTheme(
         name="Modern Minimalist",
         category="website",
         description="Clean and modern design with minimalist aesthetics",
@@ -43,7 +43,7 @@ async def test_curated_preset_creation(db_session: AsyncSession) -> None:
 @pytest.mark.asyncio
 async def test_curated_preset_required_fields(db_session: AsyncSession) -> None:
     """Test that required fields are enforced."""
-    preset = CuratedPreset(
+    preset = CuratedTheme(
         name="Test Preset",
         category="website",
         config={"test": "value"},
@@ -64,7 +64,7 @@ async def test_curated_preset_required_fields(db_session: AsyncSession) -> None:
 @pytest.mark.asyncio
 async def test_curated_preset_timestamps(db_session: AsyncSession) -> None:
     """Test that timestamps are automatically set."""
-    preset = CuratedPreset(
+    preset = CuratedTheme(
         name="Timestamp Test",
         category="mobile-app",
         config={"test": "value"},
@@ -83,9 +83,9 @@ async def test_curated_preset_timestamps(db_session: AsyncSession) -> None:
 async def test_curated_preset_query_by_category(db_session: AsyncSession) -> None:
     """Test querying presets by category."""
     presets = [
-        CuratedPreset(name="Web 1", category="website", config={}),
-        CuratedPreset(name="Web 2", category="website", config={}),
-        CuratedPreset(name="Mobile 1", category="mobile-app", config={}),
+        CuratedTheme(name="Web 1", category="website", config={}),
+        CuratedTheme(name="Web 2", category="website", config={}),
+        CuratedTheme(name="Mobile 1", category="mobile-app", config={}),
     ]
 
     for preset in presets:
@@ -94,7 +94,7 @@ async def test_curated_preset_query_by_category(db_session: AsyncSession) -> Non
 
     # Query website presets
     result = await db_session.execute(
-        select(CuratedPreset).where(CuratedPreset.category == "website")
+        select(CuratedTheme).where(CuratedTheme.category == "website")
     )
     website_presets = result.scalars().all()
 
@@ -106,9 +106,9 @@ async def test_curated_preset_query_by_category(db_session: AsyncSession) -> Non
 async def test_curated_preset_query_active_only(db_session: AsyncSession) -> None:
     """Test querying only active presets."""
     presets = [
-        CuratedPreset(name="Active 1", category="website", config={}, is_active=True),
-        CuratedPreset(name="Inactive", category="website", config={}, is_active=False),
-        CuratedPreset(name="Active 2", category="website", config={}, is_active=True),
+        CuratedTheme(name="Active 1", category="website", config={}, is_active=True),
+        CuratedTheme(name="Inactive", category="website", config={}, is_active=False),
+        CuratedTheme(name="Active 2", category="website", config={}, is_active=True),
     ]
 
     for preset in presets:
@@ -117,7 +117,7 @@ async def test_curated_preset_query_active_only(db_session: AsyncSession) -> Non
 
     # Query active presets only
     result = await db_session.execute(
-        select(CuratedPreset).where(CuratedPreset.is_active == True)
+        select(CuratedTheme).where(CuratedTheme.is_active == True)
     )
     active_presets = result.scalars().all()
 
@@ -128,7 +128,7 @@ async def test_curated_preset_query_active_only(db_session: AsyncSession) -> Non
 @pytest.mark.asyncio
 async def test_curated_preset_name_uniqueness(db_session: AsyncSession) -> None:
     """Test that preset names should be unique per category."""
-    preset1 = CuratedPreset(
+    preset1 = CuratedTheme(
         name="Duplicate Name",
         category="website",
         config={},
@@ -137,7 +137,7 @@ async def test_curated_preset_name_uniqueness(db_session: AsyncSession) -> None:
     await db_session.commit()
 
     # Same name in different category should be allowed
-    preset2 = CuratedPreset(
+    preset2 = CuratedTheme(
         name="Duplicate Name",
         category="mobile-app",
         config={},
@@ -145,7 +145,7 @@ async def test_curated_preset_name_uniqueness(db_session: AsyncSession) -> None:
     db_session.add(preset2)
     await db_session.commit()
 
-    result = await db_session.execute(select(CuratedPreset))
+    result = await db_session.execute(select(CuratedTheme))
     all_presets = result.scalars().all()
     assert len(all_presets) == 2
 
@@ -169,7 +169,7 @@ async def test_curated_preset_json_config(db_session: AsyncSession) -> None:
         "breakpoints": {"sm": 640, "md": 768, "lg": 1024},
     }
 
-    preset = CuratedPreset(
+    preset = CuratedTheme(
         name="Complex Config Test",
         category="website",
         config=complex_config,

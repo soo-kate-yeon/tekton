@@ -11,7 +11,7 @@ import { useTheme } from '../../src/theme-provider/useTheme.js';
 
 // Test component with theme switching capabilities
 function ThemeSwitcher() {
-  const { preset, setPreset, darkMode, toggleDarkMode } = useTheme();
+  const { preset, setTheme, darkMode, toggleDarkMode } = useTheme();
 
   return (
     <div>
@@ -19,13 +19,13 @@ function ThemeSwitcher() {
       <div data-testid="current-mode">{darkMode ? 'dark' : 'light'}</div>
       <button
         data-testid="switch-creative"
-        onClick={() => setPreset('creative')}
+        onClick={() => setTheme('creative')}
       >
         Switch to Creative
       </button>
       <button
         data-testid="switch-minimal"
-        onClick={() => setPreset('minimal')}
+        onClick={() => setTheme('minimal')}
       >
         Switch to Minimal
       </button>
@@ -48,7 +48,7 @@ describe('Theme Switching', () => {
   describe('Preset Switching', () => {
     it('should switch between presets', () => {
       render(
-        <ThemeProvider defaultPreset="professional">
+        <ThemeProvider defaultTheme="professional">
           <ThemeSwitcher />
         </ThemeProvider>
       );
@@ -72,18 +72,18 @@ describe('Theme Switching', () => {
 
     it('should update tokens when preset changes', () => {
       function TokenWatcher() {
-        const { preset, tokens, setPreset } = useTheme();
+        const { preset, tokens, setTheme } = useTheme();
         return (
           <div>
             <div data-testid="preset">{preset}</div>
             <div data-testid="has-tokens">{tokens ? 'yes' : 'no'}</div>
-            <button onClick={() => setPreset('bold')}>Switch</button>
+            <button onClick={() => setTheme('bold')}>Switch</button>
           </div>
         );
       }
 
       render(
-        <ThemeProvider defaultPreset="professional">
+        <ThemeProvider defaultTheme="professional">
           <TokenWatcher />
         </ThemeProvider>
       );
@@ -100,7 +100,7 @@ describe('Theme Switching', () => {
 
     it('should apply new CSS variables when preset changes', () => {
       render(
-        <ThemeProvider defaultPreset="professional">
+        <ThemeProvider defaultTheme="professional">
           <ThemeSwitcher />
         </ThemeProvider>
       );
@@ -115,7 +115,7 @@ describe('Theme Switching', () => {
 
     it('should handle rapid preset switches', () => {
       render(
-        <ThemeProvider defaultPreset="professional">
+        <ThemeProvider defaultTheme="professional">
           <ThemeSwitcher />
         </ThemeProvider>
       );
@@ -180,7 +180,7 @@ describe('Theme Switching', () => {
 
     it('should maintain preset when toggling dark mode', () => {
       render(
-        <ThemeProvider defaultPreset="creative">
+        <ThemeProvider defaultTheme="creative">
           <ThemeSwitcher />
         </ThemeProvider>
       );
@@ -199,7 +199,7 @@ describe('Theme Switching', () => {
   describe('Combined Switching', () => {
     it('should handle preset and dark mode changes together', () => {
       render(
-        <ThemeProvider defaultPreset="professional" defaultDarkMode={false}>
+        <ThemeProvider defaultTheme="professional" defaultDarkMode={false}>
           <ThemeSwitcher />
         </ThemeProvider>
       );
@@ -265,11 +265,11 @@ describe('Theme Switching', () => {
 
       function RenderCounter() {
         renderCount++;
-        const { preset, setPreset } = useTheme();
+        const { preset, setTheme } = useTheme();
         return (
           <div>
             <div data-testid="render-count">{renderCount}</div>
-            <button onClick={() => setPreset('creative')}>Switch</button>
+            <button onClick={() => setTheme('creative')}>Switch</button>
           </div>
         );
       }
@@ -322,12 +322,12 @@ describe('Theme Switching', () => {
   });
 
   describe('Callback Stability', () => {
-    it('should provide stable setPreset callback', () => {
+    it('should provide stable setTheme callback', () => {
       const callbacks: any[] = [];
 
       function CallbackTracker() {
-        const { setPreset } = useTheme();
-        callbacks.push(setPreset);
+        const { setTheme } = useTheme();
+        callbacks.push(setTheme);
         return <div>Tracker</div>;
       }
 

@@ -4,14 +4,14 @@
  */
 
 import { useState, useCallback, useEffect, useMemo } from 'react';
-import type { VariantConfigurationOption } from '@tekton/archetype-system';
+import type { VariantConfigurationOption } from '@tekton/component-system';
 import {
   generateStylesFromVariants,
   generateBaseStyles,
   type ComponentState,
   type HookName,
 } from '@/lib/component-preview';
-import { getDefaultState } from './useArchetypeData';
+import { getDefaultState } from './useComponentData';
 
 export interface PreviewState {
   hookName: HookName | null;

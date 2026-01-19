@@ -304,14 +304,14 @@ describe("Screen Schemas", () => {
     it("should accept valid input with valid archetype name", () => {
       const input: ApplyArchetypeInput = {
         screenName: "user-profile",
-        archetypeName: "Professional",
+        componentName: "Professional",
       };
 
       const result = ApplyArchetypeInputSchema.safeParse(input);
       expect(result.success).toBe(true);
       if (result.success) {
         expect(result.data.screenName).toBe("user-profile");
-        expect(result.data.archetypeName).toBe("Professional");
+        expect(result.data.componentName).toBe("Professional");
       }
     });
 
@@ -329,7 +329,7 @@ describe("Screen Schemas", () => {
       for (const archetype of archetypes) {
         const input = {
           screenName: "test-screen",
-          archetypeName: archetype,
+          componentName: archetype,
         };
 
         const result = ApplyArchetypeInputSchema.safeParse(input);
@@ -339,14 +339,14 @@ describe("Screen Schemas", () => {
 
     it("should reject input without screenName", () => {
       const input = {
-        archetypeName: "Professional",
+        componentName: "Professional",
       };
 
       const result = ApplyArchetypeInputSchema.safeParse(input);
       expect(result.success).toBe(false);
     });
 
-    it("should reject input without archetypeName", () => {
+    it("should reject input without componentName", () => {
       const input = {
         screenName: "user-profile",
       };
@@ -358,7 +358,7 @@ describe("Screen Schemas", () => {
     it("should reject invalid archetype name", () => {
       const input = {
         screenName: "user-profile",
-        archetypeName: "InvalidArchetype",
+        componentName: "InvalidArchetype",
       };
 
       const result = ApplyArchetypeInputSchema.safeParse(input);
@@ -368,7 +368,7 @@ describe("Screen Schemas", () => {
     it("should reject empty screenName string", () => {
       const input = {
         screenName: "",
-        archetypeName: "Professional",
+        componentName: "Professional",
       };
 
       const result = ApplyArchetypeInputSchema.safeParse(input);

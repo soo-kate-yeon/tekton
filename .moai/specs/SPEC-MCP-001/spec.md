@@ -22,7 +22,7 @@ lifecycle: "spec-anchored"
 
 ### Commits
 - 477bc9e feat(studio-api): add ProjectSettings model and migration
-- 049962b feat(studio-api): add Settings API with preset management
+- 049962b feat(studio-api): add Settings API with theme management
 - 73cd4cb test(studio-api): add comprehensive tests for project settings
 - 41acdee feat(studio-mcp): add project tools for structure detection
 - f890622 feat(studio-mcp): add screen tools for natural language generation
@@ -54,7 +54,7 @@ lifecycle: "spec-anchored"
 
 ## Executive Summary
 
-**Purpose**: Extend the Tekton MCP Server with natural language screen generation capabilities, enabling AI assistants to create complete screens with routing setup, component composition, and style archetype application through simple MCP tool invocations.
+**Purpose**: Extend the Tekton MCP Server with natural language screen generation capabilities, enabling AI assistants to create complete screens with routing setup, component composition, and style component application through simple MCP tool invocations.
 
 **Scope**: Add Screen Tools (create, addComponent, applyArchetype, list, preview) and Project Tools (detectStructure, getActivePreset, setActivePreset) to the existing studio-mcp package, with supporting infrastructure in studio-api and studio-web.
 
@@ -70,7 +70,7 @@ lifecycle: "spec-anchored"
 
 **Existing studio-mcp Package:**
 - **HTTP-based MCP Server**: Located at `packages/studio-mcp/src/server/mcp-server.ts`
-- **Archetype Tools**: 7 existing tools (archetype.list, archetype.get, archetype.getPropRules, archetype.getStateMappings, archetype.getVariants, archetype.getStructure, archetype.query)
+- **Component Tools**: 7 existing tools (component.list, component.get, component.getPropRules, component.getStateMappings, component.getVariants, component.getStructure, component.query)
 - **Tool Execution**: `executeTool()` function at lines 172-205 with switch-case pattern
 - **CORS Support**: Enabled with wildcard origin for development
 - **Health Endpoint**: `/health` returning tool list
@@ -79,18 +79,18 @@ lifecycle: "spec-anchored"
 - **FastAPI Backend**: Python 3.11+ with async/await patterns
 - **SQLAlchemy 2.0**: Async ORM with PostgreSQL/SQLite support
 - **Pydantic v2.9**: Data validation and serialization
-- **Curated Presets System**: `curated_preset` model with category, tags, and config
+- **Curated Themes System**: `curated_preset` model with category, tags, and config
 - **Database Infrastructure**: Alembic migrations, async session management
 
 **Existing studio-web Package:**
 - **Next.js App Router**: Client components with React 19 patterns
-- **Preset Detail Page**: `packages/studio-web/src/app/presets/[id]/page.tsx`
+- **Theme Detail Page**: `packages/studio-web/src/app/themes/[id]/page.tsx`
 - **React Query**: Data fetching with usePreset, useDeletePreset hooks
 - **UI Components**: Button, Card, Badge, Skeleton from custom UI library
 
 **Target MCP Tools Integration:**
-- **Screen Tools**: Create screens, add components, apply archetypes
-- **Project Tools**: Detect framework structure, manage active preset
+- **Screen Tools**: Create screens, add components, apply components
+- **Project Tools**: Detect framework structure, manage active theme
 - **Auto-Routing**: Automatic file creation in correct app/pages directories
 - **Link Injection**: Add navigation links to parent pages
 
@@ -100,7 +100,7 @@ lifecycle: "spec-anchored"
 - TypeScript 5.7+
 - Node.js 20+
 - Zod 3.23+ (schema validation)
-- @tekton/archetype-system (workspace dependency)
+- @tekton/component-system (workspace dependency)
 
 **Backend API (Python):**
 - FastAPI 0.118+
@@ -140,7 +140,7 @@ lifecycle: "spec-anchored"
 - **Risk if Wrong**: Screen creation fails silently or with permission errors
 - **Validation**: Permission check before file write, clear error messages
 
-**A-003: Preset Configuration Stability**
+**A-003: Theme Configuration Stability**
 - **Assumption**: CuratedPreset model structure remains stable for active_preset_id foreign key
 - **Confidence**: HIGH
 - **Evidence**: Model established in SPEC-PHASEAB-001, stable since v0.1.0
@@ -156,12 +156,12 @@ lifecycle: "spec-anchored"
 
 ### Business Assumptions
 
-**A-005: Single Active Preset Workflow**
-- **Assumption**: Users work with one active preset at a time per project
+**A-005: Single Active Theme Workflow**
+- **Assumption**: Users work with one active theme at a time per project
 - **Confidence**: HIGH
 - **Evidence**: Design system consistency requires single active theme
-- **Risk if Wrong**: Preset conflicts, inconsistent styling
-- **Validation**: UI enforces single active preset selection
+- **Risk if Wrong**: Theme conflicts, inconsistent styling
+- **Validation**: UI enforces single active theme selection
 
 **A-006: Screen Name Uniqueness**
 - **Assumption**: Screen names are unique within a project for routing
@@ -172,12 +172,12 @@ lifecycle: "spec-anchored"
 
 ### Integration Assumptions
 
-**A-007: Archetype System Compatibility**
-- **Assumption**: Style archetypes from SPEC-ARCHETYPE-001 are directly applicable to generated screens
+**A-007: Component System Compatibility**
+- **Assumption**: Style components from SPEC-COMPONENT-001 are directly applicable to generated screens
 - **Confidence**: HIGH
-- **Evidence**: Archetype system designed for component styling
+- **Evidence**: Component system designed for component styling
 - **Risk if Wrong**: Styling mismatches, incompatible CSS variable references
-- **Validation**: Integration tests with all 7 style archetypes
+- **Validation**: Integration tests with all 7 style components
 
 ---
 
@@ -222,25 +222,25 @@ lifecycle: "spec-anchored"
 - **Rationale**: Incremental component building without full regeneration
 - **Test Strategy**: Component addition tests, import statement verification
 
-**E-003: Archetype Application Request**
-- **WHEN** `screen.applyArchetype` tool invoked with screenName and archetypeName **THEN** apply style archetype to screen with Token Contract CSS variables
-- **Rationale**: Style archetype application ensures design system consistency
-- **Test Strategy**: Archetype application tests with all 7 style archetypes
+**E-003: Component Application Request**
+- **WHEN** `screen.applyArchetype` tool invoked with screenName and archetypeName **THEN** apply style component to screen with Token Contract CSS variables
+- **Rationale**: Style component application ensures design system consistency
+- **Test Strategy**: Component application tests with all 7 style components
 
 **E-004: Project Structure Detection Request**
 - **WHEN** `project.detectStructure` tool invoked with projectPath **THEN** return detected framework type and relevant paths
 - **Rationale**: Framework detection enables correct file generation paths
 - **Test Strategy**: Detection tests with Next.js App/Pages and Vite projects
 
-**E-005: Active Preset Retrieval Request**
-- **WHEN** `project.getActivePreset` tool invoked **THEN** return current active preset from project settings database
-- **Rationale**: Active preset provides styling context for screen generation
-- **Test Strategy**: Active preset retrieval tests with various preset states
+**E-005: Active Theme Retrieval Request**
+- **WHEN** `project.getActivePreset` tool invoked **THEN** return current active theme from project settings database
+- **Rationale**: Active theme provides styling context for screen generation
+- **Test Strategy**: Active theme retrieval tests with various theme states
 
-**E-006: Active Preset Update Request**
+**E-006: Active Theme Update Request**
 - **WHEN** `project.setActivePreset` tool invoked with presetId **THEN** update project settings and return confirmation
-- **Rationale**: Preset selection determines global styling for new screens
-- **Test Strategy**: Active preset update tests with valid and invalid preset IDs
+- **Rationale**: Theme selection determines global styling for new screens
+- **Test Strategy**: Active theme update tests with valid and invalid theme IDs
 
 **E-007: Screen List Request**
 - **WHEN** `screen.list` tool invoked **THEN** return list of all screens in current project with metadata
@@ -267,11 +267,11 @@ lifecycle: "spec-anchored"
 - **Rationale**: Optional link injection with configurable label improves navigation without blocking creation
 - **Test Strategy**: Link injection tests with present and absent parent pages, label verification
 
-**S-003: Active Preset Conditional**
-- **IF** active preset exists **THEN** apply preset styling to new screens automatically
-- **IF** no active preset set **THEN** use default styling without error
-- **Rationale**: Preset-driven styling without hard requirement
-- **Test Strategy**: Screen creation tests with and without active preset
+**S-003: Active Theme Conditional**
+- **IF** active theme exists **THEN** apply theme styling to new screens automatically
+- **IF** no active theme set **THEN** use default styling without error
+- **Rationale**: Theme-driven styling without hard requirement
+- **Test Strategy**: Screen creation tests with and without active theme
 
 **S-004: Screen Name Conflict Resolution**
 - **IF** screen name already exists **THEN** return error with existing screen metadata
@@ -291,7 +291,7 @@ lifecycle: "spec-anchored"
 - **Test Strategy**: Validation layer tests, SQL injection prevention
 
 **UW-003: No Cross-Project Data Leakage**
-- The system **shall not** expose preset or screen data from other projects
+- The system **shall not** expose theme or screen data from other projects
 - **Rationale**: Project isolation ensures data privacy
 - **Test Strategy**: Multi-project isolation tests
 
@@ -312,10 +312,10 @@ lifecycle: "spec-anchored"
 - **Priority**: DEFERRED to Phase 2
 - **Rationale**: AI-assisted component selection improves screen quality
 
-**O-003: Multi-Preset Preview**
-- **Where possible**, enable side-by-side preview with different presets
+**O-003: Multi-Theme Preview**
+- **Where possible**, enable side-by-side preview with different themes
 - **Priority**: DEFERRED to Phase 2
-- **Rationale**: Visual comparison aids preset selection
+- **Rationale**: Visual comparison aids theme selection
 
 ---
 
@@ -384,7 +384,7 @@ lifecycle: "spec-anchored"
       },
       componentType: {
         type: "string",
-        description: "Component type from archetype system (e.g., 'useButton', 'useTextField', 'useDialog')"
+        description: "Component type from component system (e.g., 'useButton', 'useTextField', 'useDialog')"
       },
       props: {
         type: "object",
@@ -400,7 +400,7 @@ lifecycle: "spec-anchored"
 ```typescript
 {
   name: "screen.applyArchetype",
-  description: "Apply a style archetype to a screen. Updates CSS variables and component styling.",
+  description: "Apply a style component to a screen. Updates CSS variables and component styling.",
   inputSchema: {
     type: "object",
     properties: {
@@ -411,7 +411,7 @@ lifecycle: "spec-anchored"
       archetypeName: {
         type: "string",
         enum: ["Professional", "Creative", "Minimal", "Bold", "Warm", "Cool", "High-Contrast"],
-        description: "Style archetype to apply"
+        description: "Style component to apply"
       }
     },
     required: ["screenName", "archetypeName"]
@@ -474,7 +474,7 @@ lifecycle: "spec-anchored"
 ```typescript
 {
   name: "project.getActivePreset",
-  description: "Get the currently active preset for the project.",
+  description: "Get the currently active theme for the project.",
   inputSchema: {
     type: "object",
     properties: {},
@@ -487,13 +487,13 @@ lifecycle: "spec-anchored"
 ```typescript
 {
   name: "project.setActivePreset",
-  description: "Set the active preset for the project.",
+  description: "Set the active theme for the project.",
   inputSchema: {
     type: "object",
     properties: {
       presetId: {
         type: "integer",
-        description: "ID of the preset to set as active"
+        description: "ID of the theme to set as active"
       }
     },
     required: ["presetId"]
@@ -523,11 +523,11 @@ CREATE INDEX idx_project_settings_path ON project_settings(project_path);
 **Settings Router (`/api/v2/settings`):**
 
 ```
-PUT /settings/active-preset
+PUT /settings/active-theme
 Request Body: { "preset_id": integer, "project_path": string }
 Response: { "success": boolean, "active_preset": PresetResponse | null }
 
-GET /settings/active-preset
+GET /settings/active-theme
 Query Params: project_path (required)
 Response: { "success": boolean, "active_preset": PresetResponse | null }
 
@@ -597,10 +597,10 @@ import Link from 'next/link';
 | U-004 | AC-004 | Framework detection accuracy |
 | E-001 | AC-005 | Screen creation workflow |
 | E-002 | AC-006 | Component addition workflow |
-| E-003 | AC-007 | Archetype application workflow |
+| E-003 | AC-007 | Component application workflow |
 | E-004 | AC-008 | Project structure detection |
-| E-005 | AC-009 | Active preset retrieval |
-| E-006 | AC-010 | Active preset update |
+| E-005 | AC-009 | Active theme retrieval |
+| E-006 | AC-010 | Active theme update |
 | S-001 | AC-011 | Framework-specific generation |
 | S-002 | AC-012 | Link injection conditional |
 
@@ -618,13 +618,13 @@ import Link from 'next/link';
 ## DEPENDENCIES
 
 ### Internal Dependencies
-- **SPEC-ARCHETYPE-001**: Style archetypes for screen styling
+- **SPEC-COMPONENT-001**: Style components for screen styling
 - **studio-mcp**: Existing MCP server infrastructure
 - **studio-api**: FastAPI backend for settings storage
-- **studio-web**: Frontend for preset management
+- **studio-web**: Frontend for theme management
 
 ### External Dependencies
-- **@tekton/archetype-system**: Style archetype data
+- **@tekton/component-system**: Style component data
 - **Zod**: Schema validation
 - **SQLAlchemy 2.0**: Async database operations
 - **Alembic**: Database migrations
@@ -681,7 +681,7 @@ import Link from 'next/link';
 - All 8 MCP tools registered and functional
 - Framework detection works for Next.js App Router, Pages Router, and Vite
 - Screen creation generates valid, compilable code
-- Active preset integration works with existing preset system
+- Active theme integration works with existing theme system
 - Test coverage greater than or equal to 85% for all new code
 
 ### Quality Success Criteria
@@ -693,17 +693,17 @@ import Link from 'next/link';
 ### Integration Success Criteria
 - MCP tools accessible from AI assistants (Claude, etc.)
 - Settings API integrates with existing studio-api
-- Frontend preset selection works with active preset system
+- Frontend theme selection works with active theme system
 - All existing tests continue to pass
 
 ---
 
 ## REFERENCES
 
-- [SPEC-ARCHETYPE-001: Hook Archetype Integration System](../SPEC-ARCHETYPE-001/spec.md)
+- [SPEC-COMPONENT-001: Hook Component Integration System](../SPEC-COMPONENT-001/spec.md)
 - [Existing MCP Server](../../packages/studio-mcp/src/server/mcp-server.ts)
 - [Studio API Main](../../packages/studio-api/src/studio_api/main.py)
-- [Studio Web Preset Page](../../packages/studio-web/src/app/presets/[id]/page.tsx)
+- [Studio Web Theme Page](../../packages/studio-web/src/app/themes/[id]/page.tsx)
 - [TRUST 5 Framework](../../.claude/skills/moai-foundation-core/modules/trust-5-framework.md)
 
 ---

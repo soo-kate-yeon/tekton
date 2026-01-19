@@ -1,9 +1,9 @@
 import { describe, it, expect, beforeEach, afterEach } from "vitest";
 import {
-  saveArchetype,
-  loadArchetype,
+  saveComponent,
+  loadComponent,
   listArchetypes,
-  deleteArchetype,
+  deleteComponent,
   archetypeExists,
 } from "../../src/storage/storage.js";
 import { z } from "zod";
@@ -50,9 +50,9 @@ describe("Storage", () => {
     }
   });
 
-  describe("saveArchetype", () => {
+  describe("saveComponent", () => {
     it("should save archetype data to JSON file", async () => {
-      await saveArchetype("useButton", mockData, TestDataSchema, storagePath);
+      await saveComponent("useButton", mockData, TestDataSchema, storagePath);
 
       const filePath = path.join(storagePath, "useButton.json");
       const fileContent = await fs.readFile(filePath, "utf-8");
@@ -64,7 +64,7 @@ describe("Storage", () => {
     });
 
     it("should create directory structure if it does not exist", async () => {
-      await saveArchetype("useButton", mockData, TestDataSchema, storagePath);
+      await saveComponent("useButton", mockData, TestDataSchema, storagePath);
 
       const dirExists = await fs
         .access(storagePath)
@@ -77,7 +77,7 @@ describe("Storage", () => {
     it("should add updatedAt timestamp on save", async () => {
       const beforeSave = new Date();
 
-      await saveArchetype("useButton", mockData, TestDataSchema, storagePath);
+      await saveComponent("useButton", mockData, TestDataSchema, storagePath);
 
       const filePath = path.join(storagePath, "useButton.json");
       const fileContent = await fs.readFile(filePath, "utf-8");
@@ -93,13 +93,13 @@ describe("Storage", () => {
       const invalidData = { invalid: "data" };
 
       await expect(
-        saveArchetype("useButton", invalidData as any, TestDataSchema, storagePath),
+        saveComponent("useButton", invalidData as any, TestDataSchema, storagePath),
       ).rejects.toThrow();
     });
 
     it("should overwrite existing archetype file", async () => {
       // Save initial version
-      await saveArchetype("useButton", mockData, TestDataSchema, storagePath);
+      await saveComponent("useButton", mockData, TestDataSchema, storagePath);
 
       // Save updated version
       const updatedData = {
@@ -107,19 +107,19 @@ describe("Storage", () => {
         description: "Updated description",
         version: "2.0.0",
       };
-      await saveArchetype("useButton", updatedData, TestDataSchema, storagePath);
+      await saveComponent("useButton", updatedData, TestDataSchema, storagePath);
 
-      const loaded = await loadArchetype("useButton", TestDataSchema, storagePath);
+      const loaded = await loadComponent("useButton", TestDataSchema, storagePath);
       expect(loaded.description).toBe("Updated description");
       expect(loaded.version).toBe("2.0.0");
     });
   });
 
-  describe("loadArchetype", () => {
+  describe("loadComponent", () => {
     it("should load archetype data from JSON file", async () => {
-      await saveArchetype("useButton", mockData, TestDataSchema, storagePath);
+      await saveComponent("useButton", mockData, TestDataSchema, storagePath);
 
-      const loaded = await loadArchetype("useButton", TestDataSchema, storagePath);
+      const loaded = await loadComponent("useButton", TestDataSchema, storagePath);
 
       expect(loaded.hookName).toBe("useButton");
       expect(loaded.version).toBe("1.0.0");
@@ -127,7 +127,7 @@ describe("Storage", () => {
 
     it("should throw error when archetype does not exist", async () => {
       await expect(
-        loadArchetype("non-existent", TestDataSchema, storagePath),
+        loadComponent("non-existent", TestDataSchema, storagePath),
       ).rejects.toThrow("Archetype not found: non-existent");
     });
 
@@ -141,7 +141,7 @@ describe("Storage", () => {
       );
 
       await expect(
-        loadArchetype("useButton", TestDataSchema, storagePath),
+        loadComponent("useButton", TestDataSchema, storagePath),
       ).rejects.toThrow();
     });
   });
@@ -157,9 +157,9 @@ describe("Storage", () => {
       const data2 = { ...mockData, hookName: "useTextField" };
       const data3 = { ...mockData, hookName: "useModal" };
 
-      await saveArchetype("useButton", data1, TestDataSchema, storagePath);
-      await saveArchetype("useTextField", data2, TestDataSchema, storagePath);
-      await saveArchetype("useModal", data3, TestDataSchema, storagePath);
+      await saveComponent("useButton", data1, TestDataSchema, storagePath);
+      await saveComponent("useTextField", data2, TestDataSchema, storagePath);
+      await saveComponent("useModal", data3, TestDataSchema, storagePath);
 
       const list = await listArchetypes(storagePath);
 
@@ -168,7 +168,7 @@ describe("Storage", () => {
     });
 
     it("should ignore non-JSON files", async () => {
-      await saveArchetype("useButton", mockData, TestDataSchema, storagePath);
+      await saveComponent("useButton", mockData, TestDataSchema, storagePath);
 
       // Create a non-JSON file
       await fs.writeFile(path.join(storagePath, "README.md"), "# Test");
@@ -180,11 +180,11 @@ describe("Storage", () => {
     });
   });
 
-  describe("deleteArchetype", () => {
+  describe("deleteComponent", () => {
     it("should delete archetype file", async () => {
-      await saveArchetype("useButton", mockData, TestDataSchema, storagePath);
+      await saveComponent("useButton", mockData, TestDataSchema, storagePath);
 
-      await deleteArchetype("useButton", storagePath);
+      await deleteComponent("useButton", storagePath);
 
       const exists = await archetypeExists("useButton", storagePath);
       expect(exists).toBe(false);
@@ -192,14 +192,14 @@ describe("Storage", () => {
 
     it("should throw error when archetype does not exist", async () => {
       await expect(
-        deleteArchetype("non-existent", storagePath),
+        deleteComponent("non-existent", storagePath),
       ).rejects.toThrow("Archetype not found: non-existent");
     });
   });
 
   describe("archetypeExists", () => {
     it("should return true when archetype exists", async () => {
-      await saveArchetype("useButton", mockData, TestDataSchema, storagePath);
+      await saveComponent("useButton", mockData, TestDataSchema, storagePath);
 
       const exists = await archetypeExists("useButton", storagePath);
       expect(exists).toBe(true);
@@ -219,7 +219,7 @@ describe("Storage", () => {
 
       // Trying to unlink a directory should throw EISDIR or EPERM, not ENOENT
       await expect(
-        deleteArchetype("useDirectory", storagePath),
+        deleteComponent("useDirectory", storagePath),
       ).rejects.toThrow();
     });
   });
@@ -229,16 +229,16 @@ describe("Storage", () => {
       const hookName = "use-special_hook123";
       const data = { ...mockData, hookName };
 
-      await saveArchetype(hookName, data, TestDataSchema, storagePath);
+      await saveComponent(hookName, data, TestDataSchema, storagePath);
 
-      const loaded = await loadArchetype(hookName, TestDataSchema, storagePath);
+      const loaded = await loadComponent(hookName, TestDataSchema, storagePath);
       expect(loaded.hookName).toBe(hookName);
     });
 
     it("should handle concurrent writes gracefully", async () => {
       const promises = Array.from({ length: 10 }, (_, i) => {
         const data = { ...mockData, hookName: `useHook${i}`, version: `${i}.0.0` };
-        return saveArchetype(`useHook${i}`, data, TestDataSchema, storagePath);
+        return saveComponent(`useHook${i}`, data, TestDataSchema, storagePath);
       });
 
       await Promise.all(promises);

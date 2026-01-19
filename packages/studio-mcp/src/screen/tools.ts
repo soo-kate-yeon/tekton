@@ -239,7 +239,7 @@ export class ScreenTools {
       };
     }
 
-    const { screenName, archetypeName, projectPath } = validation.data;
+    const { screenName, componentName, projectPath } = validation.data;
     const absolutePath = resolve(projectPath || process.cwd());
 
     // Check if project path exists
@@ -263,7 +263,7 @@ export class ScreenTools {
     const content = readFileSync(screenFile, "utf-8");
 
     // Apply archetype styles
-    const newContent = applyArchetypeToContent(content, archetypeName);
+    const newContent = applyArchetypeToContent(content, componentName);
 
     // Write updated content
     writeFileSync(screenFile, newContent, "utf-8");
@@ -272,7 +272,7 @@ export class ScreenTools {
       success: true,
       data: {
         archetypeApplied: true,
-        archetypeName,
+        componentName,
         screenPath: screenFile,
       },
     };

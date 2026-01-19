@@ -427,13 +427,13 @@ export default function TestPage() {
 
       const result = await tools.applyArchetype({
         screenName: "test",
-        archetypeName: "Professional",
+        componentName: "Professional",
         projectPath,
       });
 
       expect(result.success).toBe(true);
       expect(result.data?.archetypeApplied).toBe(true);
-      expect(result.data?.archetypeName).toBe("Professional");
+      expect(result.data?.componentName).toBe("Professional");
     });
 
     it("should apply all valid archetypes", async () => {
@@ -456,12 +456,12 @@ export default function TestPage() {
 
         const result = await tools.applyArchetype({
           screenName: "test",
-          archetypeName: archetype,
+          componentName: archetype,
           projectPath,
         });
 
         expect(result.success).toBe(true);
-        expect(result.data?.archetypeName).toBe(archetype);
+        expect(result.data?.componentName).toBe(archetype);
       }
     });
 
@@ -473,7 +473,7 @@ export default function TestPage() {
 
       const result = await tools.applyArchetype({
         screenName: "non-existent",
-        archetypeName: "Professional",
+        componentName: "Professional",
         projectPath,
       });
 
@@ -491,7 +491,7 @@ export default function TestPage() {
       const result = await tools.applyArchetype({
         screenName: "test",
         // @ts-expect-error Testing invalid input
-        archetypeName: "InvalidArchetype",
+        componentName: "InvalidArchetype",
         projectPath,
       });
 

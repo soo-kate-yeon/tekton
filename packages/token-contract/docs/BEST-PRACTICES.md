@@ -6,21 +6,21 @@ Recommended patterns and decision trees for effective usage of the Token Contrac
 
 ## Design Token Selection
 
-### Choosing the Right Preset
+### Choosing the Right Theme
 
-Use this decision tree to select the most appropriate preset for your project:
+Use this decision tree to select the most appropriate theme for your project:
 
 ```mermaid
 flowchart TD
-    Start([Select Preset]) --> Purpose{Project Type?}
+    Start([Select Theme]) --> Purpose{Project Type?}
 
-    Purpose -->|Enterprise/B2B| Professional[Professional Preset]
-    Purpose -->|Creative/Agency| Creative[Creative Preset]
-    Purpose -->|Content-First| Minimal[Minimal Preset]
-    Purpose -->|E-commerce/CTA| Bold[Bold Preset]
-    Purpose -->|Lifestyle/Wellness| Warm[Warm Preset]
-    Purpose -->|Tech/Healthcare| Cool[Cool Preset]
-    Purpose -->|Accessibility-First| HighContrast[High-Contrast Preset]
+    Purpose -->|Enterprise/B2B| Professional[Professional Theme]
+    Purpose -->|Creative/Agency| Creative[Creative Theme]
+    Purpose -->|Content-First| Minimal[Minimal Theme]
+    Purpose -->|E-commerce/CTA| Bold[Bold Theme]
+    Purpose -->|Lifestyle/Wellness| Warm[Warm Theme]
+    Purpose -->|Tech/Healthcare| Cool[Cool Theme]
+    Purpose -->|Accessibility-First| HighContrast[High-Contrast Theme]
 
     Professional --> ValidateProf{WCAG AA?}
     Creative --> ValidateCreative{WCAG AA?}
@@ -30,7 +30,7 @@ flowchart TD
     Cool --> ValidateCool{WCAG AA?}
     HighContrast --> ValidateHC{WCAG AAA?}
 
-    ValidateProf -->|Pass| UsePreset[Use Preset]
+    ValidateProf -->|Pass| UsePreset[Use Theme]
     ValidateCreative -->|Pass| UsePreset
     ValidateMin -->|Pass| UsePreset
     ValidateBold -->|Pass| UsePreset
@@ -61,9 +61,9 @@ flowchart TD
     class UsePreset,CustomizeProf,CustomizeCreative,CustomizeMin,CustomizeBold,CustomizeWarm,CustomizeCool actionNode
 ```
 
-### Preset Characteristics Matrix
+### Theme Characteristics Matrix
 
-| Preset | Use Case | Primary Hue | Contrast Level | Best For |
+| Theme | Use Case | Primary Hue | Contrast Level | Best For |
 |--------|----------|-------------|----------------|----------|
 | **Professional** | Enterprise, SaaS, Dashboards | 220° (Blue) | High | Trust, reliability, corporate |
 | **Creative** | Agencies, Portfolios, Marketing | 270° (Purple) | Medium-High | Bold, expressive, innovative |
@@ -212,10 +212,10 @@ function getCachedCSS(presetName: string): string {
     return cssCache.get(presetName)!;
   }
 
-  const preset = loadPreset(presetName);
+  const theme = loadPreset(presetName);
   const css = generateCSSFromTokens({
-    semantic: preset.tokens,
-    composition: preset.composition,
+    semantic: theme.tokens,
+    composition: theme.composition,
   });
 
   cssCache.set(presetName, css);
@@ -227,8 +227,8 @@ function getCachedCSS(presetName: string): string {
 ```typescript
 // ❌ Avoid: Generating CSS on every render
 function MyComponent() {
-  const preset = loadPreset('professional');
-  const css = generateCSSFromTokens({ semantic: preset.tokens, composition: preset.composition });
+  const theme = loadPreset('professional');
+  const css = generateCSSFromTokens({ semantic: theme.tokens, composition: theme.composition });
   // This regenerates CSS on every render!
 }
 ```
@@ -243,7 +243,7 @@ import { useMemo } from 'react';
 import { useTheme } from '@tekton/token-contract';
 
 function MyComponent() {
-  const { preset, tokens, darkMode } = useTheme();
+  const { theme, tokens, darkMode } = useTheme();
 
   // ✅ Good: Memoize derived values
   const buttonColor = useMemo(() => {
@@ -329,12 +329,12 @@ function DynamicButton({ children }) {
 import { validateWCAGCompliance, loadPreset } from '@tekton/token-contract';
 
 // ✅ Good: Validate compliance before deployment
-const preset = loadPreset('professional');
-const compliance = validateWCAGCompliance(preset.tokens);
+const theme = loadPreset('professional');
+const compliance = validateWCAGCompliance(theme.tokens);
 
 if (!compliance.passed) {
   console.error('WCAG violations detected:', compliance.violations);
-  // Fix violations or choose different preset
+  // Fix violations or choose different theme
 }
 ```
 
@@ -362,14 +362,14 @@ if (!compliance.passed) {
 import { useTheme } from '@tekton/token-contract';
 
 function App() {
-  const { preset, setPreset } = useTheme();
+  const { theme, setPreset } = useTheme();
   const [highContrastMode, setHighContrastMode] = useState(false);
 
   useEffect(() => {
     if (highContrastMode) {
       setPreset('high-contrast');
     } else {
-      setPreset('professional'); // Restore default preset
+      setPreset('professional'); // Restore default theme
     }
   }, [highContrastMode, setPreset]);
 
@@ -450,18 +450,18 @@ import { useEffect } from 'react';
 import { useTheme } from '@tekton/token-contract';
 
 function App() {
-  const { darkMode, preset, setPreset } = useTheme();
+  const { darkMode, theme, setPreset } = useTheme();
 
   // Save to localStorage
   useEffect(() => {
     localStorage.setItem('theme-dark-mode', JSON.stringify(darkMode));
-    localStorage.setItem('theme-preset', preset);
-  }, [darkMode, preset]);
+    localStorage.setItem('theme-theme', theme);
+  }, [darkMode, theme]);
 
   // Restore on mount
   useEffect(() => {
     const savedDarkMode = localStorage.getItem('theme-dark-mode');
-    const savedPreset = localStorage.getItem('theme-preset');
+    const savedPreset = localStorage.getItem('theme-theme');
 
     if (savedDarkMode !== null) {
       // Toggle if saved preference differs from default
@@ -477,15 +477,15 @@ function App() {
 
 ---
 
-## Custom Preset Creation
+## Custom Theme Creation
 
-### Extending Base Presets
+### Extending Base Themes
 
-**Create Brand-Specific Preset**:
+**Create Brand-Specific Theme**:
 ```typescript
 import { loadPreset, overridePresetTokens } from '@tekton/token-contract';
 
-// ✅ Good: Extend existing preset with brand colors
+// ✅ Good: Extend existing theme with brand colors
 const basePreset = loadPreset('professional');
 
 const brandPreset = overridePresetTokens(basePreset.tokens, {
@@ -498,7 +498,7 @@ const brandPreset = overridePresetTokens(basePreset.tokens, {
 });
 ```
 
-**Validate Custom Preset**:
+**Validate Custom Theme**:
 ```typescript
 import { validateOverride, validateWCAGCompliance } from '@tekton/token-contract';
 
@@ -555,16 +555,16 @@ describe('MyComponent', () => {
 
 ### Visual Regression Testing
 
-**Test All Presets**:
+**Test All Themes**:
 ```typescript
 import { getAvailablePresets } from '@tekton/token-contract';
 
-const presets = getAvailablePresets();
+const themes = getAvailablePresets();
 
 describe('Visual Regression Tests', () => {
-  presets.forEach(preset => {
-    it(`renders correctly with ${preset.name} preset`, () => {
-      // Snapshot test with each preset
+  themes.forEach(theme => {
+    it(`renders correctly with ${theme.name} theme`, () => {
+      // Snapshot test with each theme
     });
   });
 });
@@ -597,7 +597,7 @@ const result = validateOverride(customOverrides);
 
 if (!result.valid) {
   console.error('Invalid overrides:', result.errors);
-  // Use base preset instead
+  // Use base theme instead
 }
 ```
 
@@ -605,13 +605,13 @@ if (!result.valid) {
 
 ## Documentation Best Practices
 
-### Document Custom Presets
+### Document Custom Themes
 
-**Create Preset Documentation**:
+**Create Theme Documentation**:
 ```markdown
-# Brand Preset
+# Brand Theme
 
-Custom preset based on Professional with brand colors.
+Custom theme based on Professional with brand colors.
 
 - Primary: Brand Blue (200°)
 - Accent: Brand Orange (30°)
@@ -686,9 +686,9 @@ if (!compliance.passed) {
 ```tsx
 // ❌ Avoid: Theme-dependent conditional logic
 function MyComponent() {
-  const { preset } = useTheme();
+  const { theme } = useTheme();
 
-  if (preset === 'professional') {
+  if (theme === 'professional') {
     return <ProfessionalLayout />;
   } else {
     return <DefaultLayout />;
@@ -711,11 +711,11 @@ function MyComponent() {
 
 ### Before Deployment
 - [ ] Validate WCAG compliance for all color tokens
-- [ ] Test all presets in light and dark modes
+- [ ] Test all themes in light and dark modes
 - [ ] Verify CSS variable naming conventions
 - [ ] Test dark mode toggle functionality
 - [ ] Validate custom overrides (if any)
-- [ ] Test component rendering across presets
+- [ ] Test component rendering across themes
 - [ ] Check browser compatibility (Chrome 111+, Firefox 113+, Safari 15.4+)
 - [ ] Review performance metrics (≤3 re-renders per theme change)
 
@@ -725,11 +725,11 @@ function MyComponent() {
 - [ ] Use composition tokens for consistency
 - [ ] Cache generated CSS
 - [ ] Minimize re-renders with CSS variables
-- [ ] Document custom presets
+- [ ] Document custom themes
 
 ### Post-Deployment
 - [ ] Monitor WCAG compliance
-- [ ] Collect user feedback on presets
+- [ ] Collect user feedback on themes
 - [ ] Track theme switch performance
 - [ ] Update documentation for custom tokens
 

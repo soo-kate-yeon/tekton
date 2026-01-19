@@ -1,4 +1,4 @@
-import type { OKLCHColor } from '@tekton/preset';
+import type { OKLCHColor } from '@tekton/theme';
 import { generateNeutralPalette } from './neutral-palette';
 
 /**

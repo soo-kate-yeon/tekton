@@ -6,7 +6,7 @@ import {
   generateCSSClass,
   generateBaseStyles,
 } from '@/lib/component-preview/style-generator';
-import type { VariantConfigurationOption } from '@tekton/archetype-system';
+import type { VariantConfigurationOption } from '@tekton/component-system';
 
 describe('style-generator', () => {
   describe('generateStylesFromVariants', () => {

@@ -12,7 +12,7 @@ from sqlalchemy.pool import StaticPool
 
 from studio_api.core.database import Base, get_db
 from studio_api.main import app
-from studio_api.models import CuratedPreset  # noqa: F401 - Import to register model with Base
+from studio_api.models import CuratedTheme  # noqa: F401 - Import to register model with Base
 
 # Test database URL (in-memory SQLite for fast testing)
 TEST_DATABASE_URL = "sqlite+aiosqlite:///:memory:"

@@ -2,7 +2,7 @@
 
 import { forwardRef, type HTMLAttributes } from 'react';
 import { cn } from '@/lib/utils/cn';
-import type { VariantConfigurationOption } from '@tekton/archetype-system';
+import type { VariantConfigurationOption } from '@tekton/component-system';
 import type { ComponentState } from '@/lib/component-preview';
 
 type StateValue = string | number | boolean | null | undefined;

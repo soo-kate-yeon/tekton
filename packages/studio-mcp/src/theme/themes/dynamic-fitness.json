@@ -1,0 +1,51 @@
+{
+    "id": "dynamic-fitness",
+    "name": "Dynamic Fitness",
+    "description": "Bold and dynamic UI with high energy and movement, inspired by sports brands.",
+    "stackInfo": {
+        "framework": "nextjs",
+        "styling": "tailwindcss",
+        "components": "shadcn-ui"
+    },
+    "brandTone": "energetic",
+    "colorPalette": {
+        "primary": {
+            "l": 0.60,
+            "c": 0.20,
+            "h": 40
+        },
+        "secondary": {
+            "l": 0.10,
+            "c": 0.00,
+            "h": 0
+        },
+        "accent": {
+            "l": 0.60,
+            "c": 0.22,
+            "h": 30
+        },
+        "neutral": {
+            "l": 0.15,
+            "c": 0.00,
+            "h": 0
+        }
+    },
+    "typography": {
+        "fontFamily": "Helvetica Neue",
+        "fontScale": "large",
+        "headingWeight": 900,
+        "bodyWeight": 500
+    },
+    "componentDefaults": {
+        "borderRadius": "none",
+        "density": "spacious",
+        "contrast": "maximum"
+    },
+    "aiContext": {
+        "brandTone": "energetic",
+        "designPhilosophy": "Bold, aggressive, and energetic. Use ALL CAPS headings and tight letter spacing. Motion is key.",
+        "colorGuidance": "Dark mode default. high contrast black and white with neon orange/red accents.",
+        "componentGuidance": "Sharp edges (0px radius). Full-screen imagery. Large, bold typography. Avoid subtle shadows.",
+        "accessibilityNotes": "Ensure text is legible against dark backgrounds."
+    }
+}

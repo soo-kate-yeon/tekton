@@ -204,7 +204,7 @@ tekton create screen Analytics \
   - [ ] Environment enum 9개 타입 정의
   - [ ] Grid 시스템 6개 환경별 매핑
   - [ ] Layout Behavior 스키마 정의
-  - [ ] Skeleton preset 6개 구현
+  - [ ] Skeleton theme 6개 구현
   - [ ] Intent enum 10개 타입 정의
   - [ ] Intent → Compound Pattern 매핑 테이블 작성
 
@@ -371,17 +371,17 @@ tekton create screen Analytics \
 
 ---
 
-### EC-006: Skeleton Preset Override
+### EC-006: Skeleton Theme Override
 
-**Given**: 사용자가 WithHeader preset 선택 후 header height 수정 요청
+**Given**: 사용자가 WithHeader theme 선택 후 header height 수정 요청
 **When**: `--skeleton with-header --header-height lg` 파라미터 전달
 **Then**:
-- WithHeader preset 기본 구성 로드
+- WithHeader theme 기본 구성 로드
 - header.height 속성을 'lg'로 override
 - 생성된 코드에 override된 값 적용 확인
 
 **검증 방법**:
-- [ ] Preset 기본 구성 로드 확인
+- [ ] Theme 기본 구성 로드 확인
 - [ ] Override 값 적용 확인
 - [ ] 생성된 코드에 올바른 값 반영 확인
 
@@ -426,7 +426,7 @@ tekton create screen Analytics \
   - [ ] navigation, cardLayout, dataDensity, interactionModel 속성 정의
   - [ ] 환경별 기본값 설정
 
-- [ ] Skeleton preset 6개 구현
+- [ ] Skeleton theme 6개 구현
   - [ ] FullScreen, WithHeader, WithSidebar, WithHeaderSidebar, WithHeaderFooter, Dashboard
   - [ ] 각 preset별 기본 구성 정의
 

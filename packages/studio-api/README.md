@@ -1,6 +1,6 @@
 # Tekton Studio API
 
-FastAPI-based backend service for Tekton Studio's Curated Presets system, providing intelligent preset management and MCP-powered suggestions.
+FastAPI-based backend service for Tekton Studio's Curated Themes system, providing intelligent theme management and MCP-powered suggestions.
 
 ## Quick Start
 
@@ -71,7 +71,7 @@ Tekton Studio API follows a **Clean Architecture** pattern with clear separation
 ```
 src/studio_api/
 ├── api/              # API endpoints and routing
-│   └── v2/          # API version 2 (Curated Presets)
+│   └── v2/          # API version 2 (Curated Themes)
 ├── core/            # Core configuration and utilities
 ├── models/          # SQLAlchemy database models
 ├── repositories/    # Data access layer (database operations)
@@ -108,12 +108,12 @@ src/studio_api/
 
 ## API Reference
 
-### Curated Presets API (v2)
+### Curated Themes API (v2)
 
-#### List Presets
+#### List Themes
 
 ```http
-GET /api/v2/presets?page=1&size=20&category=Brand&search=Tech&tags=startup
+GET /api/v2/themes?page=1&size=20&category=Brand&search=Tech&tags=startup
 ```
 
 **Query Parameters**:
@@ -130,7 +130,7 @@ GET /api/v2/presets?page=1&size=20&category=Brand&search=Tech&tags=startup
     {
       "id": "uuid",
       "name": "Tech Startup Brand",
-      "description": "Modern tech startup preset",
+      "description": "Modern tech startup theme",
       "category": "Brand",
       "thumbnail_url": "https://example.com/image.png",
       "tags": ["startup", "tech", "modern"],
@@ -147,10 +147,10 @@ GET /api/v2/presets?page=1&size=20&category=Brand&search=Tech&tags=startup
 }
 ```
 
-#### Get Preset by ID
+#### Get Theme by ID
 
 ```http
-GET /api/v2/presets/{preset_id}
+GET /api/v2/themes/{preset_id}
 ```
 
 **Response**:
@@ -173,10 +173,10 @@ GET /api/v2/presets/{preset_id}
 }
 ```
 
-#### Get Preset Categories
+#### Get Theme Categories
 
 ```http
-GET /api/v2/presets/categories
+GET /api/v2/themes/categories
 ```
 
 **Response**:
@@ -190,10 +190,10 @@ GET /api/v2/presets/categories
 }
 ```
 
-#### Get MCP Preset Suggestions
+#### Get MCP Theme Suggestions
 
 ```http
-GET /api/v2/presets/suggestions?context=tech_startup
+GET /api/v2/themes/suggestions?context=tech_startup
 ```
 
 **Query Parameters**:
@@ -202,7 +202,7 @@ GET /api/v2/presets/suggestions?context=tech_startup
 **Response**:
 ```json
 {
-  "presets": [
+  "themes": [
     {
       "id": "uuid",
       "name": "Tech Startup Brand",
@@ -218,7 +218,7 @@ GET /api/v2/presets/suggestions?context=tech_startup
 
 ## Database Schema
 
-### Curated Presets Table
+### Curated Themes Table
 
 ```sql
 CREATE TABLE curated_presets (
@@ -269,7 +269,7 @@ packages/studio-api/
 │   └── studio_api/
 │       ├── api/              # API endpoints
 │       │   └── v2/
-│       │       └── presets.py
+│       │       └── themes.py
 │       ├── core/             # Core configuration
 │       │   ├── config.py
 │       │   └── database.py
@@ -367,7 +367,7 @@ async def test_create_feature(async_client):
 
 ### Studio MCP Client
 
-The API integrates with the `studio-mcp` server for intelligent preset suggestions.
+The API integrates with the `studio-mcp` server for intelligent theme suggestions.
 
 **Configuration**:
 ```python
@@ -386,7 +386,7 @@ suggestions = await client.get_preset_suggestions(context="tech_startup")
 ```
 
 **Fallback Mechanism**:
-- If MCP server unavailable, returns default preset list
+- If MCP server unavailable, returns default theme list
 - Circuit breaker pattern prevents cascading failures
 - Logs errors for monitoring and alerting
 
@@ -473,7 +473,7 @@ async def async_client(db_session):
 # tests/test_api.py - API endpoint tests
 @pytest.mark.asyncio
 async def test_list_presets(async_client):
-    response = await async_client.get("/api/v2/presets")
+    response = await async_client.get("/api/v2/themes")
     assert response.status_code == 200
     assert "items" in response.json()
 ```
@@ -525,7 +525,7 @@ open htmlcov/index.html
 - Connection pooling for efficient database connections
 
 **Caching Strategy**:
-- Repository-level caching for frequently accessed presets
+- Repository-level caching for frequently accessed themes
 - Category list caching (low change frequency)
 - MCP suggestion caching with TTL
 
@@ -600,7 +600,7 @@ pytest --cache-clear
 
 4. **Commit with Traceability**:
    ```bash
-   git commit -m "feat(api): [SPEC-STUDIO-002] Add preset filtering"
+   git commit -m "feat(api): [SPEC-STUDIO-002] Add theme filtering"
    ```
 
 5. **Create Pull Request**:

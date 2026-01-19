@@ -13,7 +13,7 @@ export {
   getAccessibilitySpec,
   type HookName,
   type HookMeta,
-} from './archetype-client';
+} from './component-client';
 
 export {
   generateStylesFromVariants,

@@ -34,7 +34,7 @@
 │   ┌─────────────────┐    ┌─────────────────┐    ┌──────────────┐ │
 │   │  Studio Web     │    │  Studio API     │    │  Studio MCP  │ │
 │   │  (Next.js 16)   │◄──►│  (FastAPI)      │◄──►│  (MCP Server)│ │
-│   │  - UI Preview   │    │  - Presets CRUD │    │  - Brand DNA │ │
+│   │  - UI Preview   │    │  - Themes CRUD │    │  - Brand DNA │ │
 │   │  - Editor       │    │  - PostgreSQL   │    │  - 5-Axis    │ │
 │   └────────┬────────┘    └────────┬────────┘    └──────┬───────┘ │
 │            │                      │                     │         │
@@ -51,7 +51,7 @@
 │   └────────┬────────────────────────────────────────────────────┘ │
 │            │                                                      │
 │   ┌────────▼────────────────────────────────────────────────────┐ │
-│   │           ARCHETYPE SYSTEM (@tekton/archetype-system)        │ │
+│   │           COMPONENT SYSTEM (@tekton/component-system)        │ │
 │   │   - 훅 속성 규칙         - 상태-스타일 매핑                  │ │
 │   │   - 변형 브랜칭          - 구조 템플릿                      │ │
 │   └────────┬────────────────────────────────────────────────────┘ │
@@ -74,7 +74,7 @@
 | `@tekton/studio-mcp` | Brand DNA용 MCP 서버 | `packages/studio-mcp/` |
 | `@tekton/token-contract` | 디자인 토큰 → CSS 매핑 | `packages/token-contract/` |
 | `@tekton/headless-components` | 스타일 없는 React 훅 | `packages/headless-components/` |
-| `@tekton/archetype-system` | 컴포넌트 아키타입 규칙 | `packages/archetype-system/` |
+| `@tekton/component-system` | 컴포넌트 아키타입 규칙 | `packages/component-system/` |
 | `@tekton/cli` | 커맨드라인 인터페이스 | `packages/cli/` |
 | `@tekton/contracts` | 타입 정의 및 스키마 | `packages/contracts/` |
 
@@ -233,13 +233,13 @@ MCP (Model Context Protocol) 서버는 AI 어시스턴트가 다음을 수행할
 
 | 도구 | 설명 |
 |------|-------------|
-| `archetype.list` | 사용 가능한 모든 훅 나열 |
-| `archetype.get` | 훅에 대한 완전한 아키타입 가져오기 |
-| `archetype.getPropRules` | 레이어 1 (훅 prop 규칙) 가져오기 |
-| `archetype.getStateMappings` | 레이어 2 (상태-스타일 매핑) 가져오기 |
-| `archetype.getVariants` | 레이어 3 (변형 브랜칭) 가져오기 |
-| `archetype.getStructure` | 레이어 4 (구조 템플릿) 가져오기 |
-| `archetype.query` | 기준으로 검색 (WCAG 레벨, 상태명 등) |
+| `component.list` | 사용 가능한 모든 훅 나열 |
+| `component.get` | 훅에 대한 완전한 아키타입 가져오기 |
+| `component.getPropRules` | 레이어 1 (훅 prop 규칙) 가져오기 |
+| `component.getStateMappings` | 레이어 2 (상태-스타일 매핑) 가져오기 |
+| `component.getVariants` | 레이어 3 (변형 브랜칭) 가져오기 |
+| `component.getStructure` | 레이어 4 (구조 템플릿) 가져오기 |
+| `component.query` | 기준으로 검색 (WCAG 레벨, 상태명 등) |
 
 #### 프로젝트 도구
 
@@ -301,7 +301,7 @@ curl -X POST http://localhost:3000/tools/project.detectStructure \
 **2단계: 사용 가능한 프리셋 목록 조회**
 
 ```bash
-curl http://localhost:8000/api/v2/presets | jq '.items[] | {id, name, category}'
+curl http://localhost:8000/api/v2/themes | jq '.items[] | {id, name, category}'
 
 # 응답에서 모든 프리셋과 ID를 확인할 수 있습니다
 ```
@@ -386,7 +386,7 @@ function ThemeSelector() {
 packages/studio-mcp/
 ├── src/
 │   ├── index.ts              # 패키지 내보내기
-│   ├── archetype/
+│   ├── component/
 │   │   └── tools.ts          # ArchetypeTools 클래스
 │   ├── server/
 │   │   ├── index.ts          # 서버 진입점
@@ -396,7 +396,7 @@ packages/studio-mcp/
 │   └── types/
 │       └── design-tokens.ts  # 디자인 토큰 스키마
 └── tests/
-    ├── archetype/
+    ├── component/
     │   └── tools.test.ts     # ArchetypeTools 테스트
     ├── storage/
     │   └── storage.test.ts   # 스토리지 테스트
@@ -410,7 +410,7 @@ packages/studio-mcp/
 ```typescript
 import { ArchetypeTools, archetypeTools } from '@tekton/studio-mcp';
 
-// 초기화 (@tekton/archetype-system에서 데이터 로드)
+// 초기화 (@tekton/component-system에서 데이터 로드)
 await archetypeTools.initialize();
 
 // 사용 가능한 모든 훅 나열
@@ -418,7 +418,7 @@ const hookList = await archetypeTools.list();
 // { success: true, data: ["useButton", "useTextField", ...] }
 
 // 훅에 대한 완전한 아키타입 가져오기
-const archetype = await archetypeTools.get("useButton");
+const component = await archetypeTools.get("useButton");
 // { success: true, data: { hookName, propRules, stateMappings, variants, structure } }
 
 // 개별 레이어 가져오기
@@ -506,14 +506,14 @@ await deleteArchetype('useButton');
 curl http://localhost:3000/health
 
 # 예상 응답:
-# {"status": "ok", "service": "studio-mcp", "tools": ["archetype.list", ...]}
+# {"status": "ok", "service": "studio-mcp", "tools": ["component.list", ...]}
 ```
 
 #### 2단계: 사용 가능한 훅 나열
 
 ```bash
 # 모든 사용 가능한 훅 나열
-curl -X POST http://localhost:3000/tools/archetype.list
+curl -X POST http://localhost:3000/tools/component.list
 
 # 예상 응답:
 # {"success": true, "data": ["useButton", "useTextField", "useModal", ...]}
@@ -523,7 +523,7 @@ curl -X POST http://localhost:3000/tools/archetype.list
 
 ```bash
 # useButton에 대한 완전한 아키타입 가져오기
-curl -X POST http://localhost:3000/tools/archetype.get \
+curl -X POST http://localhost:3000/tools/component.get \
   -H "Content-Type: application/json" \
   -d '{"hookName": "useButton"}'
 
@@ -534,12 +534,12 @@ curl -X POST http://localhost:3000/tools/archetype.get \
 
 ```bash
 # 레이어 1: 프롭 규칙만 가져오기
-curl -X POST http://localhost:3000/tools/archetype.getPropRules \
+curl -X POST http://localhost:3000/tools/component.getPropRules \
   -H "Content-Type: application/json" \
   -d '{"hookName": "useButton"}'
 
 # 레이어 2: 상태 매핑 가져오기
-curl -X POST http://localhost:3000/tools/archetype.getStateMappings \
+curl -X POST http://localhost:3000/tools/component.getStateMappings \
   -H "Content-Type: application/json" \
   -d '{"hookName": "useButton"}'
 ```
@@ -552,11 +552,11 @@ Claude Code를 MCP 서버를 사용하도록 구성:
 // .claude/settings.json
 {
   "mcpServers": {
-    "tekton-archetype": {
+    "tekton-component": {
       "command": "node",
       "args": ["packages/studio-mcp/dist/index.js"],
       "env": {
-        "STORAGE_PATH": ".tekton/archetypes"
+        "STORAGE_PATH": ".tekton/components"
       }
     }
   }
@@ -578,7 +578,7 @@ Claude에서 액세스 확인:
 - [ ] 아키타입 데이터 가져오기 작동
 - [ ] 레이어별 쿼리 작동
 - [ ] Claude가 MCP 도구에 액세스 가능
-- [ ] 스토리지가 `.tekton/archetypes/`에 유지됨
+- [ ] 스토리지가 `.tekton/components/`에 유지됨
 
 ---
 
@@ -728,7 +728,7 @@ npx @tekton/cli validate-env --config tekton.config.json
 ```bash
 # CSS 변수 생성
 npx @tekton/cli generate-tokens \
-  --preset next-tailwind-shadcn \
+  --theme next-tailwind-shadcn \
   --output ./styles/tokens.css
 ```
 
@@ -759,7 +759,7 @@ npx @tekton/cli generate-tokens \
 ```bash
 # 다크 모드로 생성
 npx @tekton/cli generate-tokens \
-  --preset next-tailwind-shadcn \
+  --theme next-tailwind-shadcn \
   --dark-mode \
   --output ./styles/tokens.css
 ```
@@ -827,7 +827,7 @@ React Native 프로젝트의 경우:
 
 ```bash
 npx @tekton/cli generate-tokens \
-  --preset react-native \
+  --theme react-native \
   --format stylesheet \
   --output ./styles/tokens.ts
 ```
@@ -936,10 +936,10 @@ interface BaseStyle {
 
 ```bash
 # 모든 훅 속성 규칙 나열
-npx @tekton/cli list-archetypes
+npx @tekton/cli list-components
 
 # 예상 출력:
-# Available Hook Archetypes:
+# Available Hook Components:
 # ├── useButton (buttonProps)
 # ├── useInput (inputProps, labelProps)
 # ├── useModal (overlayProps, modalProps)
@@ -950,7 +950,7 @@ npx @tekton/cli list-archetypes
 
 ```bash
 # useButton 세부 정보 가져오기
-npx @tekton/cli show-archetype useButton
+npx @tekton/cli show-component useButton
 ```
 
 예상 출력:
@@ -978,7 +978,7 @@ RequiredCSSVariables:
 
 ```bash
 # 토큰 컨트랙트에 대해 모든 규칙 검증
-npx @tekton/cli validate-archetypes
+npx @tekton/cli validate-components
 
 # 예상 출력:
 # Validating Hook Prop Rules...
@@ -1137,7 +1137,7 @@ npx @tekton/cli create-screen --interactive
 ```
 ? Screen name: UserDashboard
 ? Environment: web
-? Skeleton preset: dashboard
+? Skeleton theme: dashboard
 ? Screen intent: Dashboard
 ? Components (auto-suggested): Card, Progress, Badge, Chart
 ? Output path: src/screens
@@ -1396,17 +1396,17 @@ alembic upgrade head
 
 ```bash
 # 프리셋이 존재하는지 확인
-ls packages/token-contract/dist/presets/defaults/
+ls packages/token-contract/dist/themes/defaults/
 
 # 프리셋 JSON 검증
-cat packages/token-contract/dist/presets/defaults/next-tailwind-shadcn.json | jq .
+cat packages/token-contract/dist/themes/defaults/next-tailwind-shadcn.json | jq .
 ```
 
 #### 훅 검증 오류
 
 ```bash
 # 하드코딩된 색상 확인
-grep -r "rgb\|hsl\|#[0-9a-fA-F]" packages/archetype-system/src/
+grep -r "rgb\|hsl\|#[0-9a-fA-F]" packages/component-system/src/
 
 # CSS 변수가 존재하는지 검증
 npx @tekton/cli validate-tokens
@@ -1443,20 +1443,20 @@ mkdir -p src/screens
 npx @tekton/cli detect-env
 
 # 토큰
-npx @tekton/cli generate-tokens --preset <name> --output <path>
+npx @tekton/cli generate-tokens --theme <name> --output <path>
 npx @tekton/cli validate-tokens
 
 # 아키타입
-npx @tekton/cli list-archetypes
-npx @tekton/cli show-archetype <hookName>
-npx @tekton/cli validate-archetypes
+npx @tekton/cli list-components
+npx @tekton/cli show-component <hookName>
+npx @tekton/cli validate-components
 
 # 컴포넌트
 npx @tekton/cli generate-component --hook <name> --output <path>
 
 # 화면
 npx @tekton/cli create-screen --interactive
-npx @tekton/cli create-screen --name <Name> --skeleton <preset> --intent <type>
+npx @tekton/cli create-screen --name <Name> --skeleton <theme> --intent <type>
 npx @tekton/cli validate-screen <path>
 ```
 
@@ -1467,11 +1467,11 @@ npx @tekton/cli validate-screen <path>
 GET /api/v2/health
 
 # 프리셋
-GET    /api/v2/presets
-POST   /api/v2/presets
-GET    /api/v2/presets/{id}
-PUT    /api/v2/presets/{id}
-DELETE /api/v2/presets/{id}
+GET    /api/v2/themes
+POST   /api/v2/themes
+GET    /api/v2/themes/{id}
+PUT    /api/v2/themes/{id}
+DELETE /api/v2/themes/{id}
 ```
 
 ### MCP 도구

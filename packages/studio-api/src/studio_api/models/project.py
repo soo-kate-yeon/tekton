@@ -62,7 +62,7 @@ class Project(Base):
     """Project model for storing user projects.
     
     Each project contains:
-    - Active template (linked to CuratedPreset)
+    - Active template (linked to CuratedTheme)
     - Layout breakpoints configuration
     - General settings
     """
@@ -76,9 +76,9 @@ class Project(Base):
     # Thumbnail for workspace display
     thumbnail_url: Mapped[str | None] = mapped_column(String(1024), nullable=True)
     
-    # Active template (foreign key to curated_presets)
+    # Active template (foreign key to curated_themes)
     active_template_id: Mapped[int | None] = mapped_column(
-        Integer, ForeignKey("curated_presets.id", ondelete="SET NULL"), nullable=True, index=True
+        Integer, ForeignKey("curated_themes.id", ondelete="SET NULL"), nullable=True, index=True
     )
     
     # Token configuration (copied from template, user can customize)
@@ -106,7 +106,7 @@ class Project(Base):
     )
     
     # Relationships
-    active_template = relationship("CuratedPreset", foreign_keys=[active_template_id])
+    active_template = relationship("CuratedTheme", foreign_keys=[active_template_id])
     breakpoints = relationship(
         "LayoutBreakpoint",
         backref="project",

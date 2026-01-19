@@ -19,10 +19,10 @@ priority: "HIGH"
 
 ## Overview
 
-**Purpose**: Establish production-ready design system infrastructure through 3-package monorepo implementation providing preset-driven token generation and component contracts for Next.js + Tailwind CSS + shadcn/ui applications.
+**Purpose**: Establish production-ready design system infrastructure through 3-package monorepo implementation providing theme-driven token generation and component contracts for Next.js + Tailwind CSS + shadcn/ui applications.
 
 **Scope**: Phase A comprises three foundational packages:
-- A1: Preset definition system for technology stack configuration
+- A1: Theme definition system for technology stack configuration
 - A2: OKLCH-based design token generator with accessibility validation
 - A3: Component contract system with comprehensive shadcn/ui coverage
 
@@ -42,7 +42,7 @@ priority: "HIGH"
 ## TAG BLOCK
 
 ```
-TAGS: [DESIGN-SYSTEM, OKLCH, TOKEN-GENERATOR, COMPONENT-CONTRACTS, ACCESSIBILITY, WCAG-AA, PRESET-SYSTEM, MONOREPO, SHADCN-UI]
+TAGS: [DESIGN-SYSTEM, OKLCH, TOKEN-GENERATOR, COMPONENT-CONTRACTS, ACCESSIBILITY, WCAG-AA, THEME-SYSTEM, MONOREPO, SHADCN-UI]
 PRIORITY: HIGH
 COMPLEXITY: HIGH
 ESTIMATED_EFFORT: 3-4 weeks
@@ -76,16 +76,16 @@ RELATED_SPECS: []
 - **Test**: Validate all foreground-background combinations with chroma-js contrast calculator.
 
 **UR-005: Zero Runtime Dependencies Requirement**
-- Core packages (preset, contracts) **shall** have zero external runtime dependencies.
+- Core packages (theme, contracts) **shall** have zero external runtime dependencies.
 - **Rationale**: Minimize bundle size and reduce security vulnerabilities.
 - **Test**: Verify `package.json` dependencies sections contain only dev dependencies.
 
 ### 2. Event-Driven Requirements (WHEN/THEN)
 
-**EDR-001: Preset Loading Event**
-- **WHEN** a preset file is loaded, **THEN** the system **shall** validate against JSON schema before proceeding.
+**EDR-001: Theme Loading Event**
+- **WHEN** a theme file is loaded, **THEN** the system **shall** validate against JSON schema before proceeding.
 - **Error Handling**: If validation fails, throw descriptive error with field-level details.
-- **Test**: Load invalid preset and verify detailed error message includes failing field path.
+- **Test**: Load invalid theme and verify detailed error message includes failing field path.
 
 **EDR-002: Token Generation Event**
 - **WHEN** token generation is requested, **THEN** the system **shall** generate palettes for primary, neutral, and all status colors (success, warning, error, info).
@@ -158,7 +158,7 @@ RELATED_SPECS: []
 
 **UBR-005: Circular Package Dependencies**
 - Monorepo packages **shall not** create circular dependency relationships.
-- **Dependency Graph**: preset ← token-generator ← contracts (unidirectional only).
+- **Dependency Graph**: theme ← token-generator ← contracts (unidirectional only).
 - **Enforcement**: Build-time dependency graph validation.
 
 ### 5. Complex Requirements (Multi-Condition)
@@ -179,7 +179,7 @@ RELATED_SPECS: []
 - **Test**: Trigger auto-fixable violation and verify fix suggestion is accurate and applicable.
 
 **CR-004: Multi-Package Build Orchestration**
-- **WHEN** token-generator changes are committed, **THEN** the build system **shall** rebuild token-generator tests, **AND** rebuild contracts tests (due to dependency), **AND** skip preset tests (no dependency), **WHILE** running all builds in parallel where possible.
+- **WHEN** token-generator changes are committed, **THEN** the build system **shall** rebuild token-generator tests, **AND** rebuild contracts tests (due to dependency), **AND** skip theme tests (no dependency), **WHILE** running all builds in parallel where possible.
 - **Optimization**: Topological sort of dependency graph for parallel execution.
 - **Test**: Modify token-generator and verify only affected packages rebuild.
 
@@ -196,7 +196,7 @@ RELATED_SPECS: []
 
 ```
 ┌─────────────────┐
-│   preset        │  ← Configuration layer
+│   theme        │  ← Configuration layer
 └────────┬────────┘
          │
          ▼
@@ -382,7 +382,7 @@ Constraint {
 This SPEC implements the design system foundation described in `tekton-phase-ab-spec.md`.
 
 **Alignment with Technical Specification**:
-- Section A1 (Preset) → Package: preset
+- Section A1 (Theme) → Package: theme
 - Section A2 (Token Generator) → Package: token-generator
 - Section A3 (Contracts) → Package: contracts
 

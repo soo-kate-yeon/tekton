@@ -5,7 +5,7 @@
 **Execution Strategy**: Three sequential milestones with clear dependencies:
 
 ```
-Milestone 1: A1 Preset       (Foundation)
+Milestone 1: A1 Theme       (Foundation)
             ↓
 Milestone 2: A2 Token Gen    (OKLCH Core)
             ↓
@@ -13,35 +13,35 @@ Milestone 3: A3 Contracts    (Validation)
 ```
 
 **Priority Classification**:
-- **Primary Goal**: A1 + A2 (Preset + Token Generation)
+- **Primary Goal**: A1 + A2 (Theme + Token Generation)
 - **Secondary Goal**: A3 MVP (8 core components)
 - **Optional Goal**: A3 Extended (42 additional components)
 
 ---
 
-## Milestone 1: A1 Preset Package (Foundation)
+## Milestone 1: A1 Theme Package (Foundation)
 
-**Objective**: Establish preset definition system for technology stack configuration.
+**Objective**: Establish theme definition system for technology stack configuration.
 
 **Dependencies**: None (foundation layer)
 
 **Deliverables**:
-1. Preset JSON schema with TypeScript types
-2. Preset loader with validation
-3. Default preset: `next-tailwind-shadcn.json`
+1. Theme JSON schema with TypeScript types
+2. Theme loader with validation
+3. Default theme: `next-tailwind-shadcn.json`
 
 ### Implementation Steps
 
 #### Step 1.1: Define Package Structure
 
 ```
-packages/preset/
+packages/theme/
 ├── src/
 │   ├── types/
-│   │   └── preset.ts          # TypeScript type definitions
-│   ├── presets/
+│   │   └── theme.ts          # TypeScript type definitions
+│   ├── themes/
 │   │   └── next-tailwind-shadcn.json
-│   ├── loader.ts               # Preset loading logic
+│   ├── loader.ts               # Theme loading logic
 │   ├── validator.ts            # JSON schema validation
 │   └── index.ts                # Public API exports
 ├── __tests__/
@@ -53,10 +53,10 @@ packages/preset/
 
 #### Step 1.2: Implement TypeScript Types
 
-**File**: `src/types/preset.ts`
+**File**: `src/types/theme.ts`
 
 ```typescript
-export interface Preset {
+export interface Theme {
   id: string;
   version: string;
   name: string;
@@ -85,9 +85,9 @@ export type ShadcnComponent =
   // ... (50+ total components)
 ```
 
-#### Step 1.3: Create Default Preset
+#### Step 1.3: Create Default Theme
 
-**File**: `src/presets/next-tailwind-shadcn.json`
+**File**: `src/themes/next-tailwind-shadcn.json`
 
 Key configuration elements:
 - Framework: Next.js 14+
@@ -100,7 +100,7 @@ Key configuration elements:
 
 **Validation Strategy**:
 - Use JSON Schema or Zod for runtime validation
-- Validate on preset load before processing
+- Validate on theme load before processing
 - Provide detailed error messages with field paths
 
 **Error Handling**:
@@ -111,13 +111,13 @@ Key configuration elements:
 #### Step 1.5: Write Tests
 
 **Test Coverage Requirements**:
-- Valid preset loading: ✓
+- Valid theme loading: ✓
 - Invalid structure rejection: ✓
 - Missing fields detection: ✓
 - Dependency version validation: ✓
 - TypeScript type compatibility: ✓
 
-**Target**: ≥90% coverage for preset package
+**Target**: ≥90% coverage for theme package
 
 ---
 
@@ -172,7 +172,7 @@ packages/token-generator/
 2. Contrast Level: standard | high
 3. UI Density: comfortable | compact
 4. Border Radius: none | sm | md | lg
-5. Primary Color: preset (blue, green, purple) | custom (hex)
+5. Primary Color: theme (blue, green, purple) | custom (hex)
 6. Neutral Tone: warm | cool | gray
 7. Font Scale: small | default | large
 
@@ -183,7 +183,7 @@ export const DEFAULT_QUESTIONNAIRE: TokenQuestionnaire = {
   contrast: 'standard',
   density: 'comfortable',
   borderRadius: 'md',
-  primaryColor: { type: 'preset', value: 'blue' },
+  primaryColor: { type: 'theme', value: 'blue' },
   neutralTone: 'gray',
   fontScale: 'default'
 };
@@ -405,7 +405,7 @@ export function validateWCAG(tokens: ShadcnColorTokens): ValidationResult;
 
 **Objective**: Define component usage contracts with comprehensive shadcn/ui coverage.
 
-**Dependencies**: None (can reference preset types if needed)
+**Dependencies**: None (can reference theme types if needed)
 
 **Deliverables**:
 1. Contract schema with 6 rule types
@@ -604,7 +604,7 @@ export function getConstraintsForComponent(
 }
 ```
 
-**Package: preset**
+**Package: theme**
 ```json
 {
   "devDependencies": {
@@ -640,7 +640,7 @@ export function getConstraintsForComponent(
 ### Unit Test Coverage
 
 **Per-Package Requirements**:
-- preset: ≥90% coverage
+- theme: ≥90% coverage
 - token-generator: ≥85% coverage
 - contracts: ≥85% coverage
 
@@ -648,8 +648,8 @@ export function getConstraintsForComponent(
 
 ### Integration Test Scenarios
 
-**Scenario 1**: Preset → Token Generation
-- Load next-tailwind-shadcn preset
+**Scenario 1**: Theme → Token Generation
+- Load next-tailwind-shadcn theme
 - Generate tokens with default Q&A
 - Verify CSS variables match expected format
 
@@ -666,7 +666,7 @@ export function getConstraintsForComponent(
 ### End-to-End Test Scenarios
 
 **E2E Test**: Complete Workflow
-1. Load preset
+1. Load theme
 2. Generate tokens
 3. Apply tokens to Next.js project
 4. Validate generated CSS
@@ -735,7 +735,7 @@ export function getConstraintsForComponent(
 
 ### Extension 3: Theme Variants
 
-**Feature**: Support multiple theme presets beyond default.
+**Feature**: Support multiple theme themes beyond default.
 
 **Variants**:
 - Material Design 3 mapping
@@ -756,10 +756,10 @@ export function getConstraintsForComponent(
 4. Configure ESLint + Prettier
 5. Create package scaffolds
 
-### Phase 2: Preset Package (Days 2-3)
+### Phase 2: Theme Package (Days 2-3)
 
 1. Define types
-2. Create default preset JSON
+2. Create default theme JSON
 3. Implement loader
 4. Write tests
 5. Verify integration

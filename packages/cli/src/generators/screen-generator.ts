@@ -1,7 +1,7 @@
 import fs from 'fs-extra';
 import * as path from 'path';
 import type { CompleteArchetype } from '../clients/mcp-client.js';
-import type { ExtendedTokenPreset } from '@tekton/preset';
+import type { ExtendedTokenPreset } from '@tekton/theme';
 import { generateCompleteTokensCSS } from './token-injector.js';
 import { generateComponentFiles } from './component-generator.js';
 

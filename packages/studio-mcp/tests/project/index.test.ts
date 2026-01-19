@@ -83,15 +83,15 @@ describe("Project Module Exports", () => {
     });
 
     it("should validate SetActivePresetInput correctly", () => {
-      const valid = { presetId: 1 };
+      const valid = { themeId: 1 };
       const result = SetActivePresetInputSchema.safeParse(valid);
       expect(result.success).toBe(true);
 
-      const withPath = { presetId: 1, projectPath: "/some/path" };
+      const withPath = { themeId: 1, projectPath: "/some/path" };
       const withPathResult = SetActivePresetInputSchema.safeParse(withPath);
       expect(withPathResult.success).toBe(true);
 
-      const invalid = { presetId: -1 };
+      const invalid = { themeId: -1 };
       const invalidResult = SetActivePresetInputSchema.safeParse(invalid);
       expect(invalidResult.success).toBe(false);
     });

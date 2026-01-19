@@ -100,9 +100,9 @@ describe("MCP Server", () => {
         expect(tool).toBeDefined();
         expect(tool?.description).toContain("Set the active preset");
         expect(tool?.inputSchema.type).toBe("object");
-        expect(tool?.inputSchema.properties).toHaveProperty("presetId");
+        expect(tool?.inputSchema.properties).toHaveProperty("themeId");
         expect(tool?.inputSchema.properties).toHaveProperty("projectPath");
-        expect(tool?.inputSchema.required).toContain("presetId");
+        expect(tool?.inputSchema.required).toContain("themeId");
       });
     });
 
@@ -148,7 +148,7 @@ describe("MCP Server", () => {
     it("should include preset.get tool", () => {
       const tool = TOOLS.find((t) => t.name === "preset.get");
       expect(tool).toBeDefined();
-      expect(tool?.inputSchema.required).toContain("presetId");
+      expect(tool?.inputSchema.required).toContain("themeId");
     });
 
     it("should include project.status tool", () => {
@@ -160,7 +160,7 @@ describe("MCP Server", () => {
     it("should include project.useBuiltinPreset tool", () => {
       const tool = TOOLS.find((t) => t.name === "project.useBuiltinPreset");
       expect(tool).toBeDefined();
-      expect(tool?.inputSchema.required).toContain("presetId");
+      expect(tool?.inputSchema.required).toContain("themeId");
     });
   });
 
@@ -337,7 +337,7 @@ describe("MCP Server", () => {
           TEST_PORT,
           "POST",
           "/tools/project.setActivePreset",
-          { presetId: 1, projectPath: "/test/path" }
+          { themeId: 1, projectPath: "/test/path" }
         );
 
         expect(status).toBe(200);

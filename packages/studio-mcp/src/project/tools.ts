@@ -198,7 +198,7 @@ export class ProjectTools {
       };
     }
 
-    const { presetId, projectPath } = validation.data;
+    const { themeId, projectPath } = validation.data;
 
     try {
       const url = new URL(
@@ -207,7 +207,7 @@ export class ProjectTools {
       );
 
       const body: Record<string, unknown> = {
-        preset_id: presetId,
+        theme_id: themeId,
       };
       if (projectPath) {
         body.project_path = projectPath;

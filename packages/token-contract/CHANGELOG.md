@@ -13,7 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 #### Core Features
 - **Zod Schema Validation**: Runtime validation for all token types (Color, ColorScale, Semantic, State, Composition)
-- **7 Curated Presets**: Professional, Creative, Minimal, Bold, Warm, Cool, High-Contrast design systems
+- **7 Curated Themes**: Professional, Creative, Minimal, Bold, Warm, Cool, High-Contrast design systems
 - **CSS Variable Generation**: Automatic generation of CSS custom properties from tokens
 - **OKLCH Color Space**: Integration with Tekton's perceptually uniform color system
 - **WCAG Compliance Validation**: Automatic contrast validation for AA/AAA standards
@@ -23,15 +23,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 #### React Integration
 - **ThemeProvider**: React Context API-based theme management
-- **useTheme Hook**: Access theme context with preset, tokens, darkMode state
+- **useTheme Hook**: Access theme context with theme, tokens, darkMode state
 - **System Theme Detection**: Automatic detection and respect for `prefers-color-scheme`
 - **CSS Variable Injection**: Automatic injection of CSS variables into `:root`
 - **Performance Optimization**: Memoized token derivation and stable callback references
 
 #### Developer Experience
 - **TypeScript Support**: Full TypeScript definitions with strict type checking
-- **Preset Loading**: Simple preset selection with `loadPreset()` function
-- **Preset Override**: Custom token overrides while maintaining validation
+- **Theme Loading**: Simple theme selection with `loadPreset()` function
+- **Theme Override**: Custom token overrides while maintaining validation
 - **Fallback Handling**: Graceful degradation for missing tokens with warnings
 - **WCAG Validation API**: Comprehensive validation with detailed violation reports
 
@@ -91,14 +91,14 @@ None (initial release)
 #### v0.2.0 (Future)
 - **Token Animation**: CSS transition definitions for smooth token value changes
 - **Figma Token Sync**: Synchronize with Figma Design Tokens Community Group (DTCG) format
-- **Custom Preset Builder UI**: Visual tool for creating custom presets with live preview
-- **Token Analytics**: Usage analytics to track popular presets and token combinations
+- **Custom Theme Builder UI**: Visual tool for creating custom themes with live preview
+- **Token Analytics**: Usage analytics to track popular themes and token combinations
 
 #### v1.0.0 (Future)
 - **Token Versioning**: Version token contracts for backward compatibility
 - **Plugin System**: Extensible plugin architecture for custom token transformations
 - **Performance Enhancements**: Further optimization of CSS generation and validation
-- **Additional Presets**: Community-contributed preset library
+- **Additional Themes**: Community-contributed theme library
 
 ---
 
@@ -109,9 +109,9 @@ None (initial release)
 **Token Contract & CSS Variable System** is a comprehensive design token management layer for Tekton, bridging OKLCH-based token generation with CSS custom property consumption.
 
 **Key Achievements**:
-- ✅ 7 curated presets with semantic meaning
+- ✅ 7 curated themes with semantic meaning
 - ✅ 96.36% test coverage with 222 passing tests
-- ✅ WCAG AA compliance validation (AAA for High-Contrast preset)
+- ✅ WCAG AA compliance validation (AAA for High-Contrast theme)
 - ✅ Performance targets achieved (<1ms validation, <3ms CSS generation)
 - ✅ Comprehensive documentation with architecture diagrams
 

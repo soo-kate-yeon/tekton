@@ -9,7 +9,7 @@ from typing import Any
 
 from pydantic import BaseModel, ConfigDict, Field
 
-from studio_api.schemas.curated_preset import CuratedPresetResponse
+from studio_api.schemas.curated_theme import CuratedPresetResponse
 
 
 # --- LayoutBreakpoint Schemas ---
@@ -62,7 +62,7 @@ class ProjectBase(BaseModel):
 class ProjectCreate(ProjectBase):
     """Schema for creating a new project."""
 
-    active_template_id: int | None = Field(None, description="ID of the active template (CuratedPreset)")
+    active_template_id: int | None = Field(None, description="ID of the active template (CuratedTheme)")
     token_config: dict[str, Any] = Field(default_factory=dict, description="Token configuration")
     settings: dict[str, Any] = Field(default_factory=dict, description="Project settings")
 

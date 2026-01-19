@@ -1,6 +1,6 @@
 """API schemas package."""
 
-from studio_api.schemas.curated_preset import (
+from studio_api.schemas.curated_theme import (
     CuratedPresetBase,
     CuratedPresetCreate,
     CuratedPresetList,

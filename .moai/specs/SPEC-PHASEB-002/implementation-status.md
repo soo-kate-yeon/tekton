@@ -55,7 +55,7 @@
 - CR-002: Phase A test preservation during migration
 
 **Implementation Details**:
-- Monorepo structure with 5 packages (preset, token-generator, contracts, cli, vscode-extension)
+- Monorepo structure with 5 packages (theme, token-generator, contracts, cli, vscode-extension)
 - pnpm workspace protocol for internal dependencies
 - Shared TypeScript configuration (tsconfig.base.json)
 - Unified build and test scripts in root package.json

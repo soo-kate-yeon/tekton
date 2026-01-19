@@ -16,42 +16,42 @@ This document defines comprehensive acceptance criteria using Given-When-Then fo
 
 ---
 
-## A1: Preset Package Acceptance
+## A1: Theme Package Acceptance
 
-### Scenario 1: Valid Preset Loading
+### Scenario 1: Valid Theme Loading
 
-**Given** a valid `next-tailwind-shadcn.json` preset file exists
-**When** the preset loader is invoked with the file path
-**Then** the preset should load successfully
+**Given** a valid `next-tailwind-shadcn.json` theme file exists
+**When** the theme loader is invoked with the file path
+**Then** the theme should load successfully
 **And** all required fields should be populated
-**And** the preset object should match TypeScript type `Preset`
+**And** the theme object should match TypeScript type `Theme`
 **And** no validation errors should be thrown
 
 **Success Criteria**:
-- ✅ Preset object contains `id`, `version`, `name`, `description`
+- ✅ Theme object contains `id`, `version`, `name`, `description`
 - ✅ Stack configuration includes `framework`, `styling`, `components`
 - ✅ Dependencies section includes `required` and `devDependencies`
 - ✅ Component whitelist is a non-empty array
 
 **Test Implementation**:
 ```typescript
-// packages/preset/src/__tests__/loader.test.ts
-it('loads valid preset successfully', async () => {
-  const preset = await loadPreset('next-tailwind-shadcn');
+// packages/theme/src/__tests__/loader.test.ts
+it('loads valid theme successfully', async () => {
+  const theme = await loadPreset('next-tailwind-shadcn');
 
-  expect(preset.id).toBe('next-tailwind-shadcn');
-  expect(preset.stack.framework).toBe('nextjs');
-  expect(preset.componentWhitelist).toContain('button');
-  expect(preset.dependencies.required).toHaveProperty('clsx');
+  expect(theme.id).toBe('next-tailwind-shadcn');
+  expect(theme.stack.framework).toBe('nextjs');
+  expect(theme.componentWhitelist).toContain('button');
+  expect(theme.dependencies.required).toHaveProperty('clsx');
 });
 ```
 
 ---
 
-### Scenario 2: Invalid Preset Rejection
+### Scenario 2: Invalid Theme Rejection
 
-**Given** a preset file with missing required fields exists
-**When** the preset loader attempts to load the file
+**Given** a theme file with missing required fields exists
+**When** the theme loader attempts to load the file
 **Then** a `PresetValidationError` should be thrown
 **And** the error message should list all missing fields
 **And** the error should include the field path for debugging
@@ -64,7 +64,7 @@ it('loads valid preset successfully', async () => {
 
 **Test Implementation**:
 ```typescript
-it('rejects preset with missing required fields', async () => {
+it('rejects theme with missing required fields', async () => {
   const invalidPreset = {
     version: '0.1.0',
     // missing id, name, stack, etc.
@@ -408,10 +408,10 @@ it('requires empty state for data tables', () => {
 
 ## Integration Acceptance
 
-### Scenario 1: End-to-End Preset Application
+### Scenario 1: End-to-End Theme Application
 
 **Given** a blank Next.js 14 project with Tailwind CSS
-**When** the preset system applies `next-tailwind-shadcn` preset
+**When** the theme system applies `next-tailwind-shadcn` theme
 **And** tokens are generated with default Q&A
 **And** component contracts are loaded
 **Then** the project should have valid shadcn configuration
@@ -429,13 +429,13 @@ it('requires empty state for data tables', () => {
 **Test Implementation**:
 ```typescript
 // Integration test in tests/integration/
-it('applies preset end-to-end', async () => {
+it('applies theme end-to-end', async () => {
   const tempProject = await createNextJsProject();
 
-  const preset = await loadPreset('next-tailwind-shadcn');
+  const theme = await loadPreset('next-tailwind-shadcn');
   const tokens = generateTokens(DEFAULT_QUESTIONNAIRE);
 
-  await applyPreset(tempProject, preset, tokens);
+  await applyPreset(tempProject, theme, tokens);
 
   expect(await fileExists(tempProject, 'components.json')).toBe(true);
   expect(await fileExists(tempProject, 'components/ui/button.tsx')).toBe(true);
@@ -518,14 +518,14 @@ it('validates real component usage', async () => {
 
 ### Scenario 1: Test Coverage ≥85%
 
-**Given** all three packages (preset, token-generator, contracts)
+**Given** all three packages (theme, token-generator, contracts)
 **When** test coverage reports are generated
 **Then** each package should have ≥85% statement coverage
 **And** each package should have ≥80% branch coverage
 **And** critical paths should have 100% coverage
 
 **Success Criteria**:
-- ✅ preset: ≥90% statement coverage
+- ✅ theme: ≥90% statement coverage
 - ✅ token-generator: ≥85% statement coverage
 - ✅ contracts: ≥85% statement coverage
 - ✅ OKLCH generation logic: 100% coverage
@@ -653,7 +653,7 @@ it('generates valid CSS syntax', () => {
 ✅ **Zero TypeScript errors** - Strict mode with zero errors
 ✅ **Linter clean** - 2 warnings only (non-blocking)
 ✅ **Documentation complete** - Architecture, API reference, README
-✅ **Integration tests pass** - End-to-end preset application validated
+✅ **Integration tests pass** - End-to-end theme application validated
 ✅ **Performance benchmarks met** - Token generation ~50ms, contract lookup < 1ms
 ✅ **Code quality validated** - TRUST 5 score: 4.8/5.0
 ✅ **README and examples** - Comprehensive documentation available

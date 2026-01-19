@@ -19,8 +19,8 @@ cd /Users/asleep/Developer/tekton
 # Install dependencies if you haven't already
 pnpm install
 
-# Build the archetype-system dependency
-cd packages/archetype-system
+# Build the component-system dependency
+cd packages/component-system
 pnpm run build
 
 # Build the studio-mcp package
@@ -80,13 +80,13 @@ npm install /Users/asleep/Developer/tekton/packages/studio-mcp/tekton-mcp-server
 Link the package globally, then link in your project:
 
 ```bash
-# Step 1: Link archetype-system
-cd /Users/asleep/Developer/tekton/packages/archetype-system
+# Step 1: Link component-system
+cd /Users/asleep/Developer/tekton/packages/component-system
 npm link
 
-# Step 2: Link studio-mcp and connect to archetype-system
+# Step 2: Link studio-mcp and connect to component-system
 cd /Users/asleep/Developer/tekton/packages/studio-mcp
-npm link @tekton/archetype-system
+npm link @tekton/component-system
 npm link
 
 # Step 3: Link in your project
@@ -118,11 +118,11 @@ MCP_PORT=4000 npx tekton-mcp
 # Check server health
 curl http://localhost:3000/health
 
-# List available presets
-curl -X POST http://localhost:3000/tools/preset.list
+# List available themes
+curl -X POST http://localhost:3000/tools/theme.list
 
-# Get preset details
-curl -X POST http://localhost:3000/tools/preset.get \
+# Get theme details
+curl -X POST http://localhost:3000/tools/theme.get \
   -H "Content-Type: application/json" \
   -d '{"presetId": "next-tailwind-shadcn"}'
 ```
@@ -135,7 +135,7 @@ Expected health response:
   "service": "tekton-mcp",
   "mode": "standalone",
   "version": "1.0.0",
-  "tools": ["archetype.list", "preset.list", ...]
+  "tools": ["component.list", "theme.list", ...]
 }
 ```
 
@@ -177,15 +177,15 @@ Or if you installed via npm:
 
 ## Troubleshooting
 
-### Error: Cannot find module '@tekton/archetype-system'
+### Error: Cannot find module '@tekton/component-system'
 
-**Cause:** The archetype-system package wasn't built or linked properly.
+**Cause:** The component-system package wasn't built or linked properly.
 
 **Solution:**
 
 ```bash
-# Rebuild archetype-system
-cd /Users/asleep/Developer/tekton/packages/archetype-system
+# Rebuild component-system
+cd /Users/asleep/Developer/tekton/packages/component-system
 pnpm run build
 
 # Rebuild studio-mcp
@@ -193,7 +193,7 @@ cd /Users/asleep/Developer/tekton/packages/studio-mcp
 pnpm run build
 
 # If using npm link, relink
-npm link @tekton/archetype-system
+npm link @tekton/component-system
 ```
 
 ### Error: EADDRINUSE (Port already in use)
@@ -238,23 +238,23 @@ If you're actively developing the MCP server and testing in another project:
 
 ## Quick Reference: Available Tools
 
-### Preset Tools
+### Theme Tools
 
-- `preset.list` - List all 7 built-in presets
-- `preset.get` - Get preset details
-- `project.useBuiltinPreset` - Activate a preset
+- `theme.list` - List all 7 built-in themes
+- `theme.get` - Get theme details
+- `project.useBuiltinPreset` - Activate a theme
 
-### Archetype Tools
+### Component Tools
 
-- `archetype.list` - List all component hooks
-- `archetype.get` - Get complete archetype
-- `archetype.query` - Search by WCAG level, state, etc.
+- `component.list` - List all component hooks
+- `component.get` - Get complete component
+- `component.query` - Search by WCAG level, state, etc.
 
 ### Project Tools
 
 - `project.detectStructure` - Detect Next.js, Vite, etc.
-- `project.status` - Get project info and active preset
-- `project.getActivePreset` - Get current preset
+- `project.status` - Get project info and active theme
+- `project.getActivePreset` - Get current theme
 
 ### Screen Tools
 
@@ -265,7 +265,7 @@ If you're actively developing the MCP server and testing in another project:
 ## Next Steps
 
 - Read the [full USER_GUIDE.md](./USER_GUIDE.md) for detailed documentation
-- Explore the [7 built-in presets](./USER_GUIDE.md#built-in-presets)
+- Explore the [7 built-in themes](./USER_GUIDE.md#built-in-themes)
 - Try the [usage examples](./USER_GUIDE.md#usage-examples)
 - Learn about [Claude Code integration](./USER_GUIDE.md#claude-code-integration)
 
@@ -277,7 +277,7 @@ For most users testing the MCP server in other projects:
 # One-time setup: Build both packages
 cd /Users/asleep/Developer/tekton
 pnpm install
-cd packages/archetype-system && pnpm run build && cd ../..
+cd packages/component-system && pnpm run build && cd ../..
 cd packages/studio-mcp && pnpm run build && cd ../..
 
 # In your other project: Install

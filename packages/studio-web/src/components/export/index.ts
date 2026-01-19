@@ -14,5 +14,5 @@ export type { ExportActionsProps } from './ExportActions';
 export { ExportOptionsPanel } from './ExportOptionsPanel';
 export type { ExportOptionsPanelProps } from './ExportOptionsPanel';
 
-export { PresetSelector, PRESET_OPTIONS } from './PresetSelector';
-export type { PresetSelectorProps } from './PresetSelector';
+export { PresetSelector, PRESET_OPTIONS } from './ThemeSelector';
+export type { ThemeSelectorProps } from './ThemeSelector';

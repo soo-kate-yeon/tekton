@@ -1,4 +1,4 @@
-import type { OKLCHColor, RGBColor } from '@tekton/preset';
+import type { OKLCHColor, RGBColor } from '@tekton/theme';
 
 /**
  * Convert OKLCH to linear RGB

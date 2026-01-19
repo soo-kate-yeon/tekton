@@ -67,10 +67,10 @@ class TestMigrationTableDefinition:
         assert "unique=True" in migration_content or "UniqueConstraint" in migration_content
 
     def test_has_active_preset_id_foreign_key(self, migration_content: str) -> None:
-        """Test migration defines FK to curated_presets."""
+        """Test migration defines FK to curated_themes."""
         assert "'active_preset_id'" in migration_content
         assert "ForeignKey" in migration_content or "ForeignKeyConstraint" in migration_content
-        assert "curated_presets.id" in migration_content
+        assert "curated_themes.id" in migration_content
 
     def test_has_on_delete_set_null(self, migration_content: str) -> None:
         """Test FK has ON DELETE SET NULL."""

@@ -35,7 +35,7 @@ describe('useTheme Hook', () => {
       expect(result.current.tokens).toBeDefined();
       expect(result.current.composition).toBeDefined();
       expect(result.current.darkMode).toBeDefined();
-      expect(typeof result.current.setPreset).toBe('function');
+      expect(typeof result.current.setTheme).toBe('function');
       expect(typeof result.current.toggleDarkMode).toBe('function');
     });
 
@@ -92,7 +92,7 @@ describe('useTheme Hook', () => {
   describe('Hook Updates', () => {
     it('should update when preset changes', () => {
       const wrapper = ({ children }: { children: React.ReactNode }) => (
-        <ThemeProvider defaultPreset="professional">{children}</ThemeProvider>
+        <ThemeProvider defaultTheme="professional">{children}</ThemeProvider>
       );
 
       const { result } = renderHook(() => useTheme(), { wrapper });
@@ -126,12 +126,12 @@ describe('useTheme Hook', () => {
       // TypeScript should enforce these types at compile time
       const preset: string = result.current.preset;
       const darkMode: boolean = result.current.darkMode;
-      const setPreset: (preset: any) => void = result.current.setPreset;
+      const setTheme: (preset: any) => void = result.current.setTheme;
       const toggleDarkMode: () => void = result.current.toggleDarkMode;
 
       expect(typeof preset).toBe('string');
       expect(typeof darkMode).toBe('boolean');
-      expect(typeof setPreset).toBe('function');
+      expect(typeof setTheme).toBe('function');
       expect(typeof toggleDarkMode).toBe('function');
     });
   });

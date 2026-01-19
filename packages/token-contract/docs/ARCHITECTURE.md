@@ -2,7 +2,7 @@
 
 ## System Overview
 
-The Token Contract & CSS Variable System bridges Tekton's OKLCH-based design token generation with CSS custom property consumption. It provides a comprehensive, type-safe token management layer with runtime validation, curated design presets, and dynamic theme switching capabilities.
+The Token Contract & CSS Variable System bridges Tekton's OKLCH-based design token generation with CSS custom property consumption. It provides a comprehensive, type-safe token management layer with runtime validation, curated design themes, and dynamic theme switching capabilities.
 
 ### Key Components
 
@@ -10,7 +10,7 @@ The Token Contract & CSS Variable System bridges Tekton's OKLCH-based design tok
 graph TB
     subgraph "Token Input Layer"
         OKLCH[OKLCH Token Generator]
-        Presets[7 Curated Presets]
+        Themes[7 Curated Themes]
         Custom[Custom Token Input]
     end
 
@@ -41,7 +41,7 @@ graph TB
     end
 
     OKLCH --> Zod
-    Presets --> Zod
+    Themes --> Zod
     Custom --> Zod
     Zod --> WCAG
     WCAG --> Semantic
@@ -61,7 +61,7 @@ graph TB
     classDef integrationLayer fill:#fce4ec,stroke:#c2185b,stroke-width:2px
     classDef outputLayer fill:#e0f2f1,stroke:#00796b,stroke-width:2px
 
-    class OKLCH,Presets,Custom inputLayer
+    class OKLCH,Themes,Custom inputLayer
     class Zod,WCAG validationLayer
     class Semantic,State,Composition contractLayer
     class CSSGen,DarkMode generationLayer
@@ -75,11 +75,11 @@ graph TB
 
 **Perceptual Uniformity**: OKLCH color space ensures consistent perceived brightness and color intensity across the entire token system.
 
-**Accessibility by Default**: WCAG AA compliance validation integrated into the core validation pipeline, with High-Contrast preset achieving AAA compliance.
+**Accessibility by Default**: WCAG AA compliance validation integrated into the core validation pipeline, with High-Contrast theme achieving AAA compliance.
 
 **Progressive Enhancement**: Graceful fallback handling for missing tokens, browser compatibility considerations, and optional features.
 
-**Developer Experience**: Curated presets for rapid prototyping, comprehensive TypeScript types, clear error messages with validation feedback.
+**Developer Experience**: Curated themes for rapid prototyping, comprehensive TypeScript types, clear error messages with validation feedback.
 
 ---
 
@@ -91,7 +91,7 @@ The token transformation pipeline converts high-level design intent into browser
 flowchart LR
     subgraph Input["Input Stage"]
         direction TB
-        I1[Preset Selection]
+        I1[Theme Selection]
         I2[Custom Overrides]
         I3[OKLCH Generation]
     end
@@ -157,9 +157,9 @@ flowchart LR
 
 #### 1. Input Stage
 
-**Preset Selection**: User selects one of 7 curated presets (Professional, Creative, Minimal, Bold, Warm, Cool, High-Contrast).
+**Theme Selection**: User selects one of 7 curated themes (Professional, Creative, Minimal, Bold, Warm, Cool, High-Contrast).
 
-**Custom Overrides**: Developer provides custom token overrides while maintaining preset structure.
+**Custom Overrides**: Developer provides custom token overrides while maintaining theme structure.
 
 **OKLCH Generation**: Tokens generated using Tekton's OKLCH token generator with perceptually uniform color distribution.
 
@@ -328,18 +328,18 @@ sequenceDiagram
     participant Component
 
     App->>ThemeProvider: Initialize with defaultPreset='professional'
-    ThemeProvider->>ThemeProvider: Load preset tokens
+    ThemeProvider->>ThemeProvider: Load theme tokens
     ThemeProvider->>CSS Engine: Generate CSS variables
     CSS Engine->>ThemeProvider: CSS string
     ThemeProvider->>CSS Engine: Inject into :root
 
     Component->>useTheme Hook: useTheme()
     useTheme Hook->>ThemeProvider: Read context
-    ThemeProvider-->>useTheme Hook: { preset, tokens, darkMode, ... }
+    ThemeProvider-->>useTheme Hook: { theme, tokens, darkMode, ... }
     useTheme Hook-->>Component: Theme state
 
     Component->>useTheme Hook: setPreset('creative')
-    useTheme Hook->>ThemeProvider: Update preset state
+    useTheme Hook->>ThemeProvider: Update theme state
     ThemeProvider->>ThemeProvider: Re-derive tokens (memoized)
     ThemeProvider->>CSS Engine: Regenerate CSS variables
     CSS Engine->>ThemeProvider: New CSS string
@@ -352,8 +352,8 @@ sequenceDiagram
 
 ```typescript
 interface ThemeContextValue {
-  preset: PresetName;                      // Current preset name
-  setPreset: (preset: PresetName) => void; // Preset setter
+  theme: PresetName;                      // Current theme name
+  setPreset: (theme: PresetName) => void; // Theme setter
   tokens: SemanticToken;                   // Current semantic tokens
   composition: CompositionToken;           // Current composition tokens
   darkMode: boolean;                       // Dark mode state
@@ -363,12 +363,12 @@ interface ThemeContextValue {
 
 ### Performance Optimizations
 
-**Token Derivation Memoization**: Uses `useMemo` to cache token derivation based on preset and darkMode dependencies:
+**Token Derivation Memoization**: Uses `useMemo` to cache token derivation based on theme and darkMode dependencies:
 
 ```typescript
 const tokens = useMemo(() => {
-  const preset = loadPreset(presetName);
-  return darkMode ? invertTokensForDarkMode(preset.tokens) : preset.tokens;
+  const theme = loadPreset(presetName);
+  return darkMode ? invertTokensForDarkMode(theme.tokens) : theme.tokens;
 }, [presetName, darkMode]);
 ```
 
@@ -394,7 +394,7 @@ useEffect(() => {
 ```
 
 **Re-render Target**: Maximum 3 re-renders per theme change:
-1. Initial preset state update
+1. Initial theme state update
 2. Token derivation (memoized)
 3. CSS variable injection (no re-render)
 
@@ -512,7 +512,7 @@ function Button({ children }: ButtonProps) {
 **Dependency**: Styled components apply CSS variables to implement visual design.
 
 **Integration Points**:
-- Preset selection via ThemeProvider
+- Theme selection via ThemeProvider
 - CSS variable consumption in styled-components
 - Dark mode theming via theme context
 
@@ -576,7 +576,7 @@ function App() {
 - Target: <5ms total generation time (achieved)
 
 **Optimization Strategies**:
-- Pre-computed CSS strings for curated presets
+- Pre-computed CSS strings for curated themes
 - Lazy generation only when tokens change
 - CSS string caching in ThemeProvider
 
@@ -585,7 +585,7 @@ function App() {
 **Re-render Targets**:
 - Theme change: ≤3 re-renders (achieved)
 - Dark mode toggle: ≤2 re-renders (achieved)
-- Preset override: ≤3 re-renders (achieved)
+- Theme override: ≤3 re-renders (achieved)
 
 **Optimization Techniques**:
 - `useMemo` for token derivation
@@ -638,7 +638,7 @@ function App() {
 
 **Validation Pipeline**: All color tokens validated against WCAG AA standards (4.5:1 contrast for normal text, 3:1 for large text).
 
-**High-Contrast Preset**: Dedicated preset achieving WCAG AAA compliance (7:1 contrast ratio).
+**High-Contrast Theme**: Dedicated theme achieving WCAG AAA compliance (7:1 contrast ratio).
 
 **Error Reporting**: WCAG validation failures reported with detailed contrast ratio information.
 
@@ -654,7 +654,7 @@ function App() {
 
 **Meaningful Names**: Tokens named semantically (success, warning, error) rather than by color (green, yellow, red).
 
-**Consistent Mapping**: Semantic tokens consistently mapped across all presets for predictable behavior.
+**Consistent Mapping**: Semantic tokens consistently mapped across all themes for predictable behavior.
 
 ---
 
@@ -695,9 +695,9 @@ if (!supportsOKLCH) {
 
 **Token Versioning (O-003)**: Version token contracts for backward compatibility across major releases.
 
-**Custom Preset Builder**: UI tool for creating custom presets with live preview.
+**Custom Theme Builder**: UI tool for creating custom themes with live preview.
 
-**Token Analytics**: Usage analytics to track most popular presets and token combinations.
+**Token Analytics**: Usage analytics to track most popular themes and token combinations.
 
 ---
 

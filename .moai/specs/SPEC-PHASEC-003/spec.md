@@ -25,7 +25,7 @@ Phase C는 Tekton 디자인 시스템의 핵심 목표인 **"AI 에이전트가 
 
 Phase C는 Phase B의 완료된 인프라를 기반으로 합니다:
 
-- ✅ **B1: Monorepo 구조** - `@tekton/preset`, `@tekton/token-generator`, `@tekton/contracts`
+- ✅ **B1: Monorepo 구조** - `@tekton/theme`, `@tekton/token-generator`, `@tekton/contracts`
 - ✅ **B2: CLI 도구** - Framework/Tailwind/shadcn 감지, Token 생성
 - ✅ **B3: VS Code Extension** - Command Palette 통합
 - ✅ **B4: 템플릿 시스템** - `page.tsx.template`, `layout.tsx.template`
@@ -46,7 +46,7 @@ Phase C는 Phase B의 완료된 인프라를 기반으로 합니다:
 ├─────────────────────────────────────────────────────────────────┤
 │  Layer 2: Skeleton (골격 계층)                                   │
 │  ┌─────────────────────────────────────────────────────────┐    │
-│  │  Layout Preset: FullScreen | WithSidebar | WithHeader   │    │
+│  │  Layout Theme: FullScreen | WithSidebar | WithHeader   │    │
 │  │  ┌─────────┐ ┌─────────┐ ┌─────────────────────────────┐│    │
 │  │  │ Header? │ │Sidebar? │ │         Content             ││    │
 │  │  └─────────┘ └─────────┘ └─────────────────────────────┘│    │
@@ -99,7 +99,7 @@ Phase C는 Phase B의 완료된 인프라를 기반으로 합니다:
 **R-E-001: CLI 명령어 실행 시 대화형 프롬프트 표시**
 - **WHEN** 사용자가 `tekton create screen <name>` 명령 실행
 - **THEN** 시스템은 Environment 선택 프롬프트를 표시해야 한다
-- **THEN** 시스템은 Skeleton preset 선택 프롬프트를 표시해야 한다
+- **THEN** 시스템은 Skeleton theme 선택 프롬프트를 표시해야 한다
 - **THEN** 시스템은 Intent 선택 프롬프트를 표시해야 한다
 - **THEN** 시스템은 Component 다중 선택 프롬프트를 표시해야 한다
 - WHY: 사용자 친화적 화면 생성 워크플로우 제공
@@ -229,7 +229,7 @@ export const layoutBehaviorSchema = z.object({
 
 ### Layer 2: Skeleton (골격 계층)
 
-#### Skeleton Preset 정의
+#### Skeleton Theme 정의
 
 ```typescript
 export enum SkeletonPreset {
@@ -246,7 +246,7 @@ export enum SkeletonPreset {
 
 ```typescript
 export const skeletonContractSchema = z.object({
-  preset: z.nativeEnum(SkeletonPreset),
+  theme: z.nativeEnum(SkeletonPreset),
 
   header: z.object({
     enabled: z.boolean(),
@@ -337,7 +337,7 @@ export enum ScreenIntent {
 
 ## Extended Token System (확장 토큰 시스템)
 
-### Token Preset 스키마
+### Token Theme 스키마
 
 ```typescript
 export const tokenPresetSchema = z.object({
@@ -481,7 +481,7 @@ $ tekton create screen UserProfile \
 | 계층 | 확장 방법 | 기존 시스템 연동 |
 |------|----------|-----------------|
 | Environment | Enum 추가 + Grid 정의 | `tekton.config.json` |
-| Skeleton | Preset 추가 + 기본 구성 | `@tekton/preset` |
+| Skeleton | Theme 추가 + 기본 구성 | `@tekton/theme` |
 | Intent | Enum 추가 + Pattern 매핑 | Domain Packs (SaaS, E-commerce) |
 | Composition | Component 추가 (자동) | `@tekton/contracts`, `@tekton/token-generator` |
 
@@ -530,7 +530,7 @@ $ tekton create screen UserProfile \
 
 **R-003: 템플릿 경직성**
 - 영향도: MEDIUM
-- 완화 전략: Override 시스템 구현 (Skeleton Preset 선택 후 개별 속성 수정 허용)
+- 완화 전략: Override 시스템 구현 (Skeleton Theme 선택 후 개별 속성 수정 허용)
 
 ---
 

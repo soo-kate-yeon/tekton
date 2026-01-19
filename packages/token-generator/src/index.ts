@@ -8,5 +8,5 @@ export * from './neutral-palette.js';
 export * from './semantic-mapper.js';
 export * from './output.js';
 
-// Re-export schemas and questionnaire from @tekton/preset
-export * from '@tekton/preset';
+// Re-export schemas and questionnaire from @tekton/theme
+export * from '@tekton/theme';

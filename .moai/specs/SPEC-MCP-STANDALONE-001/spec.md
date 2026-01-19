@@ -21,7 +21,7 @@ lifecycle: "spec-anchored"
 
 **Purpose**: Transform studio-mcp into an environment-independent npm package (@tekton/mcp-server) that can be installed and run via `npx @tekton/mcp-server` on any project without requiring studio-api, Supabase, or git clone.
 
-**Scope**: Refactor studio-mcp to remove studio-api dependencies, bundle built-in presets as JSON, implement framework auto-detection with local configuration storage, and configure npm package publishing.
+**Scope**: Refactor studio-mcp to remove studio-api dependencies, bundle built-in themes as JSON, implement framework auto-detection with local configuration storage, and configure npm package publishing.
 
 **Priority**: HIGH - Enables standalone MCP server distribution for the Free tier user experience
 
@@ -34,22 +34,22 @@ lifecycle: "spec-anchored"
 ### Current System Context
 
 **Existing studio-mcp Package:**
-- **16 MCP Tools**: 7 archetype tools + 3 project tools + 6 screen tools
-- **Self-Contained Tools**: archetype.* and screen.* tools are 100% self-contained
+- **16 MCP Tools**: 7 component tools + 3 project tools + 6 screen tools
+- **Self-Contained Tools**: component.* and screen.* tools are 100% self-contained
 - **API-Dependent Tools**: `project.getActivePreset` and `project.setActivePreset` require studio-api
 - **Package Location**: `packages/studio-mcp/`
 - **Current Binary**: `studio-mcp` pointing to `./dist/server/index.js`
 
 **Dependencies on studio-api:**
-- `project.getActivePreset`: Calls `GET /api/v2/settings/active-preset`
-- `project.setActivePreset`: Calls `PUT /api/v2/settings/active-preset`
+- `project.getActivePreset`: Calls `GET /api/v2/settings/active-theme`
+- `project.setActivePreset`: Calls `PUT /api/v2/settings/active-theme`
 - **Why Problematic**: Requires running Python backend with PostgreSQL database
 
-**Existing Preset Package:**
-- **Location**: `packages/preset/`
+**Existing Theme Package:**
+- **Location**: `packages/theme/`
 - **Schema**: `PresetSchema` in `src/types.ts` with Zod validation
 - **Loader**: `loadPreset()` and `loadDefaultPreset()` functions
-- **Default Preset**: `next-tailwind-shadcn.json` bundled
+- **Default Theme**: `next-tailwind-shadcn.json` bundled
 
 **Target Distribution:**
 - npm package: `@tekton/mcp-server`
@@ -62,8 +62,8 @@ lifecycle: "spec-anchored"
 - TypeScript 5.7+
 - Node.js 20+
 - Zod 3.23+ (schema validation)
-- @tekton/archetype-system (bundled)
-- @tekton/preset (bundled presets)
+- @tekton/component-system (bundled)
+- @tekton/theme (bundled themes)
 
 **Local Storage:**
 - `.tekton/config.json` - Project-local configuration
@@ -81,12 +81,12 @@ lifecycle: "spec-anchored"
 
 ### Technical Assumptions
 
-**A-001: Preset JSON Bundling Feasibility**
-- **Assumption**: 7 built-in presets can be bundled as JSON within the npm package without significant size increase
+**A-001: Theme JSON Bundling Feasibility**
+- **Assumption**: 7 built-in themes can be bundled as JSON within the npm package without significant size increase
 - **Confidence**: HIGH
-- **Evidence**: Current preset JSON is approximately 1KB, 7 presets would add less than 10KB
+- **Evidence**: Current theme JSON is approximately 1KB, 7 themes would add less than 10KB
 - **Risk if Wrong**: Package size bloat affecting download times
-- **Validation**: Measure bundle size before and after preset inclusion
+- **Validation**: Measure bundle size before and after theme inclusion
 
 **A-002: Local File System Access**
 - **Assumption**: MCP server has read/write access to `.tekton/` directory in project root
@@ -112,26 +112,26 @@ lifecycle: "spec-anchored"
 ### Business Assumptions
 
 **A-005: Free Tier Feature Set Sufficiency**
-- **Assumption**: Built-in presets and local configuration satisfy Free tier users
+- **Assumption**: Built-in themes and local configuration satisfy Free tier users
 - **Confidence**: MEDIUM
-- **Evidence**: 7 presets cover common design patterns (Professional, Creative, Minimal, etc.)
-- **Risk if Wrong**: Users demand custom preset creation without upgrade
+- **Evidence**: 7 themes cover common design patterns (Professional, Creative, Minimal, etc.)
+- **Risk if Wrong**: Users demand custom theme creation without upgrade
 - **Validation**: User feedback collection after launch
 
 **A-006: No Authentication for Standalone Mode**
 - **Assumption**: Standalone mode operates without user authentication
 - **Confidence**: HIGH
 - **Evidence**: Local tools typically don't require auth for basic functionality
-- **Risk if Wrong**: Feature abuse potential, but low risk for design presets
+- **Risk if Wrong**: Feature abuse potential, but low risk for design themes
 - **Validation**: Security review of exposed functionality
 
 ### Integration Assumptions
 
-**A-007: Archetype System Compatibility**
-- **Assumption**: @tekton/archetype-system package can be bundled without modification
+**A-007: Component System Compatibility**
+- **Assumption**: @tekton/component-system package can be bundled without modification
 - **Confidence**: HIGH
 - **Evidence**: Already works as workspace dependency
-- **Risk if Wrong**: Requires archetype-system refactoring
+- **Risk if Wrong**: Requires component-system refactoring
 - **Validation**: Build and test bundled package
 
 ---
@@ -160,32 +160,32 @@ lifecycle: "spec-anchored"
 - **Rationale**: Configuration survives server restarts without database
 - **Test Strategy**: Configuration persistence tests across restarts
 
-**U-005: Built-in Preset Bundling**
-- The system **shall** bundle all 7 built-in presets as JSON within the npm package
-- **Rationale**: Presets must be available without network access
-- **Test Strategy**: Verify all presets load from bundled JSON
+**U-005: Built-in Theme Bundling**
+- The system **shall** bundle all 7 built-in themes as JSON within the npm package
+- **Rationale**: Themes must be available without network access
+- **Test Strategy**: Verify all themes load from bundled JSON
 
 ### Event-Driven Requirements (Trigger-Response)
 
-**E-001: Preset List Request (Standalone)**
-- **WHEN** `preset.list` tool invoked **THEN** return list of all 7 built-in presets with metadata
-- **Rationale**: AI assistants need to discover available presets
-- **Test Strategy**: Verify all 7 presets returned with correct schema
+**E-001: Theme List Request (Standalone)**
+- **WHEN** `theme.list` tool invoked **THEN** return list of all 7 built-in themes with metadata
+- **Rationale**: AI assistants need to discover available themes
+- **Test Strategy**: Verify all 7 themes returned with correct schema
 
-**E-002: Preset Get Request (Standalone)**
-- **WHEN** `preset.get` tool invoked with presetId **THEN** return complete preset data including AI context
-- **Rationale**: AI assistants need full preset details for styling decisions
-- **Test Strategy**: Verify preset data matches bundled JSON
+**E-002: Theme Get Request (Standalone)**
+- **WHEN** `theme.get` tool invoked with presetId **THEN** return complete theme data including AI context
+- **Rationale**: AI assistants need full theme details for styling decisions
+- **Test Strategy**: Verify theme data matches bundled JSON
 
 **E-003: Project Status Request (Standalone)**
-- **WHEN** `project.status` tool invoked **THEN** return connection status and active preset from local config
+- **WHEN** `project.status` tool invoked **THEN** return connection status and active theme from local config
 - **Rationale**: AI assistants need to understand current project state
 - **Test Strategy**: Verify status reflects local configuration state
 
-**E-004: Use Built-in Preset Request**
-- **WHEN** `project.useBuiltinPreset` tool invoked with presetId **THEN** set active preset in local config and return confirmation
-- **Rationale**: Users select presets without studio-api connection
-- **Test Strategy**: Verify local config updated with preset selection
+**E-004: Use Built-in Theme Request**
+- **WHEN** `project.useBuiltinPreset` tool invoked with presetId **THEN** set active theme in local config and return confirmation
+- **Rationale**: Users select themes without studio-api connection
+- **Test Strategy**: Verify local config updated with theme selection
 
 **E-005: Server Health Check**
 - **WHEN** `/health` endpoint accessed **THEN** return server status, mode (standalone/connected), and available tools
@@ -201,24 +201,24 @@ lifecycle: "spec-anchored"
 
 **S-001: Mode Selection Based on API Availability**
 - **IF** studio-api is reachable **THEN** operate in connected mode with full feature set
-- **IF** studio-api is not reachable **THEN** operate in standalone mode with built-in presets only
+- **IF** studio-api is not reachable **THEN** operate in standalone mode with built-in themes only
 - **Rationale**: Graceful degradation ensures functionality without API
 - **Test Strategy**: Test both modes with API available and unavailable
 
-**S-002: Preset Selection Source**
-- **IF** operating in standalone mode **THEN** load presets from bundled JSON
-- **IF** operating in connected mode **THEN** load presets from studio-api with bundled as fallback
-- **Rationale**: Connected mode enables custom presets, standalone uses built-in
-- **Test Strategy**: Verify correct preset source in each mode
+**S-002: Theme Selection Source**
+- **IF** operating in standalone mode **THEN** load themes from bundled JSON
+- **IF** operating in connected mode **THEN** load themes from studio-api with bundled as fallback
+- **Rationale**: Connected mode enables custom themes, standalone uses built-in
+- **Test Strategy**: Verify correct theme source in each mode
 
 **S-003: Configuration File Creation**
-- **IF** `.tekton/config.json` does not exist **THEN** create with default configuration on first preset selection
+- **IF** `.tekton/config.json` does not exist **THEN** create with default configuration on first theme selection
 - **IF** `.tekton/config.json` exists **THEN** update existing configuration preserving other settings
 - **Rationale**: Non-destructive configuration management
 - **Test Strategy**: Verify file creation and update behaviors
 
 **S-004: Tool Registration Based on Mode**
-- **IF** operating in standalone mode **THEN** register standalone tool variants (preset.list, preset.get, project.status, project.useBuiltinPreset)
+- **IF** operating in standalone mode **THEN** register standalone tool variants (theme.list, theme.get, project.status, project.useBuiltinPreset)
 - **IF** operating in connected mode **THEN** register full tool set including API-dependent tools
 - **Rationale**: Tool availability reflects actual capabilities
 - **Test Strategy**: Verify tool list differs by mode
@@ -241,34 +241,34 @@ lifecycle: "spec-anchored"
 - **Test Strategy**: Startup tests with missing and malformed config
 
 **UW-004: No Package Size Explosion**
-- The system **shall not** exceed 5MB total package size including all bundled presets
+- The system **shall not** exceed 5MB total package size including all bundled themes
 - **Rationale**: Large packages create poor npx experience
 - **Test Strategy**: Measure and enforce package size limit
 
 ### Optional Requirements (Future Enhancements)
 
-**O-001: Preset Preview in Terminal**
-- **Where possible**, provide ASCII art preview of preset color scheme
+**O-001: Theme Preview in Terminal**
+- **Where possible**, provide ASCII art preview of theme color scheme
 - **Priority**: DEFERRED to Phase 2
-- **Rationale**: Terminal users benefit from visual preset preview
+- **Rationale**: Terminal users benefit from visual theme preview
 
-**O-002: Framework-Specific Preset Recommendations**
-- **Where possible**, suggest presets based on detected framework
+**O-002: Framework-Specific Theme Recommendations**
+- **Where possible**, suggest themes based on detected framework
 - **Priority**: DEFERRED to Phase 2
 - **Rationale**: Intelligent recommendations improve user experience
 
-**O-003: Local Preset Creation**
-- **Where possible**, enable custom preset creation in standalone mode (saved locally)
+**O-003: Local Theme Creation**
+- **Where possible**, enable custom theme creation in standalone mode (saved locally)
 - **Priority**: DEFERRED to Phase 2
-- **Rationale**: Power users may want custom presets without upgrade
+- **Rationale**: Power users may want custom themes without upgrade
 
 ---
 
 ## SPECIFICATIONS
 
-### Built-in Presets (7 Types)
+### Built-in Themes (7 Types)
 
-**Preset IDs and Descriptions:**
+**Theme IDs and Descriptions:**
 
 1. **next-tailwind-shadcn** (existing)
    - Description: Next.js + Tailwind CSS + shadcn/ui - Professional web applications
@@ -307,11 +307,11 @@ lifecycle: "spec-anchored"
 
 ### MCP Tool Definitions (Standalone Mode)
 
-**preset.list**
+**theme.list**
 ```typescript
 {
-  name: "preset.list",
-  description: "List all built-in presets available in standalone mode. Returns preset ID, name, description, and stack info.",
+  name: "theme.list",
+  description: "List all built-in themes available in standalone mode. Returns theme ID, name, description, and stack info.",
   inputSchema: {
     type: "object",
     properties: {},
@@ -320,17 +320,17 @@ lifecycle: "spec-anchored"
 }
 ```
 
-**preset.get**
+**theme.get**
 ```typescript
 {
-  name: "preset.get",
-  description: "Get complete preset details including AI context for styling decisions. Provides questionnaire defaults and design tokens.",
+  name: "theme.get",
+  description: "Get complete theme details including AI context for styling decisions. Provides questionnaire defaults and design tokens.",
   inputSchema: {
     type: "object",
     properties: {
       presetId: {
         type: "string",
-        description: "Preset ID (e.g., 'next-tailwind-shadcn', 'saas-dashboard')"
+        description: "Theme ID (e.g., 'next-tailwind-shadcn', 'saas-dashboard')"
       }
     },
     required: ["presetId"]
@@ -342,7 +342,7 @@ lifecycle: "spec-anchored"
 ```typescript
 {
   name: "project.status",
-  description: "Get project status including connection mode (standalone/connected), active preset, and detected framework.",
+  description: "Get project status including connection mode (standalone/connected), active theme, and detected framework.",
   inputSchema: {
     type: "object",
     properties: {
@@ -360,13 +360,13 @@ lifecycle: "spec-anchored"
 ```typescript
 {
   name: "project.useBuiltinPreset",
-  description: "Select a built-in preset as the active preset for the project. Persists to local .tekton/config.json.",
+  description: "Select a built-in theme as the active theme for the project. Persists to local .tekton/config.json.",
   inputSchema: {
     type: "object",
     properties: {
       presetId: {
         type: "string",
-        description: "Built-in preset ID to activate"
+        description: "Built-in theme ID to activate"
       },
       projectPath: {
         type: "string",
@@ -391,7 +391,7 @@ lifecycle: "spec-anchored"
     "frameworkType": "next-app",
     "detectedAt": "2026-01-18T00:00:00Z"
   },
-  "preset": {
+  "theme": {
     "activePresetId": "next-tailwind-shadcn",
     "selectedAt": "2026-01-18T00:00:00Z"
   }
@@ -404,7 +404,7 @@ lifecycle: "spec-anchored"
 ```
 packages/studio-mcp/
   src/
-    archetype/tools.ts     # Self-contained
+    component/tools.ts     # Self-contained
     project/tools.ts       # API-dependent (getActivePreset, setActivePreset)
     screen/tools.ts        # Self-contained
     server/mcp-server.ts   # HTTP server
@@ -414,15 +414,15 @@ packages/studio-mcp/
 ```
 packages/studio-mcp/
   src/
-    archetype/tools.ts     # Unchanged
+    component/tools.ts     # Unchanged
     project/
       tools.ts             # Refactored - mode-aware
       standalone.ts        # NEW - standalone implementations
       config.ts            # NEW - local config management
     screen/tools.ts        # Unchanged
-    preset/
-      builtin.ts           # NEW - bundled preset loader
-      presets/             # NEW - 7 JSON preset files
+    theme/
+      builtin.ts           # NEW - bundled theme loader
+      themes/             # NEW - 7 JSON theme files
         next-tailwind-shadcn.json
         next-tailwind-radix.json
         vite-tailwind-shadcn.json
@@ -479,7 +479,7 @@ packages/studio-mcp/
   "service": "tekton-mcp",
   "mode": "standalone",
   "version": "1.0.0",
-  "tools": ["archetype.list", "archetype.get", "preset.list", "preset.get", "project.status", "project.useBuiltinPreset", "screen.create", "..."],
+  "tools": ["component.list", "component.get", "theme.list", "theme.get", "project.status", "project.useBuiltinPreset", "screen.create", "..."],
   "features": {
     "customPresets": false,
     "cloudSync": false,
@@ -500,18 +500,18 @@ packages/studio-mcp/
 | U-002 | AC-002 | Backward compatibility test suite |
 | U-003 | AC-003 | Zero configuration startup test |
 | U-004 | AC-004 | Local configuration persistence |
-| U-005 | AC-005 | Bundled preset verification |
-| E-001 | AC-006 | preset.list tool test |
-| E-002 | AC-007 | preset.get tool test |
+| U-005 | AC-005 | Bundled theme verification |
+| E-001 | AC-006 | theme.list tool test |
+| E-002 | AC-007 | theme.get tool test |
 | E-003 | AC-008 | project.status tool test |
 | E-004 | AC-009 | project.useBuiltinPreset tool test |
 | S-001 | AC-010 | Mode selection logic test |
-| S-002 | AC-011 | Preset source selection test |
+| S-002 | AC-011 | Theme source selection test |
 
 ### SPEC-to-Implementation Tags
 
 - **[SPEC-MCP-STANDALONE-001]**: All commits related to standalone MCP
-- **[MCP-PRESET]**: Bundled preset implementations
+- **[MCP-THEME]**: Bundled theme implementations
 - **[MCP-CONFIG]**: Local configuration management
 - **[MCP-MODE]**: Mode detection and switching
 - **[MCP-NPM]**: npm package configuration
@@ -522,8 +522,8 @@ packages/studio-mcp/
 
 ### Internal Dependencies
 - **SPEC-MCP-001**: Completed - base MCP server infrastructure
-- **@tekton/archetype-system**: Archetype data (bundled)
-- **@tekton/preset**: Preset schemas (referenced for compatibility)
+- **@tekton/component-system**: Component data (bundled)
+- **@tekton/theme**: Theme schemas (referenced for compatibility)
 
 ### External Dependencies
 - **Zod**: Schema validation (already dependency)
@@ -547,11 +547,11 @@ packages/studio-mcp/
 - **Mitigation**: Verify @tekton/mcp-server availability before development
 - **Contingency**: Alternative names: @tekton/studio-mcp, @tekton-design/mcp
 
-**Risk 2: Bundled Preset Size Growth**
+**Risk 2: Bundled Theme Size Growth**
 - **Likelihood**: MEDIUM
 - **Impact**: MEDIUM
 - **Mitigation**: Minify JSON, monitor bundle size in CI
-- **Contingency**: Lazy-load presets, external preset CDN
+- **Contingency**: Lazy-load themes, external theme CDN
 
 ### Medium-Risk Areas
 
@@ -573,7 +573,7 @@ packages/studio-mcp/
 
 ### Implementation Success Criteria
 - [ ] All 4 standalone tools implemented and functional
-- [ ] 7 built-in presets bundled and validated
+- [ ] 7 built-in themes bundled and validated
 - [ ] Local configuration storage working
 - [ ] Mode detection working correctly
 - [ ] npm package publishable
@@ -586,7 +586,7 @@ packages/studio-mcp/
 
 ### Integration Success Criteria
 - [ ] `npx @tekton/mcp-server` works in fresh environment
-- [ ] Existing screen.* and archetype.* tools unaffected
+- [ ] Existing screen.* and component.* tools unaffected
 - [ ] Claude Desktop integration verified
 - [ ] VS Code extension integration verified
 
@@ -596,7 +596,7 @@ packages/studio-mcp/
 
 - [SPEC-MCP-001: Tekton MCP Server Natural Language Screen Generation](../SPEC-MCP-001/spec.md) - Completed base implementation
 - [Existing MCP Server](../../packages/studio-mcp/src/server/mcp-server.ts)
-- [Preset Package](../../packages/preset/src/loader.ts)
+- [Theme Package](../../packages/theme/src/loader.ts)
 - [npm Publishing Guide](https://docs.npmjs.com/cli/v10/commands/npm-publish)
 - [MCP Specification](https://modelcontextprotocol.io/specification)
 

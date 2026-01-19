@@ -2,7 +2,7 @@
 
 import { forwardRef, type HTMLAttributes } from 'react';
 import { cn } from '@/lib/utils/cn';
-import type { AccessibilitySpec } from '@tekton/archetype-system';
+import type { AccessibilitySpec } from '@tekton/component-system';
 
 export interface AccessibilityInfoPanelProps extends HTMLAttributes<HTMLDivElement> {
   accessibility: AccessibilitySpec | undefined;

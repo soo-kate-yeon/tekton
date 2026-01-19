@@ -9,13 +9,13 @@ import pytest
 from httpx import AsyncClient
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from studio_api.models.curated_preset import CuratedPreset
+from studio_api.models.curated_theme import CuratedTheme
 
 
 @pytest.mark.asyncio
 async def test_list_presets_empty(async_client: AsyncClient):
     """Test listing presets when database is empty."""
-    response = await async_client.get("/api/v2/presets")
+    response = await async_client.get("/api/v2/themes")
     assert response.status_code == 200
     data = response.json()
     assert data["items"] == []
@@ -27,7 +27,7 @@ async def test_list_presets_with_data(async_client: AsyncClient, db_session: Asy
     """Test listing presets with existing data."""
     # Create test presets
     presets = [
-        CuratedPreset(
+        CuratedTheme(
             name="Modern Minimalist",
             category="professional",
             description="Clean and professional design",
@@ -35,7 +35,7 @@ async def test_list_presets_with_data(async_client: AsyncClient, db_session: Asy
             tags=["modern", "minimal"],
             is_active=True,
         ),
-        CuratedPreset(
+        CuratedTheme(
             name="Vintage Warm",
             category="creative",
             description="Warm vintage aesthetics",
@@ -48,7 +48,7 @@ async def test_list_presets_with_data(async_client: AsyncClient, db_session: Asy
         db_session.add(preset)
     await db_session.commit()
 
-    response = await async_client.get("/api/v2/presets")
+    response = await async_client.get("/api/v2/themes")
     assert response.status_code == 200
     data = response.json()
     assert len(data["items"]) == 2
@@ -63,14 +63,14 @@ async def test_list_presets_filter_by_category(
 ):
     """Test filtering presets by category."""
     presets = [
-        CuratedPreset(
+        CuratedTheme(
             name="Business Pro",
             category="professional",
             description="Professional business design",
             config={},
             is_active=True,
         ),
-        CuratedPreset(
+        CuratedTheme(
             name="Art Deco",
             category="creative",
             description="Creative artistic design",
@@ -82,7 +82,7 @@ async def test_list_presets_filter_by_category(
         db_session.add(preset)
     await db_session.commit()
 
-    response = await async_client.get("/api/v2/presets?category=professional")
+    response = await async_client.get("/api/v2/themes?category=professional")
     assert response.status_code == 200
     data = response.json()
     assert len(data["items"]) == 1
@@ -95,7 +95,7 @@ async def test_list_presets_filter_by_tags(
 ):
     """Test filtering presets by tags."""
     presets = [
-        CuratedPreset(
+        CuratedTheme(
             name="Dark Mode",
             category="modern",
             description="Dark theme preset",
@@ -103,7 +103,7 @@ async def test_list_presets_filter_by_tags(
             tags=["dark", "modern"],
             is_active=True,
         ),
-        CuratedPreset(
+        CuratedTheme(
             name="Light Mode",
             category="modern",
             description="Light theme preset",
@@ -116,7 +116,7 @@ async def test_list_presets_filter_by_tags(
         db_session.add(preset)
     await db_session.commit()
 
-    response = await async_client.get("/api/v2/presets?tags=dark")
+    response = await async_client.get("/api/v2/themes?tags=dark")
     assert response.status_code == 200
     data = response.json()
     assert len(data["items"]) == 1
@@ -130,7 +130,7 @@ async def test_list_presets_pagination(
     """Test pagination of preset list."""
     # Create 15 presets
     for i in range(15):
-        preset = CuratedPreset(
+        preset = CuratedTheme(
             name=f"Preset {i}",
             category="test",
             description=f"Test preset {i}",
@@ -141,14 +141,14 @@ async def test_list_presets_pagination(
     await db_session.commit()
 
     # Test first page
-    response = await async_client.get("/api/v2/presets?skip=0&limit=10")
+    response = await async_client.get("/api/v2/themes?skip=0&limit=10")
     assert response.status_code == 200
     data = response.json()
     assert len(data["items"]) == 10
     assert data["total"] == 15
 
     # Test second page
-    response = await async_client.get("/api/v2/presets?skip=10&limit=10")
+    response = await async_client.get("/api/v2/themes?skip=10&limit=10")
     assert response.status_code == 200
     data = response.json()
     assert len(data["items"]) == 5
@@ -158,7 +158,7 @@ async def test_list_presets_pagination(
 @pytest.mark.asyncio
 async def test_get_preset_by_id(async_client: AsyncClient, db_session: AsyncSession):
     """Test retrieving a single preset by ID."""
-    preset = CuratedPreset(
+    preset = CuratedTheme(
         name="Test Preset",
         category="test",
         description="Test description",
@@ -170,7 +170,7 @@ async def test_get_preset_by_id(async_client: AsyncClient, db_session: AsyncSess
     await db_session.commit()
     await db_session.refresh(preset)
 
-    response = await async_client.get(f"/api/v2/presets/{preset.id}")
+    response = await async_client.get(f"/api/v2/themes/{preset.id}")
     assert response.status_code == 200
     data = response.json()
     assert data["id"] == preset.id
@@ -182,7 +182,7 @@ async def test_get_preset_by_id(async_client: AsyncClient, db_session: AsyncSess
 @pytest.mark.asyncio
 async def test_get_preset_not_found(async_client: AsyncClient):
     """Test retrieving non-existent preset returns 404."""
-    response = await async_client.get("/api/v2/presets/99999")
+    response = await async_client.get("/api/v2/themes/99999")
     assert response.status_code == 404
     assert "not found" in response.json()["detail"].lower()
 
@@ -190,7 +190,7 @@ async def test_get_preset_not_found(async_client: AsyncClient):
 @pytest.mark.asyncio
 async def test_create_preset(async_client: AsyncClient):
     """Test creating a new preset."""
-    preset_data = {
+    theme_data = {
         "name": "New Preset",
         "category": "professional",
         "description": "A brand new preset",
@@ -198,7 +198,7 @@ async def test_create_preset(async_client: AsyncClient):
         "tags": ["new", "blue"],
     }
 
-    response = await async_client.post("/api/v2/presets", json=preset_data)
+    response = await async_client.post("/api/v2/themes", json=theme_data)
     assert response.status_code == 201
     data = response.json()
     assert data["name"] == "New Preset"
@@ -216,14 +216,14 @@ async def test_create_preset_validation_error(async_client: AsyncClient):
         "category": "test",
     }
 
-    response = await async_client.post("/api/v2/presets", json=invalid_data)
+    response = await async_client.post("/api/v2/themes", json=invalid_data)
     assert response.status_code == 422
 
 
 @pytest.mark.asyncio
 async def test_update_preset(async_client: AsyncClient, db_session: AsyncSession):
     """Test updating an existing preset."""
-    preset = CuratedPreset(
+    preset = CuratedTheme(
         name="Original Name",
         category="test",
         description="Original description",
@@ -240,7 +240,7 @@ async def test_update_preset(async_client: AsyncClient, db_session: AsyncSession
         "config": {"colors": {"primary": "#FFFFFF"}},
     }
 
-    response = await async_client.patch(f"/api/v2/presets/{preset.id}", json=update_data)
+    response = await async_client.patch(f"/api/v2/themes/{preset.id}", json=update_data)
     assert response.status_code == 200
     data = response.json()
     assert data["name"] == "Updated Name"
@@ -253,14 +253,14 @@ async def test_update_preset_not_found(async_client: AsyncClient):
     """Test updating non-existent preset returns 404."""
     update_data = {"name": "Updated"}
 
-    response = await async_client.patch("/api/v2/presets/99999", json=update_data)
+    response = await async_client.patch("/api/v2/themes/99999", json=update_data)
     assert response.status_code == 404
 
 
 @pytest.mark.asyncio
 async def test_delete_preset(async_client: AsyncClient, db_session: AsyncSession):
     """Test deleting a preset (soft delete by setting is_active=False)."""
-    preset = CuratedPreset(
+    preset = CuratedTheme(
         name="To Delete",
         category="test",
         description="Will be deleted",
@@ -271,18 +271,18 @@ async def test_delete_preset(async_client: AsyncClient, db_session: AsyncSession
     await db_session.commit()
     await db_session.refresh(preset)
 
-    response = await async_client.delete(f"/api/v2/presets/{preset.id}")
+    response = await async_client.delete(f"/api/v2/themes/{preset.id}")
     assert response.status_code == 204
 
     # Verify preset is soft-deleted (is_active=False)
-    response = await async_client.get(f"/api/v2/presets/{preset.id}")
+    response = await async_client.get(f"/api/v2/themes/{preset.id}")
     assert response.status_code == 404
 
 
 @pytest.mark.asyncio
 async def test_delete_preset_not_found(async_client: AsyncClient):
     """Test deleting non-existent preset returns 404."""
-    response = await async_client.delete("/api/v2/presets/99999")
+    response = await async_client.delete("/api/v2/themes/99999")
     assert response.status_code == 404
 
 
@@ -292,14 +292,14 @@ async def test_list_presets_excludes_inactive(
 ):
     """Test that inactive presets are excluded from list by default."""
     presets = [
-        CuratedPreset(
+        CuratedTheme(
             name="Active Preset",
             category="test",
             description="Active",
             config={},
             is_active=True,
         ),
-        CuratedPreset(
+        CuratedTheme(
             name="Inactive Preset",
             category="test",
             description="Inactive",
@@ -311,7 +311,7 @@ async def test_list_presets_excludes_inactive(
         db_session.add(preset)
     await db_session.commit()
 
-    response = await async_client.get("/api/v2/presets")
+    response = await async_client.get("/api/v2/themes")
     assert response.status_code == 200
     data = response.json()
     assert len(data["items"]) == 1

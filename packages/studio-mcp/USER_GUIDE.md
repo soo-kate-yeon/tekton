@@ -5,7 +5,7 @@
 1. [Introduction](#introduction)
 2. [Installation](#installation)
 3. [Quick Start](#quick-start)
-4. [Built-in Presets](#built-in-presets)
+4. [Built-in Themes](#built-in-themes)
 5. [Available MCP Tools](#available-mcp-tools)
 6. [Claude Code Integration](#claude-code-integration)
 7. [Configuration](#configuration)
@@ -19,11 +19,11 @@
 
 ### What is Tekton Standalone MCP Server?
 
-Tekton Standalone MCP Server (`@tekton/mcp-server`) is an npm-distributed package that provides AI-powered design system tools via the Model Context Protocol (MCP). It enables AI assistants like Claude to query and use design presets, archetypes, and component generation tools for building modern web applications.
+Tekton Standalone MCP Server (`@tekton/mcp-server`) is an npm-distributed package that provides AI-powered design system tools via the Model Context Protocol (MCP). It enables AI assistants like Claude to query and use design themes, components, and component generation tools for building modern web applications.
 
 ### Key Benefits
 
-- **Zero Configuration**: Works out-of-the-box with 7 professional built-in presets
+- **Zero Configuration**: Works out-of-the-box with 7 professional built-in themes
 - **Framework Agnostic**: Supports Next.js, Vite, React, and more
 - **AI-Powered**: Provides context-aware design guidance for AI assistants
 - **Type-Safe**: Full TypeScript support with Zod schema validation
@@ -40,14 +40,14 @@ Tekton Standalone MCP Server (`@tekton/mcp-server`) is an npm-distributed packag
 ### Operating Modes
 
 **Standalone Mode** (Default)
-- Uses 7 built-in presets bundled with the package
+- Uses 7 built-in themes bundled with the package
 - No external API connection required
 - Perfect for getting started quickly
 - Full offline support
 
 **Connected Mode** (Advanced)
 - Connects to Tekton Studio API at `http://localhost:8000`
-- Access to custom presets and cloud features
+- Access to custom themes and cloud features
 - Collaborative design system management
 - Analytics and usage tracking
 
@@ -100,8 +100,8 @@ cd tekton
 # Install all dependencies (this handles workspace dependencies)
 pnpm install
 
-# Build the archetype-system package (required dependency)
-cd packages/archetype-system
+# Build the component-system package (required dependency)
+cd packages/component-system
 pnpm run build
 cd ../..
 
@@ -128,13 +128,13 @@ npm install /Users/yourname/Developer/tekton/packages/studio-mcp
 **Method B - Using npm link:**
 
 ```bash
-# Step 1: Link the archetype-system package first
-cd /path/to/tekton/packages/archetype-system
+# Step 1: Link the component-system package first
+cd /path/to/tekton/packages/component-system
 npm link
 
 # Step 2: Link the studio-mcp package
 cd /path/to/tekton/packages/studio-mcp
-npm link @tekton/archetype-system
+npm link @tekton/component-system
 npm link
 
 # Step 3: Link in your project
@@ -175,11 +175,11 @@ node /path/to/tekton/packages/studio-mcp/dist/server/index.js
 
 ### Important: Workspace Dependencies
 
-The `@tekton/mcp-server` package depends on `@tekton/archetype-system`, which is a workspace dependency in the monorepo. When installing locally:
+The `@tekton/mcp-server` package depends on `@tekton/component-system`, which is a workspace dependency in the monorepo. When installing locally:
 
-1. **Always build archetype-system first:**
+1. **Always build component-system first:**
    ```bash
-   cd packages/archetype-system
+   cd packages/component-system
    pnpm run build
    ```
 
@@ -190,7 +190,7 @@ The `@tekton/mcp-server` package depends on `@tekton/archetype-system`, which is
    ```
 
 3. **The build creates these directories:**
-   - `packages/archetype-system/dist/` - TypeScript compiled output
+   - `packages/component-system/dist/` - TypeScript compiled output
    - `packages/studio-mcp/dist/` - Server executable and types
 
 ### Verify Installation
@@ -259,10 +259,10 @@ curl http://localhost:3000/health
   "mode": "standalone",
   "version": "1.0.0",
   "tools": [
-    "archetype.list",
-    "archetype.get",
-    "preset.list",
-    "preset.get",
+    "component.list",
+    "component.get",
+    "theme.list",
+    "theme.get",
     "project.status",
     "screen.create",
     ...
@@ -277,10 +277,10 @@ curl http://localhost:3000/health
 
 ### Basic Tool Usage Example
 
-**List Available Presets:**
+**List Available Themes:**
 
 ```bash
-curl -X POST http://localhost:3000/tools/preset.list
+curl -X POST http://localhost:3000/tools/theme.list
 ```
 
 **Response:**
@@ -307,13 +307,13 @@ curl -X POST http://localhost:3000/tools/preset.list
 
 ---
 
-## Built-in Presets
+## Built-in Themes
 
-The MCP server includes 7 professionally crafted presets for different use cases and technology stacks.
+The MCP server includes 7 professionally crafted themes for different use cases and technology stacks.
 
-### Preset Overview
+### Theme Overview
 
-| Preset ID | Name | Framework | Styling | Components | Brand Tone |
+| Theme ID | Name | Framework | Styling | Components | Brand Tone |
 |-----------|------|-----------|---------|------------|------------|
 | `next-tailwind-shadcn` | Next.js + Tailwind + shadcn/ui | Next.js | Tailwind CSS | shadcn/ui | Professional |
 | `next-tailwind-radix` | Next.js + Tailwind + Radix UI | Next.js | Tailwind CSS | Radix UI | Professional |
@@ -323,9 +323,9 @@ The MCP server includes 7 professionally crafted presets for different use cases
 | `tech-startup` | Tech Startup | Next.js | Tailwind CSS | Radix UI | Bold |
 | `premium-editorial` | Premium Editorial | Next.js | Tailwind CSS | - | Elegant |
 
-### Preset Structure
+### Theme Structure
 
-Each preset contains:
+Each theme contains:
 
 #### 1. Basic Information
 - **id**: Unique identifier
@@ -382,7 +382,7 @@ Provides guidance for AI assistants:
 }
 ```
 
-### Preset Selection Guide
+### Theme Selection Guide
 
 **For Professional Applications:**
 - Use `next-tailwind-shadcn` for enterprise apps with high accessibility needs
@@ -403,19 +403,19 @@ Provides guidance for AI assistants:
 
 The server provides 26 MCP tools across 4 categories.
 
-### Archetype Tools (7 tools)
+### Component Tools (7 tools)
 
-Query hook archetypes for component generation with 4-layer architecture.
+Query hook components for component generation with 4-layer architecture.
 
 | Tool | Description | Parameters |
 |------|-------------|------------|
-| `archetype.list` | List all available hooks | None |
-| `archetype.get` | Get complete archetype (all 4 layers) | `hookName` |
-| `archetype.getPropRules` | Get Layer 1: Hook prop rules | `hookName` |
-| `archetype.getStateMappings` | Get Layer 2: State-style mappings | `hookName` |
-| `archetype.getVariants` | Get Layer 3: Variant branching | `hookName` |
-| `archetype.getStructure` | Get Layer 4: Structure templates | `hookName` |
-| `archetype.query` | Search archetypes by criteria | `wcagLevel`, `stateName`, `hasVariant`, `propObject` |
+| `component.list` | List all available hooks | None |
+| `component.get` | Get complete component (all 4 layers) | `hookName` |
+| `component.getPropRules` | Get Layer 1: Hook prop rules | `hookName` |
+| `component.getStateMappings` | Get Layer 2: State-style mappings | `hookName` |
+| `component.getVariants` | Get Layer 3: Variant branching | `hookName` |
+| `component.getStructure` | Get Layer 4: Structure templates | `hookName` |
+| `component.query` | Search components by criteria | `wcagLevel`, `stateName`, `hasVariant`, `propObject` |
 
 **Available Hooks:**
 - `useButton`, `useTextField`, `useCheckbox`, `useRadio`, `useToggle`
@@ -431,11 +431,11 @@ Create and manage screens (pages) in your project.
 |------|-------------|------------|
 | `screen.create` | Create new screen with routing | `name`, `intent`, `targetPath`, `linkFrom?`, `projectPath?` |
 | `screen.addComponent` | Add component to existing screen | `screenName`, `componentType`, `props?`, `projectPath?` |
-| `screen.applyArchetype` | Apply style archetype to screen | `screenName`, `archetypeName`, `projectPath?` |
+| `screen.applyArchetype` | Apply style component to screen | `screenName`, `archetypeName`, `projectPath?` |
 | `screen.list` | List all screens in project | `projectPath?` |
 | `screen.preview` | Get preview URL for screen | `screenName`, `projectPath?` |
 
-**Available Archetypes:**
+**Available Components:**
 - Professional, Creative, Minimal, Bold, Warm, Cool, High-Contrast
 
 ### Project Tools (4 tools)
@@ -445,20 +445,20 @@ Detect project structure and manage configuration.
 | Tool | Description | Parameters |
 |------|-------------|------------|
 | `project.detectStructure` | Detect framework and project type | `projectPath` |
-| `project.getActivePreset` | Get currently active preset | `projectPath?` |
-| `project.setActivePreset` | Set active preset (connected mode) | `presetId`, `projectPath?` |
+| `project.getActivePreset` | Get currently active theme | `projectPath?` |
+| `project.setActivePreset` | Set active theme (connected mode) | `presetId`, `projectPath?` |
 | `project.status` | Get project status and mode | `projectPath?` |
 
-### Preset Tools (4 tools)
+### Theme Tools (4 tools)
 
-Manage design presets (standalone mode).
+Manage design themes (standalone mode).
 
 | Tool | Description | Parameters |
 |------|-------------|------------|
-| `preset.list` | List all built-in presets | None |
-| `preset.get` | Get complete preset details | `presetId` |
-| `project.useBuiltinPreset` | Activate built-in preset | `presetId`, `projectPath?` |
-| `preset.status` | Get preset system status | None |
+| `theme.list` | List all built-in themes | None |
+| `theme.get` | Get complete theme details | `presetId` |
+| `project.useBuiltinPreset` | Activate built-in theme | `presetId`, `projectPath?` |
+| `theme.status` | Get theme system status | None |
 
 ---
 
@@ -511,11 +511,11 @@ Once configured, Claude can access all MCP tools directly.
 **Example Conversations:**
 
 ```
-User: What presets are available?
-Claude: [Uses preset.list tool]
+User: What themes are available?
+Claude: [Uses theme.list tool]
 
-User: Show me the next-tailwind-shadcn preset details
-Claude: [Uses preset.get tool with presetId="next-tailwind-shadcn"]
+User: Show me the next-tailwind-shadcn theme details
+Claude: [Uses theme.get tool with presetId="next-tailwind-shadcn"]
 
 User: Create a user profile page
 Claude: [Uses screen.create tool]
@@ -527,14 +527,14 @@ User: Add a button component to the dashboard screen
 Claude: [Uses screen.addComponent tool]
 
 User: Find all WCAG AA compliant components
-Claude: [Uses archetype.query with wcagLevel="AA"]
+Claude: [Uses component.query with wcagLevel="AA"]
 ```
 
 ### Tool Invocation Best Practices
 
 **Let Claude decide when to use tools:**
 - Ask high-level questions about design and components
-- Request specific presets or archetypes
+- Request specific themes or components
 - Request project structure analysis
 - Ask for component generation
 
@@ -542,7 +542,7 @@ Claude: [Uses archetype.query with wcagLevel="AA"]
 - Select appropriate tools based on your question
 - Chain multiple tool calls when needed
 - Format responses with the retrieved data
-- Provide design guidance using AI context from presets
+- Provide design guidance using AI context from themes
 
 ---
 
@@ -564,7 +564,7 @@ The MCP server creates a local configuration file at `.tekton/config.json` in yo
     "frameworkType": "nextjs",
     "detectedAt": "2026-01-18T12:00:00Z"
   },
-  "preset": {
+  "theme": {
     "activePresetId": null,
     "selectedAt": null
   }
@@ -581,7 +581,7 @@ The MCP server creates a local configuration file at `.tekton/config.json` in yo
 | `version` | string | Config version (semver) |
 | `mode` | enum | `"standalone"` or `"connected"` |
 | `project` | object | Project metadata |
-| `preset` | object | Active preset selection |
+| `theme` | object | Active theme selection |
 
 **Project Object:**
 
@@ -591,11 +591,11 @@ The MCP server creates a local configuration file at `.tekton/config.json` in yo
 | `frameworkType` | string | Detected framework (`nextjs`, `vite`, etc.) |
 | `detectedAt` | string | ISO 8601 timestamp of detection |
 
-**Preset Object:**
+**Theme Object:**
 
 | Field | Type | Description |
 |-------|------|-------------|
-| `activePresetId` | string \| null | Currently active preset ID |
+| `activePresetId` | string \| null | Currently active theme ID |
 | `selectedAt` | string \| null | ISO 8601 timestamp of selection |
 
 ### Mode Detection
@@ -604,12 +604,12 @@ The server automatically detects its operating mode:
 
 **Standalone Mode** (Default)
 - Activated when: Studio API is not available
-- Features: Built-in presets, local config, offline operation
-- Limitations: No custom presets, no cloud sync
+- Features: Built-in themes, local config, offline operation
+- Limitations: No custom themes, no cloud sync
 
 **Connected Mode** (Advanced)
 - Activated when: Studio API is available at `http://localhost:8000`
-- Features: All standalone features + custom presets + cloud sync + analytics
+- Features: All standalone features + custom themes + cloud sync + analytics
 - Requires: Tekton Studio API running locally
 
 **Manual Mode Override:**
@@ -668,7 +668,7 @@ curl http://localhost:3000/health
   "service": "tekton-mcp",
   "mode": "standalone",
   "version": "1.0.0",
-  "tools": ["archetype.list", "preset.list", ...],
+  "tools": ["component.list", "theme.list", ...],
   "features": {
     "customPresets": false,
     "cloudSync": false,
@@ -702,8 +702,8 @@ curl http://localhost:3000/tools
 {
   "tools": [
     {
-      "name": "preset.list",
-      "description": "List all built-in presets...",
+      "name": "theme.list",
+      "description": "List all built-in themes...",
       "inputSchema": {
         "type": "object",
         "properties": {},
@@ -711,14 +711,14 @@ curl http://localhost:3000/tools
       }
     },
     {
-      "name": "preset.get",
-      "description": "Get complete preset details...",
+      "name": "theme.get",
+      "description": "Get complete theme details...",
       "inputSchema": {
         "type": "object",
         "properties": {
           "presetId": {
             "type": "string",
-            "description": "Preset ID"
+            "description": "Theme ID"
           }
         },
         "required": ["presetId"]
@@ -742,7 +742,7 @@ Execute an MCP tool.
 **Request:**
 
 ```bash
-curl -X POST http://localhost:3000/tools/preset.get \
+curl -X POST http://localhost:3000/tools/theme.get \
   -H "Content-Type: application/json" \
   -d '{"presetId": "next-tailwind-shadcn"}'
 ```
@@ -770,29 +770,29 @@ curl -X POST http://localhost:3000/tools/preset.get \
 ```json
 {
   "success": false,
-  "error": "Preset not found: invalid-preset-id"
+  "error": "Theme not found: invalid-theme-id"
 }
 ```
 
 ### Tool Examples
 
-#### Preset Tools
+#### Theme Tools
 
-**List Presets:**
+**List Themes:**
 
 ```bash
-curl -X POST http://localhost:3000/tools/preset.list
+curl -X POST http://localhost:3000/tools/theme.list
 ```
 
-**Get Preset:**
+**Get Theme:**
 
 ```bash
-curl -X POST http://localhost:3000/tools/preset.get \
+curl -X POST http://localhost:3000/tools/theme.get \
   -H "Content-Type: application/json" \
   -d '{"presetId": "next-tailwind-shadcn"}'
 ```
 
-**Use Built-in Preset:**
+**Use Built-in Theme:**
 
 ```bash
 curl -X POST http://localhost:3000/tools/project.useBuiltinPreset \
@@ -840,18 +840,18 @@ curl -X POST http://localhost:3000/tools/project.status \
 }
 ```
 
-#### Archetype Tools
+#### Component Tools
 
-**List Archetypes:**
+**List Components:**
 
 ```bash
-curl -X POST http://localhost:3000/tools/archetype.list
+curl -X POST http://localhost:3000/tools/component.list
 ```
 
-**Get Button Archetype:**
+**Get Button Component:**
 
 ```bash
-curl -X POST http://localhost:3000/tools/archetype.get \
+curl -X POST http://localhost:3000/tools/component.get \
   -H "Content-Type: application/json" \
   -d '{"hookName": "useButton"}'
 ```
@@ -859,7 +859,7 @@ curl -X POST http://localhost:3000/tools/archetype.get \
 **Query by WCAG Level:**
 
 ```bash
-curl -X POST http://localhost:3000/tools/archetype.query \
+curl -X POST http://localhost:3000/tools/component.query \
   -H "Content-Type: application/json" \
   -d '{"wcagLevel": "AA"}'
 ```
@@ -867,7 +867,7 @@ curl -X POST http://localhost:3000/tools/archetype.query \
 **Query by State Name:**
 
 ```bash
-curl -X POST http://localhost:3000/tools/archetype.query \
+curl -X POST http://localhost:3000/tools/component.query \
   -H "Content-Type: application/json" \
   -d '{"stateName": "isPressed"}'
 ```
@@ -917,7 +917,7 @@ curl -X POST http://localhost:3000/tools/screen.list \
 
 ### Example 1: Starting a New Project
 
-**Scenario:** You're starting a new Next.js project and want to use the shadcn/ui preset.
+**Scenario:** You're starting a new Next.js project and want to use the shadcn/ui theme.
 
 **Step 1:** Install and start the MCP server
 
@@ -926,21 +926,21 @@ npm install @tekton/mcp-server
 npx tekton-mcp
 ```
 
-**Step 2:** List available presets
+**Step 2:** List available themes
 
 ```bash
-curl -X POST http://localhost:3000/tools/preset.list
+curl -X POST http://localhost:3000/tools/theme.list
 ```
 
-**Step 3:** Get preset details
+**Step 3:** Get theme details
 
 ```bash
-curl -X POST http://localhost:3000/tools/preset.get \
+curl -X POST http://localhost:3000/tools/theme.get \
   -H "Content-Type: application/json" \
   -d '{"presetId": "next-tailwind-shadcn"}'
 ```
 
-**Step 4:** Activate the preset
+**Step 4:** Activate the theme
 
 ```bash
 curl -X POST http://localhost:3000/tools/project.useBuiltinPreset \
@@ -968,9 +968,9 @@ You: Add a table component to show user data
 Claude: I'll add a table component to the dashboard.
 [Uses screen.addComponent with componentType="useTable"]
 
-You: Apply a professional style archetype
+You: Apply a professional style component
 
-Claude: I'll apply the Professional archetype.
+Claude: I'll apply the Professional component.
 [Uses screen.applyArchetype with archetypeName="Professional"]
 ```
 
@@ -979,7 +979,7 @@ Claude: I'll apply the Professional archetype.
 **Scenario:** Find all WCAG AA compliant components.
 
 ```bash
-curl -X POST http://localhost:3000/tools/archetype.query \
+curl -X POST http://localhost:3000/tools/component.query \
   -H "Content-Type: application/json" \
   -d '{"wcagLevel": "AA"}'
 ```
@@ -1027,25 +1027,25 @@ curl -X POST http://localhost:3000/tools/project.detectStructure \
 }
 ```
 
-### Example 5: Working with Presets Programmatically
+### Example 5: Working with Themes Programmatically
 
 **JavaScript/TypeScript Example:**
 
 ```typescript
 import { presetList, presetGet } from '@tekton/mcp-server';
 
-// List all presets
+// List all themes
 async function listPresets() {
   const result = await presetList();
-  console.log('Available presets:', result.data);
+  console.log('Available themes:', result.data);
   return result.data;
 }
 
-// Get specific preset
+// Get specific theme
 async function getPreset(id: string) {
   const result = await presetGet({ presetId: id });
   if (result.success) {
-    console.log('Preset:', result.data);
+    console.log('Theme:', result.data);
     console.log('Color palette:', result.data.colorPalette);
     console.log('Typography:', result.data.typography);
   }
@@ -1053,7 +1053,7 @@ async function getPreset(id: string) {
 }
 
 // Usage
-const presets = await listPresets();
+const themes = await listPresets();
 const shadcnPreset = await getPreset('next-tailwind-shadcn');
 ```
 
@@ -1122,7 +1122,7 @@ cat > .tekton/config.json << 'EOF'
     "frameworkType": "nextjs",
     "detectedAt": "2026-01-18T12:00:00Z"
   },
-  "preset": {
+  "theme": {
     "activePresetId": null,
     "selectedAt": null
   }
@@ -1148,24 +1148,24 @@ EOF
 
 3. **Test tool manually:**
    ```bash
-   curl -X POST http://localhost:3000/tools/preset.list
+   curl -X POST http://localhost:3000/tools/theme.list
    ```
 
 4. **Check logs:**
    - Look at server console output for errors
    - Verify Claude Code is connecting to the right port
 
-#### Preset Not Found
+#### Theme Not Found
 
-**Problem:** Getting "Preset not found" error.
+**Problem:** Getting "Theme not found" error.
 
 **Solution:**
 
 ```bash
-# List available presets
-curl -X POST http://localhost:3000/tools/preset.list
+# List available themes
+curl -X POST http://localhost:3000/tools/theme.list
 
-# Verify preset ID spelling (case-sensitive)
+# Verify theme ID spelling (case-sensitive)
 # Valid IDs:
 # - next-tailwind-shadcn
 # - next-tailwind-radix
@@ -1215,7 +1215,7 @@ curl -X POST http://localhost:3000/tools/preset.list
 **Solution:**
 ```bash
 # Ensure proper JSON formatting
-curl -X POST http://localhost:3000/tools/preset.get \
+curl -X POST http://localhost:3000/tools/theme.get \
   -H "Content-Type: application/json" \
   -d '{"presetId": "next-tailwind-shadcn"}'  # Valid JSON
 ```
@@ -1224,7 +1224,7 @@ curl -X POST http://localhost:3000/tools/preset.get \
 
 **Error:**
 ```json
-{ "error": "Tool not found: preset.invalid" }
+{ "error": "Tool not found: theme.invalid" }
 ```
 
 **Cause:** Tool name is incorrect.
@@ -1278,7 +1278,7 @@ lsof -ti:3000 | xargs kill -9
 
 See [API Reference](#api-reference) for detailed tool documentation.
 
-### Preset Comparison Table
+### Theme Comparison Table
 
 | Feature | next-tailwind-shadcn | vite-tailwind-shadcn | saas-dashboard | tech-startup | premium-editorial |
 |---------|---------------------|---------------------|----------------|--------------|------------------|
@@ -1293,7 +1293,7 @@ See [API Reference](#api-reference) for detailed tool documentation.
 
 **v1.0.0** (2026-01-18)
 - Initial release with standalone MCP server
-- 7 built-in presets
+- 7 built-in themes
 - 26 MCP tools across 4 categories
 - Framework detection support
 - TypeScript + Zod validation

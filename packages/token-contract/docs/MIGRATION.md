@@ -36,7 +36,7 @@ pnpm add @tekton/token-contract
 // tailwind.config.js
 const { loadPreset } = require('@tekton/token-contract');
 
-const preset = loadPreset('professional');
+const theme = loadPreset('professional');
 
 module.exports = {
   theme: {
@@ -206,7 +206,7 @@ npm install @tekton/token-contract
 import { extendTheme } from '@chakra-ui/react';
 import { ThemeProvider as TektonThemeProvider, loadPreset } from '@tekton/token-contract';
 
-const preset = loadPreset('professional');
+const theme = loadPreset('professional');
 
 const chakraTheme = extendTheme({
   colors: {
@@ -336,7 +336,7 @@ npm install @tekton/token-contract
 import { createTheme, ThemeProvider as MuiThemeProvider } from '@mui/material/styles';
 import { ThemeProvider as TektonThemeProvider, loadPreset } from '@tekton/token-contract';
 
-const preset = loadPreset('professional');
+const theme = loadPreset('professional');
 
 const muiTheme = createTheme({
   palette: {
@@ -499,7 +499,7 @@ const Button = styled.button`
 - [ ] Audit current design token usage
 - [ ] Identify all color values, spacing, and typography
 - [ ] Document custom theme overrides
-- [ ] Choose appropriate Token Contract preset
+- [ ] Choose appropriate Token Contract theme
 
 ### During Migration
 - [ ] Install @tekton/token-contract
@@ -577,7 +577,7 @@ const theme = {
 };
 ```
 
-**Solution**: Use Token Contract preset overrides.
+**Solution**: Use Token Contract theme overrides.
 
 **After**:
 ```tsx

@@ -12,11 +12,11 @@ Command-line interface for Tekton - OKLCH design token generator with framework 
 - **Tailwind Detection** - Identify Tailwind CSS configuration and version
 - **shadcn/ui Detection** - Detect shadcn/ui components and configuration
 - **Project Scanning** - Comprehensive project analysis with all detectors combined
-- **Code Template Engine** - Transform archetype data into React components with 4-layer transformation
+- **Code Template Engine** - Transform component data into React components with 4-layer transformation
 - **Screen Generation** - Contract-based screen creation with layout skeletons and intent patterns
 - **Token Injection** - Complete design token generation (colors, spacing, typography, shadows)
-- **Archetype Integration** - Connect to MCP server for hook-based styling rules
-- **Preset API** - Fetch curated design presets for consistent theming
+- **Component Integration** - Connect to MCP server for hook-based styling rules
+- **Theme API** - Fetch curated design themes for consistent theming
 - **Zero Configuration** - Works out of the box with sensible defaults
 
 ## Installation
@@ -719,11 +719,11 @@ done
 
 ## Screen Generation (Phase 2 - Code Template Engine)
 
-Tekton CLI now includes a powerful Code Template Engine that transforms archetype data and preset tokens into complete React components.
+Tekton CLI now includes a powerful Code Template Engine that transforms component data and theme tokens into complete React components.
 
 ### `tekton create-screen <name>`
 
-Generate a new screen with contract-based code generation and archetype integration.
+Generate a new screen with contract-based code generation and component integration.
 
 **Usage:**
 ```bash
@@ -732,13 +732,13 @@ tekton create-screen <name> [options]
 
 **Options:**
 - `-e, --environment <env>` - Target environment (web, mobile, tablet, responsive, tv, kiosk)
-- `-s, --skeleton <skeleton>` - Skeleton preset (full-screen, with-header, with-sidebar, dashboard, with-footer, complete)
+- `-s, --skeleton <skeleton>` - Skeleton theme (full-screen, with-header, with-sidebar, dashboard, with-footer, complete)
 - `-i, --intent <intent>` - Screen intent (data-list, data-detail, dashboard, form, settings, landing, auth, error, empty)
 - `-c, --components <components...>` - Components to include
 - `-p, --path <path>` - Output directory path (default: current directory)
-- `--preset <preset>` - Preset name to fetch design tokens from API
+- `--theme <theme>` - Theme name to fetch design tokens from API
 - `--skip-mcp` - Skip MCP server integration (offline mode)
-- `--skip-api` - Skip Preset API integration (offline mode)
+- `--skip-api` - Skip Theme API integration (offline mode)
 
 **Examples:**
 
@@ -749,8 +749,8 @@ tekton create-screen Dashboard -e web -s dashboard -i dashboard -p ./src
 # Create a form screen with specific components
 tekton create-screen UserProfile -e responsive -s with-header -i form -c Button Input Card -p ./src
 
-# Create a screen with preset tokens
-tekton create-screen Analytics -e web -s complete -i dashboard --preset "Professional" -p ./src
+# Create a screen with theme tokens
+tekton create-screen Analytics -e web -s complete -i dashboard --theme "Professional" -p ./src
 
 # Offline mode (no external services)
 tekton create-screen Settings -e web -s with-sidebar -i settings --skip-mcp --skip-api -p ./src
@@ -761,9 +761,9 @@ tekton create-screen Settings -e web -s with-sidebar -i settings --skip-mcp --sk
 ```
 Creating screen: Dashboard...
 
-  Fetching preset "Professional"...
-  ✓ Preset loaded: Professional
-  ✓ Loaded 5 archetypes
+  Fetching theme "Professional"...
+  ✓ Theme loaded: Professional
+  ✓ Loaded 5 components
 
 ✓ Screen "Dashboard" contract created successfully
   Environment: web
@@ -779,13 +779,13 @@ Files generated:
 
 Generation Statistics:
   Components generated: 5
-  Archetypes applied: 3
+  Components applied: 3
   Token variables: 87
 ```
 
 ### Code Template Engine Architecture
 
-The Code Template Engine transforms archetype data through a 4-layer transformation process:
+The Code Template Engine transforms component data through a 4-layer transformation process:
 
 **Layer 1: Prop Rules to Base CSS**
 - Maps hook prop objects (buttonProps, inputProps) to CSS base styles
@@ -834,7 +834,7 @@ The generated `tokens.css` includes comprehensive token variables:
 
 ### Supported Components
 
-The following components can be generated with archetype integration:
+The following components can be generated with component integration:
 
 | Component | Hook Mapping | Default Styles |
 |-----------|--------------|----------------|
@@ -875,7 +875,7 @@ Screen intent determines the recommended layout structure:
 | error | centered | message, actions |
 | empty | centered | illustration, message, action |
 
-### Skeleton Presets
+### Skeleton Themes
 
 Layout skeletons define the structural regions:
 
@@ -901,7 +901,7 @@ const result = await createScreen({
   intent: 'dashboard',
   components: ['Stat', 'Chart', 'Table'],
   path: './src',
-  preset: 'Professional',
+  theme: 'Professional',
 });
 
 if (result.success) {
@@ -980,14 +980,14 @@ packages/cli/
 │   │   ├── generate.ts            # Token generation command
 │   │   └── create-screen.ts       # Screen generation command (Phase 2)
 │   ├── clients/                   # External service clients (Phase 2)
-│   │   ├── mcp-client.ts          # MCP server integration for archetypes
-│   │   └── preset-client.ts       # Preset API client for design tokens
+│   │   ├── mcp-client.ts          # MCP server integration for components
+│   │   └── theme-client.ts       # Theme API client for design tokens
 │   ├── detectors/                 # Framework/tool detection logic
 │   │   ├── framework.ts           # Framework detector
 │   │   ├── tailwind.ts            # Tailwind detector
 │   │   └── shadcn.ts              # shadcn/ui detector
 │   ├── generators/                # Code generation modules (Phase 2)
-│   │   ├── code-template-engine.ts # 4-layer archetype transformation
+│   │   ├── code-template-engine.ts # 4-layer component transformation
 │   │   ├── component-generator.ts  # Individual component file generation
 │   │   ├── screen-generator.ts     # Screen structure and layout generation
 │   │   └── token-injector.ts       # Design token CSS generation

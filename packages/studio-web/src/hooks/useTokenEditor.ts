@@ -32,7 +32,7 @@ interface UseTokenEditorReturn {
   setActiveToken: (tokenName: SemanticTokenName | null) => void;
   setActiveStep: (step: ColorScaleStep | null) => void;
   // Load/Reset
-  loadPreset: (preset: Preset) => void;
+  loadTheme: (preset: Preset) => void;
   loadTokens: (semantic: SemanticToken, composition?: CompositionToken) => void;
   reset: () => void;
 }
@@ -162,7 +162,7 @@ export function useTokenEditor(
   }, []);
 
   // Load from a preset
-  const loadPreset = useCallback((preset: Preset) => {
+  const loadTheme = useCallback((preset: Preset) => {
     setState((prev) => ({
       ...prev,
       semantic: preset.tokens,
@@ -201,7 +201,7 @@ export function useTokenEditor(
     updateComposition,
     setActiveToken,
     setActiveStep,
-    loadPreset,
+    loadTheme,
     loadTokens,
     reset,
   };

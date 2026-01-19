@@ -45,7 +45,7 @@ describe('ThemeProvider', () => {
 
     it('should initialize with specified preset', () => {
       render(
-        <ThemeProvider defaultPreset="creative">
+        <ThemeProvider defaultTheme="creative">
           <TestComponent />
         </ThemeProvider>
       );
@@ -101,7 +101,7 @@ describe('ThemeProvider', () => {
   describe('CSS Variable Application', () => {
     it('should apply CSS variables to document root', () => {
       render(
-        <ThemeProvider defaultPreset="professional">
+        <ThemeProvider defaultTheme="professional">
           <TestComponent />
         </ThemeProvider>
       );
@@ -167,8 +167,8 @@ describe('ThemeProvider', () => {
       }
 
       render(
-        <ThemeProvider defaultPreset="professional">
-          <ThemeProvider defaultPreset="creative">
+        <ThemeProvider defaultTheme="professional">
+          <ThemeProvider defaultTheme="creative">
             <InnerComponent />
           </ThemeProvider>
         </ThemeProvider>
@@ -182,7 +182,7 @@ describe('ThemeProvider', () => {
     it('should handle invalid preset gracefully', () => {
       // TypeScript prevents this, but test runtime behavior
       render(
-        <ThemeProvider defaultPreset={'invalid' as PresetName}>
+        <ThemeProvider defaultTheme={'invalid' as PresetName}>
           <TestComponent />
         </ThemeProvider>
       );
