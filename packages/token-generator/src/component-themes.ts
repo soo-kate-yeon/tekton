@@ -1,4 +1,4 @@
-import type { OKLCHColor, ComponentPreset } from '@tekton/theme';
+import type { OKLCHColor, ComponentTheme } from '@tekton/theme';
 import { oklchToRgb } from './color-conversion';
 import { validateColorPair } from './wcag-validator';
 
@@ -10,17 +10,17 @@ const WHITE_BG = { r: 255, g: 255, b: 255 };
 /**
  * Validate WCAG AA compliance for a color against white background
  */
-function validateAgainstWhite(color: OKLCHColor): ComponentPreset['accessibility'] {
+function validateAgainstWhite(color: OKLCHColor): ComponentTheme['accessibility'] {
   const rgb = oklchToRgb(color);
   const result = validateColorPair(rgb, WHITE_BG, 'AA');
   return [result];
 }
 
 /**
- * Button component preset
+ * Button component theme
  * States: default, hover, active, disabled
  */
-export function buttonPreset(baseColor: OKLCHColor): ComponentPreset {
+export function buttonTheme(baseColor: OKLCHColor): ComponentTheme {
   return {
     name: 'button',
     states: {
@@ -34,10 +34,10 @@ export function buttonPreset(baseColor: OKLCHColor): ComponentPreset {
 }
 
 /**
- * Input component preset
+ * Input component theme
  * States: default, focus, error, disabled
  */
-export function inputPreset(baseColor: OKLCHColor): ComponentPreset {
+export function inputTheme(baseColor: OKLCHColor): ComponentTheme {
   return {
     name: 'input',
     states: {
@@ -51,10 +51,10 @@ export function inputPreset(baseColor: OKLCHColor): ComponentPreset {
 }
 
 /**
- * Card component preset
+ * Card component theme
  * States: background, border, shadow
  */
-export function cardPreset(baseColor: OKLCHColor): ComponentPreset {
+export function cardTheme(baseColor: OKLCHColor): ComponentTheme {
   return {
     name: 'card',
     states: {
@@ -67,10 +67,10 @@ export function cardPreset(baseColor: OKLCHColor): ComponentPreset {
 }
 
 /**
- * Badge component preset
+ * Badge component theme
  * States: info, success, warning, error
  */
-export function badgePreset(_baseColor: OKLCHColor): ComponentPreset {
+export function badgeTheme(_baseColor: OKLCHColor): ComponentTheme {
   const infoColor = { l: 0.5, c: 0.15, h: 220 }; // Blue
   const successColor = { l: 0.5, c: 0.15, h: 140 }; // Green
   const warningColor = { l: 0.6, c: 0.15, h: 60 }; // Yellow/Orange
@@ -94,10 +94,10 @@ export function badgePreset(_baseColor: OKLCHColor): ComponentPreset {
 }
 
 /**
- * Alert component preset
+ * Alert component theme
  * States: info, success, warning, error
  */
-export function alertPreset(_baseColor: OKLCHColor): ComponentPreset {
+export function alertTheme(_baseColor: OKLCHColor): ComponentTheme {
   const infoColor = { l: 0.9, c: 0.08, h: 220 }; // Light blue
   const successColor = { l: 0.9, c: 0.08, h: 140 }; // Light green
   const warningColor = { l: 0.92, c: 0.08, h: 60 }; // Light yellow
@@ -121,10 +121,10 @@ export function alertPreset(_baseColor: OKLCHColor): ComponentPreset {
 }
 
 /**
- * Link component preset
+ * Link component theme
  * States: default, hover, visited, active
  */
-export function linkPreset(_baseColor: OKLCHColor): ComponentPreset {
+export function linkTheme(_baseColor: OKLCHColor): ComponentTheme {
   const defaultColor = { l: 0.4, c: 0.15, h: 220 }; // Blue
 
   return {
@@ -140,10 +140,10 @@ export function linkPreset(_baseColor: OKLCHColor): ComponentPreset {
 }
 
 /**
- * Checkbox component preset
+ * Checkbox component theme
  * States: unchecked, checked, indeterminate
  */
-export function checkboxPreset(baseColor: OKLCHColor): ComponentPreset {
+export function checkboxTheme(baseColor: OKLCHColor): ComponentTheme {
   return {
     name: 'checkbox',
     states: {
@@ -156,10 +156,10 @@ export function checkboxPreset(baseColor: OKLCHColor): ComponentPreset {
 }
 
 /**
- * Radio component preset
+ * Radio component theme
  * States: unselected, selected
  */
-export function radioPreset(baseColor: OKLCHColor): ComponentPreset {
+export function radioTheme(baseColor: OKLCHColor): ComponentTheme {
   return {
     name: 'radio',
     states: {
@@ -171,31 +171,31 @@ export function radioPreset(baseColor: OKLCHColor): ComponentPreset {
 }
 
 /**
- * Generate all 8 MVP component presets
+ * Generate all 8 MVP component themes
  */
-export function generateComponentPresets(baseColor: OKLCHColor): ComponentPreset[] {
+export function generateComponentThemes(baseColor: OKLCHColor): ComponentTheme[] {
   return [
-    buttonPreset(baseColor),
-    inputPreset(baseColor),
-    cardPreset(baseColor),
-    badgePreset(baseColor),
-    alertPreset(baseColor),
-    linkPreset(baseColor),
-    checkboxPreset(baseColor),
-    radioPreset(baseColor),
+    buttonTheme(baseColor),
+    inputTheme(baseColor),
+    cardTheme(baseColor),
+    badgeTheme(baseColor),
+    alertTheme(baseColor),
+    linkTheme(baseColor),
+    checkboxTheme(baseColor),
+    radioTheme(baseColor),
   ];
 }
 
 /**
- * Export all presets
+ * Export all themes
  */
-export const COMPONENT_PRESETS = {
-  button: buttonPreset,
-  input: inputPreset,
-  card: cardPreset,
-  badge: badgePreset,
-  alert: alertPreset,
-  link: linkPreset,
-  checkbox: checkboxPreset,
-  radio: radioPreset,
+export const COMPONENT_THEMES = {
+  button: buttonTheme,
+  input: inputTheme,
+  card: cardTheme,
+  badge: badgeTheme,
+  alert: alertTheme,
+  link: linkTheme,
+  checkbox: checkboxTheme,
+  radio: radioTheme,
 };
