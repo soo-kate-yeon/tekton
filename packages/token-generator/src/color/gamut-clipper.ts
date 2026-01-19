@@ -5,7 +5,7 @@
  * @module color/gamut-clipper
  */
 
-import { oklch, rgb, inGamut } from 'culori';
+import { oklch, inGamut } from 'culori';
 import type { ArchetypeColor } from '../types/archetype.types.js';
 
 /**

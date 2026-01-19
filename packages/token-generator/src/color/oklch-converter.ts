@@ -5,7 +5,7 @@
  * @module color/oklch-converter
  */
 
-import { oklch, rgb, formatHex } from 'culori';
+import { oklch, rgb } from 'culori';
 import type { ArchetypeColor } from '../types/archetype.types.js';
 import { clipToSrgbGamut } from './gamut-clipper.js';
 
