@@ -21,6 +21,8 @@
   },
   "dependencies": {
     "@tekton/theme": "workspace:*",
+    "culori": "^3.3.0",
+    "wcag-contrast": "^3.0.0",
     "zod": "^3.23.8"
   },
   "devDependencies": {
