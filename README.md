@@ -13,6 +13,7 @@ OKLCH-based design token generator with WCAG AA compliance for modern design sys
 - [Features](#features)
 - [Installation](#installation)
 - [Quick Start](#quick-start)
+- [Worktree Management](#worktree-management)
 - [Architecture Overview](#architecture-overview)
 - [API Reference](#api-reference)
 - [Project Status](#project-status)
@@ -325,6 +326,163 @@ console.log(hex); // "#0066CC"
 // RGB to OKLCH
 const oklchFromRgb = rgbToOklch({ r: 59, g: 130, b: 246 });
 ```
+
+## Worktree Management
+
+Tekton provides a comprehensive Git worktree management system for parallel SPEC development. The worktree system enables isolated development environments where each SPEC gets its own directory and Git branch, allowing true parallel development without context switching overhead.
+
+### Why Use Worktrees?
+
+**Traditional branch workflow pain points**:
+- Frequent `git stash` operations when switching branches
+- Risk of losing uncommitted work
+- Context switching overhead
+- Conflicts when switching branches with uncommitted changes
+- Single development environment
+
+**Worktree solution**:
+- Each SPEC has its own isolated directory
+- Independent Git state per worktree
+- Simultaneous development on multiple SPECs
+- Instant switching between worktrees (no stashing)
+- Isolated dependencies and configuration
+
+### Quick Start
+
+Create a worktree for parallel development:
+
+```bash
+# Create a worktree for a SPEC
+tekton worktree new SPEC-AUTH-001 "User Authentication System"
+
+# Output:
+# ✓ Worktree created successfully
+#   Path: /Users/yourname/.worktrees/SPEC-AUTH-001
+#   Branch: feature/SPEC-AUTH-001
+#   Base: master
+
+# Navigate to the worktree
+cd ~/.worktrees/SPEC-AUTH-001
+
+# Work on your SPEC in isolation
+# All changes are isolated to this worktree
+
+# Check sync status before creating PR
+cd /path/to/main/repo
+tekton worktree status SPEC-AUTH-001
+
+# Sync with base branch
+tekton worktree sync SPEC-AUTH-001
+
+# After PR is merged, clean up
+tekton worktree clean --merged-only
+```
+
+### Integration with MoAI Workflow
+
+Worktrees integrate seamlessly with MoAI's SPEC-based development workflow:
+
+```bash
+# Option 1: Create SPEC with worktree automatically
+/moai:1-plan --worktree "User Authentication System"
+# Creates SPEC-AUTH-001 and worktree in one step
+
+# Option 2: Create worktree for existing SPEC
+tekton worktree new SPEC-AUTH-001 "User Authentication System"
+cd ~/.worktrees/SPEC-AUTH-001
+
+# Run MoAI workflow in isolated worktree
+/moai:2-run SPEC-AUTH-001  # TDD implementation
+/moai:3-sync SPEC-AUTH-001 # Documentation sync
+
+# When ready, sync and create PR
+tekton worktree sync SPEC-AUTH-001
+git push origin feature/SPEC-AUTH-001
+```
+
+**Benefits of MoAI + Worktree**:
+- **Parallel SPEC Development**: Work on multiple SPECs simultaneously without conflicts
+- **Isolated Testing**: Each SPEC has its own test environment
+- **Independent Dependencies**: Install SPEC-specific packages without affecting other work
+- **Clean Git History**: Each SPEC maintains its own branch and commits
+- **Zero Context Switching**: Move between SPECs instantly (no `git stash` needed)
+
+**Recommended Workflow**:
+1. Create SPEC using `/moai:1-plan --worktree`
+2. Worktree is automatically created with proper branch naming
+3. Develop in isolated worktree using `/moai:2-run`
+4. Sync documentation with `/moai:3-sync`
+5. Merge changes back using `tekton worktree sync`
+6. Create PR directly from worktree branch
+7. Clean up after merge: `tekton worktree clean --merged-only`
+
+### Core Commands
+
+| Command | Usage | Purpose |
+|---------|-------|---------|
+| `new` | `tekton worktree new SPEC-001 "Description"` | Create isolated worktree |
+| `list` | `tekton worktree list [--status active]` | List all worktrees |
+| `switch` | `tekton worktree switch SPEC-001` | Get path to worktree |
+| `status` | `tekton worktree status SPEC-001` | Check sync status |
+| `sync` | `tekton worktree sync SPEC-001` | Sync with base branch |
+| `remove` | `tekton worktree remove SPEC-001` | Remove worktree |
+| `clean` | `tekton worktree clean --merged-only` | Clean merged worktrees |
+| `config` | `tekton worktree config list` | View configuration |
+
+### Parallel Development Workflow
+
+Work on multiple SPECs simultaneously:
+
+```bash
+# Create multiple worktrees
+tekton worktree new SPEC-AUTH-001 "User Authentication"
+tekton worktree new SPEC-PAY-001 "Payment Processing"
+tekton worktree new SPEC-DASH-001 "Dashboard Analytics"
+
+# List all worktrees
+tekton worktree list
+
+# Output:
+# SPEC ID         STATUS   PATH                                        BRANCH
+# SPEC-AUTH-001   active   /Users/you/.worktrees/SPEC-AUTH-001        feature/SPEC-AUTH-001
+# SPEC-PAY-001    active   /Users/you/.worktrees/SPEC-PAY-001         feature/SPEC-PAY-001
+# SPEC-DASH-001   active   /Users/you/.worktrees/SPEC-DASH-001        feature/SPEC-DASH-001
+
+# Switch between worktrees instantly
+cd ~/.worktrees/SPEC-AUTH-001  # Work on authentication
+cd ~/.worktrees/SPEC-PAY-001   # Switch to payment
+cd ~/.worktrees/SPEC-DASH-001  # Switch to dashboard
+
+# No stashing, no conflicts, independent development
+```
+
+### Features
+
+- **Isolation**: Each SPEC has its own directory and Git branch
+- **Parallel Development**: Work on multiple SPECs simultaneously
+- **Zero Context Switching**: Instant switching between worktrees
+- **Clean Integration**: Automatic sync with base branch
+- **Safe Experimentation**: Isolated environment for testing
+- **Automatic Cleanup**: Remove merged worktrees with one command
+- **Configuration Management**: Project-specific worktree settings
+- **JSON Output**: All commands support `--format json` for automation
+
+### Documentation
+
+For complete documentation, see:
+- [Worktree Workflow Guide](./docs/worktree-workflow-guide.md) - Complete integration with SPEC workflow
+- [MoAI Integration Analysis](./docs/worktree-moai-integration.md) - Integration points and implementation guide
+
+### Implementation Status
+
+The Tekton Worktree Management System is fully implemented:
+- **Phase 1**: Foundation (types, registry, validation) - 127 tests ✅
+- **Phase 2**: Git Integration (worktree manager, git operations) - 79 tests ✅
+- **Phase 3**: Core CLI Commands (new, list, switch, remove) - 67 tests ✅
+- **Phase 4**: Advanced Features (sync, status, config, clean) - 41 tests ✅
+- **Phase 5**: MoAI Workflow Integration - Documentation complete ✅
+
+**Total: 314 tests passing, full CLI implementation complete**
 
 ## Architecture Overview
 
