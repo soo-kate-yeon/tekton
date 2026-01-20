@@ -28,6 +28,31 @@ export { LocalSlotRegistry } from './registry/local-slot-registry';
 
 // Validator exports
 export { SlotValidator } from './validators/slot-validator';
+export { ComponentValidator } from './validators/component-validator';
+export type {
+  ValidationError as ComponentValidationError,
+  ValidationResult as ComponentValidationResult,
+} from './validators/component-validator';
 
 // Resolver exports
 export { SlotResolver } from './resolvers/slot-resolver';
+
+// Knowledge Schema exports (TASK-001)
+export type {
+  ComponentCategory,
+  SlotDefinitionKnowledge,
+  PropDefinitionKnowledge,
+  ComponentKnowledge,
+  SlotMapping,
+  PropMapping,
+  ComponentBlueprint,
+  KnowledgeSchema,
+} from './types/knowledge-types';
+
+// Generator exports (TASK-003 to TASK-006)
+export { ASTImportGenerator } from './generators/ast-import-generator';
+export { ASTJSXGenerator } from './generators/ast-jsx-generator';
+export { ASTBuilder } from './generators/ast-builder';
+export { JSXGenerator } from './generators/jsx-generator';
+export type { ImportInfo } from './generators/ast-import-generator';
+export type { PrettierOptions } from './generators/jsx-generator';

@@ -20,7 +20,10 @@
     "lint": "eslint src --ext .ts"
   },
   "dependencies": {
+    "@babel/generator": "^7.28.6",
+    "@babel/types": "^7.28.6",
     "@tekton/theme": "workspace:*",
+    "prettier": "^3.7.4",
     "zod": "^3.23.8"
   },
   "devDependencies": {
