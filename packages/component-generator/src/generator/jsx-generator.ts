@@ -4,10 +4,10 @@
  * SPEC-LAYER3-MVP-001 M1-TASK-006
  */
 
-import generate from '@babel/generator';
+import { generate } from '@babel/generator';
 import * as prettier from 'prettier';
-import { ASTBuilder } from './ast-builder';
-import type { BlueprintResult } from '../types/knowledge-schema';
+import { ASTBuilder } from './ast-builder.js';
+import type { BlueprintResult } from '../types/knowledge-schema.js';
 
 /**
  * Result of code generation
