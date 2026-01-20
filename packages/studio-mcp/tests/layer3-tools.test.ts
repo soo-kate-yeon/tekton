@@ -97,11 +97,11 @@ describe('TASK-008: knowledge.getComponentList', () => {
   });
 
   it('should filter by category', () => {
-    const filter: ComponentFilter = { category: 'layout' };
+    const filter: ComponentFilter = { category: 'container' };
     const result = getComponentList(filter);
 
     expect(result.success).toBe(true);
-    expect(result.components.every((c) => c.category === 'layout')).toBe(true);
+    expect(result.components.every((c) => c.category === 'container')).toBe(true);
   });
 
   it('should filter by hasSlot', () => {
@@ -116,13 +116,13 @@ describe('TASK-008: knowledge.getComponentList', () => {
 
   it('should filter by both category and hasSlot', () => {
     const filter: ComponentFilter = {
-      category: 'layout',
+      category: 'container',
       hasSlot: 'header',
     };
     const result = getComponentList(filter);
 
     expect(result.success).toBe(true);
-    expect(result.components.every((c) => c.category === 'layout')).toBe(true);
+    expect(result.components.every((c) => c.category === 'container')).toBe(true);
     expect(
       result.components.every((c) => c.slots?.includes('header'))
     ).toBe(true);
@@ -333,7 +333,7 @@ describe('End-to-End MCP Workflow', () => {
     expect(schemaResult.success).toBe(true);
 
     // Step 2: Get component list to understand available components
-    const listResult = getComponentList({ category: 'layout' });
+    const listResult = getComponentList({ category: 'container' });
     expect(listResult.success).toBe(true);
     expect(listResult.components.length).toBeGreaterThan(0);
 
@@ -363,6 +363,141 @@ describe('End-to-End MCP Workflow', () => {
   });
 });
 
+describe('Regression Tests - renderScreen Edge Cases', () => {
+  const testOutputDir = join(process.cwd(), 'test-regression-output');
+
+  beforeEach(async () => {
+    await mkdir(testOutputDir, { recursive: true });
+  });
+
+  afterEach(async () => {
+    if (existsSync(testOutputDir)) {
+      await rm(testOutputDir, { recursive: true, force: true });
+    }
+  });
+
+  it('should handle blueprint with undefined componentName gracefully', async () => {
+    const invalidBlueprint: any = {
+      blueprintId: 'test-undefined',
+      recipeName: 'test',
+      analysis: { intent: 'test', tone: 'test' },
+      structure: {
+        componentName: undefined, // Intentional undefined
+        props: {},
+      },
+    };
+
+    const result = await renderScreen(invalidBlueprint);
+
+    expect(result.success).toBe(false);
+    expect(result.error).toBeDefined();
+  });
+
+  it('should handle blueprint with null componentName gracefully', async () => {
+    const invalidBlueprint: any = {
+      blueprintId: 'test-null',
+      recipeName: 'test',
+      analysis: { intent: 'test', tone: 'test' },
+      structure: {
+        componentName: null, // Intentional null
+        props: {},
+      },
+    };
+
+    const result = await renderScreen(invalidBlueprint);
+
+    expect(result.success).toBe(false);
+    expect(result.error).toBeDefined();
+  });
+
+  it('should render with valid catalog components', async () => {
+    const validComponents = ['Card', 'Input', 'Button'];
+
+    for (const componentName of validComponents) {
+      const blueprint: BlueprintResult = {
+        blueprintId: `test-${componentName}`,
+        recipeName: `test-${componentName}`,
+        analysis: { intent: 'test', tone: 'professional' },
+        structure: {
+          componentName,
+          props: {},
+        },
+      };
+
+      const outputPath = join(testOutputDir, componentName, 'page.tsx');
+      const result = await renderScreen(blueprint, outputPath);
+      expect(result.success).toBe(true, `Failed for ${componentName}`);
+      expect(result.code).toBeDefined();
+    }
+  });
+
+  it('should render Card + Input + Button combination successfully', async () => {
+    const blueprint: BlueprintResult = {
+      blueprintId: 'test-combination',
+      recipeName: 'test-combination',
+      analysis: { intent: 'test combination', tone: 'professional' },
+      structure: {
+        componentName: 'Card',
+        props: {},
+        slots: {
+          header: {
+            componentName: 'Input',
+            props: {},
+          },
+          footer: {
+            componentName: 'Button',
+            props: {},
+          },
+        },
+      },
+    };
+
+    const outputPath = join(testOutputDir, 'combination', 'page.tsx');
+    const result = await renderScreen(blueprint, outputPath);
+
+    expect(result.success).toBe(true);
+    expect(result.code).toBeDefined();
+    expect(result.code).toContain('Card');
+    expect(result.code).toContain('Input');
+    expect(result.code).toContain('Button');
+  });
+});
+
+describe('Component List Integrity', () => {
+  it('should return all 20 components from catalog', () => {
+    const result = getComponentList();
+
+    expect(result.success).toBe(true);
+    expect(result.count).toBe(20);
+    expect(result.components.length).toBe(20);
+  });
+
+  it('should include core components in catalog', () => {
+    const result = getComponentList();
+
+    const expectedComponents = [
+      'Button', 'Input', 'Card', 'Modal', 'Dropdown',
+      'Checkbox', 'Radio', 'Switch', 'Slider', 'Badge',
+      'Alert', 'Toast', 'Tooltip', 'Popover', 'Tabs',
+      'Accordion', 'Select', 'Textarea', 'Progress', 'Avatar',
+    ];
+
+    const returnedNames = result.components.map((c) => c.name);
+    expectedComponents.forEach((name) => {
+      expect(returnedNames).toContain(name);
+    });
+  });
+
+  it('should return components with consistent category values', () => {
+    const result = getComponentList();
+
+    const validCategories = ['action', 'input', 'container', 'display', 'navigation'];
+    result.components.forEach((component) => {
+      expect(validCategories).toContain(component.category!);
+    });
+  });
+});
+
 describe('Performance Requirements', () => {
   it('all MCP tools should meet performance targets', () => {
     // TASK-007: <50ms
@@ -384,7 +519,7 @@ describe('Performance Requirements', () => {
     expect(schema2Time).toBeLessThan(50);
 
     const list2Start = performance.now();
-    getComponentList({ category: 'layout' });
+    getComponentList({ category: 'container' });
     const list2Time = performance.now() - list2Start;
     expect(list2Time).toBeLessThan(30);
   });

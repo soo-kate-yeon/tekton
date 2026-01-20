@@ -9,6 +9,10 @@ import {
   BlueprintResultSchema,
   type BlueprintResult,
 } from '@tekton/component-generator';
+import {
+  COMPONENT_CATALOG,
+  type ComponentKnowledge,
+} from '@tekton/component-knowledge';
 import { writeFile, mkdir } from 'fs/promises';
 import { join, dirname } from 'path';
 
@@ -116,75 +120,22 @@ export function getComponentList(filter?: ComponentFilter): {
   components: ComponentLightweight[];
   count: number;
 } {
-  // Build component catalog from known components
-  // This is a static catalog for MVP; future versions would query from registry
-  const components: ComponentLightweight[] = [];
-  const knownComponents: ComponentLightweight[] = [
-    {
-      name: 'Card',
-      description: 'Container component with elevation and padding',
-      category: 'layout',
-      slots: ['header', 'content', 'footer', 'actions'],
-      props: ['variant', 'elevation', 'padding'],
-    },
-    {
-      name: 'Button',
-      description: 'Interactive button component',
-      category: 'action',
-      slots: ['icon', 'label'],
-      props: ['variant', 'size', 'disabled', 'onClick'],
-    },
-    {
-      name: 'Typography',
-      description: 'Text display component',
-      category: 'content',
-      props: ['variant', 'text', 'color', 'align'],
-    },
-    {
-      name: 'Avatar',
-      description: 'User avatar/profile image',
-      category: 'content',
-      props: ['size', 'src', 'alt', 'fallback'],
-    },
-    {
-      name: 'Container',
-      description: 'Layout container',
-      category: 'layout',
-      slots: ['children'],
-      props: ['maxWidth', 'padding', 'centered'],
-    },
-    {
-      name: 'Stack',
-      description: 'Vertical or horizontal stack layout',
-      category: 'layout',
-      slots: ['children'],
-      props: ['direction', 'spacing', 'align'],
-    },
-    {
-      name: 'TextField',
-      description: 'Text input field',
-      category: 'input',
-      slots: ['label', 'helper', 'error'],
-      props: ['value', 'placeholder', 'type', 'disabled'],
-    },
-    {
-      name: 'Link',
-      description: 'Navigation link',
-      category: 'navigation',
-      slots: ['children'],
-      props: ['href', 'target', 'underline'],
-    },
-  ];
-
-  // Apply filters
-  let filtered = knownComponents;
+  // Use actual catalog instead of hardcoded list
+  let filtered = COMPONENT_CATALOG.map((comp: ComponentKnowledge) => ({
+    name: comp.name,
+    description: comp.semanticDescription.purpose,
+    category: comp.category,
+    props: Object.keys(comp.tokenBindings.states.default),
+    slots: comp.slotAffinity ? Object.keys(comp.slotAffinity) : undefined,
+  }));
 
   if (filter?.category) {
     filtered = filtered.filter((c) => c.category === filter.category);
   }
 
   if (filter?.hasSlot) {
-    filtered = filtered.filter((c) => c.slots?.includes(filter.hasSlot));
+    const targetSlot = filter.hasSlot;
+    filtered = filtered.filter((c) => c.slots?.includes(targetSlot));
   }
 
   return {
