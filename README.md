@@ -13,6 +13,7 @@ OKLCH-based design token generator with WCAG AA compliance for modern design sys
 - [Features](#features)
 - [Installation](#installation)
 - [Quick Start](#quick-start)
+- [Worktree Management](#worktree-management)
 - [Architecture Overview](#architecture-overview)
 - [API Reference](#api-reference)
 - [Project Status](#project-status)
@@ -20,18 +21,86 @@ OKLCH-based design token generator with WCAG AA compliance for modern design sys
 - [Contributing](#contributing)
 - [License](#license)
 
+## Design System Architecture
+
+Tekton implements a 3-layer design system architecture for generating deterministic design tokens:
+
+### Layer 1: Token Generator Engine (SPEC-LAYER1-001) ✅ Complete
+
+Generates deterministic design tokens from archetype JSON presets using OKLCH color spaces with WCAG AA compliance.
+
+**Key Features**:
+- **OKLCH Color Space**: Perceptually uniform color transformations using culori 3.3.0
+- **WCAG AA/AAA Validation**: Automatic contrast ratio validation (4.5:1 text, 3:1 UI)
+- **Auto-Adjustment**: Intelligent lightness modification to achieve WCAG compliance
+- **Multiple Export Formats**: CSS custom properties, Tailwind configuration, DTCG metadata
+- **Performance Optimized**: LRU cache with 80%+ hit rate, <100ms generation time
+
+**Technology Stack**:
+- TypeScript 5.9+
+- culori ^3.3.0 (OKLCH support)
+- wcag-contrast ^3.0.0 (WCAG validation)
+- vitest ^2.0.0 (testing framework)
+
+**Usage Example**:
+```typescript
+import { generateTokensFromArchetype } from '@tekton/token-generator';
+
+// Load archetype JSON preset
+const archetype = loadArchetypeJSON('premium-editorial.json');
+
+// Generate tokens with WCAG validation
+const tokens = await generateTokensFromArchetype(archetype, {
+  wcagLevel: 'AA',
+  cacheEnabled: true
+});
+
+// Export to desired format
+const css = exportToCSS(tokens);
+const tailwind = exportToTailwind(tokens);
+const dtcg = exportToDTCG(tokens);
+```
+
+### Layer 2: Component Theme Mapper (SPEC-LAYER2-001) 🚧 In Progress
+
+Maps generated tokens to component-specific themes. Coming soon.
+
+### Layer 3: Framework Adapter (SPEC-LAYER3-001) 🚧 In Progress
+
+Adapts component themes to specific frontend frameworks. Coming soon.
+
+---
+
 ## Features
 
-### OKLCH Color Space
+### OKLCH Color System
 
-Tekton uses the **OKLCH color space** for perceptually uniform color generation:
+Tekton uses the OKLCH color space for perceptually uniform color generation:
 
-- **Perceptual Uniformity**: Equal lightness steps appear equally spaced to the human eye
+- **Perceptually Uniform**: Equal lightness steps appear equally spaced to the human eye
 - **Predictable Behavior**: Chroma adjustments preserve hue, preventing unwanted color shifts
 - **Gamut Independence**: Future-proof support for wide-gamut displays (P3, Rec.2020)
 - **CSS Native**: Supported in modern browsers (Safari 15+, Chrome 111+, Firefox 113+)
 
-### WCAG AA Compliance
+### WCAG Compliance
+
+Automatic accessibility validation ensures all generated color combinations meet standards:
+
+- **Contrast Validation**: Minimum 4.5:1 for normal text, 3:1 for large text
+- **Automated Checking**: Built-in WCAG AA/AAA compliance validation
+- **Fix Suggestions**: Recommendations for lightness adjustments when compliance fails
+- **Real-time Validation**: Validates foreground-background pairs during generation
+
+### Token Caching
+
+Performance optimization through intelligent caching:
+
+- **LRU Cache**: Least Recently Used eviction strategy
+- **File-based Invalidation**: Automatic cache clearing when source files change
+- **High Hit Rate**: 80%+ cache hit rate in typical usage
+- **Fast Generation**: <100ms for typical archetype, <10ms for cached results
+
+### WCAG AA Compliance (Deprecated - See Layer 1 Above)
 
 Automatic accessibility validation ensures all generated color combinations meet standards:
 
@@ -257,6 +326,163 @@ console.log(hex); // "#0066CC"
 // RGB to OKLCH
 const oklchFromRgb = rgbToOklch({ r: 59, g: 130, b: 246 });
 ```
+
+## Worktree Management
+
+Tekton provides a comprehensive Git worktree management system for parallel SPEC development. The worktree system enables isolated development environments where each SPEC gets its own directory and Git branch, allowing true parallel development without context switching overhead.
+
+### Why Use Worktrees?
+
+**Traditional branch workflow pain points**:
+- Frequent `git stash` operations when switching branches
+- Risk of losing uncommitted work
+- Context switching overhead
+- Conflicts when switching branches with uncommitted changes
+- Single development environment
+
+**Worktree solution**:
+- Each SPEC has its own isolated directory
+- Independent Git state per worktree
+- Simultaneous development on multiple SPECs
+- Instant switching between worktrees (no stashing)
+- Isolated dependencies and configuration
+
+### Quick Start
+
+Create a worktree for parallel development:
+
+```bash
+# Create a worktree for a SPEC
+tekton worktree new SPEC-AUTH-001 "User Authentication System"
+
+# Output:
+# ✓ Worktree created successfully
+#   Path: /Users/yourname/.worktrees/SPEC-AUTH-001
+#   Branch: feature/SPEC-AUTH-001
+#   Base: master
+
+# Navigate to the worktree
+cd ~/.worktrees/SPEC-AUTH-001
+
+# Work on your SPEC in isolation
+# All changes are isolated to this worktree
+
+# Check sync status before creating PR
+cd /path/to/main/repo
+tekton worktree status SPEC-AUTH-001
+
+# Sync with base branch
+tekton worktree sync SPEC-AUTH-001
+
+# After PR is merged, clean up
+tekton worktree clean --merged-only
+```
+
+### Integration with MoAI Workflow
+
+Worktrees integrate seamlessly with MoAI's SPEC-based development workflow:
+
+```bash
+# Option 1: Create SPEC with worktree automatically
+/moai:1-plan --worktree "User Authentication System"
+# Creates SPEC-AUTH-001 and worktree in one step
+
+# Option 2: Create worktree for existing SPEC
+tekton worktree new SPEC-AUTH-001 "User Authentication System"
+cd ~/.worktrees/SPEC-AUTH-001
+
+# Run MoAI workflow in isolated worktree
+/moai:2-run SPEC-AUTH-001  # TDD implementation
+/moai:3-sync SPEC-AUTH-001 # Documentation sync
+
+# When ready, sync and create PR
+tekton worktree sync SPEC-AUTH-001
+git push origin feature/SPEC-AUTH-001
+```
+
+**Benefits of MoAI + Worktree**:
+- **Parallel SPEC Development**: Work on multiple SPECs simultaneously without conflicts
+- **Isolated Testing**: Each SPEC has its own test environment
+- **Independent Dependencies**: Install SPEC-specific packages without affecting other work
+- **Clean Git History**: Each SPEC maintains its own branch and commits
+- **Zero Context Switching**: Move between SPECs instantly (no `git stash` needed)
+
+**Recommended Workflow**:
+1. Create SPEC using `/moai:1-plan --worktree`
+2. Worktree is automatically created with proper branch naming
+3. Develop in isolated worktree using `/moai:2-run`
+4. Sync documentation with `/moai:3-sync`
+5. Merge changes back using `tekton worktree sync`
+6. Create PR directly from worktree branch
+7. Clean up after merge: `tekton worktree clean --merged-only`
+
+### Core Commands
+
+| Command | Usage | Purpose |
+|---------|-------|---------|
+| `new` | `tekton worktree new SPEC-001 "Description"` | Create isolated worktree |
+| `list` | `tekton worktree list [--status active]` | List all worktrees |
+| `switch` | `tekton worktree switch SPEC-001` | Get path to worktree |
+| `status` | `tekton worktree status SPEC-001` | Check sync status |
+| `sync` | `tekton worktree sync SPEC-001` | Sync with base branch |
+| `remove` | `tekton worktree remove SPEC-001` | Remove worktree |
+| `clean` | `tekton worktree clean --merged-only` | Clean merged worktrees |
+| `config` | `tekton worktree config list` | View configuration |
+
+### Parallel Development Workflow
+
+Work on multiple SPECs simultaneously:
+
+```bash
+# Create multiple worktrees
+tekton worktree new SPEC-AUTH-001 "User Authentication"
+tekton worktree new SPEC-PAY-001 "Payment Processing"
+tekton worktree new SPEC-DASH-001 "Dashboard Analytics"
+
+# List all worktrees
+tekton worktree list
+
+# Output:
+# SPEC ID         STATUS   PATH                                        BRANCH
+# SPEC-AUTH-001   active   /Users/you/.worktrees/SPEC-AUTH-001        feature/SPEC-AUTH-001
+# SPEC-PAY-001    active   /Users/you/.worktrees/SPEC-PAY-001         feature/SPEC-PAY-001
+# SPEC-DASH-001   active   /Users/you/.worktrees/SPEC-DASH-001        feature/SPEC-DASH-001
+
+# Switch between worktrees instantly
+cd ~/.worktrees/SPEC-AUTH-001  # Work on authentication
+cd ~/.worktrees/SPEC-PAY-001   # Switch to payment
+cd ~/.worktrees/SPEC-DASH-001  # Switch to dashboard
+
+# No stashing, no conflicts, independent development
+```
+
+### Features
+
+- **Isolation**: Each SPEC has its own directory and Git branch
+- **Parallel Development**: Work on multiple SPECs simultaneously
+- **Zero Context Switching**: Instant switching between worktrees
+- **Clean Integration**: Automatic sync with base branch
+- **Safe Experimentation**: Isolated environment for testing
+- **Automatic Cleanup**: Remove merged worktrees with one command
+- **Configuration Management**: Project-specific worktree settings
+- **JSON Output**: All commands support `--format json` for automation
+
+### Documentation
+
+For complete documentation, see:
+- [Worktree Workflow Guide](./docs/worktree-workflow-guide.md) - Complete integration with SPEC workflow
+- [MoAI Integration Analysis](./docs/worktree-moai-integration.md) - Integration points and implementation guide
+
+### Implementation Status
+
+The Tekton Worktree Management System is fully implemented:
+- **Phase 1**: Foundation (types, registry, validation) - 127 tests ✅
+- **Phase 2**: Git Integration (worktree manager, git operations) - 79 tests ✅
+- **Phase 3**: Core CLI Commands (new, list, switch, remove) - 67 tests ✅
+- **Phase 4**: Advanced Features (sync, status, config, clean) - 41 tests ✅
+- **Phase 5**: MoAI Workflow Integration - Documentation complete ✅
+
+**Total: 314 tests passing, full CLI implementation complete**
 
 ## Architecture Overview
 

@@ -1,105 +1,290 @@
 # Acceptance Criteria: SPEC-LAYER3-001 - Component Generation Engine
 
 **TAG**: SPEC-LAYER3-001
+**Version**: 2.0.0
 **Test Coverage Target**: ≥ 85% (TRUST 5 Framework)
 **Dependencies**: SPEC-LAYER1-001, SPEC-LAYER2-001
 **WCAG Compliance**: AA Level
+**Last Updated**: 2026-01-20
 
 ---
 
-## 1. Blueprint System Acceptance Criteria
+## 1. Slot Semantic Registry Acceptance Criteria
 
-### Scenario 1.1: Basic Mode - AI Blueprint Generation from Natural Language
+### Scenario 1.1: Global Slot Definition Validation
 
-**Given** a user provides a natural language prompt describing a component
-**When** the AI Blueprint generator processes the prompt
-**Then** a valid Blueprint JSON should be generated
-**And** the Blueprint should conform to the Zod schema
-**And** the generation should complete within 5 seconds
+**Given** the Slot Semantic Registry
+**When** global slots are queried
+**Then** all 4 standard slots shall be defined (header, sidebar, main, footer)
+**And** each slot shall have role and constraintTags
+**And** main slot shall be marked as required
 
-**Test Data**:
-```
-User Prompt: "Create a blog post editor with header, content area for title and body, and sidebar with publish button"
-```
-
-**Expected Blueprint Structure**:
-```json
-{
-  "id": "bp-blog-editor",
-  "name": "Blog Editor",
-  "archetype": "premium-editorial",
-  "slots": {
-    "header": { "component": "Card" },
-    "content": {
-      "component": "Card",
-      "children": [
-        { "component": "Input", "props": { "placeholder": "Title" } },
-        { "component": "Textarea", "props": { "rows": 20 } }
-      ]
-    },
-    "sidebar": {
-      "component": "Card",
-      "children": [{ "component": "Button", "props": { "variant": "primary" } }]
-    }
-  }
-}
+**Expected Registry**:
+```typescript
+[
+  { name: "header", role: "navigation", constraintTags: ["navigation", "action", "display"], required: false },
+  { name: "sidebar", role: "secondary-navigation", constraintTags: ["navigation", "input", "action"], required: false },
+  { name: "main", role: "primary-content", constraintTags: ["display", "input", "container", "action"], required: true },
+  { name: "footer", role: "auxiliary", constraintTags: ["navigation", "action", "display"], required: false },
+]
 ```
 
 **Validation**:
-- Blueprint passes Zod schema validation
-- All slot components exist in Layer 2
-- Generation time < 5 seconds
-- No errors or warnings
+- All 4 global slots present
+- Main slot is required
+- constraintTags enforce component categories
 
 ---
 
-### Scenario 1.2: Pro Mode - Manual Blueprint Editing with Validation
+### Scenario 1.2: Local Slot Definition
 
-**Given** a user manually edits a Blueprint JSON
-**When** the Blueprint is validated
-**Then** schema validation should detect errors immediately
-**And** descriptive error messages should guide the user
-**And** validation should complete within 50ms
+**Given** a component that defines local slots (e.g., Card)
+**When** local slots are queried
+**Then** local slots shall be registered with parent component
+**And** local slots shall have constraintTags
 
-**Test Data**:
-```json
-{
-  "id": "bp-invalid",
-  "name": "Invalid Blueprint",
-  "slots": {
-    "content": {
-      "component": "NonExistentComponent",
-      "props": { "invalid": true }
-    }
-  }
-}
+**Expected Local Slots**:
+```typescript
+[
+  { name: "card_actions", parentComponent: "Card", role: "actions", constraintTags: ["action"] },
+  { name: "table_toolbar", parentComponent: "DataTable", role: "toolbar", constraintTags: ["action", "input"] },
+  { name: "modal_footer", parentComponent: "Modal", role: "actions", constraintTags: ["action"] },
+]
 ```
 
-**Expected Errors**:
+**Validation**:
+- Local slots linked to parent components
+- constraintTags enforced for local slots
+
+---
+
+### Scenario 1.3: Slot Constraint Enforcement
+
+**Given** a slot with constraintTags
+**When** a component with mismatched category is assigned
+**Then** the system shall reject with LAYER3-E003
+**And** an error message shall indicate allowed categories
+
+**Test Data**:
+```typescript
+// header slot allows: ["navigation", "action", "display"]
+// DataTable has category: "display" but excludedSlots: ["header"]
+
+const assignment = {
+  slot: "header",
+  component: "DataTable",
+};
+```
+
+**Validation**:
+- Mismatched assignments rejected
+- Clear error message with allowed categories
+
+---
+
+## 2. Semantic Scoring Algorithm Acceptance Criteria
+
+### Scenario 2.1: Score Calculation Accuracy
+
+**Given** a component and target slot
+**When** the Semantic Scoring Algorithm calculates the score
+**Then** the formula shall be: Score = (BaseAffinity × 0.5) + (IntentMatch × 0.3) + (ContextPenalty × 0.2)
+**And** the score shall be clamped to 0.0-1.0
+
+**Test Data**:
+```typescript
+const input = {
+  component: ButtonKnowledge,  // slotAffinity.sidebar = 0.8
+  targetSlot: "sidebar",
+  intent: { mode: "interactive", keywords: ["button", "action"] },
+  context: { siblingComponents: [], slotConstraints: ["action"] },
+};
+
+// Expected:
+// BaseAffinity = 0.8
+// IntentMatch = 0.7 (interactive + keyword matches)
+// ContextPenalty = 1.0 (no conflicts, category matches)
+// Score = (0.8 × 0.5) + (0.7 × 0.3) + (1.0 × 0.2) = 0.4 + 0.21 + 0.2 = 0.81
+```
+
+**Validation**:
+- Score calculation follows formula
+- Score clamped to 0.0-1.0
+- Calculation completes in < 10ms
+
+---
+
+### Scenario 2.2: Intent-Based Scoring Adjustment
+
+**Given** a Blueprint with "read-only" intent mode
+**When** an action component (e.g., Button) is scored
+**Then** the IntentMatch score shall be penalized by -0.3
+**And** display components shall receive +0.2 boost
+
+**Test Data**:
+```typescript
+const readOnlyIntent = { mode: "read-only", keywords: [], complexity: "simple" };
+
+// Button (category: action) IntentMatch:
+// Base: 0.5 - 0.3 = 0.2 (penalized)
+
+// DataTable (category: display) IntentMatch:
+// Base: 0.5 (no penalty for display in read-only)
+```
+
+**Validation**:
+- Action components penalized in read-only mode
+- Display components not penalized
+- Dashboard mode boosts display components
+
+---
+
+### Scenario 2.3: Context Penalty Calculation
+
+**Given** a component with conflictsWith constraints
+**When** the component is scored for a slot with conflicting siblings
+**Then** the ContextPenalty shall be reduced by -0.5
+
+**Test Data**:
+```typescript
+const component = {
+  name: "DataTable",
+  constraints: { conflictsWith: ["OtherDataTable"] },
+};
+
+const context = {
+  siblingComponents: ["OtherDataTable"],  // Conflict!
+  slotConstraints: ["display"],
+};
+
+// ContextPenalty = 1.0 - 0.5 = 0.5
+```
+
+**Validation**:
+- Conflicts detected and penalized
+- Category mismatch penalized
+
+---
+
+## 3. Safety Protocol Acceptance Criteria
+
+### Scenario 3.1: Threshold Check Enforcement
+
+**Given** a component with score < 0.4
+**When** the Threshold Check is applied
+**Then** the system shall trigger Fluid Fallback
+**And** GenericContainer shall be assigned
+**And** warning LAYER3-W001 shall be logged
+
+**Test Data**:
+```typescript
+const lowScoreResult = {
+  component: "ComplexChart",
+  slot: "header",
+  score: 0.25,  // Below 0.4 threshold
+};
+
+// Expected: Fallback to GenericContainer
+```
+
+**Validation**:
+- Scores < 0.4 trigger fallback
+- GenericContainer assigned as fallback
+- Warning logged with original component name
+
+---
+
+### Scenario 3.2: Hallucination Check - Invalid Component Detection
+
+**Given** a Blueprint with non-existent component names
+**When** the Hallucination Check validates the Blueprint
+**Then** invalid components shall be detected
+**And** error LAYER3-E002 shall be returned
+**And** similar component suggestions shall be provided
+
+**Test Data**:
+```typescript
+const blueprint = {
+  slots: {
+    main: { component: "Buttn" },  // Typo: should be "Button"
+    sidebar: { component: "FakeComponent" },  // Non-existent
+  }
+};
+```
+
+**Expected Response**:
 ```typescript
 {
-  errors: [
-    { path: ["archetype"], message: "Required field 'archetype' is missing" },
-    { path: ["slots", "content", "component"], message: "Component 'NonExistentComponent' not found in Layer 2" }
-  ]
+  valid: false,
+  invalidComponents: ["Buttn", "FakeComponent"],
+  suggestions: {
+    "Buttn": ["Button"],
+    "FakeComponent": [],
+  }
 }
 ```
 
 **Validation**:
-- Missing required fields detected
-- Invalid component names flagged
-- Error messages include path and suggestion
-- Validation time < 50ms
+- Invalid components detected
+- Fuzzy suggestions for typos
+- Blueprint rejected until fixed
 
 ---
 
-### Scenario 1.3: Blueprint Schema Compliance
+### Scenario 3.3: Constraint Violation - Excluded Slot
 
-**Given** a complete Blueprint JSON
-**When** the schema validator checks all fields
-**Then** all required fields should be present
-**And** all field types should match schema definitions
-**And** all component references should resolve to Layer 2 bindings
+**Given** a component with excludedSlots constraint
+**When** the component is placed in an excluded slot
+**Then** the system shall return score = 0.0
+**And** the placement shall be blocked regardless of other factors
+
+**Test Data**:
+```typescript
+const dataTable = {
+  name: "DataTable",
+  constraints: { excludedSlots: ["header", "footer", "sidebar"] },
+};
+
+// Attempt to place DataTable in header
+const result = scoreComponent(dataTable, "header", intent, context);
+// Expected: score = 0.0, blocked
+```
+
+**Validation**:
+- Excluded slots enforce hard block
+- Score is exactly 0.0
+- Clear error message
+
+---
+
+### Scenario 3.4: Fluid Fallback Application
+
+**Given** a slot that fails scoring or constraint checks
+**When** Fluid Fallback is applied
+**Then** appropriate fallback component shall be assigned based on slot role
+**And** _fallback metadata shall be attached
+
+**Fallback Mapping**:
+- primary-content → GenericContainer
+- navigation → NavPlaceholder
+- actions → ButtonGroup
+- auxiliary → GenericContainer
+
+**Validation**:
+- Fallback matches slot role
+- _fallback metadata includes reason
+- No errors during fallback
+
+---
+
+## 4. Blueprint System Acceptance Criteria
+
+### Scenario 4.1: Blueprint Schema Validation (New Structure)
+
+**Given** a Blueprint JSON with the new v2.0 structure
+**When** the schema validator checks the Blueprint
+**Then** all required fields shall be present
+**And** the Blueprint shall pass Zod validation
 
 **Required Fields Checklist**:
 - [ ] `id` (string, unique)
@@ -107,70 +292,48 @@ User Prompt: "Create a blog post editor with header, content area for title and 
 - [ ] `name` (string, non-empty)
 - [ ] `description` (string)
 - [ ] `archetype` (string, valid archetype ID)
-- [ ] `slots.content` (SlotDefinition, required)
+- [ ] `intent.mode` (enum: read-only | interactive | data-entry | dashboard)
+- [ ] `intent.keywords` (string array)
+- [ ] `intent.complexity` (enum: simple | moderate | complex)
+- [ ] `slots.main` (SlotAssignment, required)
 - [ ] `responsive` (ResponsiveConfig)
 - [ ] `accessibility` (AccessibilityConfig)
-- [ ] `metadata` (created, updated, author)
+- [ ] `metadata` (created, updated, author, generatedBy)
 
 **Validation**:
 - All required fields present
-- All types match schema
-- All component references valid
+- Zod validation passes
+- Validation time < 50ms
 
 ---
 
-## 2. Slot-Based Assembly Acceptance Criteria
+### Scenario 4.2: AI Blueprint Generation (Basic Mode)
 
-### Scenario 2.1: Standard Slot Resolution
-
-**Given** a Blueprint with standard slots (header, content, sidebar, footer)
-**When** the slot resolver processes the Blueprint
-**Then** all slots should resolve to Layer 2 components
-**And** slot props should validate against component schemas
-**And** resolution should complete within 100ms
+**Given** a user natural language prompt
+**When** the AI Blueprint generator processes the prompt
+**Then** a valid Blueprint JSON shall be generated
+**And** intent shall be correctly parsed from prompt
+**And** generation shall complete within 5 seconds
 
 **Test Data**:
-```json
-{
-  "slots": {
-    "header": { "component": "Card", "props": { "variant": "elevated" } },
-    "content": { "component": "Input", "props": { "placeholder": "Enter text" } },
-    "sidebar": { "component": "Button", "props": { "variant": "primary" } },
-    "footer": { "component": "Badge", "props": { "text": "Status" } }
-  }
-}
+```
+User Prompt: "Create a read-only admin dashboard with data tables and metrics display"
 ```
 
-**Validation**:
-- All 4 slots resolve successfully
-- All components found in Layer 2
-- All props validated against schemas
-- Resolution time < 100ms
-
----
-
-### Scenario 2.2: Recursive Child Slot Resolution
-
-**Given** a Blueprint with nested child slots
-**When** the slot resolver processes children recursively
-**Then** all nested children should resolve correctly
-**And** the hierarchy should be preserved
-**And** deep nesting (5+ levels) should work without errors
-
-**Test Data**:
+**Expected Blueprint**:
 ```json
 {
+  "name": "Admin Dashboard",
+  "intent": {
+    "mode": "dashboard",
+    "keywords": ["admin", "dashboard", "data", "tables", "metrics"],
+    "complexity": "moderate"
+  },
   "slots": {
-    "content": {
+    "main": {
       "component": "Card",
       "children": [
-        {
-          "component": "Card",
-          "children": [
-            { "component": "Input" },
-            { "component": "Button" }
-          ]
-        }
+        { "component": "DataTable" }
       ]
     }
   }
@@ -178,71 +341,62 @@ User Prompt: "Create a blog post editor with header, content area for title and 
 ```
 
 **Validation**:
-- All nested children resolved
-- Hierarchy preserved in output
-- No infinite recursion
-- Memory usage reasonable
+- Blueprint generated successfully
+- Intent parsed correctly
+- Generation time < 5s
 
 ---
 
-### Scenario 2.3: Custom Slot Support
+### Scenario 4.3: Manual Blueprint Editing (Pro Mode)
 
-**Given** a Blueprint with custom slots beyond standard (header/content/footer/sidebar)
-**When** the slot resolver processes custom slots
-**Then** custom slots should be supported
-**And** custom slot names should be preserved
-**And** custom slots should render correctly in generated component
-
-**Test Data**:
-```json
-{
-  "slots": {
-    "content": { "component": "Card" },
-    "customSlot": { "component": "Badge", "props": { "text": "Custom" } }
-  }
-}
-```
+**Given** a user manually edits a Blueprint
+**When** the Blueprint is validated
+**Then** schema validation errors shall be detected immediately
+**And** hallucination check shall validate component names
+**And** validation shall complete within 50ms
 
 **Validation**:
-- Custom slot `customSlot` resolves successfully
-- Custom slot name preserved in component
-- Generated component includes custom slot
+- Instant validation feedback
+- Component name suggestions for typos
+- Clear error messages
 
 ---
 
-## 3. Code Generation Acceptance Criteria
+## 5. Code Generation Acceptance Criteria
 
-### Scenario 3.1: React JSX Code Generation
+### Scenario 5.1: React JSX Generation
 
-**Given** a resolved Blueprint with all slots
+**Given** a validated Blueprint
 **When** the JSX generator produces React code
-**Then** the code should be valid TypeScript JSX
-**And** the code should compile without errors
-**And** the code should be formatted with Prettier
+**Then** the code shall be valid TypeScript JSX
+**And** all components shall use Layer 2 bindings
+**And** code shall be formatted with Prettier
 
 **Expected Output**:
 ```typescript
-// Generated: BlogEditor.tsx
 import React from "react";
-import { Card, Input, Textarea, Button } from "@/components";
+import { Card, DataTable, Badge, Avatar, Button } from "@/components";
 
-export const BlogEditor: React.FC = () => {
+export const AdminDashboard: React.FC = () => {
   return (
-    <div className="blog-editor-layout">
+    <div className="admin-dashboard-layout">
       <header className="layout-header">
-        <Card variant="elevated" />
-      </header>
-      <main className="layout-content">
-        <Card>
-          <Input placeholder="Title" />
-          <Textarea rows={20} />
+        <Card variant="ghost">
+          <Badge text="Admin" />
+          <Avatar size="sm" />
         </Card>
-      </main>
+      </header>
       <aside className="layout-sidebar">
-        <Card>
-          <Button variant="primary">Publish</Button>
+        <Card variant="default">
+          <Button variant="ghost">Dashboard</Button>
+          <Button variant="ghost">Users</Button>
         </Card>
       </aside>
+      <main className="layout-main">
+        <Card variant="elevated">
+          <DataTable columns={5} rows={10} />
+        </Card>
+      </main>
     </div>
   );
 };
@@ -251,496 +405,143 @@ export const BlogEditor: React.FC = () => {
 **Validation**:
 - Code is valid TypeScript
 - JSX syntax correct
-- Imports are correct
+- All imports generated
 - Prettier formatting applied
-- TypeScript compiles with zero errors
 
 ---
 
-### Scenario 3.2: TypeScript Type Generation
+### Scenario 5.2: Layer 1 + Layer 2 + Layer 3 Integration
 
 **Given** a generated component
-**When** the TypeScript type generator creates `.types.ts`
-**Then** prop types should be inferred from Blueprint
-**And** types should be exportable and reusable
-**And** types should compile without errors
-
-**Expected Output**:
-```typescript
-// Generated: BlogEditor.types.ts
-import type { ReactNode } from "react";
-
-export interface BlogEditorProps {
-  onPublish?: () => void;
-  children?: ReactNode;
-}
-
-export type { BlogEditorProps as default };
-```
-
-**Validation**:
-- Types exported correctly
-- TypeScript compiles types
-- Types usable in other files
-
----
-
-### Scenario 3.3: Layer 1 Token and Layer 2 Binding Integration
-
-**Given** a generated component
-**When** the code references styles
-**Then** all color/size values should use CSS variables from Layer 1
-**And** all component bindings should use Layer 2 schemas
-**And** zero hardcoded design values should exist
-
-**Generated Code Check**:
-```typescript
-// Good: Uses CSS variables
-backgroundColor: "var(--color-primary)"
-
-// Bad: Hardcoded values
-backgroundColor: "#3b82f6" // ❌ FAIL
-```
+**When** styles are applied
+**Then** all color/size values shall use CSS variables from Layer 1
+**And** all component schemas shall use Layer 2 Zod schemas
+**And** zero hardcoded design values shall exist
 
 **Validation**:
 - All styles use `var(--token-name)` syntax
-- Zero hardcoded hex/rgb colors
-- Zero hardcoded pixel sizes (except for border-width: 1px)
-- Layer 2 binding schemas imported and used
+- Layer 2 schemas imported and used
+- Zero hardcoded values
 
 ---
 
-### Scenario 3.4: Responsive Utility Generation
+## 6. Supabase Integration Acceptance Criteria
 
-**Given** a Blueprint with responsive configuration
-**When** the responsive utility generator creates styles
-**Then** mobile-first breakpoints should be applied
-**And** media queries should match Blueprint breakpoints
-**And** styles should work on all viewport sizes
-
-**Expected Output**:
-```typescript
-const styles = {
-  ".blog-editor-layout": {
-    display: "grid",
-    gridTemplateColumns: "1fr", // Mobile: single column
-  },
-
-  "@media (min-width: 768px)": {
-    ".blog-editor-layout": {
-      gridTemplateColumns: "1fr 250px", // Tablet: content + sidebar
-    },
-  },
-
-  "@media (min-width: 1024px)": {
-    ".blog-editor-layout": {
-      gridTemplateColumns: "250px 1fr 250px", // Desktop: full layout
-    },
-  },
-};
-```
-
-**Validation**:
-- Mobile-first approach (base styles for smallest viewport)
-- Media queries use Blueprint breakpoints
-- Styles tested on mobile, tablet, desktop
-
----
-
-## 4. Supabase Integration Acceptance Criteria
-
-### Scenario 4.1: Blueprint Save Operation
+### Scenario 6.1: Blueprint Save with Version
 
 **Given** a valid Blueprint
 **When** the Blueprint is saved to Supabase
-**Then** the Blueprint should be stored with version number
-**And** the save operation should complete within 200ms
-**And** the Blueprint should be retrievable by ID
-
-**Test Procedure**:
-```typescript
-const blueprint = { /* valid Blueprint */ };
-const blueprintId = await saveBlueprint(blueprint, userId);
-const retrieved = await loadBlueprint(blueprintId);
-assert(retrieved.id === blueprint.id);
-```
+**Then** the Blueprint shall be stored with version number
+**And** version shall auto-increment on updates
+**And** operation shall complete within 200ms
 
 **Validation**:
-- Save operation completes within 200ms
-- Blueprint stored with correct version
-- Retrieved Blueprint matches original
+- Save completes within 200ms
+- Version stored correctly
+- Version history preserved
 
 ---
 
-### Scenario 4.2: Blueprint Load Operation
-
-**Given** a Blueprint ID
-**When** the Blueprint is loaded from Supabase
-**Then** the Blueprint should be deserialized correctly
-**And** the load operation should complete within 200ms
-**And** the Blueprint should pass schema validation
-
-**Test Procedure**:
-```typescript
-const blueprintId = "bp-test-001";
-const blueprint = await loadBlueprint(blueprintId);
-const validationResult = BlueprintSchema.safeParse(blueprint);
-assert(validationResult.success === true);
-```
-
-**Validation**:
-- Load operation completes within 200ms
-- Blueprint deserialized correctly
-- Schema validation passes
-
----
-
-### Scenario 4.3: Row-Level Security (RLS) Enforcement
+### Scenario 6.2: RLS Enforcement
 
 **Given** two users with different Supabase user IDs
 **When** User A attempts to access User B's Blueprint
-**Then** the access should be denied by RLS policies
-**And** an authorization error should be returned
-**And** User A should only see their own Blueprints
-
-**Test Procedure**:
-```typescript
-// User A creates Blueprint
-const userABlueprint = await saveBlueprint(blueprint, "user-a-id");
-
-// User B attempts to load User A's Blueprint
-const result = await loadBlueprint(userABlueprint.id, "user-b-id");
-assert(result.error === "Authorization denied");
-```
+**Then** access shall be denied by RLS policies
+**And** authorization error shall be returned
 
 **Validation**:
 - User isolation enforced
-- Authorization error returned
+- Authorization errors returned
 - Users only see own Blueprints
 
 ---
 
-### Scenario 4.4: Offline Fallback
+### Scenario 6.3: Offline Fallback
 
-**Given** Supabase is unavailable (network error or service down)
-**When** a Blueprint save/load operation is attempted
-**Then** the system should fall back to local file storage
-**And** no data should be lost
-**And** sync should occur when Supabase becomes available
-
-**Test Procedure**:
-```typescript
-// Simulate Supabase unavailable
-simulateNetworkError();
-
-// Save Blueprint (should use local fallback)
-const blueprintId = await saveBlueprint(blueprint, userId);
-assert(localStorage.getItem(`blueprint-${blueprintId}`) !== null);
-
-// Restore network
-restoreNetwork();
-
-// Sync should occur automatically
-await syncLocalBlueprintsToSupabase();
-const synced = await loadBlueprint(blueprintId);
-assert(synced !== null);
-```
+**Given** Supabase is unavailable
+**When** a Blueprint save/load is attempted
+**Then** local storage fallback shall be used
+**And** sync shall occur when Supabase becomes available
 
 **Validation**:
-- Local fallback works without errors
-- No data loss during offline period
+- Local fallback works
+- No data loss
 - Sync completes when online
 
 ---
 
-## 5. E2E Testing and Accessibility Acceptance Criteria
+## 7. E2E Testing and Accessibility Acceptance Criteria
 
-### Scenario 5.1: E2E Test Generation
+### Scenario 7.1: E2E Test Generation
 
 **Given** a generated component with interactive elements
 **When** the E2E test generator creates Playwright tests
-**Then** tests should cover all buttons, inputs, and interactions
-**And** tests should include accessibility checks
-**And** tests should run successfully with the component
+**Then** tests shall cover all interactive elements
+**And** tests shall include route from Blueprint.routing.path
 
 **Expected Test Output**:
 ```typescript
-// Generated: BlogEditor.spec.ts
 import { test, expect } from "@playwright/test";
 
-test.describe("BlogEditor", () => {
-  test("should render all slots", async ({ page }) => {
-    await page.goto("/blog-editor");
-    await expect(page.locator(".layout-header")).toBeVisible();
-    await expect(page.locator(".layout-content")).toBeVisible();
-    await expect(page.locator(".layout-sidebar")).toBeVisible();
-  });
+const COMPONENT_ROUTE = "/admin-dashboard";
 
-  test("should handle publish button click", async ({ page }) => {
-    await page.goto("/blog-editor");
-    const publishBtn = page.locator('button:has-text("Publish")');
-    await publishBtn.click();
-    // Assert expected behavior
+test.describe("AdminDashboard", () => {
+  test("should render all slots", async ({ page }) => {
+    await page.goto(COMPONENT_ROUTE);
+    await expect(page.locator(".layout-header")).toBeVisible();
+    await expect(page.locator(".layout-main")).toBeVisible();
+    await expect(page.locator(".layout-sidebar")).toBeVisible();
   });
 });
 ```
 
 **Validation**:
-- Tests generated for all interactive elements
+- Tests generated for all interactions
+- Route derived from Blueprint
 - Tests run successfully
-- 80%+ interaction coverage
 
 ---
 
-### Scenario 5.2: WCAG AA Accessibility Compliance
+### Scenario 7.2: WCAG AA Accessibility Compliance
 
 **Given** a generated component
-**When** automated accessibility checks are run (axe-core)
-**Then** the component should pass WCAG AA criteria
-**And** all interactive elements should have ARIA labels
-**And** keyboard navigation should work correctly
-
-**Accessibility Checklist**:
-- [ ] All buttons have accessible names
-- [ ] All inputs have labels
-- [ ] Focus indicators visible (outline or ring)
-- [ ] Color contrast ratios meet WCAG AA (validated by Layer 1)
-- [ ] Keyboard navigation works (Tab, Enter, Escape)
-- [ ] Screen reader text provided for icons
-
-**Test Procedure**:
-```typescript
-import { injectAxe, checkA11y } from "axe-playwright";
-
-test("should pass WCAG AA checks", async ({ page }) => {
-  await page.goto("/blog-editor");
-  await injectAxe(page);
-  await checkA11y(page, null, { detailedReport: true });
-});
-```
+**When** automated accessibility checks run (axe-core)
+**Then** zero WCAG AA violations shall exist
+**And** all interactive elements shall have ARIA labels
+**And** keyboard navigation shall work
 
 **Validation**:
 - Zero WCAG AA violations
-- All accessibility best practices followed
-- Keyboard navigation verified
+- Keyboard navigation works
+- Focus indicators visible
 
 ---
 
-### Scenario 5.3: Storybook Story Generation (Optional)
+## 8. Performance Acceptance Criteria
 
-**Given** a generated component with variants
-**When** the Storybook story generator creates stories
-**Then** stories should render all component variants
-**And** stories should include interactive controls
-**And** stories should work in Storybook
-
-**Expected Story Output**:
-```typescript
-// Generated: BlogEditor.stories.tsx
-import type { Meta, StoryObj } from "@storybook/react";
-import { BlogEditor } from "./BlogEditor";
-
-const meta: Meta<typeof BlogEditor> = {
-  title: "Components/BlogEditor",
-  component: BlogEditor,
-  tags: ["autodocs"],
-};
-
-export default meta;
-type Story = StoryObj<typeof BlogEditor>;
-
-export const Default: Story = {};
-
-export const WithContent: Story = {
-  args: {
-    initialTitle: "My Blog Post",
-    initialBody: "This is the content...",
-  },
-};
-```
-
-**Validation**:
-- Stories render correctly
-- Controls work in Storybook
-- All variants included
-
----
-
-## 6. Performance Acceptance Criteria
-
-### Scenario 6.1: Blueprint Validation Performance
-
-**Given** a typical Blueprint (50-100 lines JSON)
-**When** the schema validator checks the Blueprint
-**Then** validation should complete within 50ms
-**And** memory usage should remain under 50MB
-
-**Test Procedure**:
-```typescript
-const start = performance.now();
-const result = BlueprintSchema.safeParse(blueprint);
-const duration = performance.now() - start;
-assert(duration < 50);
-```
-
-**Validation**:
-- Validation time < 50ms
-- Memory usage < 50MB
-
----
-
-### Scenario 6.2: Component Generation Performance
-
-**Given** a typical Blueprint with 3-5 slots
-**When** the full generation pipeline runs (AST → JSX → TypeScript types)
-**Then** generation should complete within 500ms
-**And** memory usage should remain under 200MB
-
-**Test Procedure**:
-```typescript
-const start = performance.now();
-const component = await generateComponent(blueprint);
-const duration = performance.now() - start;
-assert(duration < 500);
-```
-
-**Validation**:
-- Generation time < 500ms
-- Memory usage < 200MB
-
----
-
-### Scenario 6.3: Full Pipeline Performance (Prompt to Code)
+### Scenario 8.1: Full Pipeline Performance (With AI)
 
 **Given** a user prompt in Basic Mode
-**When** the full pipeline executes (AI → Blueprint → Component → Files)
-**Then** the entire process should complete within 6 seconds
-**And** memory usage should remain under 300MB
-
-**Test Procedure**:
-```typescript
-const start = performance.now();
-const prompt = "Create a blog editor with header, content, and sidebar";
-const files = await generateComponentFromPrompt(prompt);
-const duration = performance.now() - start;
-assert(duration < 6000); // 6 seconds
-```
+**When** the full pipeline executes
+**Then** total time shall be < 6 seconds
+**And** AI generation shall be < 5 seconds
+**And** code generation shall be < 700ms
 
 **Validation**:
-- Full pipeline < 6 seconds (including AI call ~5s)
-- Memory usage < 300MB
-- All files generated successfully
+- Full pipeline < 6s
+- AI call < 5s
+- Code generation < 700ms
 
 ---
 
-## 7. Security Acceptance Criteria
+### Scenario 8.2: Full Pipeline Performance (Without AI)
 
-### Scenario 7.1: Code Injection Prevention
-
-**Given** a malicious Blueprint with script injection attempts
-**When** the Blueprint is validated
-**Then** the Blueprint should be rejected
-**And** no code execution should occur
-**And** a security warning should be logged
-
-**Test Data**:
-```json
-{
-  "slots": {
-    "content": {
-      "component": "'; alert('xss'); //",
-      "props": { "onClick": "eval('malicious code')" }
-    }
-  }
-}
-```
+**Given** a manual Blueprint in Pro Mode
+**When** the full pipeline executes (no AI)
+**Then** total time shall be < 700ms
 
 **Validation**:
-- Blueprint rejected by schema validator
-- No code executed
-- Security warning logged
-
----
-
-### Scenario 7.2: Supabase API Key Protection
-
-**Given** the Supabase integration
-**When** generated code is inspected
-**Then** no API keys should be exposed in client-side code
-**And** API keys should be stored in environment variables only
-**And** generated bundles should not contain secrets
-
-**Test Procedure**:
-```typescript
-// Check generated code for API keys
-const generatedCode = fs.readFileSync("BlogEditor.tsx", "utf-8");
-const hasApiKey = /supabase[_-]?api[_-]?key/i.test(generatedCode);
-assert(!hasApiKey);
-```
-
-**Validation**:
-- Zero API keys in generated code
-- Environment variables used correctly
-- Bundles do not expose secrets
-
----
-
-## 8. Integration Acceptance Criteria
-
-### Scenario 8.1: Layer 1 + Layer 2 + Layer 3 Integration
-
-**Given** tokens from Layer 1 and bindings from Layer 2
-**When** Layer 3 generates a component
-**Then** the component should use Layer 1 tokens
-**And** the component should use Layer 2 bindings
-**And** the component should compile without errors
-**And** the component should render correctly in a browser
-
-**Test Procedure**:
-1. Load Layer 1 tokens (CSS variables)
-2. Load Layer 2 bindings (TypeScript schemas + CSS-in-JS)
-3. Generate component with Layer 3
-4. Verify token references in generated code
-5. Verify binding usage in generated code
-6. Compile component with TypeScript
-7. Render component in test browser
-
-**Validation**:
-- All layers integrated successfully
-- Token references correct (`var(--token-name)`)
-- Binding schemas used
-- Component compiles and renders
-
----
-
-### Scenario 8.2: Production React Application Integration
-
-**Given** a generated component
-**When** the component is imported into a production React app
-**Then** the component should render without errors
-**And** the component should be fully functional
-**And** the component should pass production build
-
-**Test Procedure**:
-```typescript
-// Import generated component
-import { BlogEditor } from "./generated/BlogEditor";
-
-// Use in production app
-const App = () => (
-  <div>
-    <BlogEditor onPublish={() => console.log("Published")} />
-  </div>
-);
-
-// Production build
-npm run build
-```
-
-**Validation**:
-- Component imports successfully
-- Component renders in production
-- Production build passes
+- Full pipeline < 700ms
 
 ---
 
@@ -749,61 +550,47 @@ npm run build
 ### 9.1 Test Coverage Gate
 - **Requirement**: ≥ 85% code coverage
 - **Validation**: Run `vitest --coverage`
-- **Failure Action**: Block merge until coverage increases
 
 ### 9.2 Code Quality Gate
 - **Requirement**: Zero ESLint errors, zero TypeScript errors
 - **Validation**: Run `eslint .` and `tsc --noEmit`
-- **Failure Action**: Fix errors before merge
 
 ### 9.3 Performance Gate
-- **Requirement**: Full pipeline < 6 seconds (prompt to code)
-- **Validation**: Run performance benchmark suite
-- **Failure Action**: Profile and optimize hot paths
+- **Requirement**: Full pipeline < 6s (with AI), < 700ms (without AI)
+- **Validation**: Run performance benchmarks
 
 ### 9.4 Accessibility Gate
 - **Requirement**: Generated components pass WCAG AA
-- **Validation**: Run axe-core accessibility checks
-- **Failure Action**: Fix accessibility violations
+- **Validation**: Run axe-core checks
 
 ### 9.5 Security Gate
-- **Requirement**: No exposed API keys, no code injection vulnerabilities
-- **Validation**: Security audit, code scanning
-- **Failure Action**: Fix security issues before merge
+- **Requirement**: No exposed API keys, no code injection
+- **Validation**: Security audit
 
 ---
 
 ## 10. Definition of Done
 
 ### Functional Completeness
-- ✅ AI generates valid Blueprints from user prompts (Basic Mode)
-- ✅ Users can manually edit Blueprints (Pro Mode)
-- ✅ Blueprint schema validation works correctly
-- ✅ Slot-based assembly generates correct components
-- ✅ Generated components use Layer 1 tokens and Layer 2 bindings
+- ✅ Slot Semantic Registry defines all global and local slots
+- ✅ Semantic Scoring Algorithm produces consistent results
+- ✅ Safety Protocols prevent low-quality and hallucinated components
+- ✅ AI generates valid Blueprints from user prompts
+- ✅ Generated components use Layer 1 tokens and Layer 2 knowledge
 - ✅ Supabase Blueprint storage works with versioning
-- ✅ Responsive utilities generate mobile-first styles
 - ✅ E2E tests generated for all components
 - ✅ Generated components pass WCAG AA checks
 
 ### Quality Completeness
 - ✅ Test coverage ≥ 85%
 - ✅ All acceptance scenarios pass
-- ✅ Zero ESLint errors
-- ✅ Zero TypeScript errors
-- ✅ Performance benchmarks met (< 6s full pipeline)
-- ✅ Accessibility tests pass
+- ✅ Zero ESLint/TypeScript errors
+- ✅ Performance benchmarks met
 
 ### Integration Completeness
 - ✅ Layer 1 + Layer 2 + Layer 3 integration verified
 - ✅ Generated components work in production React apps
 - ✅ Supabase RLS policies enforce security
-
-### Documentation Completeness
-- ✅ API documentation complete (JSDoc)
-- ✅ Blueprint schema documented
-- ✅ Usage examples provided
-- ✅ Migration guide for existing components
 
 ---
 
@@ -811,4 +598,4 @@ npm run build
 **Test Framework**: Vitest, Playwright
 **Coverage Tool**: @vitest/coverage-v8
 **Dependencies**: SPEC-LAYER1-001, SPEC-LAYER2-001
-**Last Updated**: 2026-01-19
+**Last Updated**: 2026-01-20

@@ -105,7 +105,7 @@ export function exportToDTCG(config: ExportConfig): string {
     }
 
     Object.entries(scale).forEach(([step, color]) => {
-      output[scaleName][step] = {
+      (output[scaleName] as Record<string, DTCGToken>)[step] = {
         $type: 'color',
         $value: formatOKLCH(color),
       };
@@ -117,7 +117,7 @@ export function exportToDTCG(config: ExportConfig): string {
     output.dark = {};
 
     Object.entries(darkTokens).forEach(([name, color]) => {
-      output.dark[name] = {
+      (output.dark as Record<string, DTCGToken>)[name] = {
         $type: 'color',
         $value: formatOKLCH(color),
       };

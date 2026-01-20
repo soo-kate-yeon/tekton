@@ -80,6 +80,18 @@ export const ComponentThemeSchema = z.object({
 export type ComponentTheme = z.infer<typeof ComponentThemeSchema>;
 
 /**
+ * Backward compatibility alias for ComponentThemeSchema
+ * @deprecated Use ComponentThemeSchema instead
+ */
+export const ComponentPresetSchema = ComponentThemeSchema;
+
+/**
+ * Backward compatibility type alias
+ * @deprecated Use ComponentTheme instead
+ */
+export type ComponentPreset = ComponentTheme;
+
+/**
  * Token Output Format Schema
  * Defines supported output formats
  */

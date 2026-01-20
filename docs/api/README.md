@@ -318,6 +318,149 @@ const scales = generateColorScales(palette);
 
 ## Token Generator Module
 
+The Token Generator module provides the core Layer 1 functionality for design token generation from archetype JSON presets.
+
+### Core Functions
+
+#### `generateTokensFromArchetype(archetype, options?)`
+
+Main token generation function. Converts archetype JSON to validated design tokens with OKLCH color space support and WCAG compliance validation.
+
+```typescript
+import { generateTokensFromArchetype } from '@tekton/token-generator';
+
+const tokens = await generateTokensFromArchetype(archetype, {
+  wcagLevel: 'AA',
+  cacheEnabled: true,
+  cacheTTL: 3600000 // 1 hour
+});
+```
+
+**Options**:
+- `wcagLevel`: WCAG compliance level ('AA' | 'AAA')
+- `cacheEnabled`: Enable token caching (boolean)
+- `cacheTTL`: Cache time-to-live in milliseconds (number)
+
+**Returns**: Generated tokens object containing color tokens, semantic tokens, and metadata
+
+**Throws**:
+- `ArchetypeValidationError` if archetype JSON is invalid
+- `WCAGComplianceError` if colors cannot meet specified WCAG level
+
+#### `TokenCache` Class
+
+LRU cache for token generation results with file-based invalidation and memory management.
+
+```typescript
+import { TokenCache } from '@tekton/token-generator';
+
+const cache = new TokenCache({
+  maxSize: 100,
+  ttl: 3600000,
+  invalidateOnChange: true
+});
+
+// Cache tokens
+cache.set('premium-editorial', tokens);
+
+// Retrieve tokens
+const cached = cache.get('premium-editorial');
+
+// Clear cache
+cache.clear();
+```
+
+**Constructor Options**:
+- `maxSize`: Maximum number of cached entries (default: 100)
+- `ttl`: Time-to-live in milliseconds (default: 3600000)
+- `invalidateOnChange`: Auto-invalidate on file changes (default: true)
+
+**Methods**:
+- `set(key, value)`: Store tokens in cache
+- `get(key)`: Retrieve cached tokens
+- `has(key)`: Check if key exists in cache
+- `delete(key)`: Remove specific cache entry
+- `clear()`: Clear entire cache
+
+#### `autoAdjustContrast(foreground, background, wcagLevel)`
+
+Automatically adjusts color lightness to meet WCAG contrast requirements. Uses iterative adjustment algorithm to find the optimal lightness value.
+
+```typescript
+import { autoAdjustContrast } from '@tekton/token-generator';
+
+const adjusted = autoAdjustContrast(
+  { r: 150, g: 150, b: 150 }, // Foreground
+  { r: 255, g: 255, b: 255 }, // Background
+  'AA' // WCAG level
+);
+
+// Returns: Adjusted color meeting 4.5:1 ratio
+```
+
+**Parameters**:
+- `foreground`: RGB color object for text or foreground element
+- `background`: RGB color object for background surface
+- `wcagLevel`: Target compliance level ('AA' requires 4.5:1, 'AAA' requires 7:1)
+
+**Returns**: Adjusted RGB color object that meets contrast requirement
+
+**Algorithm**:
+1. Calculate current contrast ratio
+2. If below threshold, darken foreground or lighten background
+3. Iterate in 0.05 lightness steps until ratio achieved
+4. Return adjusted color with metadata
+
+#### Export Functions
+
+```typescript
+import {
+  exportToCSS,
+  exportToTailwind,
+  exportToDTCG
+} from '@tekton/token-generator';
+
+// Export to CSS custom properties
+const css = exportToCSS(tokens, {
+  format: 'oklch',
+  prefix: '--',
+  minify: false
+});
+
+// Export to Tailwind config
+const tailwind = exportToTailwind(tokens, {
+  format: 'js' // or 'ts'
+});
+
+// Export to DTCG format
+const dtcg = exportToDTCG(tokens);
+```
+
+**`exportToCSS(tokens, options?)`**:
+- `format`: 'oklch' | 'rgb' | 'both' (default: 'oklch')
+- `prefix`: CSS variable prefix (default: '--')
+- `minify`: Remove whitespace for production (default: false)
+
+**`exportToTailwind(tokens, options?)`**:
+- `format`: 'js' | 'ts' - Output JavaScript or TypeScript config
+
+**`exportToDTCG(tokens)`**:
+- Exports Design Token Community Group compliant JSON
+- Includes type information and metadata for design tools
+
+### Configuration
+
+```typescript
+interface TokenGeneratorConfig {
+  wcagLevel: 'AA' | 'AAA';
+  cacheEnabled: boolean;
+  cacheTTL: number;
+  maxCacheSize: number;
+}
+```
+
+## Original Token Generator Module (Legacy)
+
 Core token generation with caching and multi-format export.
 
 ### generateToken

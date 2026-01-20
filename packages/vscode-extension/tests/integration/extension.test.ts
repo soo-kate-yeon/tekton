@@ -52,7 +52,7 @@ describe('Extension', () => {
 
     // Mock registerCommand to return a disposable
     (vscode.commands.registerCommand as any).mockImplementation(
-      (command: string, callback: Function) => {
+      (command: string, callback: (...args: any[]) => any) => {
         return {
           dispose: vi.fn(),
           command,

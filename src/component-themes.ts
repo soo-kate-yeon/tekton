@@ -199,3 +199,9 @@ export const COMPONENT_THEMES = {
   checkbox: checkboxTheme,
   radio: radioTheme,
 };
+
+/**
+ * Backward compatibility alias for generateComponentThemes
+ * @deprecated Use generateComponentThemes instead
+ */
+export const generateComponentPresets = generateComponentThemes;

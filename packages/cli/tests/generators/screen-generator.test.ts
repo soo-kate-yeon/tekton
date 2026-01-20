@@ -373,9 +373,10 @@ describe('screen-generator', () => {
       const result = await generateScreenFiles(options);
       const layoutContent = await fs.readFile(result.files!.layout, 'utf-8');
 
-      // Should not contain template placeholders
-      expect(layoutContent).not.toContain('{{');
-      expect(layoutContent).not.toContain('}}');
+      // Should not contain unresolved template variables (but JSX {{ }} for styles is OK)
+      expect(layoutContent).not.toMatch(/\$\{[^}]+\}/);  // No ${variable} patterns
+      expect(layoutContent).toContain('layout--dashboard');  // Skeleton value resolved
+      expect(layoutContent).toContain('--grid-columns');
     });
 
     it('should inject component imports correctly', async () => {

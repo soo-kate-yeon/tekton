@@ -1,4 +1,6 @@
 import type { RGBColor, AccessibilityCheck } from '@tekton/theme';
+import type { ArchetypeColor } from './types/archetype.types.js';
+import { oklchToRgb } from './color/oklch-converter.js';
 
 /**
  * Calculate relative luminance of an RGB color
@@ -107,4 +109,142 @@ export function suggestLightnessAdjustment(
     // Foreground is darker, suggest lightening background
     return Math.min(1, bgLum + 0.1);
   }
+}
+
+/**
+ * Advanced contrast adjustment using OKLCH color space
+ * Preserves hue while adjusting lightness to achieve WCAG compliance
+ *
+ * @param color - OKLCH color to adjust
+ * @param background - Background RGB color to test against
+ * @param targetLevel - WCAG level ('AA' | 'AAA')
+ * @param maxIterations - Maximum adjustment iterations (default: 20)
+ * @returns Adjusted OKLCH color or null if impossible to fix
+ */
+export function autoAdjustContrast(
+  color: ArchetypeColor,
+  background: RGBColor,
+  targetLevel: 'AA' | 'AAA' = 'AA',
+  maxIterations: number = 20
+): ArchetypeColor | null {
+  const threshold = targetLevel === 'AA' ? 4.5 : 7.0;
+
+  // Check if already compliant
+  const currentRgb = oklchToRgb(color);
+  const currentRatio = calculateContrastRatio(currentRgb, background);
+
+  if (currentRatio >= threshold) {
+    return color;
+  }
+
+  // Determine adjustment direction based on background luminance
+  const bgLuminance = calculateRelativeLuminance(background);
+
+  // Binary search for optimal lightness
+  let minL = 0;
+  let maxL = 1;
+  let bestColor: ArchetypeColor | null = null;
+  let bestRatio = 0;
+
+  // Determine if we should search darker or lighter
+  const needsDarker = bgLuminance > 0.5;
+
+  if (needsDarker) {
+    // For light backgrounds, search darker values
+    maxL = color.l;
+  } else {
+    // For dark backgrounds, search lighter values
+    minL = color.l;
+  }
+
+  for (let iteration = 0; iteration < maxIterations; iteration++) {
+    const targetL = (minL + maxL) / 2;
+    const adjustedColor = { ...color, l: targetL };
+    const testRgb = oklchToRgb(adjustedColor);
+    const testRatio = calculateContrastRatio(testRgb, background);
+
+    // Track best result so far
+    if (testRatio > bestRatio) {
+      bestRatio = testRatio;
+      bestColor = adjustedColor;
+    }
+
+    // Check if we found a compliant color
+    if (testRatio >= threshold) {
+      return adjustedColor;
+    }
+
+    // Adjust search range based on whether we need more or less contrast
+    if (testRatio < threshold) {
+      if (needsDarker) {
+        // Need even darker
+        maxL = targetL;
+      } else {
+        // Need even lighter
+        minL = targetL;
+      }
+    }
+
+    // Check if we've converged
+    if (Math.abs(maxL - minL) < 0.001) {
+      break;
+    }
+  }
+
+  // Return best result if we got close enough (within 10% of threshold)
+  if (bestColor && bestRatio >= threshold * 0.9) {
+    return bestColor;
+  }
+
+  return null;
+}
+
+/**
+ * Detect if a color pair is impossible to fix
+ * Returns warning message with suggestions if impossible
+ */
+export function detectImpossiblePair(
+  foreground: RGBColor,
+  background: RGBColor,
+  targetLevel: 'AA' | 'AAA' = 'AA'
+): { impossible: boolean; message?: string; suggestions?: string[] } {
+  const bgLum = calculateRelativeLuminance(background);
+  const fgLum = calculateRelativeLuminance(foreground);
+  const currentRatio = calculateContrastRatio(foreground, background);
+  const threshold = targetLevel === 'AA' ? 4.5 : 7.0;
+
+  // If already compliant, not impossible
+  if (currentRatio >= threshold) {
+    return { impossible: false };
+  }
+
+  // Check if both colors are very similar in luminance
+  const lumDiff = Math.abs(bgLum - fgLum);
+
+  if (lumDiff < 0.05 && currentRatio < 2.0) {
+    return {
+      impossible: true,
+      message: `Colors are too similar in luminance (${currentRatio.toFixed(2)}:1). Cannot achieve ${threshold}:1 contrast.`,
+      suggestions: [
+        'Use a significantly darker foreground color (L < 0.3)',
+        'Use a significantly lighter background color (L > 0.8)',
+        'Consider a different color palette with higher contrast potential',
+      ],
+    };
+  }
+
+  // Check if background is mid-tone (hard to achieve high contrast)
+  if (bgLum > 0.3 && bgLum < 0.7 && targetLevel === 'AAA') {
+    return {
+      impossible: true,
+      message: `Mid-tone background (L=${bgLum.toFixed(2)}) makes AAA compliance difficult.`,
+      suggestions: [
+        'Use pure black (L=0) or pure white (L=1) as foreground',
+        'Change background to lighter (L > 0.8) or darker (L < 0.3)',
+        'Consider AA level instead of AAA for this color combination',
+      ],
+    };
+  }
+
+  return { impossible: false };
 }

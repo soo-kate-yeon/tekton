@@ -81,8 +81,8 @@ describe('Generate Command', () => {
         expect.arrayContaining([
           expect.objectContaining({
             type: 'select',
-            name: 'preset',
-            message: expect.stringContaining('preset'),
+            name: 'theme',
+            message: expect.stringContaining('theme'),
             choices: expect.arrayContaining(['default', 'accessible', 'vibrant']),
           }),
         ])
@@ -133,14 +133,14 @@ describe('Generate Command', () => {
       const result = await generate({
         path: projectDir,
         primaryColor: '#3b82f6',
-        preset: 'default',
+        theme: 'default',
       });
 
       expect(result.success).toBe(true);
       expect(generateTokensWrapper).toHaveBeenCalledWith(
         expect.objectContaining({
           primaryColor: '#3b82f6',
-          preset: 'default',
+          theme: 'default',
         })
       );
     });
@@ -163,7 +163,7 @@ describe('Generate Command', () => {
       expect(result.success).toBe(true);
       expect(generateTokensWrapper).toHaveBeenCalledWith(
         expect.objectContaining({
-          preset: 'default',
+          theme: 'default',
         })
       );
     });
