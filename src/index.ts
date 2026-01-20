@@ -43,6 +43,7 @@ export {
   checkboxTheme,
   radioTheme,
   generateComponentThemes,
+  generateComponentPresets, // Backward compatibility alias
   COMPONENT_THEMES,
 } from './component-themes';
 

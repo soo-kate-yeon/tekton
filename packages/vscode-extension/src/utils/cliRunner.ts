@@ -44,21 +44,16 @@ export async function runCLI(
 ): Promise<CLIResult> {
   const workingDir = cwd || getWorkspacePath();
 
-  try {
-    const result = await execa('tekton', [command, ...args], {
-      cwd: workingDir,
-      reject: false,
-    });
+  const result = await execa('tekton', [command, ...args], {
+    cwd: workingDir,
+    reject: false,
+  });
 
-    return {
-      stdout: result.stdout,
-      stderr: result.stderr,
-      exitCode: result.exitCode || 0,
-    };
-  } catch (error) {
-    // Re-throw errors like ENOENT (command not found)
-    throw error;
-  }
+  return {
+    stdout: result.stdout,
+    stderr: result.stderr,
+    exitCode: result.exitCode || 0,
+  };
 }
 
 /**
