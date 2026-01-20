@@ -1,9 +1,9 @@
-# MoAI Worktree Examples
+# Tekton Worktree Examples
 
-Purpose: Real-world usage examples and patterns for moai-worktree skill integration with MoAI-ADK workflow.
+Purpose: Real-world usage examples and patterns for worktree management with SPEC development workflow.
 
-Version: 1.0.0
-Last Updated: 2025-11-29
+Version: 2.0.0
+Last Updated: 2026-01-20
 
 ---
 
@@ -11,31 +11,39 @@ Last Updated: 2025-11-29
 
 ### Example 1: SPEC Development with Worktree
 
-Scenario: Creating a new SPEC with automatic worktree setup
+Scenario: Creating a new SPEC with worktree isolation
 
 ```bash
-# Plan Phase - Create SPEC with worktree
-/moai:1-plan "User Authentication System" --worktree
+# Step 1: Create SPEC using /moai:1-plan (creates SPEC directory)
+# This should be run in Claude Code or your workflow tool
+
+# Step 2: Create worktree for the SPEC
+tekton worktree new SPEC-AUTH-001 "User Authentication System"
 
 # Output:
-# SPEC created: SPEC-AUTH-001
-# Worktree created: ~/workflows/MoAI-ADK/SPEC-AUTH-001
+# Creating worktree for SPEC-AUTH-001...
 #
-# Next steps:
-# 1. Switch to worktree: moai-worktree switch SPEC-AUTH-001
-# 2. Or use shell eval: eval $(moai-worktree go SPEC-AUTH-001)
-# 3. Start development: /moai:2-run SPEC-AUTH-001
+# ✓ Worktree created successfully
+#   Path: /Users/yourname/.worktrees/SPEC-AUTH-001
+#   Branch: feature/SPEC-AUTH-001
+#   Base: master
+#
+# To switch to worktree, run:
+#   cd /Users/yourname/.worktrees/SPEC-AUTH-001
 
-# Development Phase - Implement in isolated environment
-eval $(moai-worktree go SPEC-AUTH-001)
-/moai:2-run SPEC-AUTH-001
+# Step 3: Switch to worktree
+cd ~/.worktrees/SPEC-AUTH-001
 
-# Sync Phase - Synchronize and integrate
-moai-worktree sync SPEC-AUTH-001
-/moai:3-sync SPEC-AUTH-001
+# Step 4: Start development (run /moai:2-run in worktree)
+# Implement your features here
 
-# Cleanup Phase - Remove completed worktree
-moai-worktree remove SPEC-AUTH-001
+# Step 5: Sync with base branch before PR
+tekton worktree sync SPEC-AUTH-001
+
+# Step 6: Create PR using /moai:3-sync
+
+# Step 7: After PR is merged, clean up
+tekton worktree clean --merged-only
 ```
 
 ### Example 2: Parallel SPEC Development
@@ -44,563 +52,353 @@ Scenario: Working on multiple SPECs simultaneously
 
 ```bash
 # Create multiple worktrees for parallel development
-moai-worktree new SPEC-AUTH-001 "User Authentication"
-moai-worktree new SPEC-PAY-001 "Payment Processing"
-moai-worktree new SPEC-DASH-001 "Dashboard Analytics"
+tekton worktree new SPEC-AUTH-001 "User Authentication"
+tekton worktree new SPEC-PAY-001 "Payment Processing"
+tekton worktree new SPEC-DASH-001 "Dashboard Analytics"
+
+# List all worktrees
+tekton worktree list
+
+# Output (table format):
+# SPEC ID         STATUS   PATH                                        BRANCH
+# SPEC-AUTH-001   active   /Users/you/.worktrees/SPEC-AUTH-001        feature/SPEC-AUTH-001
+# SPEC-PAY-001    active   /Users/you/.worktrees/SPEC-PAY-001         feature/SPEC-PAY-001
+# SPEC-DASH-001   active   /Users/you/.worktrees/SPEC-DASH-001        feature/SPEC-DASH-001
 
 # Switch between worktrees
-moai-worktree switch SPEC-AUTH-001
+cd ~/.worktrees/SPEC-AUTH-001
 # Work on authentication...
 
-moai-worktree switch SPEC-PAY-001
+cd ~/.worktrees/SPEC-PAY-001
 # Work on payment system...
 
-moai-worktree switch SPEC-DASH-001
+cd ~/.worktrees/SPEC-DASH-001
 # Work on dashboard...
 
-# Check status of all worktrees
-moai-worktree status --all
-
-# Sync all worktrees
-moai-worktree sync --all
+# Check status of a specific worktree
+tekton worktree status SPEC-AUTH-001
 
 # Clean up completed worktrees
-moai-worktree clean --merged-only
+tekton worktree clean --merged-only
 ```
 
-### Example 3: Worktree in Development Commands
+### Example 3: Worktree Sync Workflow
 
-Scenario: Using worktree-aware TDD implementation
+Scenario: Keeping worktree in sync with base branch
 
 ```bash
-# /moai:2-run automatically detects worktree environment
-/moai:2-run SPEC-AUTH-001
+# Check current status before sync
+tekton worktree status SPEC-AUTH-001
 
-# Command behavior in worktree:
-# - Detects worktree: SPEC-AUTH-001
-# - Loads worktree-specific configuration
-# - Executes TDD in isolated environment
-# - Updates worktree metadata
+# Output:
+# Current status:
+#   Ahead: 5 commits
+#   Behind: 2 commits
+#   Uncommitted changes: 3 files
 
-# Manual worktree management during development
-moai-worktree status SPEC-AUTH-001
-moai-worktree sync SPEC-AUTH-001 --include "src/"
-moai-worktree config get worktree_root
+# Preview what will be synced (dry run)
+tekton worktree sync SPEC-AUTH-001 --dry-run
+
+# Output:
+# Dry run - no changes made
+# Would sync 2 commits from base branch using merge
+
+# Perform actual sync
+tekton worktree sync SPEC-AUTH-001
+
+# Output:
+# Current status:
+#   Ahead: 5 commits
+#   Behind: 2 commits
+#
+# Syncing worktree...
+# ✓ Worktree synced successfully
+#   Strategy: merge
+#   Synced: 2 commits
+
+# Use rebase strategy instead
+tekton worktree sync SPEC-AUTH-001 --strategy rebase
 ```
 
 ---
 
-## Agent Integration Examples
+## Configuration Management Examples
 
-### Example 4: Manager-Project with Worktree Setup
+### Example 4: Configuring Worktree Settings
 
-Agent Usage: Project initialization with worktree support
+```bash
+# List all configuration
+tekton worktree config list
 
-```python
-# In manager-project agent context
-Skill("moai-worktree") # Load worktree patterns
+# Output:
+# Configuration:
+#   worktree_root: /Users/yourname/.worktrees
+#   default_base: master
+#   auto_sync: false
+#   cleanup_merged: false
 
-# Setup project with worktree support
-project_config = {
- "name": "User Authentication System",
- "worktree_enabled": True,
- "worktree_root": "~/workflows/UserAuth",
- "auto_create_worktree": True
-}
+# Change worktree root directory
+tekton worktree config set worktree_root ~/dev/worktrees
 
-# Create worktree after project setup
-if project_config.get("worktree_enabled"):
- from moai_worktree import WorktreeManager
+# Enable auto-cleanup of merged branches
+tekton worktree config set cleanup_merged true
 
- worktree_manager = WorktreeManager(
- repo_path=Path.cwd(),
- worktree_root=Path(project_config["worktree_root"]).expanduser()
- )
+# Change default base branch
+tekton worktree config set default_base develop
 
- worktree_info = worktree_manager.create(
- spec_id="SPEC-AUTH-001",
- description="User Authentication System",
- template="authentication"
- )
-```
+# Get specific configuration value
+tekton worktree config get worktree_root
 
-### Example 5: Manager-Git with Worktree Branch Management
-
-Agent Usage: Git operations with worktree awareness
-
-```python
-# In manager-git agent context
-Skill("moai-worktree") # Load worktree patterns
-
-def create_feature_branch_with_worktree(spec_id: str, description: str):
- """Create feature branch and associated worktree."""
-
- # Check if in worktree environment
- current_worktree = detect_worktree_environment()
-
- if current_worktree:
- # In worktree - create branch from worktree
- branch_name = f"feature/SPEC-{spec_id}-{description.lower().replace(' ', '-')}"
-
- # Create worktree-specific branch
- git_checkout(branch_name, create_new=True)
-
- # Update worktree registry
- update_worktree_branch(current_worktree, branch_name)
- else:
- # In main repo - create worktree
- from moai_worktree import WorktreeManager
-
- worktree_manager = WorktreeManager(Path.cwd())
- worktree_manager.create(
- spec_id=spec_id,
- description=description,
- branch=branch_name
- )
-
-# Usage in agent workflow
-create_feature_branch_with_worktree("SPEC-AUTH-001", "User Authentication")
+# Output:
+# worktree_root: /Users/yourname/dev/worktrees
 ```
 
 ---
 
-## Workflow Integration Examples
+## Complete SPEC Development Workflow
 
-### Example 6: Complete SPEC Development Workflow
-
-End-to-End Example: Full SPEC development cycle with worktree
+### Example 5: End-to-End SPEC Workflow
 
 ```bash
 #!/bin/bash
-# spec_development_workflow.sh
+# spec-workflow.sh - Complete SPEC development workflow
 
 SPEC_ID="$1"
-SPEC_DESCRIPTION="$2"
+SPEC_DESC="$2"
 
-echo " Starting SPEC development workflow for $SPEC_ID"
+echo "Starting SPEC development workflow for $SPEC_ID"
 
-# Phase 1: Plan (with worktree)
-echo " Phase 1: Creating SPEC and worktree..."
-/moai:1-plan "$SPEC_DESCRIPTION" --worktree --spec-id "$SPEC_ID"
+# Step 1: Create SPEC specification
+# This would typically be done via /moai:1-plan in Claude Code
+echo "Step 1: Create SPEC specification"
+# (Run /moai:1-plan in your workflow tool)
 
-# Check if worktree was created successfully
-if moai-worktree list --format json | jq -r ".worktrees[\"$SPEC_ID\"]" > /dev/null; then
- echo " Worktree $SPEC_ID created successfully"
+# Step 2: Create worktree
+echo "Step 2: Creating worktree..."
+tekton worktree new "$SPEC_ID" "$SPEC_DESC"
 
- # Phase 2: Develop
- echo " Phase 2: Switching to worktree for development..."
- cd $(moai-worktree go "$SPEC_ID")
+# Get worktree path
+WORKTREE_PATH=$(tekton worktree switch "$SPEC_ID")
 
- # Development loop
- while true; do
- echo " Running TDD implementation..."
- /moai:2-run "$SPEC_ID"
+# Step 3: Navigate to worktree
+echo "Step 3: Switching to worktree..."
+cd "$WORKTREE_PATH"
 
- echo " Continue development? (y/n)"
- read -r response
- if [[ ! "$response" =~ ^[Yy]$ ]]; then
- break
- fi
- done
+# Step 4: Development phase
+echo "Step 4: Development phase"
+# This is where you'd run /moai:2-run for TDD implementation
+# Work on your features here
 
- # Phase 3: Sync
- echo " Phase 3: Synchronizing worktree..."
- moai-worktree sync "$SPEC_ID"
- cd - # Return to main repository
- /moai:3-sync "$SPEC_ID"
+# Step 5: Sync before PR
+echo "Step 5: Syncing with base branch..."
+cd - # Return to main repo
+tekton worktree sync "$SPEC_ID"
 
- # Phase 4: Cleanup (optional)
- echo " Phase 4: Clean up options"
- echo "Remove worktree $SPEC_ID? (y/n)"
- read -r cleanup_response
- if [[ "$cleanup_response" =~ ^[Yy]$ ]]; then
- moai-worktree remove "$SPEC_ID"
- echo " Worktree $SPEC_ID removed"
- fi
+# Step 6: Create PR
+echo "Step 6: Creating PR"
+# This would be done via /moai:3-sync in Claude Code
 
-else
- echo " Worktree creation failed. Falling back to branch development."
- /moai:1-plan "$SPEC_DESCRIPTION" --branch --spec-id "$SPEC_ID"
-fi
+# Step 7: After merge, cleanup
+echo "Step 7: Cleaning up merged worktrees..."
+tekton worktree clean --merged-only --force
 
-echo " SPEC development workflow completed for $SPEC_ID"
-```
-
-### Example 7: Team Collaboration Workflow
-
-Team Setup: Shared worktree configuration for team development
-
-```bash
-#!/bin/bash
-# team_worktree_setup.sh
-
-TEAM_NAME="$1"
-PROJECT_NAME="$2"
-
-echo " Setting up team worktree configuration for $TEAM_NAME"
-
-# Create shared worktree root
-WORKTREE_ROOT="~/workflows/$PROJECT_NAME"
-mkdir -p "$WORKTREE_ROOT"
-
-# Configure team registry
-cat > "$WORKTREE_ROOT/.team-config.json" << EOF
-{
- "team": "$TEAM_NAME",
- "project": "$PROJECT_NAME",
- "worktree_root": "$WORKTREE_ROOT",
- "shared_registry": true,
- "auto_sync": true,
- "cleanup_policy": "team_coordinated"
-}
-EOF
-
-# Initialize shared registry
-moai-worktree config set worktree_root "$WORKTREE_ROOT"
-moai-worktree config set registry_type team
-
-echo " Team worktree configuration completed"
-echo "Team members can now join with: moai-worktree join --team $TEAM_NAME"
+echo "SPEC workflow completed!"
 ```
 
 ---
 
-## Advanced Usage Examples
+## JSON Output Examples
 
-### Example 8: Custom Worktree Templates
+### Example 6: Working with JSON Output
 
-Template Creation: Development environment templates
+```bash
+# List worktrees in JSON format
+tekton worktree list --format json
 
-```python
-# custom_worktree_templates.py
+# Output:
+# {
+#   "worktrees": {
+#     "SPEC-AUTH-001": {
+#       "spec_id": "SPEC-AUTH-001",
+#       "path": "/Users/you/.worktrees/SPEC-AUTH-001",
+#       "branch": "feature/SPEC-AUTH-001",
+#       "base_branch": "master",
+#       "status": "active",
+#       "created_at": "2026-01-20T10:30:00Z",
+#       "last_sync": null
+#     }
+#   }
+# }
 
-from pathlib import Path
+# Get status in JSON format
+tekton worktree status SPEC-AUTH-001 --format json
 
-def create_fullstack_template():
- """Create fullstack development template."""
+# Output:
+# {
+#   "spec_id": "SPEC-AUTH-001",
+#   "path": "/Users/you/.worktrees/SPEC-AUTH-001",
+#   "branch": "feature/SPEC-AUTH-001",
+#   "ahead": 5,
+#   "behind": 0,
+#   "uncommittedChanges": 0,
+#   "lastSync": "2026-01-20T11:00:00Z"
+# }
 
- template_config = {
- "name": "fullstack",
- "description": "Fullstack development environment",
- "setup_commands": [
- "npm install",
- "pip install -r requirements.txt",
- "docker-compose up -d database",
- "echo 'Environment ready for fullstack development'"
- ],
- "files": {
- "docker-compose.yml": """version: '3.8'
-services:
- database:
- image: postgres:13
- environment:
- POSTGRES_DB: app_development
- POSTGRES_USER: developer
- POSTGRES_PASSWORD: password
- ports:
- - "5432:5432"
- volumes:
- - postgres_data:/var/lib/postgresql/data
+# Parse JSON with jq
+tekton worktree list --format json | jq '.worktrees | keys[]'
 
-volumes:
- postgres_data:""",
-
- ".env.example": """# Environment Configuration
-DATABASE_URL=postgresql://developer:password@localhost:5432/app_development
-NODE_ENV=development
-FLASK_ENV=development
-DEBUG=true""",
-
- ".vscode/launch.json": """{
- "version": "0.2.0",
- "configurations": [
- {
- "name": "Debug Frontend",
- "type": "node",
- "request": "launch",
- "program": "${workspaceFolder}/src/frontend/index.js",
- "console": "integratedTerminal"
- },
- {
- "name": "Debug Backend",
- "type": "python",
- "request": "launch",
- "program": "${workspaceFolder}/src/backend/app.py",
- "console": "integratedTerminal"
- }
- ]
-}"""
- },
- "env_vars": {
- "TEMPLATE_TYPE": "fullstack",
- "INCLUDE_DATABASE": "true",
- "INCLUDE_FRONTEND": "true",
- "INCLUDE_BACKEND": "true"
- }
- }
-
- # Save template
- template_path = Path.home() / ".moai-worktree/templates" / "fullstack.json"
- template_path.parent.mkdir(parents=True, exist_ok=True)
-
- import json
- with open(template_path, 'w') as f:
- json.dump(template_config, f, indent=2)
-
- print(f" Fullstack template created: {template_path}")
-
-# Usage
-create_fullstack_template()
-
-# Create worktree with template
-# moai-worktree new SPEC-FULL-001 "Fullstack Application" --template fullstack
+# Output:
+# "SPEC-AUTH-001"
+# "SPEC-PAY-001"
+# "SPEC-DASH-001"
 ```
 
-### Example 9: Worktree Automation Script
+---
 
-Automation: Batch worktree operations
+## Shell Integration Examples
 
-```python
-# worktree_automation.py
+### Example 7: Shell Aliases and Functions
 
-import subprocess
-import json
-from pathlib import Path
-from datetime import datetime
+Add to your `.bashrc` or `.zshrc`:
 
-class WorktreeAutomation:
- def __init__(self, project_root: str):
- self.project_root = Path(project_root)
+```bash
+# Tekton worktree aliases
+alias tw='tekton worktree'
+alias twl='tekton worktree list'
+alias tws='tekton worktree switch'
+alias twn='tekton worktree new'
+alias twsync='tekton worktree sync'
+alias twst='tekton worktree status'
+alias twrm='tekton worktree remove'
+alias twclean='tekton worktree clean'
 
- def batch_create_worktrees(self, specs: list):
- """Create multiple worktrees from SPEC list."""
+# Function to create and switch to worktree
+twgo() {
+    local spec_id="$1"
+    local description="$2"
 
- results = []
+    if [ -z "$spec_id" ]; then
+        echo "Usage: twgo SPEC-ID [description]"
+        return 1
+    fi
 
- for spec in specs:
- spec_id = spec.get('id')
- description = spec.get('description', f"Development for {spec_id}")
- template = spec.get('template', 'default')
+    tekton worktree new "$spec_id" "$description"
+    local path=$(tekton worktree switch "$spec_id")
+    cd "$path"
+}
 
- try:
- print(f" Creating worktree: {spec_id}")
+# Function to sync current worktree
+twsynchere() {
+    local current_dir=$(basename "$PWD")
+    if [[ $current_dir == SPEC-* ]]; then
+        tekton worktree sync "$current_dir"
+    else
+        echo "Not in a worktree directory"
+        return 1
+    fi
+}
+```
 
- result = subprocess.run([
- "moai-worktree", "new", spec_id, description,
- "--template", template
- ], capture_output=True, text=True, check=True)
+Usage:
 
- worktree_info = {
- 'spec_id': spec_id,
- 'status': 'created',
- 'path': self._extract_worktree_path(result.stdout),
- 'created_at': datetime.utcnow().isoformat()
- }
+```bash
+# Create and switch in one command
+twgo SPEC-AUTH-001 "User Authentication"
 
- results.append(worktree_info)
- print(f" Worktree {spec_id} created successfully")
-
- except subprocess.CalledProcessError as e:
- error_info = {
- 'spec_id': spec_id,
- 'status': 'failed',
- 'error': e.stderr,
- 'created_at': datetime.utcnow().isoformat()
- }
-
- results.append(error_info)
- print(f" Failed to create worktree {spec_id}: {e.stderr}")
-
- return results
-
- def batch_sync_worktrees(self, spec_ids: list = None):
- """Sync multiple worktrees."""
-
- if spec_ids is None:
- # Get all active worktrees
- result = subprocess.run([
- "moai-worktree", "list", "--status", "active", "--format", "json"
- ], capture_output=True, text=True, check=True)
-
- worktrees = json.loads(result.stdout)
- spec_ids = list(worktrees['worktrees'].keys())
-
- results = []
-
- for spec_id in spec_ids:
- try:
- print(f" Syncing worktree: {spec_id}")
-
- result = subprocess.run([
- "moai-worktree", "sync", spec_id
- ], capture_output=True, text=True, check=True)
-
- sync_info = {
- 'spec_id': spec_id,
- 'status': 'synced',
- 'details': result.stdout,
- 'synced_at': datetime.utcnow().isoformat()
- }
-
- results.append(sync_info)
- print(f" Worktree {spec_id} synced successfully")
-
- except subprocess.CalledProcessError as e:
- error_info = {
- 'spec_id': spec_id,
- 'status': 'sync_failed',
- 'error': e.stderr,
- 'synced_at': datetime.utcnow().isoformat()
- }
-
- results.append(error_info)
- print(f" Failed to sync worktree {spec_id}: {e.stderr}")
-
- return results
-
- def generate_worktree_report(self):
- """Generate comprehensive worktree status report."""
-
- # Get worktree status
- status_result = subprocess.run([
- "moai-worktree", "status", "--all", "--format", "json"
- ], capture_output=True, text=True, check=True)
-
- worktrees = json.loads(status_result.stdout)
-
- # Generate report
- report = {
- 'generated_at': datetime.utcnow().isoformat(),
- 'total_worktrees': len(worktrees.get('worktrees', {})),
- 'active_worktrees': len([
- w for w in worktrees.get('worktrees', {}).values()
- if w.get('status') == 'active'
- ]),
- 'worktrees': worktrees.get('worktrees', {}),
- 'recommendations': self._generate_recommendations(worktrees)
- }
-
- return report
-
- def _extract_worktree_path(self, output: str) -> str:
- """Extract worktree path from command output."""
-
- for line in output.split('\n'):
- if 'Path:' in line:
- return line.split('Path:')[-1].strip()
- return ""
-
- def _generate_recommendations(self, worktrees: dict) -> list:
- """Generate cleanup and optimization recommendations."""
-
- recommendations = []
-
- # Check for stale worktrees
- stale_worktrees = [
- w_id for w_id, w_info in worktrees.get('worktrees', {}).items()
- if self._is_stale(w_info)
- ]
-
- if stale_worktrees:
- recommendations.append({
- 'type': 'cleanup',
- 'message': f"Found {len(stale_worktrees)} stale worktrees: {', '.join(stale_worktrees)}",
- 'action': 'moai-worktree clean --stale --days 30'
- })
-
- # Check for large worktrees
- large_worktrees = [
- w_id for w_id, w_info in worktrees.get('worktrees', {}).items()
- if w_info.get('metadata', {}).get('estimated_size', '0') > '500MB'
- ]
-
- if large_worktrees:
- recommendations.append({
- 'type': 'optimization',
- 'message': f"Found {len(large_worktrees)} large worktrees: {', '.join(large_worktrees)}",
- 'action': 'moai-worktree optimize --analyze'
- })
-
- return recommendations
-
-# Usage example
-if __name__ == "__main__":
- automation = WorktreeAutomation("/path/to/project")
-
- # Create worktrees from spec list
- specs = [
- {'id': 'SPEC-AUTH-001', 'description': 'User Authentication', 'template': 'backend'},
- {'id': 'SPEC-PAY-001', 'description': 'Payment Processing', 'template': 'backend'},
- {'id': 'SPEC-UI-001', 'description': 'User Interface', 'template': 'frontend'}
- ]
-
- results = automation.batch_create_worktrees(specs)
-
- # Sync all worktrees
- sync_results = automation.batch_sync_worktrees()
-
- # Generate report
- report = automation.generate_worktree_report()
-
- print(f"Report generated: {len(report['worktrees'])} worktrees analyzed")
+# Sync from within worktree
+cd ~/.worktrees/SPEC-AUTH-001
+twsynchere
 ```
 
 ---
 
 ## Troubleshooting Examples
 
-### Example 10: Common Issues and Solutions
-
-Issue Resolution: Typical worktree problems and solutions
+### Example 8: Common Issues and Solutions
 
 ```bash
 # Problem 1: Worktree creation fails
-echo " Diagnosing worktree creation issues..."
+echo "Diagnosing worktree creation issues..."
 
-# Check disk space
-df -h ~/workflows/
-
-# Check Git repository status
+# Check if you're in a Git repository
 git status
-git remote -v
 
-# Try with verbose output
-moai-worktree new SPEC-DEBUG-001 "Debug Test" --verbose
+# Check if SPEC ID is valid (format: SPEC-XXX-001)
+tekton worktree new SPEC-001 "Test"  # Invalid format
+tekton worktree new SPEC-ABC-001 "Test"  # Valid format
 
-# Problem 2: Worktree sync conflicts
-echo " Resolving sync conflicts..."
+# Problem 2: Sync conflicts
+echo "Resolving sync conflicts..."
 
 # Check sync status
-moai-worktree status SPEC-CONFLICT-001
+tekton worktree status SPEC-CONFLICT-001
 
-# Interactive conflict resolution
-moai-worktree sync SPEC-CONFLICT-001 --interactive
+# Try dry run first
+tekton worktree sync SPEC-CONFLICT-001 --dry-run
 
-# Force sync (if appropriate)
-moai-worktree sync SPEC-CONFLICT-001 --force
+# If conflicts occur during sync:
+# 1. The command will fail with error message
+# 2. Navigate to worktree
+cd ~/.worktrees/SPEC-CONFLICT-001
 
-# Problem 3: Worktree registry corruption
-echo " Repairing worktree registry..."
+# 3. Resolve conflicts manually
+git status
+# Edit conflicted files
+git add .
+git commit -m "Resolve merge conflicts"
 
-# Backup current registry
-cp ~/.workflows/PROJECT/.moai-worktree-registry.json ~/.workflows/PROJECT/.moai-worktree-registry.json.backup
+# 4. Try sync again
+cd -
+tekton worktree sync SPEC-CONFLICT-001
 
-# Rebuild registry from worktree directories
-moai-worktree config set registry_rebuild true
-moai-worktree list --rebuild-registry
+# Problem 3: Remove worktree with uncommitted changes
+echo "Handling uncommitted changes..."
 
-# Problem 4: Permission issues
-echo " Fixing permission issues..."
+# Check status first
+tekton worktree status SPEC-OLD-001
 
-# Check worktree permissions
-ls -la ~/workflows/PROJECT/
+# If uncommitted changes exist:
+# Option 1: Commit them
+cd ~/.worktrees/SPEC-OLD-001
+git add .
+git commit -m "Final changes"
 
-# Fix permissions
-chmod -R 755 ~/workflows/PROJECT/
+# Option 2: Force remove (loses changes)
+cd -
+tekton worktree remove SPEC-OLD-001 --force
 ```
 
 ---
 
-Version: 1.0.0
-Last Updated: 2025-11-29
-Examples: Real-world usage patterns for moai-worktree integration
+## Best Practices
+
+### Example 9: Recommended Workflow Patterns
+
+```bash
+# Pattern 1: Always check status before sync
+tekton worktree status SPEC-001
+tekton worktree sync SPEC-001 --dry-run
+tekton worktree sync SPEC-001
+
+# Pattern 2: Regular cleanup of merged worktrees
+# Run this weekly or after each PR merge
+tekton worktree clean --merged-only
+
+# Pattern 3: List worktrees to see what's in progress
+tekton worktree list --status active
+
+# Pattern 4: Use descriptive names for worktrees
+tekton worktree new SPEC-AUTH-001 "JWT Authentication with Refresh Tokens"
+
+# Pattern 5: Keep base branch up to date
+cd /path/to/main/repo
+git pull origin master
+cd ~/.worktrees/SPEC-001
+tekton worktree sync SPEC-001
+```
+
+---
+
+Version: 2.0.0
+Last Updated: 2026-01-20
+Examples: Real-world usage patterns for tekton worktree commands

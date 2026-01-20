@@ -1,0 +1,12 @@
+{
+  "version": "1.0.0",
+  "created_at": "2026-01-19T16:52:18.786Z",
+  "last_updated": "2026-01-19T16:52:18.787Z",
+  "config": {
+    "worktree_root": "~/worktrees/tekton/",
+    "auto_sync": true,
+    "cleanup_merged": true,
+    "default_base": "master"
+  },
+  "worktrees": {}
+}

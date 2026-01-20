@@ -5,6 +5,7 @@ import { detectCommand } from './commands/detect.js';
 import { setupCommand } from './commands/setup.js';
 import { generateCommand } from './commands/generate.js';
 import { createScreenCommand } from './commands/create-screen.js';
+import { createWorktreeCommand } from './commands/worktree/index.js';
 
 const program = new Command();
 
@@ -72,5 +73,8 @@ program
       skipApi: options.skipApi,
     });
   });
+
+// Worktree command group
+program.addCommand(createWorktreeCommand());
 
 program.parse();
