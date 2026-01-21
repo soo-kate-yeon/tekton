@@ -5,10 +5,10 @@
  */
 
 import * as t from '@babel/types';
-import { ComponentValidator } from '../validators/component-validator';
-import { generateImports } from './import-generator';
-import { buildComponentNode } from './jsx-element-generator';
-import type { BlueprintResult, ComponentNode } from '../types/knowledge-schema';
+import { ComponentValidator } from '../validators/component-validator.js';
+import { generateImports } from './import-generator.js';
+import { buildComponentNode } from './jsx-element-generator.js';
+import type { BlueprintResult, ComponentNode } from '../types/knowledge-schema.js';
 
 /**
  * Result of AST build operation
@@ -98,6 +98,12 @@ export class ASTBuilder {
    */
   private collectComponentNames(node: ComponentNode): string[] {
     const names = new Set<string>();
+
+    // Validate componentName exists BEFORE adding
+    if (!node || !node.componentName || typeof node.componentName !== 'string') {
+      console.warn('[AST Builder] Invalid component node:', node);
+      return [];
+    }
 
     // Add current component name
     names.add(node.componentName);
