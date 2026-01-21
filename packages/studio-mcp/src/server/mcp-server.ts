@@ -8,6 +8,8 @@
 
 import { createServer, type IncomingMessage, type ServerResponse } from "http";
 import { archetypeTools, type ArchetypeQueryCriteria } from '../component/tools.js';
+import { getKnowledgeSchema, getComponentList, renderScreen, type ComponentFilter } from '../component/layer3-tools.js';
+import type { BlueprintResult } from '@tekton/component-generator';
 import { projectTools } from "../project/tools.js";
 import { screenTools } from "../screen/tools.js";
 import type { ArchetypeName } from "../screen/schemas.js";
@@ -319,6 +321,57 @@ const TOOLS: MCPTool[] = [
   },
   // Standalone Preset Tools
   ...STANDALONE_TOOLS,
+  // Layer 3 Knowledge Schema Tools
+  {
+    name: "knowledge.getSchema",
+    description: "Get the Blueprint JSON Schema and component knowledge format for LLM consumption. Use this to understand how to structure component blueprints.",
+    inputSchema: {
+      type: "object",
+      properties: {},
+    },
+  },
+  {
+    name: "knowledge.getComponentList",
+    description: "Query available components from the catalog with optional filters (category, hasSlot). Returns lightweight component data.",
+    inputSchema: {
+      type: "object",
+      properties: {
+        filter: {
+          type: "object",
+          description: "Optional filter criteria",
+          properties: {
+            category: {
+              type: "string",
+              description: "Filter by component category (layout, content, input, navigation, action)",
+            },
+            hasSlot: {
+              type: "string",
+              description: "Filter by slot name (e.g., 'header', 'content', 'footer')",
+            },
+          },
+        },
+      },
+    },
+  },
+  {
+    name: "knowledge.renderScreen",
+    description: "Generate React component file from Blueprint JSON. Creates .tsx file with formatted code in the specified output path.",
+    inputSchema: {
+      type: "object",
+      properties: {
+        blueprint: {
+          type: "object",
+          description: "Blueprint JSON object conforming to BlueprintResult schema",
+          required: ["blueprintId", "recipeName", "analysis", "structure"],
+        },
+        outputPath: {
+          type: "string",
+          description: "Optional output file path (default: src/app/{recipeName}/page.tsx)",
+        },
+      },
+      required: ["blueprint"],
+    },
+  },
 ];
 
 /**
@@ -458,6 +511,19 @@ async function executeTool(
         themeId: params.themeId as string,
         projectPath: params.projectPath as string | undefined,
       });
+
+    // Layer 3 Knowledge Schema Tools
+    case "knowledge.getSchema":
+      return getKnowledgeSchema();
+
+    case "knowledge.getComponentList":
+      return getComponentList(params.filter as ComponentFilter | undefined);
+
+    case "knowledge.renderScreen":
+      return renderScreen(
+        params.blueprint as BlueprintResult,
+        params.outputPath as string | undefined
+      );
 
     default:
       return { success: false, error: `Unknown tool: ${toolName}` };

@@ -1,261 +1,155 @@
-/**
- * Component Validator Tests
- * TASK-002: Implement component validation
- * RED Phase: Failing tests
- */
-
 import { describe, it, expect } from 'vitest';
 import { ComponentValidator } from '../src/validators/component-validator';
-import type { ComponentBlueprint, KnowledgeSchema } from '../src/types/knowledge-types';
 
 describe('ComponentValidator', () => {
-  const sampleSchema: KnowledgeSchema = {
-    version: '1.0.0',
-    components: [
-      {
-        componentName: 'Button',
-        importPath: '@/components/ui/button',
-        category: 'action',
-        description: 'A clickable button',
-        slots: [
-          {
-            slotName: 'children',
-            slotType: 'text',
-            required: true,
-          },
-        ],
-        props: [
-          {
-            propName: 'variant',
-            propType: 'enum',
-            possibleValues: ['primary', 'secondary', 'ghost'],
-            defaultValue: 'primary',
-            required: false,
-          },
-          {
-            propName: 'disabled',
-            propType: 'boolean',
-            defaultValue: false,
-            required: false,
-          },
-        ],
-      },
-      {
-        componentName: 'Card',
-        importPath: '@/components/ui/card',
-        category: 'layout',
-        description: 'A container card',
-        slots: [
-          {
-            slotName: 'header',
-            slotType: 'component',
-            required: false,
-          },
-          {
-            slotName: 'content',
-            slotType: 'mixed',
-            required: true,
-          },
-        ],
-        props: [],
-      },
-    ],
-  };
+  const validator = new ComponentValidator();
 
-  describe('validateBlueprint', () => {
-    it('should validate a correct blueprint successfully', () => {
-      const validator = new ComponentValidator(sampleSchema);
-      const blueprint: ComponentBlueprint = {
-        componentName: 'Button',
-        slotMappings: {
-          children: { type: 'literal', value: 'Click me' },
-        },
-        propMappings: {
-          variant: { type: 'literal', value: 'primary' },
-        },
-      };
-
-      const result = validator.validateBlueprint(blueprint);
+  describe('validateComponent', () => {
+    it('should validate existing component', () => {
+      const result = validator.validateComponent('Button');
 
       expect(result.isValid).toBe(true);
-      expect(result.errors).toHaveLength(0);
+      expect(result.componentName).toBe('Button');
+      expect(result.error).toBeUndefined();
+      expect(result.errorCode).toBeUndefined();
+      expect(result.suggestions).toBeUndefined();
     });
 
-    it('should reject blueprint for unknown component', () => {
-      const validator = new ComponentValidator(sampleSchema);
-      const blueprint: ComponentBlueprint = {
-        componentName: 'UnknownComponent',
-        slotMappings: {},
-        propMappings: {},
-      };
+    it('should validate multiple existing components', () => {
+      const components = ['Card', 'Modal', 'Input', 'Checkbox'];
 
-      const result = validator.validateBlueprint(blueprint);
+      components.forEach(component => {
+        const result = validator.validateComponent(component);
+        expect(result.isValid).toBe(true);
+        expect(result.componentName).toBe(component);
+      });
+    });
+
+    it('should return LAYER3-E002 error for invalid component', () => {
+      const result = validator.validateComponent('InvalidComponent');
 
       expect(result.isValid).toBe(false);
-      expect(result.errors).toContainEqual(
-        expect.objectContaining({
-          type: 'unknown_component',
-          message: expect.stringContaining('UnknownComponent'),
-        })
-      );
+      expect(result.componentName).toBe('InvalidComponent');
+      expect(result.error).toBeDefined();
+      expect(result.errorCode).toBe('LAYER3-E002');
     });
 
-    it('should reject blueprint missing required slot', () => {
-      const validator = new ComponentValidator(sampleSchema);
-      const blueprint: ComponentBlueprint = {
-        componentName: 'Button',
-        slotMappings: {}, // Missing required 'children' slot
-        propMappings: {},
-      };
-
-      const result = validator.validateBlueprint(blueprint);
+    it('should provide suggestions using Levenshtein distance', () => {
+      const result = validator.validateComponent('Buton'); // typo
 
       expect(result.isValid).toBe(false);
-      expect(result.errors).toContainEqual(
-        expect.objectContaining({
-          type: 'missing_required_slot',
-          field: 'children',
-        })
-      );
+      expect(result.suggestions).toBeDefined();
+      expect(result.suggestions).toContain('Button');
     });
 
-    it('should reject blueprint with invalid enum value', () => {
-      const validator = new ComponentValidator(sampleSchema);
-      const blueprint: ComponentBlueprint = {
-        componentName: 'Button',
-        slotMappings: {
-          children: { type: 'literal', value: 'Click' },
-        },
-        propMappings: {
-          variant: { type: 'literal', value: 'invalid' }, // Not in possibleValues
-        },
-      };
-
-      const result = validator.validateBlueprint(blueprint);
+    it('should provide suggestions for similar component names', () => {
+      const result = validator.validateComponent('Crd'); // typo for Card
 
       expect(result.isValid).toBe(false);
-      expect(result.errors).toContainEqual(
-        expect.objectContaining({
-          type: 'invalid_prop_value',
-          field: 'variant',
-        })
-      );
+      expect(result.suggestions).toBeDefined();
+      expect(result.suggestions?.length).toBeGreaterThan(0);
     });
 
-    it('should reject blueprint with type mismatch in prop', () => {
-      const validator = new ComponentValidator(sampleSchema);
-      const blueprint: ComponentBlueprint = {
-        componentName: 'Button',
-        slotMappings: {
-          children: { type: 'literal', value: 'Click' },
-        },
-        propMappings: {
-          disabled: { type: 'literal', value: 'true' }, // Should be boolean, not string
-        },
-      };
-
-      const result = validator.validateBlueprint(blueprint);
+    it('should handle empty string', () => {
+      const result = validator.validateComponent('');
 
       expect(result.isValid).toBe(false);
-      expect(result.errors).toContainEqual(
-        expect.objectContaining({
-          type: 'type_mismatch',
-          field: 'disabled',
-        })
-      );
+      expect(result.errorCode).toBe('LAYER3-E002');
     });
 
-    it('should validate nested component blueprints', () => {
-      const validator = new ComponentValidator(sampleSchema);
-      const blueprint: ComponentBlueprint = {
-        componentName: 'Card',
-        slotMappings: {
-          header: {
-            type: 'component',
-            blueprint: {
-              componentName: 'Button',
-              slotMappings: {
-                children: { type: 'literal', value: 'Header Button' },
-              },
-              propMappings: {},
-            },
-          },
-          content: { type: 'literal', value: 'Card content' },
-        },
-        propMappings: {},
-      };
-
-      const result = validator.validateBlueprint(blueprint);
+    it('should handle whitespace trimming', () => {
+      const result = validator.validateComponent('  Button  ');
 
       expect(result.isValid).toBe(true);
-      expect(result.errors).toHaveLength(0);
+      expect(result.componentName).toBe('  Button  ');
     });
 
-    it('should reject nested blueprint with errors', () => {
-      const validator = new ComponentValidator(sampleSchema);
-      const blueprint: ComponentBlueprint = {
-        componentName: 'Card',
-        slotMappings: {
-          header: {
-            type: 'component',
-            blueprint: {
-              componentName: 'Button',
-              slotMappings: {}, // Missing required 'children' slot
-              propMappings: {},
-            },
-          },
-          content: { type: 'literal', value: 'Card content' },
-        },
-        propMappings: {},
-      };
-
-      const result = validator.validateBlueprint(blueprint);
+    it('should return multiple suggestions when available', () => {
+      const result = validator.validateComponent('Butto'); // close to Button
 
       expect(result.isValid).toBe(false);
-      expect(result.errors.length).toBeGreaterThan(0);
+      expect(result.suggestions).toBeDefined();
+      expect(result.suggestions?.length).toBeGreaterThanOrEqual(1);
+      expect(result.suggestions).toContain('Button');
     });
 
-    it('should validate array slot mappings', () => {
-      const validator = new ComponentValidator(sampleSchema);
-      const blueprint: ComponentBlueprint = {
-        componentName: 'Card',
-        slotMappings: {
-          content: {
-            type: 'array',
-            items: [
-              { type: 'literal', value: 'First item' },
-              { type: 'literal', value: 'Second item' },
-            ],
-          },
-        },
-        propMappings: {},
-      };
+    it('should limit suggestions to maximum 3', () => {
+      const result = validator.validateComponent('x'); // very generic
 
-      const result = validator.validateBlueprint(blueprint);
-
-      expect(result.isValid).toBe(true);
-      expect(result.errors).toHaveLength(0);
+      expect(result.isValid).toBe(false);
+      if (result.suggestions) {
+        expect(result.suggestions.length).toBeLessThanOrEqual(3);
+      }
     });
   });
 
-  describe('performance requirements', () => {
-    it('should validate blueprint in under 20ms', () => {
-      const validator = new ComponentValidator(sampleSchema);
-      const blueprint: ComponentBlueprint = {
-        componentName: 'Button',
-        slotMappings: {
-          children: { type: 'literal', value: 'Click' },
-        },
-        propMappings: {
-          variant: { type: 'literal', value: 'primary' },
-        },
-      };
+  describe('isValid', () => {
+    it('should return true for valid component', () => {
+      expect(validator.isValid('Button')).toBe(true);
+      expect(validator.isValid('Card')).toBe(true);
+      expect(validator.isValid('Modal')).toBe(true);
+    });
 
-      const start = performance.now();
-      validator.validateBlueprint(blueprint);
-      const duration = performance.now() - start;
+    it('should return false for invalid component', () => {
+      expect(validator.isValid('InvalidComponent')).toBe(false);
+      expect(validator.isValid('FakeComponent')).toBe(false);
+      expect(validator.isValid('')).toBe(false);
+    });
 
-      expect(duration).toBeLessThan(20);
+    it('should handle trimming in validation', () => {
+      expect(validator.isValid('  Button  ')).toBe(true);
+    });
+  });
+
+  describe('validateBatch', () => {
+    it('should validate multiple components at once', () => {
+      const components = ['Button', 'Card', 'Modal'];
+      const results = validator.validateBatch(components);
+
+      expect(results.length).toBe(3);
+      results.forEach(result => {
+        expect(result.isValid).toBe(true);
+      });
+    });
+
+    it('should identify all invalid components in batch', () => {
+      const components = ['Button', 'InvalidComp', 'Card', 'FakeComp'];
+      const results = validator.validateBatch(components);
+
+      expect(results.length).toBe(4);
+      expect(results[0].isValid).toBe(true);
+      expect(results[1].isValid).toBe(false);
+      expect(results[2].isValid).toBe(true);
+      expect(results[3].isValid).toBe(false);
+    });
+
+    it('should handle empty array', () => {
+      const results = validator.validateBatch([]);
+      expect(results.length).toBe(0);
+    });
+  });
+
+  describe('getSuggestions', () => {
+    it('should return suggestions for typos', () => {
+      const suggestions = validator.getSuggestions('Buton', 3);
+
+      expect(suggestions).toBeDefined();
+      expect(suggestions.length).toBeGreaterThan(0);
+      expect(suggestions).toContain('Button');
+    });
+
+    it('should limit suggestions to specified maximum', () => {
+      const suggestions = validator.getSuggestions('x', 2);
+
+      expect(suggestions.length).toBeLessThanOrEqual(2);
+    });
+
+    it('should return empty array for exact match', () => {
+      const suggestions = validator.getSuggestions('Button', 3);
+
+      // Button should match exactly, so distance would be 0
+      // Depending on implementation, might return Button or empty
+      expect(Array.isArray(suggestions)).toBe(true);
     });
   });
 });

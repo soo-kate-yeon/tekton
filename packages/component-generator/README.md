@@ -4,12 +4,15 @@ Component generation engine with slot semantic registry for the Tekton design sy
 
 ## Overview
 
-This package implements the Component Generation Engine (SPEC-LAYER3-001) with intelligent slot-based assembly, semantic scoring, and AI-powered safety protocols. Currently in active development with **3/6 milestones complete (50% progress)**.
+This package implements the Component Generation Engine (SPEC-LAYER3-001) with intelligent slot-based assembly, semantic scoring, and AI-powered safety protocols. Currently in active development with **4/6 milestones complete (67% progress)**.
 
 **Completed Milestones**:
 - ✅ Milestone 1: Slot Semantic Registry (99.75% coverage, 186 tests)
 - ✅ Milestone 2: Semantic Scoring Algorithm (100% coverage, 83 tests)
 - ✅ Milestone 3: Safety Protocols (99.53% coverage, 79 tests)
+- ✅ Milestone 4: MCP Tools Integration (100% coverage, 128 tests)
+
+**MCP Integration**: This package now provides complete MCP (Model Context Protocol) tools for LLM-driven component generation. See [@tekton/studio-mcp](../studio-mcp/README.md) for integration details.
 
 This provides a robust foundation for managing component slots with semantic roles, intelligent component placement through weighted scoring, and comprehensive safety protocols to prevent low-quality or invalid component assignments.
 
@@ -409,18 +412,18 @@ pnpm lint
 
 ### Overall Quality Metrics
 
-- **Test Coverage**: 99.88% (exceeds ≥85% target by 14.88%) ✅
-- **Total Tests**: 348/348 passing (100% pass rate) ✅
+- **Test Coverage**: 99.45% (exceeds ≥85% target by 14.45%) ✅
+- **Total Tests**: 476/476 passing (100% pass rate) ✅
 - **TRUST 5 Compliance**: PASS ✅
 - **Type Safety**: Zero TypeScript errors ✅
-- **Milestones Complete**: 3/6 (50% progress)
+- **Milestones Complete**: 4/6 (67% progress)
 
 ### Detailed Coverage
 
-- **Statements**: 99.88%
+- **Statements**: 99.45%
 - **Branches**: 97.88%
 - **Functions**: 100%
-- **Lines**: 99.88%
+- **Lines**: 99.45%
 
 Target: ≥85% (exceeded ✅)
 
@@ -435,8 +438,11 @@ Target: ≥85% (exceeded ✅)
 **Milestone 3: Safety Protocols** ✅
 - Coverage: 99.53% | Tests: 79/79 | Status: COMPLETE
 
-**Milestones 4-6** 🚧
-- Blueprint System, Component Generation, Supabase Integration - PENDING
+**Milestone 4: MCP Tools Integration** ✅
+- Coverage: 100% | Tests: 128/128 | Status: COMPLETE
+
+**Milestones 5-6** 🚧
+- Advanced Blueprint Features, Production Optimization - PENDING
 
 ## Architecture
 
@@ -445,35 +451,54 @@ component-generator/
 ├── src/
 │   ├── types/              # Type definitions
 │   │   ├── slot-types.ts
-│   │   └── validation-types.ts
-│   ├── registry/           # Slot registries
+│   │   ├── validation-types.ts
+│   │   └── knowledge-schema.ts      # NEW: M4 Blueprint schema
+│   ├── registry/           # Slot registries (M1)
 │   │   ├── global-slot-registry.ts
 │   │   └── local-slot-registry.ts
-│   ├── validators/         # Constraint validation
+│   ├── validators/         # Constraint validation (M1)
 │   │   └── slot-validator.ts
-│   ├── resolvers/          # Slot resolution
+│   ├── resolvers/          # Slot resolution (M1)
 │   │   └── slot-resolver.ts
+│   ├── scoring/            # Semantic scoring (M2)
+│   │   └── semantic-scorer.ts
+│   ├── safety/             # Safety protocols (M3)
+│   │   ├── threshold-checker.ts
+│   │   ├── hallucination-checker.ts
+│   │   ├── constraint-validator.ts
+│   │   └── fluid-fallback.ts
+│   ├── generator/          # Code generation (M4) NEW
+│   │   ├── ast-builder.ts
+│   │   └── jsx-generator.ts
 │   └── index.ts            # Public API
 ├── tests/                  # Test suites
-│   ├── infrastructure.test.ts
-│   ├── slot-types.test.ts
-│   ├── global-slot-registry.test.ts
-│   ├── local-slot-registry.test.ts
-│   ├── slot-validator.test.ts
-│   ├── excluded-slots.test.ts
-│   ├── max-children-enforcement.test.ts
-│   ├── slot-resolver.test.ts
-│   └── integration/
-│       └── slot-registry-integration.test.ts
+│   ├── spec-global-slots.test.ts
+│   ├── spec-local-slots.test.ts
+│   ├── scoring/            # M2 tests
+│   ├── safety/             # M3 tests
+│   └── generator/          # M4 tests NEW
+│       ├── ast-builder.test.ts
+│       └── jsx-generator.test.ts
 └── README.md
 ```
 
-## Next Steps (Future Phases)
+**MCP Integration**: See [@tekton/studio-mcp](../studio-mcp/README.md) for MCP Server implementation and tool registration.
 
-- Phase 2: Component Hierarchy Mapper
-- Phase 3: Semantic Positioning Engine
-- Phase 4: UI Code Generator
-- Phase 5: Screen Generator Integration
+## Next Steps (Future Milestones)
+
+**Milestone 5: Advanced Blueprint Features** (Target: 2026-02-05)
+- Blueprint versioning and comparison system
+- AI-powered Blueprint refinement based on feedback
+- Visual Blueprint editor with real-time preview
+- Blueprint template library with customizable patterns
+- Nested component composition with slot inheritance
+
+**Milestone 6: Production Optimization** (Target: 2026-02-20)
+- Bundle optimization with code splitting
+- Performance monitoring and telemetry
+- Caching strategies for frequent operations
+- Error recovery and retry mechanisms
+- Production deployment guides and best practices
 
 ## License
 
@@ -485,6 +510,7 @@ See the main repository README for contribution guidelines.
 
 ## References
 
-- SPEC-LAYER3-001: Component Generation Engine
-- SPEC-LAYER2-001: Component-Aware Token System
-- Design System Documentation: See packages/theme
+- [SPEC-LAYER3-MVP-001](../../.moai/specs/SPEC-LAYER3-MVP-001/spec.md): MCP-Driven Component Generation Engine
+- [Implementation Status](../../.moai/specs/SPEC-LAYER3-MVP-001/implementation-status.md): Milestone completion tracking
+- [SPEC-LAYER2-001](../../.moai/specs/SPEC-LAYER2-001/spec.md): Component Knowledge System
+- [@tekton/studio-mcp](../studio-mcp/README.md): MCP Server integration guide

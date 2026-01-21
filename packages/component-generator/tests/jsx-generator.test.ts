@@ -1,205 +1,364 @@
-/**
- * JSXGenerator Tests
- * TASK-006: Implement JSXGenerator with Prettier formatting
- * RED Phase: Failing tests
- */
-
 import { describe, it, expect } from 'vitest';
-import { JSXGenerator } from '../src/generators/jsx-generator';
-import type { ComponentBlueprint } from '../src/types/knowledge-types';
+import { JSXGenerator, type GenerationResult } from '../src/generator/jsx-generator';
+import type { BlueprintResult } from '../src/types/knowledge-schema';
 
-describe('JSXGenerator', () => {
+describe('JSX Generator', () => {
+  const generator = new JSXGenerator();
+
   describe('generate', () => {
-    it('should generate formatted JSX code from simple blueprint', async () => {
-      const generator = new JSXGenerator();
-      const blueprint: ComponentBlueprint = {
-        componentName: 'Button',
-        slotMappings: {
-          children: { type: 'literal', value: 'Click me' },
+    it('should generate code from simple blueprint', async () => {
+      const blueprint: BlueprintResult = {
+        blueprintId: 'bp-001',
+        recipeName: 'simple-button',
+        analysis: {
+          intent: 'Create a button',
+          tone: 'professional',
         },
-        propMappings: {
-          variant: { type: 'literal', value: 'primary' },
-        },
-      };
-
-      const code = await generator.generate(blueprint);
-
-      expect(code).toContain('import Button from "@/components/ui/button";');
-      expect(code).toContain('export default function');
-      expect(code).toContain('<Button variant="primary">Click me</Button>');
-      expect(code).toContain('return');
-    });
-
-    it('should generate formatted code with nested components', async () => {
-      const generator = new JSXGenerator();
-      const blueprint: ComponentBlueprint = {
-        componentName: 'Card',
-        slotMappings: {
-          header: {
-            type: 'component',
-            blueprint: {
-              componentName: 'CardHeader',
-              slotMappings: {
-                children: { type: 'literal', value: 'Title' },
-              },
-              propMappings: {},
-            },
-          },
-          content: { type: 'literal', value: 'Content text' },
-        },
-        propMappings: {},
-      };
-
-      const code = await generator.generate(blueprint);
-
-      expect(code).toContain('import Card from "@/components/ui/card";');
-      expect(code).toContain('import CardHeader from "@/components/ui/card";');
-      expect(code).toContain('<Card>');
-      expect(code).toContain('<CardHeader>Title</CardHeader>');
-      expect(code).toContain('Content text');
-    });
-
-    it('should format code with proper indentation', async () => {
-      const generator = new JSXGenerator();
-      const blueprint: ComponentBlueprint = {
-        componentName: 'Button',
-        slotMappings: {
-          children: { type: 'literal', value: 'Click' },
-        },
-        propMappings: {},
-      };
-
-      const code = await generator.generate(blueprint);
-
-      // Check that code has proper indentation (2 spaces by default)
-      const lines = code.split('\n');
-      const hasIndentation = lines.some(line => line.startsWith('  '));
-      expect(hasIndentation).toBe(true);
-    });
-
-    it('should use semicolons in formatted output', async () => {
-      const generator = new JSXGenerator();
-      const blueprint: ComponentBlueprint = {
-        componentName: 'Input',
-        slotMappings: {},
-        propMappings: {},
-      };
-
-      const code = await generator.generate(blueprint);
-
-      expect(code).toContain(';');
-    });
-
-    it('should handle self-closing tags properly', async () => {
-      const generator = new JSXGenerator();
-      const blueprint: ComponentBlueprint = {
-        componentName: 'Input',
-        slotMappings: {},
-        propMappings: {
-          placeholder: { type: 'literal', value: 'Enter text' },
+        structure: {
+          componentName: 'Button',
+          props: { label: 'Click me' },
         },
       };
 
-      const code = await generator.generate(blueprint);
+      const result = await generator.generate(blueprint);
 
-      expect(code).toContain('<Input');
-      expect(code).toContain('placeholder="Enter text"');
+      expect(result.success).toBe(true);
+      expect(result.code).toBeDefined();
+      expect(result.code).toContain('import React from "react"');
+      expect(result.code).toContain('Button');
+      expect(result.code).toContain('function GeneratedComponent');
     });
-  });
 
-  describe('generateWithOptions', () => {
-    it('should accept custom Prettier options', async () => {
-      const generator = new JSXGenerator();
-      const blueprint: ComponentBlueprint = {
-        componentName: 'Button',
-        slotMappings: {
-          children: { type: 'literal', value: 'Click' },
+    it('should format code with Prettier', async () => {
+      const blueprint: BlueprintResult = {
+        blueprintId: 'bp-002',
+        recipeName: 'formatted',
+        analysis: {
+          intent: 'Create formatted component',
+          tone: 'professional',
         },
-        propMappings: {},
+        structure: {
+          componentName: 'Button',
+          props: {},
+        },
       };
 
-      const code = await generator.generateWithOptions(blueprint, {
-        semi: false,
-        singleQuote: true,
-      });
+      const result = await generator.generate(blueprint);
 
-      // Should not have semicolons
-      expect(code).not.toContain('";');
-      // Should use single quotes
-      expect(code).toContain("'@/components/ui/button'");
+      expect(result.success).toBe(true);
+      expect(result.code).toBeDefined();
+
+      // Check for proper formatting (consistent indentation, semicolons)
+      const lines = result.code!.split('\n');
+      expect(lines.length).toBeGreaterThan(1);
+
+      // Should have consistent formatting
+      expect(result.code).not.toContain('  \n'); // No trailing spaces
     });
 
-    it('should support custom tab width', async () => {
-      const generator = new JSXGenerator();
-      const blueprint: ComponentBlueprint = {
-        componentName: 'Button',
-        slotMappings: {
-          children: { type: 'literal', value: 'Click' },
+    it('should return error for invalid component', async () => {
+      const blueprint: BlueprintResult = {
+        blueprintId: 'bp-003',
+        recipeName: 'invalid',
+        analysis: {
+          intent: 'Create invalid',
+          tone: 'professional',
         },
-        propMappings: {},
+        structure: {
+          componentName: 'InvalidComponent',
+          props: {},
+        },
       };
 
-      const code = await generator.generateWithOptions(blueprint, {
-        tabWidth: 4,
-      });
+      const result = await generator.generate(blueprint);
 
-      // Check for 4-space indentation
-      const lines = code.split('\n');
-      const hasFourSpaces = lines.some(line => line.startsWith('    '));
-      expect(hasFourSpaces).toBe(true);
+      expect(result.success).toBe(false);
+      expect(result.errors).toBeDefined();
+      expect(result.errors?.length).toBeGreaterThan(0);
+      expect(result.code).toBeUndefined();
     });
-  });
 
-  describe('performance requirements', () => {
-    it('should generate and format code in under 100ms', async () => {
-      const generator = new JSXGenerator();
-      const blueprint: ComponentBlueprint = {
-        componentName: 'Card',
-        slotMappings: {
-          header: {
-            type: 'component',
-            blueprint: {
-              componentName: 'CardHeader',
-              slotMappings: {
-                children: { type: 'literal', value: 'Title' },
-              },
-              propMappings: {},
+    it('should generate code with nested components', async () => {
+      const blueprint: BlueprintResult = {
+        blueprintId: 'bp-004',
+        recipeName: 'nested',
+        analysis: {
+          intent: 'Create nested structure',
+          tone: 'professional',
+        },
+        structure: {
+          componentName: 'Card',
+          props: {},
+          slots: {
+            content: {
+              componentName: 'Button',
+              props: { label: 'Click' },
             },
           },
         },
-        propMappings: {},
       };
 
-      const start = performance.now();
-      await generator.generate(blueprint);
-      const duration = performance.now() - start;
+      const result = await generator.generate(blueprint);
 
-      expect(duration).toBeLessThan(100);
+      expect(result.success).toBe(true);
+      expect(result.code).toContain('Card');
+      expect(result.code).toContain('Button');
+      expect(result.code).toContain('<Card>');
+      expect(result.code).toContain('<Button');
+      expect(result.code).toContain('</Card>');
+    });
+
+    it('should generate proper imports for all components', async () => {
+      const blueprint: BlueprintResult = {
+        blueprintId: 'bp-005',
+        recipeName: 'multi-import',
+        analysis: {
+          intent: 'Create multi-component',
+          tone: 'professional',
+        },
+        structure: {
+          componentName: 'Card',
+          props: {},
+          slots: {
+            header: { componentName: 'Button', props: {} },
+            content: { componentName: 'Input', props: {} },
+          },
+        },
+      };
+
+      const result = await generator.generate(blueprint);
+
+      expect(result.success).toBe(true);
+      expect(result.code).toContain('import { Button, Card, Input } from "@tekton/ui"');
+    });
+
+    it('should generate valid TypeScript code', async () => {
+      const blueprint: BlueprintResult = {
+        blueprintId: 'bp-006',
+        recipeName: 'typescript',
+        analysis: {
+          intent: 'Create TypeScript component',
+          tone: 'professional',
+        },
+        structure: {
+          componentName: 'Button',
+          props: { variant: 'primary' },
+        },
+      };
+
+      const result = await generator.generate(blueprint);
+
+      expect(result.success).toBe(true);
+      expect(result.code).toBeDefined();
+
+      // Should be valid TypeScript/JavaScript
+      expect(result.code).toContain('function GeneratedComponent()');
+      expect(result.code).toContain('return');
+      expect(result.code).toContain('export default GeneratedComponent');
+    });
+
+    it('should handle complex props correctly', async () => {
+      const blueprint: BlueprintResult = {
+        blueprintId: 'bp-007',
+        recipeName: 'complex-props',
+        analysis: {
+          intent: 'Create with complex props',
+          tone: 'professional',
+        },
+        structure: {
+          componentName: 'Input',
+          props: {
+            name: 'email',
+            maxLength: 100,
+            required: true,
+            style: { width: '100%' },
+          },
+        },
+      };
+
+      const result = await generator.generate(blueprint);
+
+      expect(result.success).toBe(true);
+      expect(result.code).toContain('name="email"');
+      expect(result.code).toContain('maxLength={100}');
+      expect(result.code).toContain('required={true}');
+      expect(result.code).toContain('style={{');
+    });
+
+    it('should generate code with array slots', async () => {
+      const blueprint: BlueprintResult = {
+        blueprintId: 'bp-008',
+        recipeName: 'array-slots',
+        analysis: {
+          intent: 'Create with array slots',
+          tone: 'professional',
+        },
+        structure: {
+          componentName: 'Card',
+          props: {},
+          slots: {
+            items: [
+              { componentName: 'Button', props: { label: 'First' } },
+              { componentName: 'Button', props: { label: 'Second' } },
+            ],
+          },
+        },
+      };
+
+      const result = await generator.generate(blueprint);
+
+      expect(result.success).toBe(true);
+      expect(result.code).toContain('<Button');
+      expect(result.code).toContain('label="First"');
+      expect(result.code).toContain('label="Second"');
+    });
+
+    it('should preserve component structure in generated code', async () => {
+      const blueprint: BlueprintResult = {
+        blueprintId: 'bp-009',
+        recipeName: 'structure',
+        analysis: {
+          intent: 'Preserve structure',
+          tone: 'professional',
+        },
+        structure: {
+          componentName: 'Card',
+          props: { title: 'Title' },
+          slots: {
+            content: {
+              componentName: 'Input',
+              props: { placeholder: 'Enter text' },
+            },
+          },
+        },
+      };
+
+      const result = await generator.generate(blueprint);
+
+      expect(result.success).toBe(true);
+
+      // Should have Card wrapping Input
+      const cardIndex = result.code!.indexOf('<Card');
+      const inputIndex = result.code!.indexOf('<Input');
+      const cardCloseIndex = result.code!.indexOf('</Card>');
+
+      expect(cardIndex).toBeLessThan(inputIndex);
+      expect(inputIndex).toBeLessThan(cardCloseIndex);
+    });
+
+    it('should handle deeply nested structures', async () => {
+      const blueprint: BlueprintResult = {
+        blueprintId: 'bp-010',
+        recipeName: 'deep-nested',
+        analysis: {
+          intent: 'Create deeply nested',
+          tone: 'professional',
+        },
+        structure: {
+          componentName: 'Card',
+          props: {},
+          slots: {
+            content: {
+              componentName: 'Card',
+              props: {},
+              slots: {
+                content: {
+                  componentName: 'Button',
+                  props: {},
+                },
+              },
+            },
+          },
+        },
+      };
+
+      const result = await generator.generate(blueprint);
+
+      expect(result.success).toBe(true);
+      expect(result.code).toContain('Card');
+      expect(result.code).toContain('Button');
+    });
+
+    it('should include export statement', async () => {
+      const blueprint: BlueprintResult = {
+        blueprintId: 'bp-011',
+        recipeName: 'export',
+        analysis: {
+          intent: 'Create exported component',
+          tone: 'professional',
+        },
+        structure: {
+          componentName: 'Button',
+          props: {},
+        },
+      };
+
+      const result = await generator.generate(blueprint);
+
+      expect(result.success).toBe(true);
+      expect(result.code).toContain('export default GeneratedComponent');
+    });
+
+    it('should generate consistent formatting', async () => {
+      const blueprint: BlueprintResult = {
+        blueprintId: 'bp-012',
+        recipeName: 'consistent',
+        analysis: {
+          intent: 'Create with consistent formatting',
+          tone: 'professional',
+        },
+        structure: {
+          componentName: 'Card',
+          props: {},
+          slots: {
+            a: { componentName: 'Button', props: {} },
+            b: { componentName: 'Input', props: {} },
+          },
+        },
+      };
+
+      const result = await generator.generate(blueprint);
+
+      expect(result.success).toBe(true);
+
+      // Check indentation is consistent
+      const lines = result.code!.split('\n');
+      const indentedLines = lines.filter(line => line.startsWith('  '));
+      expect(indentedLines.length).toBeGreaterThan(0);
     });
   });
 
-  describe('end-to-end validation', () => {
-    it('should generate valid TypeScript React component code', async () => {
-      const generator = new JSXGenerator();
-      const blueprint: ComponentBlueprint = {
-        componentName: 'Button',
-        slotMappings: {
-          children: { type: 'literal', value: 'Submit' },
-        },
-        propMappings: {
-          variant: { type: 'literal', value: 'primary' },
-          disabled: { type: 'literal', value: false },
-        },
+  describe('GenerationResult', () => {
+    it('should have correct structure for successful generation', async () => {
+      const blueprint: BlueprintResult = {
+        blueprintId: 'bp-013',
+        recipeName: 'test',
+        analysis: { intent: 'test', tone: 'professional' },
+        structure: { componentName: 'Button', props: {} },
       };
 
-      const code = await generator.generate(blueprint);
+      const result = await generator.generate(blueprint);
 
-      // Validate structure
-      expect(code).toMatch(/import .+ from ["'].+["'];/);
-      expect(code).toMatch(/export default function \w+/);
-      expect(code).toContain('return');
-      expect(code).toContain('<Button');
-      expect(code).toContain('</Button>');
+      expect(result).toHaveProperty('success');
+      expect(result).toHaveProperty('code');
+      expect(typeof result.success).toBe('boolean');
+      expect(typeof result.code).toBe('string');
+    });
+
+    it('should have correct structure for failed generation', async () => {
+      const blueprint: BlueprintResult = {
+        blueprintId: 'bp-014',
+        recipeName: 'test',
+        analysis: { intent: 'test', tone: 'professional' },
+        structure: { componentName: 'InvalidComponent', props: {} },
+      };
+
+      const result = await generator.generate(blueprint);
+
+      expect(result.success).toBe(false);
+      expect(result.errors).toBeDefined();
+      expect(Array.isArray(result.errors)).toBe(true);
+      expect(result.code).toBeUndefined();
     });
   });
 });

@@ -1,216 +1,193 @@
-/**
- * Knowledge Schema Types Tests
- * TASK-001: Define Knowledge Schema types
- * RED Phase: Failing tests
- */
-
 import { describe, it, expect } from 'vitest';
-import type {
-  ComponentKnowledge,
-  ComponentBlueprint,
-  SlotMapping,
-  PropMapping,
-  KnowledgeSchema,
-} from '../src/types/knowledge-types';
+import {
+  SlotRole,
+  ComponentNode,
+  BlueprintResult,
+  BlueprintResultSchema,
+} from '../src/types/knowledge-schema';
 
 describe('Knowledge Schema Types', () => {
-  describe('ComponentKnowledge Type', () => {
-    it('should allow valid ComponentKnowledge with all required fields', () => {
-      const knowledge: ComponentKnowledge = {
-        componentName: 'Button',
-        importPath: '@/components/ui/button',
-        category: 'action',
-        description: 'A clickable button component',
-        slots: [
-          {
-            slotName: 'children',
-            slotType: 'text',
-            required: true,
-          },
-        ],
-        props: [
-          {
-            propName: 'variant',
-            propType: 'enum',
-            possibleValues: ['primary', 'secondary', 'ghost'],
-            defaultValue: 'primary',
-          },
-        ],
-      };
+  describe('SlotRole', () => {
+    it('should accept valid slot roles', () => {
+      const roles: SlotRole[] = ['layout', 'navigation', 'content', 'action', 'meta'];
 
-      expect(knowledge.componentName).toBe('Button');
-      expect(knowledge.importPath).toBe('@/components/ui/button');
-      expect(knowledge.category).toBe('action');
-      expect(knowledge.slots).toHaveLength(1);
-      expect(knowledge.props).toHaveLength(1);
-    });
-
-    it('should allow ComponentKnowledge with optional fields omitted', () => {
-      const knowledge: ComponentKnowledge = {
-        componentName: 'Card',
-        importPath: '@/components/ui/card',
-        category: 'layout',
-        description: 'A container card component',
-        slots: [],
-        props: [],
-      };
-
-      expect(knowledge.slots).toHaveLength(0);
-      expect(knowledge.props).toHaveLength(0);
+      roles.forEach(role => {
+        const testRole: SlotRole = role;
+        expect(testRole).toBe(role);
+      });
     });
   });
 
-  describe('ComponentBlueprint Type', () => {
-    it('should allow valid ComponentBlueprint for rendering', () => {
-      const blueprint: ComponentBlueprint = {
+  describe('ComponentNode', () => {
+    it('should create a simple component node without slots', () => {
+      const node: ComponentNode = {
         componentName: 'Button',
-        slotMappings: {
-          children: { type: 'literal', value: 'Click me' },
-        },
-        propMappings: {
-          variant: { type: 'literal', value: 'primary' },
-          disabled: { type: 'literal', value: false },
+        props: { variant: 'primary', label: 'Click me' },
+      };
+
+      expect(node.componentName).toBe('Button');
+      expect(node.props).toEqual({ variant: 'primary', label: 'Click me' });
+      expect(node.slots).toBeUndefined();
+    });
+
+    it('should create a component node with single slot', () => {
+      const node: ComponentNode = {
+        componentName: 'Card',
+        props: { title: 'Card Title' },
+        slots: {
+          content: {
+            componentName: 'Text',
+            props: { text: 'Card content' },
+          },
         },
       };
 
-      expect(blueprint.componentName).toBe('Button');
-      expect(blueprint.slotMappings.children.type).toBe('literal');
-      expect(blueprint.propMappings.variant.value).toBe('primary');
+      expect(node.slots?.content).toBeDefined();
+      expect((node.slots?.content as ComponentNode).componentName).toBe('Text');
     });
 
-    it('should allow ComponentBlueprint with nested components in slots', () => {
-      const blueprint: ComponentBlueprint = {
-        componentName: 'Dialog',
-        slotMappings: {
-          trigger: {
-            type: 'component',
-            blueprint: {
-              componentName: 'Button',
-              slotMappings: {
-                children: { type: 'literal', value: 'Open' },
+    it('should create a component node with array slots', () => {
+      const node: ComponentNode = {
+        componentName: 'List',
+        props: {},
+        slots: {
+          items: [
+            { componentName: 'ListItem', props: { text: 'Item 1' } },
+            { componentName: 'ListItem', props: { text: 'Item 2' } },
+          ],
+        },
+      };
+
+      expect(Array.isArray(node.slots?.items)).toBe(true);
+      expect((node.slots?.items as ComponentNode[]).length).toBe(2);
+    });
+
+    it('should support nested component structure', () => {
+      const node: ComponentNode = {
+        componentName: 'Page',
+        props: {},
+        slots: {
+          header: {
+            componentName: 'Header',
+            props: {},
+            slots: {
+              navigation: {
+                componentName: 'Navigation',
+                props: {},
               },
-              propMappings: {},
             },
           },
-          content: { type: 'literal', value: 'Dialog content' },
-        },
-        propMappings: {},
-      };
-
-      expect(blueprint.slotMappings.trigger.type).toBe('component');
-      expect(blueprint.slotMappings.trigger.blueprint?.componentName).toBe('Button');
-    });
-  });
-
-  describe('SlotMapping Type', () => {
-    it('should allow literal string slot mapping', () => {
-      const mapping: SlotMapping = {
-        type: 'literal',
-        value: 'Hello World',
-      };
-
-      expect(mapping.type).toBe('literal');
-      expect(typeof mapping.value).toBe('string');
-    });
-
-    it('should allow literal boolean slot mapping', () => {
-      const mapping: SlotMapping = {
-        type: 'literal',
-        value: true,
-      };
-
-      expect(mapping.type).toBe('literal');
-      expect(typeof mapping.value).toBe('boolean');
-    });
-
-    it('should allow component slot mapping with nested blueprint', () => {
-      const mapping: SlotMapping = {
-        type: 'component',
-        blueprint: {
-          componentName: 'Icon',
-          slotMappings: {},
-          propMappings: {
-            name: { type: 'literal', value: 'check' },
+          main: {
+            componentName: 'Main',
+            props: {},
           },
         },
       };
 
-      expect(mapping.type).toBe('component');
-      expect(mapping.blueprint).toBeDefined();
-      expect(mapping.blueprint?.componentName).toBe('Icon');
-    });
-
-    it('should allow array slot mapping with multiple children', () => {
-      const mapping: SlotMapping = {
-        type: 'array',
-        items: [
-          { type: 'literal', value: 'First' },
-          { type: 'literal', value: 'Second' },
-        ],
-      };
-
-      expect(mapping.type).toBe('array');
-      expect(mapping.items).toHaveLength(2);
+      expect(node.slots?.header).toBeDefined();
+      const header = node.slots?.header as ComponentNode;
+      expect(header.slots?.navigation).toBeDefined();
     });
   });
 
-  describe('PropMapping Type', () => {
-    it('should allow literal string prop mapping', () => {
-      const mapping: PropMapping = {
-        type: 'literal',
-        value: 'primary',
+  describe('BlueprintResult', () => {
+    it('should create a valid blueprint result', () => {
+      const blueprint: BlueprintResult = {
+        blueprintId: 'bp-001',
+        recipeName: 'user-profile-card',
+        analysis: {
+          intent: 'Display user profile information',
+          tone: 'professional',
+        },
+        structure: {
+          componentName: 'Card',
+          props: {},
+          slots: {
+            content: {
+              componentName: 'Text',
+              props: { text: 'User profile' },
+            },
+          },
+        },
       };
 
-      expect(mapping.type).toBe('literal');
-      expect(mapping.value).toBe('primary');
+      expect(blueprint.blueprintId).toBe('bp-001');
+      expect(blueprint.recipeName).toBe('user-profile-card');
+      expect(blueprint.analysis.intent).toBe('Display user profile information');
+      expect(blueprint.structure.componentName).toBe('Card');
     });
 
-    it('should allow literal number prop mapping', () => {
-      const mapping: PropMapping = {
-        type: 'literal',
-        value: 42,
+    it('should support complex blueprint with nested structure', () => {
+      const blueprint: BlueprintResult = {
+        blueprintId: 'bp-002',
+        recipeName: 'dashboard-layout',
+        analysis: {
+          intent: 'Create dashboard layout with widgets',
+          tone: 'informative',
+        },
+        structure: {
+          componentName: 'Container',
+          props: { layout: 'grid' },
+          slots: {
+            widgets: [
+              {
+                componentName: 'Widget',
+                props: { type: 'chart' },
+                slots: {
+                  content: {
+                    componentName: 'Chart',
+                    props: { data: [] },
+                  },
+                },
+              },
+              {
+                componentName: 'Widget',
+                props: { type: 'stats' },
+              },
+            ],
+          },
+        },
       };
 
-      expect(mapping.type).toBe('literal');
-      expect(typeof mapping.value).toBe('number');
+      expect(blueprint.structure.slots?.widgets).toBeDefined();
+      expect(Array.isArray(blueprint.structure.slots?.widgets)).toBe(true);
     });
   });
 
-  describe('KnowledgeSchema Type', () => {
-    it('should allow complete knowledge schema with multiple components', () => {
-      const schema: KnowledgeSchema = {
-        version: '1.0.0',
-        components: [
-          {
-            componentName: 'Button',
-            importPath: '@/components/ui/button',
-            category: 'action',
-            description: 'Button component',
-            slots: [],
-            props: [],
-          },
-          {
-            componentName: 'Card',
-            importPath: '@/components/ui/card',
-            category: 'layout',
-            description: 'Card component',
-            slots: [],
-            props: [],
-          },
-        ],
-      };
-
-      expect(schema.version).toBe('1.0.0');
-      expect(schema.components).toHaveLength(2);
+  describe('BlueprintResultSchema', () => {
+    it('should have correct schema structure', () => {
+      expect(BlueprintResultSchema.type).toBe('object');
+      expect(BlueprintResultSchema.required).toContain('blueprintId');
+      expect(BlueprintResultSchema.required).toContain('recipeName');
+      expect(BlueprintResultSchema.required).toContain('analysis');
+      expect(BlueprintResultSchema.required).toContain('structure');
     });
 
-    it('should allow empty components array in schema', () => {
-      const schema: KnowledgeSchema = {
-        version: '1.0.0',
-        components: [],
-      };
+    it('should define properties object', () => {
+      expect(BlueprintResultSchema.properties).toBeDefined();
+      expect(typeof BlueprintResultSchema.properties).toBe('object');
+    });
 
-      expect(schema.components).toHaveLength(0);
+    it('should have blueprintId property with string type', () => {
+      expect(BlueprintResultSchema.properties.blueprintId).toBeDefined();
+      expect(BlueprintResultSchema.properties.blueprintId.type).toBe('string');
+    });
+
+    it('should have recipeName property with string type', () => {
+      expect(BlueprintResultSchema.properties.recipeName).toBeDefined();
+      expect(BlueprintResultSchema.properties.recipeName.type).toBe('string');
+    });
+
+    it('should have analysis property with object type', () => {
+      expect(BlueprintResultSchema.properties.analysis).toBeDefined();
+      expect(BlueprintResultSchema.properties.analysis.type).toBe('object');
+      expect(BlueprintResultSchema.properties.analysis.required).toContain('intent');
+      expect(BlueprintResultSchema.properties.analysis.required).toContain('tone');
+    });
+
+    it('should have structure property with object type', () => {
+      expect(BlueprintResultSchema.properties.structure).toBeDefined();
+      expect(BlueprintResultSchema.properties.structure.type).toBe('object');
     });
   });
 });

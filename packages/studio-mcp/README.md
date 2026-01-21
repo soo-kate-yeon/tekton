@@ -216,6 +216,191 @@ const data = await loadArchetype('myHook', MySchema);
 const stored = await listArchetypes();
 ```
 
+## LLM Integration Guide (M3)
+
+### Overview
+
+The Layer 3 Knowledge Schema provides LLM-optimized tools for component generation. LLMs can:
+1. Query the Blueprint schema to understand component structure
+2. List available components from the catalog
+3. Design component blueprints as JSON
+4. Generate React `.tsx` files from blueprints
+
+### Step 1: Get Knowledge Schema
+
+```bash
+curl -X POST http://localhost:3000/tools/knowledge.getSchema
+```
+
+Response:
+```json
+{
+  "success": true,
+  "schema": {
+    "type": "object",
+    "required": ["blueprintId", "recipeName", "analysis", "structure"],
+    "properties": {
+      "blueprintId": { "type": "string" },
+      "recipeName": { "type": "string" },
+      "analysis": {
+        "type": "object",
+        "properties": {
+          "intent": { "type": "string" },
+          "tone": { "type": "string" }
+        }
+      },
+      "structure": { "type": "object" }
+    }
+  },
+  "usage": {
+    "example": { ... },
+    "instructions": "..."
+  }
+}
+```
+
+### Step 2: Get Component List
+
+Query available components by category or slot:
+
+```bash
+# Get all layout components
+curl -X POST http://localhost:3000/tools/knowledge.getComponentList \
+  -H "Content-Type: application/json" \
+  -d '{"filter": {"category": "layout"}}'
+
+# Get components with 'header' slot
+curl -X POST http://localhost:3000/tools/knowledge.getComponentList \
+  -H "Content-Type: application/json" \
+  -d '{"filter": {"hasSlot": "header"}}'
+```
+
+Response:
+```json
+{
+  "success": true,
+  "components": [
+    {
+      "name": "Card",
+      "description": "Container component with elevation and padding",
+      "category": "layout",
+      "slots": ["header", "content", "footer", "actions"],
+      "props": ["variant", "elevation", "padding"]
+    }
+  ],
+  "count": 1
+}
+```
+
+### Step 3: Design Blueprint JSON
+
+LLMs create component blueprints following the schema:
+
+```json
+{
+  "blueprintId": "dashboard-001",
+  "recipeName": "user-dashboard",
+  "analysis": {
+    "intent": "Dashboard with user statistics card",
+    "tone": "professional"
+  },
+  "structure": {
+    "componentName": "Card",
+    "props": {
+      "variant": "elevated",
+      "padding": "large"
+    }
+  }
+}
+```
+
+**Available Components** (20 total):
+- **Action**: Button
+- **Container**: Card, Modal
+- **Input**: Input, Checkbox, Radio, Switch, Slider, Select, Textarea
+- **Navigation**: Dropdown, Tabs, Accordion
+- **Feedback**: Badge, Alert, Toast, Tooltip, Popover, Progress
+- **Content**: Avatar
+
+### Step 4: Render Screen from Blueprint
+
+```bash
+curl -X POST http://localhost:3000/tools/knowledge.renderScreen \
+  -H "Content-Type: application/json" \
+  -d '{
+    "blueprint": {
+      "blueprintId": "dashboard-001",
+      "recipeName": "user-dashboard",
+      "analysis": {
+        "intent": "Dashboard card",
+        "tone": "professional"
+      },
+      "structure": {
+        "componentName": "Card",
+        "props": {
+          "variant": "elevated"
+        }
+      }
+    },
+    "outputPath": "src/app/dashboard/page.tsx"
+  }'
+```
+
+Response:
+```json
+{
+  "success": true,
+  "filePath": "src/app/dashboard/page.tsx",
+  "code": "export default function GeneratedComponent() {\n  return <Card variant=\"elevated\" />;\n}"
+}
+```
+
+### Error Handling
+
+The system provides structured error responses:
+
+**Error Codes:**
+- `INVALID_BLUEPRINT` - Missing required fields (blueprintId, recipeName, structure)
+- `GENERATION_FAILED` - Invalid component name or generation error
+- `FILE_WRITE_ERROR` - File system write failure
+- `UNEXPECTED_ERROR` - Unhandled exception
+
+Example error:
+```json
+{
+  "success": false,
+  "error": "Component \"NonExistent\" not found in catalog. Available components: Button, Card, Modal, ...",
+  "errorCode": "GENERATION_FAILED"
+}
+```
+
+### Performance Targets
+
+- `knowledge.getSchema`: <50ms
+- `knowledge.getComponentList`: <30ms
+- `knowledge.renderScreen`: <200ms (varies by blueprint complexity)
+
+### Example LLM Prompts
+
+```
+User: "Create a dashboard with a card"
+
+LLM:
+1. Call knowledge.getSchema to understand Blueprint structure
+2. Call knowledge.getComponentList with {"category": "container"}
+3. Design Blueprint:
+   {
+     "blueprintId": "dash-001",
+     "recipeName": "dashboard",
+     "analysis": {"intent": "Dashboard card", "tone": "professional"},
+     "structure": {"componentName": "Card", "props": {"variant": "elevated"}}
+   }
+4. Call knowledge.renderScreen with Blueprint
+5. Confirm file created at src/app/dashboard/page.tsx
+```
+
+See [examples/blueprints/](./examples/blueprints/) for more Blueprint JSON examples.
+
 ## Claude Code Integration
 
 Configure Claude Code to use the MCP server:
@@ -240,6 +425,7 @@ In Claude, query components:
 > What hooks are available?
 > Show me the useButton component
 > Find all AA-compliant components
+> Create a dashboard with Card and Button components
 ```
 
 ## TypeScript Support
