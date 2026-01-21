@@ -14,11 +14,6 @@ export type {
   SlotConstraints,
   GlobalSlotType,
   LocalSlotType,
-  GlobalSlotRole,
-  LocalSlotRole,
-  ConstraintTag,
-  GlobalSlot,
-  LocalSlot,
 } from "./types/slot-types";
 
 export type {
@@ -36,30 +31,6 @@ export { SlotValidator } from "./validators/slot-validator";
 
 // Resolver exports
 export { SlotResolver } from "./resolvers/slot-resolver";
-
-// Scoring exports
-export type {
-  BlueprintIntent,
-  IntentMode,
-  IntentComplexity,
-  ScoringContext,
-  ScoringInput,
-  ScoringResult,
-  ScoringBreakdown,
-} from "./scoring/scoring.types";
-
-export {
-  SCORING_WEIGHTS,
-  INTENT_MODE_ADJUSTMENTS,
-  KEYWORD_MATCH_BONUS,
-  CONTEXT_PENALTIES,
-  DEFAULT_AFFINITY,
-  INTENT_MATCH_BASELINE,
-  NO_PENALTY,
-} from "./scoring/scoring.types";
-
-export { SemanticScorer } from "./scoring/semantic-scorer";
-export { IntentInjector } from "./scoring/intent-injector";
 
 // Safety exports
 export type {
