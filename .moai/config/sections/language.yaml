@@ -5,10 +5,10 @@
 language:
   # Primary conversation language (user-facing responses)
   # Options: en, ko, ja, zh, es, fr, de
-  conversation_language: en
+  conversation_language: ko
 
   # Human-readable language name
-  conversation_language_name: English
+  conversation_language_name: Korean
 
   # Agent internal prompt language (instructions to agents)
   # Default: English (for consistency across agents)
