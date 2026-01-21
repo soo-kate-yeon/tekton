@@ -327,4 +327,159 @@ describe('JSX Element Generator', () => {
       expect(code).toContain('</Layout>');
     });
   });
+
+  describe('Token Injection (TASK-005)', () => {
+    it('should inject token CSS variables as style props when component has tokenBindings', () => {
+      const node: ComponentNode = {
+        componentName: 'Card',
+        props: { variant: 'elevated' },
+      };
+
+      // BuildContext with themeId and tokenResolver mock
+      const buildContext = {
+        themeId: 'calm-wellness',
+        componentName: 'Card',
+        state: 'default',
+        tokenBindings: {
+          backgroundColor: 'color-surface',
+          borderRadius: 'radius-large',
+          boxShadow: 'shadow-md',
+        },
+      };
+
+      const jsxElement = buildComponentNode(node, buildContext);
+      const code = generate(jsxElement).code;
+
+      // Should have style prop with CSS variables
+      expect(code).toContain('style={');
+      expect(code).toContain('var(--color-surface)');
+      expect(code).toContain('var(--radius-large)');
+      expect(code).toContain('var(--shadow-md)');
+    });
+
+    it('should preserve existing style props when injecting tokens', () => {
+      const node: ComponentNode = {
+        componentName: 'Button',
+        props: {
+          variant: 'primary',
+          style: { marginTop: '10px', zIndex: 999 },
+        },
+      };
+
+      const buildContext = {
+        themeId: 'calm-wellness',
+        componentName: 'Button',
+        state: 'default',
+        tokenBindings: {
+          backgroundColor: 'color-primary',
+          padding: 'spacing-2',
+        },
+      };
+
+      const jsxElement = buildComponentNode(node, buildContext);
+      const code = generate(jsxElement).code;
+
+      // Should preserve existing style
+      expect(code).toContain('marginTop');
+      expect(code).toContain('10px');
+      expect(code).toContain('zIndex');
+      expect(code).toContain('999');
+      // Should add token styles
+      expect(code).toContain('var(--color-primary)');
+      expect(code).toContain('var(--spacing-2)');
+    });
+
+    it('should work normally for components without tokenBindings', () => {
+      const node: ComponentNode = {
+        componentName: 'CustomComponent',
+        props: { text: 'Hello' },
+      };
+
+      // BuildContext without tokenBindings
+      const buildContext = {
+        themeId: 'calm-wellness',
+        componentName: 'CustomComponent',
+        state: 'default',
+        tokenBindings: undefined,
+      };
+
+      const jsxElement = buildComponentNode(node, buildContext);
+      const code = generate(jsxElement).code;
+
+      expect(code).toContain('CustomComponent');
+      expect(code).toContain('text="Hello"');
+      // Should not have auto-injected style
+      expect(code).not.toContain('style={');
+    });
+
+    it('should use CSS variable syntax var(--token-name)', () => {
+      const node: ComponentNode = {
+        componentName: 'Input',
+        props: {},
+      };
+
+      const buildContext = {
+        themeId: 'calm-wellness',
+        componentName: 'Input',
+        state: 'default',
+        tokenBindings: {
+          borderColor: 'color-border',
+          borderWidth: 'border-width-1',
+        },
+      };
+
+      const jsxElement = buildComponentNode(node, buildContext);
+      const code = generate(jsxElement).code;
+
+      // Should use var(--token-name) syntax exactly
+      expect(code).toContain('var(--color-border)');
+      expect(code).toContain('var(--border-width-1)');
+      // Should NOT have hardcoded color values
+      expect(code).not.toMatch(/#[0-9a-fA-F]{3,6}/); // No hex colors
+      expect(code).not.toMatch(/rgb\(/); // No rgb()
+      expect(code).not.toMatch(/oklch\(/); // No oklch()
+    });
+
+    it('should handle camelCase to kebab-case conversion for CSS properties', () => {
+      const node: ComponentNode = {
+        componentName: 'Card',
+        props: {},
+      };
+
+      const buildContext = {
+        themeId: 'calm-wellness',
+        componentName: 'Card',
+        state: 'default',
+        tokenBindings: {
+          backgroundColor: 'color-surface',
+          borderRadius: 'radius-lg',
+          boxShadow: 'shadow-sm',
+        },
+      };
+
+      const jsxElement = buildComponentNode(node, buildContext);
+      const code = generate(jsxElement).code;
+
+      // CSS properties should be in camelCase for React inline styles
+      expect(code).toContain('backgroundColor');
+      expect(code).toContain('borderRadius');
+      expect(code).toContain('boxShadow');
+    });
+
+    it('should support buildComponentNode without buildContext (backward compatibility)', () => {
+      const node: ComponentNode = {
+        componentName: 'Button',
+        props: { label: 'Click' },
+      };
+
+      // Call without buildContext (old signature)
+      const jsxElement = buildComponentNode(node);
+      const code = generate(jsxElement).code;
+
+      expect(code).toContain('Button');
+      expect(code).toContain('label="Click"');
+      // Should not throw error
+      expect(t.isJSXElement(jsxElement)).toBe(true);
+    });
+  });
 });
