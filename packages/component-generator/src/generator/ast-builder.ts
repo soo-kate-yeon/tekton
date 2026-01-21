@@ -5,7 +5,7 @@
  */
 
 import * as t from '@babel/types';
-import { ComponentValidator } from '../validators/component-validator.js';
+import { ComponentValidator } from '../validators/component-name-validator.js';
 import { generateImports } from './import-generator.js';
 import { buildComponentNode } from './jsx-element-generator.js';
 import type { BlueprintResult, ComponentNode } from '../types/knowledge-schema.js';

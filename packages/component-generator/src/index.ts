@@ -14,11 +14,6 @@ export type {
   SlotConstraints,
   GlobalSlotType,
   LocalSlotType,
-  GlobalSlotRole,
-  LocalSlotRole,
-  ConstraintTag,
-  GlobalSlot,
-  LocalSlot,
 } from "./types/slot-types";
 
 export type {
@@ -54,51 +49,8 @@ export type {
   KnowledgeSchema,
 } from "./types/knowledge-types";
 
-// Scoring exports
-export type {
-  BlueprintIntent,
-  IntentMode,
-  IntentComplexity,
-  ScoringContext,
-  ScoringInput,
-  ScoringResult,
-  ScoringBreakdown,
-} from "./scoring/scoring.types";
-
-export {
-  SCORING_WEIGHTS,
-  INTENT_MODE_ADJUSTMENTS,
-  KEYWORD_MATCH_BONUS,
-  CONTEXT_PENALTIES,
-  DEFAULT_AFFINITY,
-  INTENT_MATCH_BASELINE,
-  NO_PENALTY,
-} from "./scoring/scoring.types";
-
-export { SemanticScorer } from "./scoring/semantic-scorer";
-export { IntentInjector } from "./scoring/intent-injector";
-
-// Safety exports
-export type {
-  ThresholdCheckResult,
-  HallucinationCheckResult,
-  ExcludedSlotResult,
-  FluidFallbackResult,
-  FallbackMetadata,
-  SlotRole as SafetySlotRole,
-  LevenshteinOptions,
-} from "./safety/safety.types";
-
-export {
-  SCORE_THRESHOLD,
-  SAFETY_ERROR_CODES,
-  FALLBACK_COMPONENTS,
-} from "./safety/safety.types";
-
-export { ThresholdChecker } from "./safety/threshold-check";
+// Safety exports (M1-TASK-002)
 export { HallucinationChecker } from "./safety/hallucination-check";
-export { ConstraintValidator } from "./safety/constraint-validator";
-export { FluidFallback } from "./safety/fluid-fallback";
 
 // Generator exports (TASK-003 to TASK-006 + M1-TASK-006)
 export { ASTImportGenerator } from "./generators/ast-import-generator";

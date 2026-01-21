@@ -46,7 +46,7 @@ export interface ValidationResult {
 export class ComponentValidator {
   private componentMap: Map<string, ComponentKnowledge>;
 
-  constructor(private schema: KnowledgeSchema) {
+  constructor(schema: KnowledgeSchema) {
     this.componentMap = new Map(
       schema.components.map((comp) => [comp.componentName, comp])
     );

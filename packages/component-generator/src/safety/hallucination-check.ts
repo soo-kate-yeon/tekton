@@ -12,7 +12,7 @@ import {
 import {
   SAFETY_ERROR_CODES,
   type HallucinationCheckResult,
-} from "./safety.types.js";
+} from "./safety.types";
 
 /**
  * HallucinationChecker - Validates component existence in catalog
