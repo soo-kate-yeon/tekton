@@ -67,5 +67,38 @@ export type {
   SlotRole as KnowledgeSlotRole,
   ComponentNode,
   BlueprintResult,
+  BlueprintResultV2,
+  Environment,
 } from "./types/knowledge-schema";
-export { BlueprintResultSchema } from "./types/knowledge-schema";
+export {
+  BlueprintResultSchema,
+  blueprintResultV2Schema,
+  environmentValues,
+} from "./types/knowledge-schema";
+
+// Layout Schema exports (SPEC-LAYOUT-001)
+export type {
+  BlueprintLayout,
+  ContainerType,
+  MaxWidthPreset,
+  GridBreakpointKey,
+  GridConfig,
+  GapConfig,
+} from "./types/layout-schema";
+export {
+  blueprintLayoutSchema,
+  containerValues,
+  maxWidthValues,
+  gridBreakpointKeys,
+} from "./types/layout-schema";
+
+// Class merge utilities (SPEC-LAYOUT-001 TASK-010)
+export { mergeClasses, mergeLayoutClasses } from "./utils/class-merge";
+
+// Responsive class generator utilities (SPEC-LAYOUT-001 TASK-011)
+export {
+  generateResponsiveClasses,
+  generateResponsiveGridClasses,
+  generateResponsivePaddingClasses,
+  generateResponsiveGapClasses,
+} from "./utils/responsive-class-generator";

@@ -89,6 +89,14 @@ No migration needed for v0.1.0 (initial release)
 
 ## [Unreleased]
 
+### Added
+- **Layout Grid System** (SPEC-LAYOUT-001): Responsive grid for Tekton Design System
+  - Tailwind CSS breakpoints (sm:640, md:768, lg:1024, xl:1280, 2xl:1536)
+  - Environment grid defaults (mobile:4-col, tablet:8-col, web:12-col)
+  - BlueprintLayout interface with Zod validation
+  - renderScreen integration with tailwind-merge
+  - 293 tests passing with 100% coverage
+
 ### Future Plans (v0.2.0)
 - [ ] Implement esbuild bundling for production hardening
 - [ ] Add more component catalog entries (target: 50+ components)

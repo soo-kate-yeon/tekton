@@ -2,6 +2,7 @@
  * JSX Element Generator
  * Converts ComponentNode to JSX AST elements
  * SPEC-LAYER3-MVP-001 M1-TASK-004
+ * SPEC-LAYOUT-001 - Extended with className support for layout
  */
 
 import * as t from '@babel/types';
@@ -22,13 +23,54 @@ import type { ComponentNode } from '../types/knowledge-schema';
  * // Returns AST for: <Button variant="primary"><Text /></Button>
  */
 export function buildComponentNode(node: ComponentNode): t.JSXElement {
+  return buildComponentNodeInternal(node, undefined);
+}
+
+/**
+ * Build a JSX element from a ComponentNode with additional className
+ * SPEC-LAYOUT-001 - TASK-009
+ *
+ * @param node - ComponentNode to convert
+ * @param className - Additional className to apply to root element
+ * @returns JSXElement AST node
+ *
+ * @example
+ * buildComponentNodeWithClassName(
+ *   { componentName: 'div', props: {}, slots: {} },
+ *   'container mx-auto grid grid-cols-4'
+ * )
+ * // Returns AST for: <div className="container mx-auto grid grid-cols-4">...</div>
+ */
+export function buildComponentNodeWithClassName(
+  node: ComponentNode,
+  className: string
+): t.JSXElement {
+  return buildComponentNodeInternal(node, className);
+}
+
+/**
+ * Internal function to build JSX element with optional className
+ */
+function buildComponentNodeInternal(
+  node: ComponentNode,
+  additionalClassName: string | undefined
+): t.JSXElement {
   const { componentName, props, slots } = node;
 
   // Create JSX identifier for component name
   const jsxName = t.jsxIdentifier(componentName);
 
+  // Merge additionalClassName with existing className if present
+  const mergedProps = { ...props };
+  if (additionalClassName) {
+    const existingClassName = props.className as string | undefined;
+    mergedProps.className = existingClassName
+      ? `${additionalClassName} ${existingClassName}`
+      : additionalClassName;
+  }
+
   // Convert props to JSX attributes
-  const attributes = propsToJSXAttributes(props);
+  const attributes = propsToJSXAttributes(mergedProps);
 
   // Check if component has children
   const hasChildren = slots && Object.keys(slots).length > 0;
@@ -45,7 +87,7 @@ export function buildComponentNode(node: ComponentNode): t.JSXElement {
     ? t.jsxClosingElement(jsxName)
     : null;
 
-  // Convert slots to JSX children
+  // Convert slots to JSX children (without className for children)
   const children = hasChildren ? slotsToJSXChildren(slots!) : [];
 
   return t.jsxElement(openingElement, closingElement, children, !hasChildren);
