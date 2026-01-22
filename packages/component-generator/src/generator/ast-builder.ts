@@ -46,6 +46,15 @@ export interface ASTBuildResult {
 }
 
 /**
+ * Options for AST building
+ * TAG: SPEC-THEME-BIND-001 TASK-004
+ */
+export interface ASTBuildOptions {
+  /** Theme ID to apply during code generation */
+  themeId: string;
+}
+
+/**
  * AST Builder class
  * Orchestrates validation, import generation, JSX generation, and function component creation
  */
@@ -58,14 +67,19 @@ export class ASTBuilder {
 
   /**
    * Build complete AST from blueprint
+   * TAG: SPEC-THEME-BIND-001 TASK-004
+   * SPEC-LAYOUT-001 - Extended with layout support
    *
    * @param blueprint - Blueprint result to build from (supports V2 with layout)
+   * @param options - Build options including themeId
    * @returns AST build result with success status and AST or errors
    */
-  build(blueprint: BlueprintResult | BlueprintResultV2): ASTBuildResult {
+  build(
+    blueprint: BlueprintResult | BlueprintResultV2,
+    options?: ASTBuildOptions
+  ): ASTBuildResult {
     // Cast to V2 to access optional layout/environment fields
     const blueprintV2 = blueprint as BlueprintResultV2;
-
     // Step 1: Collect all component names from structure
     const componentNames = this.collectComponentNames(blueprint.structure);
 
@@ -97,10 +111,10 @@ export class ASTBuilder {
       blueprintV2.environment
     );
 
-    // Step 5: Generate JSX element with layout classes
+    // Step 5: Generate JSX element (with theme context for TASK-005 and layout classes)
     const jsxElement = layoutClassName
-      ? buildComponentNodeWithClassName(blueprint.structure, layoutClassName)
-      : buildComponentNode(blueprint.structure);
+      ? buildComponentNodeWithClassName(blueprint.structure, layoutClassName, options)
+      : buildComponentNode(blueprint.structure, options);
 
     // Step 6: Create function component
     const functionComponent = this.createFunctionComponent(jsxElement);

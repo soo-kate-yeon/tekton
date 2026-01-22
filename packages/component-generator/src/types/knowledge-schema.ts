@@ -50,13 +50,26 @@ export interface ComponentNode {
  * Blueprint result from Layer 3 knowledge system
  */
 export interface BlueprintResult {
+  /** Unique identifier for the blueprint */
   blueprintId: string;
+  /** Name of the recipe used to generate the blueprint */
   recipeName: string;
+  /** Analysis results including intent and tone */
   analysis: {
+    /** User intent analysis */
     intent: string;
+    /** Tone analysis (professional, calm, etc.) */
     tone: string;
   };
+  /** Root component node structure */
   structure: ComponentNode;
+  /**
+   * Optional theme identifier for token binding
+   * @example "calm-wellness"
+   * @example "tech-startup"
+   * @default "calm-wellness" (when resolved)
+   */
+  themeId?: string;
 }
 
 /**
@@ -136,6 +149,10 @@ export const BlueprintResultSchema = {
     structure: {
       type: 'object' as const,
       description: 'Root component node structure',
+    },
+    themeId: {
+      type: 'string' as const,
+      description: 'Optional theme identifier for token binding (e.g., "calm-wellness")',
     },
     environment: {
       type: 'string' as const,

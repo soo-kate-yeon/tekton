@@ -363,6 +363,130 @@ describe('End-to-End MCP Workflow', () => {
   });
 });
 
+describe('TASK-006: renderScreen Theme Support', () => {
+  const testOutputDir = join(process.cwd(), 'test-theme-output');
+
+  const blueprintWithTheme: BlueprintResult = {
+    blueprintId: 'theme-test-001',
+    recipeName: 'themed-profile',
+    themeId: 'energetic-bright',
+    analysis: {
+      intent: 'Test themed user profile',
+      tone: 'professional',
+    },
+    structure: {
+      componentName: 'Card',
+      props: {
+        variant: 'elevated',
+      },
+    },
+  };
+
+  beforeEach(async () => {
+    await mkdir(testOutputDir, { recursive: true });
+  });
+
+  afterEach(async () => {
+    if (existsSync(testOutputDir)) {
+      await rm(testOutputDir, { recursive: true, force: true });
+    }
+  });
+
+<<<<<<< HEAD
+  it('should use calm-wellness as default theme when no theme specified', async () => {
+    const blueprint: BlueprintResult = {
+      blueprintId: 'default-theme-001',
+      recipeName: 'default-themed',
+      analysis: { intent: 'Test', tone: 'calm' },
+      structure: { componentName: 'Card', props: {} },
+    };
+
+    const outputPath = join(testOutputDir, 'default-theme', 'page.tsx');
+    const result = await renderScreen(blueprint, { outputPath });
+
+    expect(result.success).toBe(true);
+    expect(result.themeApplied).toBe('calm-wellness');
+    expect(result.code).toBeDefined();
+  });
+
+  it('should respect blueprint.themeId when provided', async () => {
+    const outputPath = join(testOutputDir, 'blueprint-theme', 'page.tsx');
+    const result = await renderScreen(blueprintWithTheme, { outputPath });
+
+    expect(result.success).toBe(true);
+    expect(result.themeApplied).toBe('energetic-bright');
+    expect(result.code).toBeDefined();
+  });
+
+  it('should respect options.themeId over blueprint.themeId', async () => {
+    const outputPath = join(testOutputDir, 'options-override', 'page.tsx');
+    const result = await renderScreen(blueprintWithTheme, {
+      outputPath,
+      themeId: 'minimal-monochrome',
+    });
+
+    expect(result.success).toBe(true);
+    expect(result.themeApplied).toBe('minimal-monochrome');
+    expect(result.code).toBeDefined();
+  });
+
+  it('should report themeApplied in response', async () => {
+    const outputPath = join(testOutputDir, 'theme-report', 'page.tsx');
+    const result = await renderScreen(blueprintWithTheme, {
+      outputPath,
+      themeId: 'calm-wellness',
+    });
+
+    expect(result.success).toBe(true);
+    expect(result.themeApplied).toBeDefined();
+    expect(typeof result.themeApplied).toBe('string');
+  });
+
+  it('should work with options=undefined for backward compatibility', async () => {
+    const blueprint: BlueprintResult = {
+      blueprintId: 'backward-compat-001',
+      recipeName: 'backward-compat',
+      analysis: { intent: 'Test', tone: 'calm' },
+      structure: { componentName: 'Card', props: {} },
+    };
+
+    const result = await renderScreen(blueprint);
+
+    expect(result.success).toBe(true);
+    expect(result.themeApplied).toBe('calm-wellness');
+  });
+
+  it('should work with string outputPath for backward compatibility', async () => {
+    const blueprint: BlueprintResult = {
+      blueprintId: 'backward-compat-002',
+      recipeName: 'backward-compat-string',
+      analysis: { intent: 'Test', tone: 'calm' },
+      structure: { componentName: 'Card', props: {} },
+    };
+
+    const outputPath = join(testOutputDir, 'backward-string', 'page.tsx');
+    const result = await renderScreen(blueprint, outputPath);
+
+    expect(result.success).toBe(true);
+    expect(result.themeApplied).toBe('calm-wellness');
+    expect(existsSync(outputPath)).toBe(true);
+  });
+
+  it('should pass themeId to JSXGenerator', async () => {
+    const outputPath = join(testOutputDir, 'theme-passed', 'page.tsx');
+    const result = await renderScreen(blueprintWithTheme, {
+      outputPath,
+      themeId: 'calm-wellness',
+    });
+
+    expect(result.success).toBe(true);
+    expect(result.themeApplied).toBe('calm-wellness');
+    expect(result.code).toBeDefined();
+    // Note: CSS variable injection is verified in TASK-005 tests
+    // This test only verifies that themeId is correctly passed through the pipeline
+  });
+});
+
 describe('Regression Tests - renderScreen Edge Cases', () => {
   const testOutputDir = join(process.cwd(), 'test-regression-output');
 

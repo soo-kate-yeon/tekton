@@ -146,22 +146,62 @@ export function getComponentList(filter?: ComponentFilter): {
 }
 
 /**
+ * Options for renderScreen function
+ * TASK-006: SPEC-THEME-BIND-001
+ *
+ * @property outputPath - Optional output file path for generated component
+ * @property themeId - Optional theme ID to apply during code generation
+ */
+export interface RenderScreenOptions {
+  /** Output file path for generated component */
+  outputPath?: string;
+  /** Theme ID to apply during code generation */
+  themeId?: string;
+}
+
+/**
  * Render screen from Blueprint JSON
  * TASK-009: MCP Tool - render-screen
+ * TASK-006: Added theme support via options
  *
- * Generates React component file from Blueprint JSON
+ * Generates React component file from Blueprint JSON with theme support.
+ * Theme priority: options.themeId > blueprint.themeId > 'calm-wellness' (default)
+ *
+ * @param blueprint - Blueprint result containing component structure
+ * @param options - Output path (string for backward compatibility) or options object
+ * @returns Promise resolving to generation result with success status, file path, code, and applied theme
+ *
+ * @example
+ * // Using default theme
+ * const result = await renderScreen(blueprint);
+ *
+ * @example
+ * // With custom theme
+ * const result = await renderScreen(blueprint, {
+ *   outputPath: 'src/components/MyScreen.tsx',
+ *   themeId: 'energetic-bright'
+ * });
+ *
+ * @example
+ * // Backward compatible string path
+ * const result = await renderScreen(blueprint, 'src/components/MyScreen.tsx');
  */
 export async function renderScreen(
   blueprint: BlueprintResult,
-  outputPath?: string
+  options?: string | RenderScreenOptions
 ): Promise<{
   success: boolean;
   filePath?: string;
   code?: string;
   error?: string;
   errorCode?: string;
+  themeApplied?: string;
 }> {
   try {
+    // Step 0: Parse options (backward compatibility)
+    const parsedOptions: RenderScreenOptions =
+      typeof options === 'string' ? { outputPath: options } : options || {};
+
     // Step 1: Validate blueprint structure
     if (!blueprint.blueprintId || !blueprint.recipeName || !blueprint.structure) {
       return {
@@ -171,9 +211,13 @@ export async function renderScreen(
       };
     }
 
-    // Step 2: Generate code using JSXGenerator
+    // Step 2: Determine effective theme (priority: options > blueprint > default)
+    const themeId =
+      parsedOptions.themeId || blueprint.themeId || 'calm-wellness';
+
+    // Step 3: Generate code using JSXGenerator with theme context
     const generator = new JSXGenerator();
-    const result = await generator.generate(blueprint);
+    const result = await generator.generate(blueprint, { themeId });
 
     if (!result.success || !result.code) {
       return {
@@ -183,11 +227,11 @@ export async function renderScreen(
       };
     }
 
-    // Step 3: Determine output path
+    // Step 4: Determine output path
     const finalPath =
-      outputPath || `src/app/${blueprint.recipeName}/page.tsx`;
+      parsedOptions.outputPath || `src/app/${blueprint.recipeName}/page.tsx`;
 
-    // Step 4: Write to file system
+    // Step 5: Write to file system
     try {
       // Ensure directory exists
       const dirPath = dirname(finalPath);
@@ -200,6 +244,7 @@ export async function renderScreen(
         success: true,
         filePath: finalPath,
         code: result.code,
+        themeApplied: themeId,
       };
     } catch (fileError) {
       return {

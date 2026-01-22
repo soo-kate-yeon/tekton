@@ -37,6 +37,25 @@ export type {
 // Resolver exports
 export { SlotResolver } from "./resolvers/slot-resolver";
 
+// Safety exports
+export type {
+  ThresholdCheckResult,
+  HallucinationCheckResult,
+  ExcludedSlotResult,
+  FluidFallbackResult,
+  FallbackMetadata,
+  SlotRole as SafetySlotRole,
+  LevenshteinOptions,
+} from "./safety/safety.types";
+
+export {
+  SCORE_THRESHOLD,
+  SAFETY_ERROR_CODES,
+  FALLBACK_COMPONENTS,
+} from "./safety/safety.types";
+
+export { ThresholdChecker } from "./safety/threshold-check";
+
 // Knowledge Schema exports (TASK-001)
 export type {
   ComponentCategory,

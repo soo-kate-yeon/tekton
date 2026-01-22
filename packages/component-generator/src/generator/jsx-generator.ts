@@ -19,6 +19,15 @@ export interface GenerationResult {
 }
 
 /**
+ * Generator options for customizing code generation
+ * TAG: SPEC-THEME-BIND-001 TASK-004
+ */
+export interface GeneratorOptions {
+  /** Theme ID to apply to generated components */
+  themeId?: string;
+}
+
+/**
  * JSX Generator class
  * Generates formatted TypeScript code from blueprints
  */
@@ -31,13 +40,21 @@ export class JSXGenerator {
 
   /**
    * Generate formatted TypeScript code from blueprint
+   * TAG: SPEC-THEME-BIND-001 TASK-004
    *
    * @param blueprint - Blueprint to generate code from
+   * @param options - Optional generator options (theme, etc.)
    * @returns Generation result with formatted code or errors
    */
-  async generate(blueprint: BlueprintResult): Promise<GenerationResult> {
-    // Step 1: Build AST
-    const astResult = this.astBuilder.build(blueprint);
+  async generate(
+    blueprint: BlueprintResult,
+    options?: GeneratorOptions
+  ): Promise<GenerationResult> {
+    // Determine effective theme (options > blueprint > default)
+    const themeId = options?.themeId || blueprint.themeId || 'calm-wellness';
+
+    // Step 1: Build AST with theme context
+    const astResult = this.astBuilder.build(blueprint, { themeId });
 
     if (!astResult.success || !astResult.ast) {
       return {

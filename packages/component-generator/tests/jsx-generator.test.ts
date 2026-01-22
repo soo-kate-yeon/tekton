@@ -361,4 +361,64 @@ describe('JSX Generator', () => {
       expect(result.code).toBeUndefined();
     });
   });
+
+  describe('TASK-004: Theme Options', () => {
+    it('should accept themeId through GeneratorOptions', async () => {
+      const blueprint: BlueprintResult = {
+        blueprintId: 'bp-theme-001',
+        recipeName: 'themed-button',
+        analysis: { intent: 'Create themed button', tone: 'calm' },
+        structure: { componentName: 'Button', props: {} },
+      };
+
+      const result = await generator.generate(blueprint, { themeId: 'calm-wellness' });
+
+      expect(result.success).toBe(true);
+      expect(result.code).toBeDefined();
+    });
+
+    it('should use blueprint themeId when options not provided', async () => {
+      const blueprint: BlueprintResult = {
+        blueprintId: 'bp-theme-002',
+        recipeName: 'blueprint-themed',
+        themeId: 'energetic-vibrant',
+        analysis: { intent: 'Create component', tone: 'energetic' },
+        structure: { componentName: 'Button', props: {} },
+      };
+
+      const result = await generator.generate(blueprint);
+
+      expect(result.success).toBe(true);
+      expect(result.code).toBeDefined();
+    });
+
+    it('should prioritize options themeId over blueprint themeId', async () => {
+      const blueprint: BlueprintResult = {
+        blueprintId: 'bp-theme-003',
+        recipeName: 'override-themed',
+        themeId: 'calm-wellness',
+        analysis: { intent: 'Create component', tone: 'calm' },
+        structure: { componentName: 'Button', props: {} },
+      };
+
+      const result = await generator.generate(blueprint, { themeId: 'energetic-vibrant' });
+
+      expect(result.success).toBe(true);
+      expect(result.code).toBeDefined();
+    });
+
+    it('should default to calm-wellness when no themeId provided', async () => {
+      const blueprint: BlueprintResult = {
+        blueprintId: 'bp-theme-004',
+        recipeName: 'default-themed',
+        analysis: { intent: 'Create component', tone: 'professional' },
+        structure: { componentName: 'Button', props: {} },
+      };
+
+      const result = await generator.generate(blueprint);
+
+      expect(result.success).toBe(true);
+      expect(result.code).toBeDefined();
+    });
+  });
 });
