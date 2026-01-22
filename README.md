@@ -5,8 +5,21 @@
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.7-blue)](https://www.typescriptlang.org/)
 [![Node](https://img.shields.io/badge/node-%3E%3D20.0.0-brightgreen)](https://nodejs.org/)
+[![Version](https://img.shields.io/badge/version-0.1.0-blue)](./CHANGELOG.md)
 
 OKLCH-based design token generator with WCAG AA compliance for modern design systems.
+
+## 🎉 v0.1.0 Release Status
+
+**Status**: ✅ **Production Ready** (2026-01-20)
+
+- ✅ All 3 Layer 3 MCP tools operational (100%)
+- ✅ 13/13 automated tests passing
+- ✅ Known Issue #1 resolved (renderScreen fix)
+- ✅ 20 components in catalog with full metadata
+- ✅ Blueprint-based component generation working
+
+See [CHANGELOG.md](./CHANGELOG.md) for complete release notes.
 
 ## Table of Contents
 

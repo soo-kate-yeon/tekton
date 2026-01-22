@@ -3,6 +3,7 @@
  * Converts ComponentNode to JSX AST elements
  * SPEC-LAYER3-MVP-001 M1-TASK-004
  * TAG: SPEC-THEME-BIND-001 TASK-005
+ * SPEC-LAYOUT-001 - Extended with className support for layout
  */
 
 import * as t from '@babel/types';
@@ -46,21 +47,67 @@ export function buildComponentNode(
   node: ComponentNode,
   buildContext?: BuildContext
 ): t.JSXElement {
+  return buildComponentNodeInternal(node, undefined, buildContext);
+}
+
+/**
+ * Build a JSX element from a ComponentNode with additional className
+ * SPEC-LAYOUT-001 - TASK-009
+ *
+ * @param node - ComponentNode to convert
+ * @param className - Additional className to apply to root element
+ * @param buildContext - Optional build context with theme and token information
+ * @returns JSXElement AST node
+ *
+ * @example
+ * buildComponentNodeWithClassName(
+ *   { componentName: 'div', props: {}, slots: {} },
+ *   'container mx-auto grid grid-cols-4'
+ * )
+ * // Returns AST for: <div className="container mx-auto grid grid-cols-4">...</div>
+ */
+export function buildComponentNodeWithClassName(
+  node: ComponentNode,
+  className: string,
+  buildContext?: BuildContext
+): t.JSXElement {
+  return buildComponentNodeInternal(node, className, buildContext);
+}
+
+/**
+ * Internal function to build JSX element with optional className and theme context
+ */
+function buildComponentNodeInternal(
+  node: ComponentNode,
+  additionalClassName: string | undefined,
+  buildContext?: BuildContext
+): t.JSXElement {
   const { componentName, props, slots } = node;
 
-  // Inject theme tokens as style props if buildContext provided
-  // TAG: SPEC-THEME-BIND-001 TASK-005
+  // Step 1: Start with base props
   let mergedProps = { ...props };
+
+  // Step 2: Inject theme tokens as style props if buildContext provided
+  // TAG: SPEC-THEME-BIND-001 TASK-005
   if (buildContext?.tokenBindings) {
     const tokenStyles = tokensToStyleObject(buildContext.tokenBindings);
     // Merge with existing style prop, preserving user's custom styles
     mergedProps.style = { ...tokenStyles, ...(props.style || {}) };
   }
 
+  // Step 3: Merge additionalClassName with existing className if present
+  // SPEC-LAYOUT-001 - TASK-009
+  if (additionalClassName) {
+    const existingClassName = props.className as string | undefined;
+    mergedProps.className = existingClassName
+      ? `${additionalClassName} ${existingClassName}`
+      : additionalClassName;
+  }
+
   // Create JSX identifier for component name
   const jsxName = t.jsxIdentifier(componentName);
 
-  // Convert props to JSX attributes (including injected style)
+  // Convert props to JSX attributes (including injected style and className)
   const attributes = propsToJSXAttributes(mergedProps);
 
   // Check if component has children
@@ -78,8 +125,8 @@ export function buildComponentNode(
     ? t.jsxClosingElement(jsxName)
     : null;
 
-  // Convert slots to JSX children
-  const children = hasChildren ? slotsToJSXChildren(slots!) : [];
+  // Convert slots to JSX children (pass buildContext down for theme support)
+  const children = hasChildren ? slotsToJSXChildren(slots!, buildContext) : [];
 
   return t.jsxElement(openingElement, closingElement, children, !hasChildren);
 }
@@ -175,22 +222,26 @@ function valueToExpression(value: unknown): t.Expression {
  * Convert slots to JSX children
  *
  * @param slots - Slots object
+ * @param buildContext - Optional build context to pass down to children
  * @returns Array of JSX children
  */
-function slotsToJSXChildren(slots: {
-  [slotName: string]: ComponentNode | ComponentNode[];
-}): Array<t.JSXElement | t.JSXText | t.JSXExpressionContainer> {
+function slotsToJSXChildren(
+  slots: {
+    [slotName: string]: ComponentNode | ComponentNode[];
+  },
+  buildContext?: BuildContext
+): Array<t.JSXElement | t.JSXText | t.JSXExpressionContainer> {
   const children: t.JSXElement[] = [];
 
   for (const slotContent of Object.values(slots)) {
     if (Array.isArray(slotContent)) {
       // Array of components
       for (const node of slotContent) {
-        children.push(buildComponentNode(node));
+        children.push(buildComponentNode(node, buildContext));
       }
     } else {
       // Single component
-      children.push(buildComponentNode(slotContent));
+      children.push(buildComponentNode(slotContent, buildContext));
     }
   }
 

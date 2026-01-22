@@ -25,6 +25,7 @@
     "@tekton/component-knowledge": "workspace:*",
     "@tekton/theme": "workspace:*",
     "prettier": "^3.7.4",
+    "tailwind-merge": "^2.6.0",
     "zod": "^3.23.8"
   },
   "devDependencies": {

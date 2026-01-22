@@ -2,13 +2,38 @@
  * AST Builder
  * Orchestrates full AST construction from blueprint
  * SPEC-LAYER3-MVP-001 M1-TASK-005
+ * SPEC-LAYOUT-001 - Extended with layout support
  */
 
 import * as t from '@babel/types';
-import { ComponentValidator } from '../validators/component-validator';
-import { generateImports } from './import-generator';
-import { buildComponentNode } from './jsx-element-generator';
-import type { BlueprintResult, ComponentNode } from '../types/knowledge-schema';
+import { ComponentValidator } from '../validators/component-name-validator.js';
+import { generateImports } from './import-generator.js';
+import { buildComponentNode, buildComponentNodeWithClassName } from './jsx-element-generator.js';
+import { getLayoutClassName } from './layout-class-generator.js';
+import type {
+  BlueprintResult,
+  BlueprintResultV2,
+  ComponentNode,
+  Environment,
+} from '../types/knowledge-schema.js';
+import type { BlueprintLayout } from '../types/layout-schema.js';
+
+/**
+ * HTML intrinsic elements that don't need catalog validation
+ */
+const HTML_INTRINSIC_ELEMENTS = new Set([
+  'div', 'span', 'main', 'section', 'article', 'aside', 'header', 'footer',
+  'nav', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'a', 'ul', 'ol', 'li',
+  'table', 'tr', 'td', 'th', 'form', 'input', 'button', 'label', 'textarea',
+  'select', 'option', 'img', 'video', 'audio', 'canvas', 'svg', 'iframe',
+]);
+
+/**
+ * Check if a component name is an HTML intrinsic element
+ */
+function isHtmlElement(name: string): boolean {
+  return HTML_INTRINSIC_ELEMENTS.has(name.toLowerCase());
+}
 
 /**
  * Result of AST build operation
@@ -43,17 +68,24 @@ export class ASTBuilder {
   /**
    * Build complete AST from blueprint
    * TAG: SPEC-THEME-BIND-001 TASK-004
+   * SPEC-LAYOUT-001 - Extended with layout support
    *
-   * @param blueprint - Blueprint result to build from
+   * @param blueprint - Blueprint result to build from (supports V2 with layout)
    * @param options - Build options including themeId
    * @returns AST build result with success status and AST or errors
    */
-  build(blueprint: BlueprintResult, _options: ASTBuildOptions): ASTBuildResult {
+  build(
+    blueprint: BlueprintResult | BlueprintResultV2,
+    options?: ASTBuildOptions
+  ): ASTBuildResult {
+    // Cast to V2 to access optional layout/environment fields
+    const blueprintV2 = blueprint as BlueprintResultV2;
     // Step 1: Collect all component names from structure
     const componentNames = this.collectComponentNames(blueprint.structure);
 
-    // Step 2: Validate all components
-    const validationResults = this.validator.validateBatch(componentNames);
+    // Step 2: Filter out HTML elements and validate remaining components
+    const customComponents = componentNames.filter(name => !isHtmlElement(name));
+    const validationResults = this.validator.validateBatch(customComponents);
     const invalidComponents = validationResults.filter(result => !result.isValid);
 
     if (invalidComponents.length > 0) {
@@ -70,30 +102,36 @@ export class ASTBuilder {
       };
     }
 
-    // Step 3: Generate imports
-    const imports = generateImports(componentNames);
+    // Step 3: Generate imports (only for custom components)
+    const imports = generateImports(customComponents);
 
-    // Step 4: Generate JSX element (with theme context for TASK-005)
-    // For now, themeId is passed but not yet used in buildComponentNode
-    // TASK-005 will implement token injection
-    const jsxElement = buildComponentNode(blueprint.structure);
+    // Step 4: Generate layout className if layout is present
+    const layoutClassName = this.generateLayoutClassName(
+      blueprintV2.layout,
+      blueprintV2.environment
+    );
 
-    // Step 5: Create function component
+    // Step 5: Generate JSX element (with theme context for TASK-005 and layout classes)
+    const jsxElement = layoutClassName
+      ? buildComponentNodeWithClassName(blueprint.structure, layoutClassName, options)
+      : buildComponentNode(blueprint.structure, options);
+
+    // Step 6: Create function component
     const functionComponent = this.createFunctionComponent(jsxElement);
 
-    // Step 6: Create export default statement
+    // Step 7: Create export default statement
     const exportStatement = t.exportDefaultDeclaration(
       t.identifier('GeneratedComponent')
     );
 
-    // Step 7: Combine into program
+    // Step 8: Combine into program
     const program = t.program([
       ...imports,
       functionComponent,
       exportStatement,
     ]);
 
-    // Step 8: Create file AST
+    // Step 9: Create file AST
     const ast = t.file(program, [], []);
 
     return {
@@ -104,6 +142,20 @@ export class ASTBuilder {
   }
 
   /**
+   * Generate layout className string from layout and environment
+   */
+  private generateLayoutClassName(
+    layout: BlueprintLayout | undefined,
+    environment: Environment | undefined
+  ): string | undefined {
+    // Always generate layout classes if layout is provided or we have an environment
+    if (layout || environment) {
+      return getLayoutClassName(layout, environment);
+    }
+    return undefined;
+  }
+
+  /**
    * Collect all component names from structure recursively
    *
    * @param node - Component node to collect from
@@ -111,6 +163,12 @@ export class ASTBuilder {
    */
   private collectComponentNames(node: ComponentNode): string[] {
     const names = new Set<string>();
+
+    // Validate componentName exists BEFORE adding
+    if (!node || !node.componentName || typeof node.componentName !== 'string') {
+      console.warn('[AST Builder] Invalid component node:', node);
+      return [];
+    }
 
     // Add current component name
     names.add(node.componentName);

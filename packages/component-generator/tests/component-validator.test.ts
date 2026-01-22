@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { ComponentValidator } from '../src/validators/component-validator';
+import { ComponentValidator } from '../src/validators/component-name-validator';
 
 describe('ComponentValidator', () => {
   const validator = new ComponentValidator();
