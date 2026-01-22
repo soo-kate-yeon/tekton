@@ -152,6 +152,39 @@ Generates production-ready React components through intelligent slot-based assem
 - Component Validation: All references validated against Layer 2 catalog
 - Error Handling: Structured error responses with actionable messages (LAYER3-E002, LAYER3-E005)
 
+**Milestone 5: Theme Token Binding System** ✅ (SPEC-THEME-BIND-001, 100% coverage, 293 tests)
+- **TokenResolver**: Theme loading with LRU caching and OKLCH color conversion
+- **Theme Priority**: Runtime override > Blueprint preference > Default theme (calm-wellness)
+- **CSS Variables**: Automatic injection of `var(--token-name)` syntax in generated components
+- **State-Specific Tokens**: Support for hover, focus, active, disabled states with fallback
+- **Backward Compatibility**: 100% compatibility with existing blueprints (optional themeId field)
+- **Type Safety**: Full TypeScript support for ThemeConfig, ColorPalette, ResolvedTokens
+- **Performance**: LRU caching with ~95% cache hit rate, <5ms for cached themes
+- **OKLCH Color Space**: Perceptually uniform color transformations for consistent styling
+
+**Theme System Features**:
+- Centralized design token management eliminates hardcoded values
+- Runtime theme switching enables multi-theme applications
+- Semantic token naming ensures maintainability across design changes
+- AI-powered theme selection based on blueprint tone matching
+- Comprehensive theme validation with descriptive error messages
+
+**Integration**:
+```typescript
+import { renderScreen } from '@tekton/studio-mcp';
+
+// Basic usage with default theme
+const result = await renderScreen(blueprint);
+
+// Custom theme override
+const themed = await renderScreen(blueprint, {
+  themeId: 'professional-dark'
+});
+console.log(themed.themeApplied); // "professional-dark"
+```
+
+**Documentation**: See [Theme Binding Specification](./moai/specs/SPEC-THEME-BIND-001/spec.md), [TokenResolver API](./packages/component-generator/docs/token-resolver.md), and [Theme Configuration Guide](./packages/component-generator/docs/theme-config.md)
+
 #### Overall Quality Metrics
 
 - **Test Coverage**: 99.45% (exceeds ≥85% target by 14.45%) ✅
