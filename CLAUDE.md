@@ -90,6 +90,7 @@ Resume interrupted agent work using agentId:
 - Continue with the frontend development using the existing context
 
 Each sub-agent execution gets a unique agentId stored in agent-{agentId}.jsonl format. Full context is preserved for resumption.
+
 ### Multilingual Agent Routing
 
 Alfred automatically routes user requests to specialized agents based on keyword matching in any supported language.
@@ -343,7 +344,6 @@ AST-Grep Technologies:
 
 WHY: Automatic skill loading ensures relevant framework knowledge is available without manual invocation.
 
-
 ---
 
 ## Alfred's Three-Step Execution Model
@@ -386,195 +386,83 @@ Agent Selection Guide by Task Type:
 
 ## Advanced Agent Patterns
 
-### Two-Agent Pattern for Long-Running Tasks
+Advanced patterns for complex agent orchestration and context management.
 
-For complex, multi-session tasks, use a two-agent system:
+**Core Patterns**:
+- Two-Agent Pattern for long-running, multi-session tasks
+- Orchestrator-Worker Architecture for parallel execution
+- Context Engineering for token optimization
 
-Initializer Agent (runs once):
-- Sets up project structure and environment
-- Creates feature registry tracking completion status
-- Establishes progress documentation patterns
-- Generates initialization scripts for future sessions
-
-Executor Agent (runs repeatedly):
-- Consumes environment created by initializer
-- Works on single features per session
-- Updates progress documentation
-- Maintains feature registry state
-
-### Orchestrator-Worker Architecture
-
-Lead Agent (higher capability model):
-- Analyzes incoming queries
-- Decomposes into parallel subtasks
-- Spawns specialized worker agents
-- Synthesizes results into final output
-
-Worker Agents (cost-effective models):
-- Execute specific, focused tasks
-- Return condensed summaries
-- Operate with isolated context windows
-- Use specialized prompts and tool access
-
-Scaling Rules:
-- Simple queries: Single agent with 3-10 tool calls
-- Complex research: 10+ workers with parallel execution
-- State persistence: Prevent disruption during updates
-
-### Context Engineering
-
-Core Principle: Find the smallest possible set of high-signal tokens that maximize likelihood of desired outcome.
-
-Information Prioritization:
-- Place critical information at start and end of context
-- Use clear section markers (XML tags or Markdown headers)
-- Remove redundant or low-signal content
-- Summarize when precision not required
-
-Context Compaction for Long-Running Tasks:
-- Summarize conversation history automatically
-- Reinitiate with compressed context
-- Preserve architectural decisions and key findings
-- Maintain external memory files outside context window
-
-For detailed patterns, refer to Skill("moai-foundation-claude") reference documentation.
+For detailed implementation guides, case studies, and best practices:
+📖 See [Advanced Agent Patterns](.moai/docs/advanced/agent-patterns.md)
 
 ---
 
 ## Plugin Integration
 
-### What are Plugins
+Plugins are reusable extensions that bundle Claude Code configurations for distribution across projects.
 
-Plugins are reusable extensions that bundle Claude Code configurations for distribution across projects. Unlike standalone configurations in .claude/ directories, plugins can be installed via marketplaces and version-controlled independently.
+**Core Concepts**:
+- Plugin vs Standalone Configuration
+- Plugin management commands (/plugin install, uninstall, enable, etc.)
+- Plugin development and publishing
 
-### Plugin vs Standalone Configuration
-
-Standalone Configuration:
-- Scope: Single project only
-- Sharing: Manual copy or git submodules
-- Best for: Project-specific customizations
-
-Plugin Configuration:
-- Scope: Reusable across multiple projects
-- Sharing: Installable via marketplaces or git URLs
-- Best for: Team standards, reusable workflows, community tools
-
-### Plugin Management Commands
-
-Installation:
-- /plugin install plugin-name - Install from marketplace
-- /plugin install owner/repo - Install from GitHub
-- /plugin install plugin-name --scope project - Install with scope
-
-Other Commands:
-- /plugin uninstall, enable, disable, update, list, validate
-
-For detailed plugin development, refer to Skill("moai-foundation-claude") reference documentation.
+For complete plugin development guide, structure, and best practices:
+📖 See [Plugin Integration Guide](.moai/docs/advanced/plugin-integration.md)
+📖 See Skill("moai-foundation-claude") for comprehensive plugin reference
 
 ---
 
 ## Sandboxing Guidelines
 
-### OS-Level Security Isolation
-
 Claude Code provides OS-level sandboxing to restrict file system and network access during code execution.
 
-Linux: Uses bubblewrap (bwrap) for namespace-based isolation
-macOS: Uses Seatbelt (sandbox-exec) for profile-based restrictions
+**Core Security Features**:
+- OS-level isolation (bubblewrap on Linux, Seatbelt on macOS)
+- File system restrictions (write limited to cwd)
+- Network access control (domain allowlisting)
+- Auto-allow mode for safe operations
 
-### Default Sandbox Behavior
-
-When sandboxing is enabled:
-- File writes are restricted to the current working directory
-- Network access is limited to allowed domains
-- System resources are protected from modification
-
-### Auto-Allow Mode
-
-If a command only reads from allowed paths, writes to allowed paths, and accesses allowed network domains, it executes automatically without user confirmation.
-
-### Security Best Practices
-
-Start Restrictive: Begin with minimal permissions, monitor for violations, add specific allowances as needed.
-
-Combine with IAM: Sandbox provides OS-level isolation, IAM provides Claude-level permissions. Together they create defense-in-depth.
-
-For detailed configuration, refer to Skill("moai-foundation-claude") reference documentation.
+For complete configuration, best practices, and troubleshooting:
+📖 See [Sandboxing Guidelines](.moai/docs/advanced/sandboxing.md)
+📖 See Skill("moai-foundation-claude") for detailed reference
 
 ---
 
 ## Headless Mode for CI/CD
 
-### Basic Usage
+Headless mode enables programmatic and non-interactive usage of Claude Code for automation.
 
-Simple Prompt:
-- claude -p "Your prompt here" - Runs Claude with the given prompt and exits after completion
+**Core Features**:
+- Non-interactive execution (-p, -c, -r flags)
+- Structured output formats (json, stream-json)
+- Tool approval automation (--allowedTools)
+- JSON schema validation for reliable data extraction
 
-Continue Previous Conversation:
-- claude -c "Follow-up question" - Continues the most recent conversation
-
-Resume Specific Session:
-- claude -r session_id "Continue this task" - Resumes a specific session by ID
-
-### Output Formats
-
-Available formats include text (default), json, and stream-json.
-
-### Tool Management
-
-Allow Specific Tools:
-- claude -p "Build the project" --allowedTools "Bash,Read,Write" - Auto-approves specified tools
-
-Tool Pattern Matching:
-- claude -p "Check git status" --allowedTools "Bash(git:*)" - Allow only specific patterns
-
-### Structured Output with JSON Schema
-
-Validate output against provided JSON schema for reliable data extraction in automated pipelines.
-
-### Best Practices for CI/CD
-
-- Use --append-system-prompt to retain Claude Code capabilities
-- Always specify --allowedTools in CI/CD to prevent unintended actions
-- Use --output-format json for reliable parsing
-- Handle errors with exit code checks
-
-For complete CLI reference, refer to Skill("moai-foundation-claude") reference documentation.
+For complete CI/CD integration guide with examples:
+📖 See [Headless Mode Guide](.moai/docs/advanced/headless-mode.md)
+📖 See Skill("moai-foundation-claude") CLI reference
 
 ---
 
 ## Strategic Thinking Framework
 
-### When to Activate Deep Analysis
+Framework for complex architectural and technology decisions.
 
-Trigger Conditions:
+**Five-Phase Process**:
+1. Assumption Audit - Surface and validate hidden assumptions
+2. First Principles Decomposition - Identify root causes with Five Whys
+3. Alternative Generation - Generate 2-3 distinct approaches
+4. Trade-off Analysis - Weighted scoring across criteria
+5. Cognitive Bias Check - Verify decision quality
+
+**When to Activate**:
 - Architecture decisions affecting 5+ files
 - Technology selection between multiple options
 - Performance vs maintainability trade-offs
-- Breaking changes consideration
-- Library or framework selection
 
-### Five-Phase Thinking Process
-
-Phase 1 - Assumption Audit:
-- Surface hidden assumptions using AskUserQuestion
-- Categorize as Technical, Business, Team, or Integration
-- Validate critical assumptions before proceeding
-
-Phase 2 - First Principles Decomposition:
-- Apply Five Whys to identify root causes
-- Distinguish hard constraints from soft preferences
-
-Phase 3 - Alternative Generation:
-- Generate minimum 2-3 distinct approaches
-- Include conservative, balanced, and aggressive options
-
-Phase 4 - Trade-off Analysis:
-- Apply weighted scoring across criteria: Performance, Maintainability, Cost, Risk, Scalability
-
-Phase 5 - Cognitive Bias Check:
-- Verify not anchored to first solution
-- Confirm consideration of contrary evidence
+For complete framework with practical examples:
+📖 See [Strategic Thinking Framework](.moai/docs/workflows/strategic-thinking.md)
 
 ---
 
@@ -665,572 +553,26 @@ SPEC Execution Agent Chain:
 
 ## Worktree Management for Parallel Development
 
-### Overview
-
-Git worktrees enable parallel development of multiple SPECs by creating isolated working directories that share the same repository. This allows simultaneous work on different features without context switching between branches.
-
-### Worktree Configuration
-
-Configuration is managed in `.moai/config/sections/worktree.yaml`:
-
-```yaml
-worktree:
-  auto_sync: false                          # Auto-sync with base branch
-  cleanup_merged: true                      # Auto-cleanup after merge
-  worktree_root: ~/worktrees/{PROJECT_NAME}/  # Worktree location
-  default_base: master                      # Base branch
-  sync_strategy: merge                      # merge or rebase
-  max_worktrees: 10                        # Maximum worktrees
-  stale_threshold_days: 30                 # Stale detection
-```
-
-### Worktree Lifecycle
-
-#### 1. Creation
-
-**Best Practice**: Always create from latest master
-
-```bash
-# Step 1: Update master
-git checkout master
-git pull origin master
-
-# Step 2: Create worktree from latest master
-git worktree add ~/worktrees/tekton/SPEC-NEW -b feature/SPEC-NEW
-
-# Step 3: Verify
-cd ~/worktrees/tekton/SPEC-NEW
-git branch --show-current  # Should show: feature/SPEC-NEW
-```
-
-**Why**: Creating from stale master causes merge conflicts later.
-
-#### 2. Development
-
-**Daily Sync Protocol** (Prevents Conflicts):
-
-```bash
-cd ~/worktrees/tekton/SPEC-YOUR-FEATURE
-
-# Every day or after other PRs merge
-git fetch origin
-git merge origin/master
-
-# If conflicts, resolve immediately
-# Run tests after merge
-npm test
-```
-
-**Why**: Early conflict detection and resolution is easier than late-stage conflicts.
-
-#### 3. PR Preparation
-
-**Pre-PR Checklist**:
-
-```bash
-# Step 1: Final master sync
-git fetch origin
-git merge origin/master
-
-# Step 2: Resolve any conflicts
-# (Use manager-git agent if needed)
-
-# Step 3: Verify quality
-npm test           # All tests pass
-npm run build      # TypeScript compiles
-npm run lint       # No lint errors
-
-# Step 4: Push
-git push origin feature/SPEC-YOUR-FEATURE
-
-# Step 5: Create PR
-gh pr create --title "..." --body "..."
-```
-
-#### 4. Post-Merge Cleanup
-
-**Manual Cleanup**:
-
-```bash
-# After PR merged to master
-git worktree remove ~/worktrees/tekton/SPEC-YOUR-FEATURE
-```
-
-**Automatic Cleanup** (if `cleanup_merged: true`):
-- Worktrees are auto-removed after successful merge
-- Stale worktrees detected after `stale_threshold_days`
-
----
-
-### Conflict Prevention Strategies
-
-#### Strategy 1: Domain Separation
-
-**Recommended**: Assign different packages to different SPECs
-
-```
-SPEC-TOKEN-001:  packages/token-generator/
-SPEC-THEME-001:  packages/component-generator/
-SPEC-STUDIO-001: packages/studio-mcp/
-```
-
-**Why**: Minimal file overlap = minimal conflicts
-
-#### Strategy 2: File Ownership Matrix
-
-**Before Starting SPEC**:
-
-1. Check active worktrees:
-   ```bash
-   git worktree list
-   ```
-
-2. Identify files each SPEC modifies:
-   ```
-   SPEC-A: ast-builder.ts, jsx-generator.ts
-   SPEC-B: token-resolver.ts, theme-types.ts
-   ```
-
-3. Avoid overlapping files when possible
-
-**When Overlap Unavoidable**:
-- Coordinate changes with other developers
-- Use smaller, focused changes
-- Merge frequently to minimize divergence
-
-#### Strategy 3: Interface Coordination
-
-**Problem**: Multiple SPECs extending same interface
-
-```typescript
-// SPEC-THEME-BIND-001 wants to add:
-interface BlueprintResult {
-  themeId?: string;
-}
-
-// SPEC-LAYOUT-001 wants to add:
-interface BlueprintResult {
-  layout?: LayoutConfig;
-}
-```
-
-**Solution**: Coordinate interface changes
-
-```typescript
-// Agreed structure (both SPECs)
-interface BlueprintResult {
-  themeId?: string;      // SPEC-THEME-BIND-001
-  layout?: LayoutConfig; // SPEC-LAYOUT-001
-}
-```
-
-**Protocol**:
-- Check existing SPECs before modifying shared interfaces
-- Document interface changes in SPEC
-- Consider using interface composition instead of modification
-
----
-
-### Conflict Resolution Protocol
-
-#### When Conflicts Occur
-
-**Detection**: GitHub PR shows conflict badge
-
-**Resolution Location**: Use worktree, not main repo
-
-```bash
-# Navigate to worktree
-cd ~/worktrees/tekton/SPEC-YOUR-FEATURE
-
-# Fetch latest master
-git fetch origin
-
-# Attempt merge
-git merge origin/master
-# Conflicts detected!
-```
-
-#### Conflict Resolution Pattern
-
-**Step 1: Understand Both Changes**
-
-Read conflicting file sections:
-```
-<<<<<<< HEAD (Your changes)
-// Your feature implementation
-=======
-// Master's new implementation
->>>>>>> origin/master
-```
-
-**Step 2: Integration Strategy**
-
-**DO NOT**: Choose one side and discard the other
-**DO**: Integrate both features
-
-Example from SPEC-THEME-BIND-001 vs SPEC-LAYOUT-001:
-
-```typescript
-// CONFLICT: Method signature
-<<<<<<< HEAD
-build(blueprint: BlueprintResult, options?: ASTBuildOptions): ASTBuildResult
-=======
-build(blueprint: BlueprintResult | BlueprintResultV2): ASTBuildResult
->>>>>>> origin/master
-
-// RESOLUTION: Support both parameters
-build(
-  blueprint: BlueprintResult | BlueprintResultV2,
-  options?: ASTBuildOptions
-): ASTBuildResult {
-  const blueprintV2 = blueprint as BlueprintResultV2;
-  // Integrate both features
-}
-```
-
-**Step 3: Delegate to manager-git Agent**
-
-For complex conflicts, use specialized agent:
-
-```typescript
-Task({
-  subagent_type: "manager-git",
-  description: "Resolve merge conflicts",
-  prompt: `
-    Resolve merge conflicts in feature/SPEC-YOUR-FEATURE.
-
-    Context:
-    - Our branch adds: [feature description]
-    - Master branch adds: [feature description]
-    - Strategy: Integrate both features
-
-    Conflicting files: [list]
-  `
-})
-```
-
-**Why**: manager-git agent has conflict resolution expertise
-
-**Step 4: Verify Integration**
-
-```bash
-# After conflict resolution
-npm test              # All tests must pass
-npm run build         # TypeScript must compile
-npm run lint          # No new lint errors
-
-# Stage and commit
-git add <resolved-files>
-git commit  # Default merge message
-
-# Push
-git push origin feature/SPEC-YOUR-FEATURE
-```
-
----
-
-### Conflict Case Study: SPEC-THEME-BIND-001
-
-#### Background
-
-**Timeline**:
-```
-Dec 20: SPEC-THEME-BIND-001 branches from master (f800e6b)
-Dec 20-27: Implements theme binding (7 commits)
-Dec 27: SPEC-LAYOUT-001 (PR #37) merges to master
-Dec 28: SPEC-THEME-BIND-001 tries to merge → CONFLICT
-```
-
-#### Root Cause
-
-**Both SPECs modified identical files**:
-- `ast-builder.ts`: Method signatures
-- `jsx-element-generator.ts`: Component building logic
-- `knowledge-schema.ts`: Interface extensions
-- `index.ts`: Export lists
-- `layer3-tools.test.ts`: Test suites
-
-**Why Conflict Occurred**:
-1. Long development period (7 days) without master sync
-2. Identical file modifications
-3. Same functions/interfaces changed for different purposes
-
-#### Resolution Approach
-
-**Integration Strategy**: Merge both feature sets
-
-1. **ast-builder.ts**:
-   - THEME: Added `ASTBuildOptions` parameter
-   - LAYOUT: Added `BlueprintResultV2` support
-   - **Resolution**: Support both parameters
-
-2. **jsx-element-generator.ts**:
-   - THEME: Injected CSS variables in `style` prop
-   - LAYOUT: Injected Tailwind classes in `className` prop
-   - **Resolution**: Generate both props
-
-3. **knowledge-schema.ts**:
-   - THEME: Added `themeId` field
-   - LAYOUT: Added `layout` and `environment` fields
-   - **Resolution**: Include all fields
-
-**Result**: Both features coexist without interference
-
-#### Testing After Resolution
-
-```bash
-# All tests passed
-Test Files: 20 passed (20)
-Tests:      293 passed (293)
-Duration:   2.00s
-
-# TypeScript compiled successfully
-tsc --noEmit
-# (no errors)
-```
-
-#### Lessons Learned
-
-**Prevention**:
-- Sync with master every 2-3 days during development
-- Coordinate when modifying shared interfaces
-- Create smaller PRs (merge more frequently)
-
-**Resolution**:
-- Always integrate both features, never discard one
-- Use manager-git agent for complex conflicts
-- Verify with full test suite after resolution
-
----
-
-### Worktree Commands Reference
-
-#### Creation
-
-```bash
-# From latest master
-git checkout master && git pull
-git worktree add <path> -b <branch-name>
-
-# Example
-git worktree add ~/worktrees/tekton/SPEC-001 -b feature/SPEC-001
-```
-
-#### Status Check
-
-```bash
-# List all worktrees
-git worktree list
-
-# Check specific worktree status
-cd ~/worktrees/tekton/SPEC-001
-git status
-git log master..HEAD --oneline  # Commits ahead of master
-```
-
-#### Sync with Master
-
-```bash
-cd ~/worktrees/tekton/SPEC-001
-
-# Merge strategy (default)
-git fetch origin
-git merge origin/master
-
-# Rebase strategy (alternative)
-git fetch origin
-git rebase origin/master
-```
-
-#### Cleanup
-
-```bash
-# Remove worktree (clean working directory required)
-git worktree remove ~/worktrees/tekton/SPEC-001
-
-# Force remove (discard uncommitted changes)
-git worktree remove --force ~/worktrees/tekton/SPEC-001
-
-# Prune stale worktree references
-git worktree prune
-```
-
-#### Recovery
-
-```bash
-# Recreate removed worktree
-git worktree add ~/worktrees/tekton/SPEC-001 feature/SPEC-001
-# Branch must still exist
-```
-
----
-
-### Agent Guidelines for Worktree Operations
-
-#### When to Use Worktrees
-
-**Use Worktrees** (Recommended):
-- Parallel SPEC development
-- Long-running feature branches
-- Maintaining multiple versions simultaneously
-- Isolating experimental changes
-
-**Use Branch Switching** (Simpler):
-- Quick bug fixes
-- Single active feature
-- Short-lived branches
-
-#### Agent Worktree Protocol
-
-**Before Creating Worktree**:
-
-1. Verify master is up-to-date:
-   ```bash
-   git checkout master && git pull
-   ```
-
-2. Check existing worktrees:
-   ```bash
-   git worktree list
-   ```
-
-3. Verify path availability:
-   ```bash
-   ls ~/worktrees/tekton/SPEC-NEW
-   # Should not exist
-   ```
-
-**During Development**:
-
-1. Sync with master every 2-3 days
-2. Run tests after each sync
-3. Resolve conflicts immediately when detected
-
-**Before PR Creation**:
-
-1. Final master sync
-2. Conflict resolution (if any)
-3. Full test suite execution
-4. TypeScript compilation verification
-
-**After PR Merge**:
-
-1. Return to main repository: `cd /main/repo/path`
-2. Update master: `git checkout master && git pull`
-3. Clean worktree: `git worktree remove <path>` (or let auto-cleanup handle it)
-
----
-
-### Troubleshooting
-
-#### Issue: "worktree contains modified or untracked files"
-
-**Error**:
-```
-fatal: '/path/to/worktree' contains modified or untracked files, use --force to delete it
-```
-
-**Solution**:
-```bash
-cd /path/to/worktree
-git status  # Check what's uncommitted
-
-# Option 1: Commit changes
-git add .
-git commit -m "final changes"
-
-# Option 2: Discard changes
-git reset --hard
-git clean -fd
-
-# Option 3: Force remove
-cd /main/repo
-git worktree remove --force /path/to/worktree
-```
-
-#### Issue: Merge conflicts during sync
-
-**Symptom**: `git merge origin/master` shows conflicts
-
-**Solution**: Use manager-git agent
-
-```bash
-# Don't manually resolve complex conflicts
-# Delegate to specialized agent
-Task({
-  subagent_type: "manager-git",
-  description: "Resolve merge conflicts",
-  prompt: "Resolve conflicts in worktree at <path>..."
-})
-```
-
-#### Issue: Stale worktree reference
-
-**Error**:
-```
-fatal: 'worktree' already exists
-```
-
-**Solution**:
-```bash
-# Prune stale references
-git worktree prune
-
-# Try creation again
-git worktree add <path> -b <branch>
-```
-
----
-
-### Best Practices Summary
-
-#### Critical Rules
-
-1. **[HARD] Always create worktrees from latest master**
-   - WHY: Prevents merge conflicts from stale base
-   - ACTION: `git checkout master && git pull` before `git worktree add`
-
-2. **[HARD] Sync with master every 2-3 days**
-   - WHY: Early conflict detection and resolution
-   - ACTION: Daily `git fetch origin && git merge origin/master`
-
-3. **[HARD] Integrate both features when resolving conflicts**
-   - WHY: Discarding code loses functionality
-   - ACTION: Merge implementations, never delete one side
-
-4. **[SOFT] Coordinate shared interface changes**
-   - WHY: Prevents conflicting modifications
-   - ACTION: Check active SPECs before modifying common types
-
-5. **[SOFT] Use domain separation when possible**
-   - WHY: Minimizes file overlap and conflicts
-   - ACTION: Assign different packages to different SPECs
-
-#### Workflow Checklist
-
-**SPEC Start**:
-- [ ] Update master: `git checkout master && git pull`
-- [ ] Create worktree from latest: `git worktree add <path> -b <branch>`
-- [ ] Verify base commit: `git log -1`
-
-**During Development** (Every 2-3 Days):
-- [ ] Fetch updates: `git fetch origin`
-- [ ] Merge master: `git merge origin/master`
-- [ ] Resolve conflicts if any
-- [ ] Run tests: `npm test`
-
-**Pre-PR**:
-- [ ] Final master sync
-- [ ] All conflicts resolved
-- [ ] Tests passing: `npm test`
-- [ ] TypeScript compiles: `npm run build`
-- [ ] Lint clean: `npm run lint`
-
-**Post-Merge**:
-- [ ] Return to main repo
-- [ ] Update master: `git pull`
-- [ ] Remove worktree: `git worktree remove <path>`
+Git worktrees enable parallel SPEC development with isolated working directories.
+
+**Core Principles**:
+- Always create from latest master
+- Sync every 2-3 days to prevent conflicts
+- Integrate both features when resolving conflicts
+
+**Best Practices**:
+- Use domain separation (different packages for different SPECs)
+- Run tests after every master sync
+- Use manager-git agent for complex conflict resolution
+
+**Lifecycle**:
+1. Creation: `git worktree add ~/worktrees/project/SPEC-001 -b feature/SPEC-001`
+2. Development: Daily sync with `git fetch origin && git merge origin/master`
+3. PR Preparation: Final sync, resolve conflicts, verify quality
+4. Post-Merge Cleanup: `git worktree remove <path>`
+
+For complete guide including conflict prevention strategies, case studies, and troubleshooting:
+📖 See [Git Worktree Management Guide](.moai/docs/workflows/git-worktree.md)
 
 ---
 
@@ -1277,55 +619,21 @@ Configuration is split into modular section files for token efficiency:
 
 ## Version Management
 
-### Single Source of Truth
-
-[HARD] pyproject.toml is the ONLY authoritative source for MoAI-ADK version.
+**[HARD]** pyproject.toml is the ONLY authoritative source for MoAI-ADK version.
 WHY: Prevents version inconsistencies across multiple files.
 
-Version Reference:
-- Authoritative Source: pyproject.toml (version = "X.Y.Z")
-- Runtime Access: src/moai_adk/version.py reads from pyproject.toml
-- Config Display: .moai/config/sections/system.yaml (updated by release process)
+**Core Principles**:
+- Single source of truth in pyproject.toml
+- Automated sync script for all version references
+- Pre-release validation in CI/CD
 
-### Files Requiring Version Sync
+**Version Sync Process**:
+1. Update pyproject.toml first
+2. Run sync script: `.github/scripts/sync-versions.sh X.Y.Z`
+3. Verify consistency across all files
 
-When releasing new version, these files MUST be updated:
-
-Documentation Files:
-- README.md (Version line)
-- README.ko.md (Version line)
-- README.ja.md (Version line)
-- README.zh.md (Version line)
-- CHANGELOG.md (New version entry)
-
-Configuration Files:
-- pyproject.toml (Single Source - update FIRST)
-- src/moai_adk/version.py (_FALLBACK_VERSION)
-- .moai/config/sections/system.yaml (moai.version)
-- src/moai_adk/templates/.moai/config/config.yaml (moai.version)
-
-### Version Sync Process
-
-[HARD] Before any release:
-
-Step 1: Update pyproject.toml
-- Change version = "X.Y.Z" to new version
-
-Step 2: Run Version Sync Script
-- Execute: .github/scripts/sync-versions.sh X.Y.Z
-- Or manually update all files listed above
-
-Step 3: Verify Consistency
-- Run: grep -r "X.Y.Z" to confirm all files updated
-- Check: No old version numbers remain in critical files
-
-### Prohibited Practices
-
-- [HARD] Never hardcode version in multiple places without sync mechanism
-- [HARD] Never update README version without updating pyproject.toml
-- [HARD] Never release with mismatched versions across files
-
-WHY: Version inconsistency causes confusion and breaks tooling expectations.
+For complete version management workflow, file list, and troubleshooting:
+📖 See [Version Management Guide](.moai/docs/development/version-management.md)
 
 ---
 
@@ -1343,7 +651,7 @@ Error Handling Process:
 
 ## Web Search Guidelines
 
-### Anti-Hallucination Policy
+**Anti-Hallucination Policy**:
 
 [HARD] URL Verification Mandate: All URLs must be verified before inclusion in responses
 WHY: Prevents dissemination of non-existent or incorrect information
@@ -1352,21 +660,13 @@ WHY: Prevents dissemination of non-existent or incorrect information
 
 [HARD] Source Attribution: All web search results must include actual search sources
 
-### Web Search Execution Protocol
+**Mandatory Verification Steps**:
+1. Initial Search Phase: Use WebSearch tool with specific queries
+2. URL Validation Phase: Use WebFetch to verify each URL
+3. Response Construction Phase: Include only verified URLs with sources
 
-Mandatory Verification Steps:
-
-1. Initial Search Phase: Use WebSearch tool with specific, targeted queries. Never fabricate URLs.
-
-2. URL Validation Phase: Use WebFetch tool to verify each URL before inclusion.
-
-3. Response Construction Phase: Only include verified URLs with actual search sources.
-
-### Prohibited Practices
-
-- Never generate URLs that were not found in WebSearch results
-- Never present information as fact when it is uncertain or speculative
-- Never omit "Sources:" section when WebSearch was used
+For complete protocol, quality assessment, and practical workflows:
+📖 See [Web Search Guidelines](.moai/docs/guidelines/web-search.md)
 
 ---
 
@@ -1425,6 +725,30 @@ Summary:
 
 ---
 
+## Documentation Index
+
+**Advanced Topics**:
+- [Advanced Agent Patterns](.moai/docs/advanced/agent-patterns.md) - Two-Agent, Orchestrator-Worker, Context Engineering
+- [Plugin Integration](.moai/docs/advanced/plugin-integration.md) - Plugin development and management
+- [Sandboxing](.moai/docs/advanced/sandboxing.md) - Security isolation and configuration
+- [Headless Mode](.moai/docs/advanced/headless-mode.md) - CI/CD integration and automation
+
+**Workflows**:
+- [Git Worktree Management](.moai/docs/workflows/git-worktree.md) - Parallel development workflow
+- [Strategic Thinking](.moai/docs/workflows/strategic-thinking.md) - Decision-making framework
+
+**Development**:
+- [Version Management](.moai/docs/development/version-management.md) - Release and versioning workflow
+
+**Guidelines**:
+- [Web Search](.moai/docs/guidelines/web-search.md) - Anti-hallucination protocol
+
+**Skills**:
+- Skill("moai-foundation-claude") - Complete Claude Code authoring reference
+- Skill("moai-foundation-core") - Core MoAI-ADK principles and workflows
+
+---
+
 ## Output Format
 
 ### User-Facing Communication (Markdown)
@@ -1445,20 +769,17 @@ XML tags are reserved for internal agent-to-agent data transfer only:
 
 ---
 
-Version: 9.0.0 (Advanced Agent Patterns Integration)
-Last Updated: 2026-01-06
+Version: 10.0.0 (Documentation Restructuring)
+Last Updated: 2026-01-23
 Core Rule: Alfred is an orchestrator; direct implementation is prohibited
 Language: Dynamic setting (language.conversation_language)
 
 Critical: Alfred must delegate all tasks to specialized agents
 Required: All tasks use "Use the [subagent] subagent to..." format for specialized agent delegation
 
-Changes from 8.5.0:
-- Added: Advanced Agent Patterns section (Two-Agent, Orchestrator-Worker, Context Engineering)
-- Added: Plugin Integration section with management commands
-- Added: Sandboxing Guidelines section for OS-level security
-- Added: Headless Mode section for CI/CD integration
-- Updated: Agent Invocation Patterns with /agents command and agentId resume
-- Updated: Tool Access Restrictions with expanded categories
-- Optimized: Reduced total lines while maintaining comprehensive coverage
-- Reference: CLI Reference and detailed patterns available in moai-foundation-claude skill
+Changes from 9.0.0:
+- Restructured: Extracted detailed sections into focused documentation files
+- Reduced: CLAUDE.md from 1465 to 505 lines (65% reduction)
+- Added: Documentation index with links to extracted guides
+- Improved: Maintainability through separation of concerns
+- Preserved: All core policies and execution rules in main file
