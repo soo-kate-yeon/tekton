@@ -79,7 +79,7 @@ describe("Standalone Server Integration", () => {
       const response = getHealthResponse("standalone", []);
 
       expect(response.features).toBeDefined();
-      expect(response.features.customPresets).toBe(false);
+      expect(response.features.customThemes).toBe(false);
       expect(response.features.cloudSync).toBe(false);
       expect(response.features.analytics).toBe(false);
     });
@@ -88,7 +88,7 @@ describe("Standalone Server Integration", () => {
       const response = getHealthResponse("connected", []);
 
       expect(response.features).toBeDefined();
-      expect(response.features.customPresets).toBe(true);
+      expect(response.features.customThemes).toBe(true);
       expect(response.features.cloudSync).toBe(true);
       expect(response.features.analytics).toBe(true);
     });

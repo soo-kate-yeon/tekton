@@ -53,8 +53,14 @@ export class JSXGenerator {
     // Determine effective theme (options > blueprint > default)
     const themeId = options?.themeId || blueprint.themeId || 'calm-wellness';
 
-    // Step 1: Build AST with theme context
-    const astResult = this.astBuilder.build(blueprint, { themeId });
+    // Update blueprint with effective theme
+    const blueprintWithTheme = {
+      ...blueprint,
+      themeId,
+    };
+
+    // Step 1: Build AST (theme context applied at component level in future)
+    const astResult = this.astBuilder.build(blueprintWithTheme);
 
     if (!astResult.success || !astResult.ast) {
       return {

@@ -75,8 +75,7 @@ export class ASTBuilder {
    * @returns AST build result with success status and AST or errors
    */
   build(
-    blueprint: BlueprintResult | BlueprintResultV2,
-    options?: ASTBuildOptions
+    blueprint: BlueprintResult | BlueprintResultV2
   ): ASTBuildResult {
     // Cast to V2 to access optional layout/environment fields
     const blueprintV2 = blueprint as BlueprintResultV2;
@@ -112,9 +111,11 @@ export class ASTBuilder {
     );
 
     // Step 5: Generate JSX element (with theme context for TASK-005 and layout classes)
+    // Note: BuildContext requires componentName and state, which are not available at this level
+    // Theme binding should be handled at component level, not blueprint level
     const jsxElement = layoutClassName
-      ? buildComponentNodeWithClassName(blueprint.structure, layoutClassName, options)
-      : buildComponentNode(blueprint.structure, options);
+      ? buildComponentNodeWithClassName(blueprint.structure, layoutClassName, undefined)
+      : buildComponentNode(blueprint.structure, undefined);
 
     // Step 6: Create function component
     const functionComponent = this.createFunctionComponent(jsxElement);

@@ -11,7 +11,7 @@ import type {
 } from '@tekton/component-generator';
 import {
   ComponentValidator,
-  JSXGenerator,
+  LegacyJSXGenerator,
 } from '@tekton/component-generator';
 import { SAMPLE_KNOWLEDGE_SCHEMA } from './sample-schema.js';
 
@@ -129,7 +129,7 @@ export async function renderScreen(input: RenderScreenInput): Promise<RenderScre
 
   // Step 2: Generate JSX code
   try {
-    const generator = new JSXGenerator();
+    const generator = new LegacyJSXGenerator();
     const code = await generator.generate(blueprint);
 
     return {

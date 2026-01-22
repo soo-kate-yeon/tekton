@@ -7,206 +7,206 @@
 
 import { describe, it, expect } from "vitest";
 import {
-  getBuiltinPresets,
-  getBuiltinPreset,
-  isValidPresetId,
+  getBuiltinThemes,
+  getBuiltinTheme,
+  isValidThemeId,
 } from "../builtin.js";
 import {
   ThemeSchema,
-  PresetMetaSchema,
-  BUILTIN_PRESET_IDS,
+  ThemeMetaSchema,
+  BUILTIN_THEME_IDS,
 } from "../types.js";
 
 describe("Builtin Preset Loader", () => {
-  describe("getBuiltinPresets", () => {
+  describe("getBuiltinThemes", () => {
     it("should return all 7 built-in presets", () => {
-      const presets = getBuiltinPresets();
-      expect(presets).toHaveLength(7);
+      const themes = getBuiltinThemes();
+      expect(themes).toHaveLength(7);
     });
 
-    it("should return presets with correct metadata structure", () => {
-      const presets = getBuiltinPresets();
+    it("should return themes with correct metadata structure", () => {
+      const themes = getBuiltinThemes();
 
-      presets.forEach((preset) => {
+      themes.forEach((theme: import("../types.js").ThemeMeta) => {
         // Validate against PresetMeta schema
-        const result = PresetMetaSchema.safeParse(preset);
+        const result = ThemeMetaSchema.safeParse(theme);
         expect(result.success).toBe(true);
       });
     });
 
     it("should include all expected preset IDs", () => {
-      const presets = getBuiltinPresets();
-      const presetIds = presets.map((p) => p.id);
+      const themes = getBuiltinThemes();
+      const themeIds = themes.map((p: import("../types.js").ThemeMeta) => p.id);
 
-      BUILTIN_PRESET_IDS.forEach((expectedId) => {
-        expect(presetIds).toContain(expectedId);
+      BUILTIN_THEME_IDS.forEach((expectedId) => {
+        expect(themeIds).toContain(expectedId);
       });
     });
 
-    it("should return presets with id, name, description, stackInfo, and brandTone", () => {
-      const presets = getBuiltinPresets();
+    it("should return themes with id, name, description, stackInfo, and brandTone", () => {
+      const themes = getBuiltinThemes();
 
-      presets.forEach((preset) => {
-        expect(preset.id).toBeDefined();
-        expect(typeof preset.id).toBe("string");
-        expect(preset.name).toBeDefined();
-        expect(typeof preset.name).toBe("string");
-        expect(preset.description).toBeDefined();
-        expect(typeof preset.description).toBe("string");
-        expect(preset.stackInfo).toBeDefined();
-        expect(preset.brandTone).toBeDefined();
+      themes.forEach((theme: import("../types.js").ThemeMeta) => {
+        expect(theme.id).toBeDefined();
+        expect(typeof theme.id).toBe("string");
+        expect(theme.name).toBeDefined();
+        expect(typeof theme.name).toBe("string");
+        expect(theme.description).toBeDefined();
+        expect(typeof theme.description).toBe("string");
+        expect(theme.stackInfo).toBeDefined();
+        expect(theme.brandTone).toBeDefined();
       });
     });
   });
 
-  describe("getBuiltinPreset", () => {
+  describe("getBuiltinTheme", () => {
     it("should return full preset data for valid preset ID", () => {
-      const preset = getBuiltinPreset("next-tailwind-shadcn");
+      const theme = getBuiltinTheme("next-tailwind-shadcn");
 
-      expect(preset).not.toBeNull();
-      expect(preset?.id).toBe("next-tailwind-shadcn");
+      expect(theme).not.toBeNull();
+      expect(theme?.id).toBe("next-tailwind-shadcn");
     });
 
     it("should return null for invalid preset ID", () => {
-      const preset = getBuiltinPreset("non-existent-preset");
+      const theme = getBuiltinTheme("non-existent-preset");
 
-      expect(preset).toBeNull();
+      expect(theme).toBeNull();
     });
 
     it("should return preset with complete structure matching ThemeSchema", () => {
-      BUILTIN_PRESET_IDS.forEach((themeId) => {
-        const preset = getBuiltinPreset(themeId);
+      BUILTIN_THEME_IDS.forEach((themeId: string) => {
+        const theme = getBuiltinTheme(themeId);
 
-        expect(preset).not.toBeNull();
-        const result = ThemeSchema.safeParse(preset);
+        expect(theme).not.toBeNull();
+        const result = ThemeSchema.safeParse(theme);
         expect(result.success).toBe(true);
       });
     });
 
     it("should return preset with colorPalette", () => {
-      const preset = getBuiltinPreset("next-tailwind-shadcn");
+      const theme = getBuiltinTheme("next-tailwind-shadcn");
 
-      expect(preset?.colorPalette).toBeDefined();
-      expect(preset?.colorPalette.primary).toBeDefined();
-      expect(preset?.colorPalette.primary.l).toBeGreaterThanOrEqual(0);
-      expect(preset?.colorPalette.primary.l).toBeLessThanOrEqual(1);
+      expect(theme?.colorPalette).toBeDefined();
+      expect(theme?.colorPalette.primary).toBeDefined();
+      expect(theme?.colorPalette.primary.l).toBeGreaterThanOrEqual(0);
+      expect(theme?.colorPalette.primary.l).toBeLessThanOrEqual(1);
     });
 
     it("should return preset with typography", () => {
-      const preset = getBuiltinPreset("next-tailwind-shadcn");
+      const theme = getBuiltinTheme("next-tailwind-shadcn");
 
-      expect(preset?.typography).toBeDefined();
-      expect(preset?.typography.fontScale).toBeDefined();
+      expect(theme?.typography).toBeDefined();
+      expect(theme?.typography.fontScale).toBeDefined();
     });
 
     it("should return preset with componentDefaults", () => {
-      const preset = getBuiltinPreset("next-tailwind-shadcn");
+      const theme = getBuiltinTheme("next-tailwind-shadcn");
 
-      expect(preset?.componentDefaults).toBeDefined();
-      expect(preset?.componentDefaults.borderRadius).toBeDefined();
-      expect(preset?.componentDefaults.density).toBeDefined();
-      expect(preset?.componentDefaults.contrast).toBeDefined();
+      expect(theme?.componentDefaults).toBeDefined();
+      expect(theme?.componentDefaults.borderRadius).toBeDefined();
+      expect(theme?.componentDefaults.density).toBeDefined();
+      expect(theme?.componentDefaults.contrast).toBeDefined();
     });
 
     it("should return preset with aiContext", () => {
-      const preset = getBuiltinPreset("next-tailwind-shadcn");
+      const theme = getBuiltinTheme("next-tailwind-shadcn");
 
-      expect(preset?.aiContext).toBeDefined();
-      expect(preset?.aiContext.brandTone).toBeDefined();
-      expect(preset?.aiContext.designPhilosophy).toBeDefined();
-      expect(preset?.aiContext.colorGuidance).toBeDefined();
-      expect(preset?.aiContext.componentGuidance).toBeDefined();
+      expect(theme?.aiContext).toBeDefined();
+      expect(theme?.aiContext.brandTone).toBeDefined();
+      expect(theme?.aiContext.designPhilosophy).toBeDefined();
+      expect(theme?.aiContext.colorGuidance).toBeDefined();
+      expect(theme?.aiContext.componentGuidance).toBeDefined();
     });
   });
 
-  describe("isValidPresetId", () => {
+  describe("isValidThemeId", () => {
     it("should return true for valid built-in preset IDs", () => {
-      BUILTIN_PRESET_IDS.forEach((themeId) => {
-        expect(isValidPresetId(themeId)).toBe(true);
+      BUILTIN_THEME_IDS.forEach((themeId: string) => {
+        expect(isValidThemeId(themeId)).toBe(true);
       });
     });
 
     it("should return false for invalid preset ID", () => {
-      expect(isValidPresetId("invalid-preset")).toBe(false);
-      expect(isValidPresetId("")).toBe(false);
-      expect(isValidPresetId("next-tailwind")).toBe(false);
+      expect(isValidThemeId("invalid-preset")).toBe(false);
+      expect(isValidThemeId("")).toBe(false);
+      expect(isValidThemeId("next-tailwind")).toBe(false);
     });
   });
 
   describe("Preset Content Validation", () => {
     describe("next-tailwind-shadcn", () => {
       it("should have correct stack info", () => {
-        const preset = getBuiltinPreset("next-tailwind-shadcn");
+        const theme = getBuiltinTheme("next-tailwind-shadcn");
 
-        expect(preset?.stackInfo.framework).toBe("nextjs");
-        expect(preset?.stackInfo.styling).toBe("tailwindcss");
-        expect(preset?.stackInfo.components).toBe("shadcn-ui");
+        expect(theme?.stackInfo.framework).toBe("nextjs");
+        expect(theme?.stackInfo.styling).toBe("tailwindcss");
+        expect(theme?.stackInfo.components).toBe("shadcn-ui");
       });
 
       it("should have professional brand tone", () => {
-        const preset = getBuiltinPreset("next-tailwind-shadcn");
+        const theme = getBuiltinTheme("next-tailwind-shadcn");
 
-        expect(preset?.brandTone).toBe("professional");
+        expect(theme?.brandTone).toBe("professional");
       });
     });
 
     describe("next-tailwind-radix", () => {
       it("should have correct stack info with radix-ui", () => {
-        const preset = getBuiltinPreset("next-tailwind-radix");
+        const theme = getBuiltinTheme("next-tailwind-radix");
 
-        expect(preset?.stackInfo.framework).toBe("nextjs");
-        expect(preset?.stackInfo.styling).toBe("tailwindcss");
-        expect(preset?.stackInfo.components).toBe("radix-ui");
+        expect(theme?.stackInfo.framework).toBe("nextjs");
+        expect(theme?.stackInfo.styling).toBe("tailwindcss");
+        expect(theme?.stackInfo.components).toBe("radix-ui");
       });
     });
 
     describe("vite-tailwind-shadcn", () => {
       it("should have vite framework", () => {
-        const preset = getBuiltinPreset("vite-tailwind-shadcn");
+        const theme = getBuiltinTheme("vite-tailwind-shadcn");
 
-        expect(preset?.stackInfo.framework).toBe("vite");
+        expect(theme?.stackInfo.framework).toBe("vite");
       });
     });
 
     describe("saas-dashboard", () => {
       it("should have professional brand tone", () => {
-        const preset = getBuiltinPreset("saas-dashboard");
+        const theme = getBuiltinTheme("saas-dashboard");
 
-        expect(preset?.brandTone).toBe("professional");
+        expect(theme?.brandTone).toBe("professional");
       });
 
       it("should have compact density for dashboards", () => {
-        const preset = getBuiltinPreset("saas-dashboard");
+        const theme = getBuiltinTheme("saas-dashboard");
 
-        expect(preset?.componentDefaults.density).toBe("compact");
+        expect(theme?.componentDefaults.density).toBe("compact");
       });
     });
 
     describe("tech-startup", () => {
       it("should have creative brand tone", () => {
-        const preset = getBuiltinPreset("tech-startup");
+        const theme = getBuiltinTheme("tech-startup");
 
-        expect(preset?.brandTone).toBe("creative");
+        expect(theme?.brandTone).toBe("creative");
       });
 
       it("should have large border radius for modern aesthetic", () => {
-        const preset = getBuiltinPreset("tech-startup");
+        const theme = getBuiltinTheme("tech-startup");
 
-        expect(preset?.componentDefaults.borderRadius).toBe("large");
+        expect(theme?.componentDefaults.borderRadius).toBe("large");
       });
     });
 
     describe("premium-editorial", () => {
       it("should have elegant brand tone", () => {
-        const preset = getBuiltinPreset("premium-editorial");
+        const theme = getBuiltinTheme("premium-editorial");
 
-        expect(preset?.brandTone).toBe("elegant");
+        expect(theme?.brandTone).toBe("elegant");
       });
 
       it("should have spacious density for editorial content", () => {
-        const preset = getBuiltinPreset("premium-editorial");
+        const theme = getBuiltinTheme("premium-editorial");
 
-        expect(preset?.componentDefaults.density).toBe("spacious");
+        expect(theme?.componentDefaults.density).toBe("spacious");
       });
     });
   });

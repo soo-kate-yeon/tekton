@@ -74,7 +74,7 @@ describe("Config Manager", () => {
 
     it("should have null active preset by default", () => {
       const defaultConfig = getDefaultConfig();
-      expect(defaultConfig.preset.activePresetId).toBeNull();
+      expect(defaultConfig.theme.activeThemeId).toBeNull();
     });
   });
 
@@ -112,8 +112,8 @@ describe("Config Manager", () => {
           frameworkType: "next-app",
           detectedAt: new Date().toISOString(),
         },
-        preset: {
-          activePresetId: "next-tailwind-shadcn",
+        theme: {
+          activeThemeId: "next-tailwind-shadcn",
           selectedAt: new Date().toISOString(),
         },
       };
@@ -123,7 +123,7 @@ describe("Config Manager", () => {
       const config = readConfig(testDir);
       expect(config).not.toBeNull();
       expect(config?.mode).toBe("standalone");
-      expect(config?.preset.activePresetId).toBe("next-tailwind-shadcn");
+      expect(config?.theme.activeThemeId).toBe("next-tailwind-shadcn");
     });
   });
 
@@ -145,8 +145,8 @@ describe("Config Manager", () => {
           frameworkType: "vite",
           detectedAt: new Date().toISOString(),
         },
-        preset: {
-          activePresetId: "vite-tailwind-shadcn",
+        theme: {
+          activeThemeId: "vite-tailwind-shadcn",
           selectedAt: new Date().toISOString(),
         },
       };
@@ -159,7 +159,7 @@ describe("Config Manager", () => {
       const content = readFileSync(configPath, "utf-8");
       const parsed = JSON.parse(content);
       expect(parsed.mode).toBe("standalone");
-      expect(parsed.preset.activePresetId).toBe("vite-tailwind-shadcn");
+      expect(parsed.theme.activeThemeId).toBe("vite-tailwind-shadcn");
     });
 
     it("should overwrite existing config", () => {
@@ -172,8 +172,8 @@ describe("Config Manager", () => {
           frameworkType: "next-app",
           detectedAt: new Date().toISOString(),
         },
-        preset: {
-          activePresetId: "next-tailwind-shadcn",
+        theme: {
+          activeThemeId: "next-tailwind-shadcn",
           selectedAt: new Date().toISOString(),
         },
       };
@@ -184,8 +184,8 @@ describe("Config Manager", () => {
           ...config1.project,
           name: "project-2",
         },
-        preset: {
-          activePresetId: "saas-dashboard",
+        theme: {
+          activeThemeId: "saas-dashboard",
           selectedAt: new Date().toISOString(),
         },
       };
@@ -195,21 +195,21 @@ describe("Config Manager", () => {
 
       const savedConfig = readConfig(testDir);
       expect(savedConfig?.project.name).toBe("project-2");
-      expect(savedConfig?.preset.activePresetId).toBe("saas-dashboard");
+      expect(savedConfig?.theme.activeThemeId).toBe("saas-dashboard");
     });
   });
 
   describe("updateConfig", () => {
     it("should create config with defaults when no config exists", () => {
       const updated = updateConfig(testDir, {
-        preset: {
-          activePresetId: "tech-startup",
+        theme: {
+          activeThemeId: "tech-startup",
           selectedAt: new Date().toISOString(),
         },
       });
 
       expect(updated.mode).toBe("standalone");
-      expect(updated.preset.activePresetId).toBe("tech-startup");
+      expect(updated.theme.activeThemeId).toBe("tech-startup");
     });
 
     it("should preserve existing config values when updating", () => {
@@ -222,8 +222,8 @@ describe("Config Manager", () => {
           frameworkType: "next-pages",
           detectedAt: "2026-01-01T00:00:00Z",
         },
-        preset: {
-          activePresetId: "next-tailwind-shadcn",
+        theme: {
+          activeThemeId: "next-tailwind-shadcn",
           selectedAt: "2026-01-01T00:00:00Z",
         },
       };
@@ -231,8 +231,8 @@ describe("Config Manager", () => {
       writeConfig(testDir, initialConfig);
 
       const updated = updateConfig(testDir, {
-        preset: {
-          activePresetId: "premium-editorial",
+        theme: {
+          activeThemeId: "premium-editorial",
           selectedAt: new Date().toISOString(),
         },
       });
@@ -241,7 +241,7 @@ describe("Config Manager", () => {
       expect(updated.project.name).toBe("existing-project");
       expect(updated.project.frameworkType).toBe("next-pages");
       // Preset should be updated
-      expect(updated.preset.activePresetId).toBe("premium-editorial");
+      expect(updated.theme.activeThemeId).toBe("premium-editorial");
     });
 
     it("should merge nested objects correctly", () => {
@@ -254,8 +254,8 @@ describe("Config Manager", () => {
           frameworkType: "vite",
           detectedAt: "2026-01-01T00:00:00Z",
         },
-        preset: {
-          activePresetId: null,
+        theme: {
+          activeThemeId: null,
           selectedAt: null,
         },
       };
@@ -271,7 +271,7 @@ describe("Config Manager", () => {
       });
 
       expect(updated.project.name).toBe("updated-name");
-      expect(updated.preset.activePresetId).toBeNull();
+      expect(updated.theme.activeThemeId).toBeNull();
     });
 
     it("should return the updated config", () => {
@@ -298,8 +298,8 @@ describe("Config Manager", () => {
           frameworkType: "next-app",
           detectedAt: new Date().toISOString(),
         },
-        preset: {
-          activePresetId: "next-tailwind-shadcn",
+        theme: {
+          activeThemeId: "next-tailwind-shadcn",
           selectedAt: new Date().toISOString(),
         },
       };
@@ -318,8 +318,8 @@ describe("Config Manager", () => {
           frameworkType: "next-app",
           detectedAt: new Date().toISOString(),
         },
-        preset: {
-          activePresetId: null,
+        theme: {
+          activeThemeId: null,
           selectedAt: null,
         },
       };
@@ -338,8 +338,8 @@ describe("Config Manager", () => {
           frameworkType: "unknown",
           detectedAt: new Date().toISOString(),
         },
-        preset: {
-          activePresetId: null,
+        theme: {
+          activeThemeId: null,
           selectedAt: null,
         },
       };
@@ -358,8 +358,8 @@ describe("Config Manager", () => {
           frameworkType: "next-app",
           detectedAt: new Date().toISOString(),
         },
-        preset: {
-          activePresetId: null,
+        theme: {
+          activeThemeId: null,
           selectedAt: null,
         },
       };

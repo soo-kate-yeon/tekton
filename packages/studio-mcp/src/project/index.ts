@@ -14,15 +14,14 @@ export {
 
 export {
   DetectStructureInputSchema,
-  GetActivePresetInputSchema,
-  SetActivePresetInputSchema,
+  GetActiveThemeInputSchema,
+  SetActiveThemeInputSchema,
   FrameworkTypeSchema,
   ProjectStructureSchema,
-  ActivePresetSchema,
+  ActiveThemeSchema,
   type DetectStructureInput,
-  type GetActivePresetInput,
-  type SetActivePresetInput,
+  type GetActiveThemeInput,
+  type SetActiveThemeInput,
   type FrameworkType,
   type ProjectStructure,
-  type ActivePreset,
 } from "./schemas.js";

@@ -212,12 +212,18 @@ export async function renderScreen(
     }
 
     // Step 2: Determine effective theme (priority: options > blueprint > default)
-    const themeId =
+    const effectiveThemeId =
       parsedOptions.themeId || blueprint.themeId || 'calm-wellness';
 
-    // Step 3: Generate code using JSXGenerator with theme context
+    // Update blueprint with effective theme
+    const blueprintWithTheme = {
+      ...blueprint,
+      themeId: effectiveThemeId,
+    };
+
+    // Step 3: Generate code using JSXGenerator
     const generator = new JSXGenerator();
-    const result = await generator.generate(blueprint, { themeId });
+    const result = await generator.generate(blueprintWithTheme);
 
     if (!result.success || !result.code) {
       return {
@@ -244,7 +250,7 @@ export async function renderScreen(
         success: true,
         filePath: finalPath,
         code: result.code,
-        themeApplied: themeId,
+        themeApplied: effectiveThemeId,
       };
     } catch (fileError) {
       return {
