@@ -23,11 +23,11 @@ function GeneratedComponent() {
           placeholder="\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022"
         />
         <Button
-          variant="primary"
-          text="Sign In"
-          fullWidth={true}
-          className="bg-black text-white hover:bg-gray-800 transition-colors uppercase tracking-widest py-3 mt-4"
-        />
+          variant="default"
+          className="w-full bg-black text-white hover:bg-gray-800 transition-colors uppercase tracking-widest py-3 mt-4"
+        >
+          Sign In
+        </Button>
       </Stack>
       <Typography
         variant="body2"
