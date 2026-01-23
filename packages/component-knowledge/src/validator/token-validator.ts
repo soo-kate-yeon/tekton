@@ -11,7 +11,7 @@ import type {
   TokenBindings,
   ComponentKnowledge,
   ValidationResult,
-} from '../types/knowledge.types';
+} from '../types/knowledge.types.js';
 
 /**
  * TokenValidator validates token references against Layer 1 metadata

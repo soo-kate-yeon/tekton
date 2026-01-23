@@ -3,7 +3,7 @@ import {
   ScreenIntent,
   intentContractSchema,
   INTENT_TO_COMPOUND_PATTERNS,
-} from '../intent';
+} from '../intent.js';
 
 describe('Intent Layer', () => {
   describe('ScreenIntent enum', () => {

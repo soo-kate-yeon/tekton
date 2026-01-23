@@ -1,6 +1,6 @@
 import type { OKLCHColor, ComponentTheme } from '@tekton/theme';
-import { oklchToRgb } from './color-conversion';
-import { validateColorPair } from './wcag-validator';
+import { oklchToRgb } from './color-conversion.js';
+import { validateColorPair } from './wcag-validator.js';
 
 /**
  * White background for WCAG validation

@@ -1,6 +1,6 @@
 import { useState, useCallback, KeyboardEvent } from "react";
-import { useUniqueId } from "../utils/id";
-import { isKeyboardKey } from "../utils/keyboard";
+import { useUniqueId } from "../utils/id.js";
+import { isKeyboardKey } from "../utils/keyboard.js";
 
 /**
  * Menu item

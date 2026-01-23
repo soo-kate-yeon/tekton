@@ -3,14 +3,14 @@
  * SPEC-LAYER3-001 Phase 1
  */
 
-import type { SlotType } from '../types/slot-types';
+import type { SlotType } from '../types/slot-types.js';
 import type {
   ValidationResult,
   ValidationError,
   SlotValidationOptions,
-} from '../types/validation-types';
-import type { GlobalSlotRegistry } from '../registry/global-slot-registry';
-import type { LocalSlotRegistry } from '../registry/local-slot-registry';
+} from '../types/validation-types.js';
+import type { GlobalSlotRegistry } from '../registry/global-slot-registry.js';
+import type { LocalSlotRegistry } from '../registry/local-slot-registry.js';
 
 /**
  * Validator for slot constraints

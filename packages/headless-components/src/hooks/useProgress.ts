@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { useUniqueId } from "../utils/id";
+import { useUniqueId } from "../utils/id.js";
 
 /**
  * Props for the useProgress hook

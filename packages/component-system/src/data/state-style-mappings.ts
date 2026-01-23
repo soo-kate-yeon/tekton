@@ -3,8 +3,8 @@
  * @description State-to-style mapping rules for all 20 headless hooks
  */
 
-import type { StateStyleMapping } from '../schemas/state-style-mapping';
-import stateStyleMappingsRaw from './state-style-mapping.json' assert { type: 'json' };
+import type { StateStyleMapping } from '../schemas/state-style-mapping.js';
+import stateStyleMappingsRaw from './state-style-mapping.json' with { type: 'json' };
 
 /**
  * State-style mappings data for all 20 hooks

@@ -1,5 +1,5 @@
 import { useState, useCallback, ChangeEvent, FocusEvent } from "react";
-import { useUniqueId } from "../utils/id";
+import { useUniqueId } from "../utils/id.js";
 
 /**
  * Props for the useInput hook

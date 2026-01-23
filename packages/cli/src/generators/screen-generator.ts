@@ -121,7 +121,7 @@ function generatePageTemplate(options: ScreenGenerationOptions): string {
   const { name, environment, intent, components } = options;
 
   const componentImports = components.length > 0
-    ? `import { ${components.join(', ')} } from './components';\n`
+    ? `import { ${components.join(', ')} } from './components.js';\n`
     : '';
 
   const intentPattern = INTENT_CONTENT_PATTERNS[intent] || INTENT_CONTENT_PATTERNS['dashboard'];
@@ -320,7 +320,7 @@ function generateComponentsIndex(components: string[]): string {
   }
 
   const exports = components
-    .map((component) => `export { ${component} } from './${component}';`)
+    .map((component) => `export { ${component} } from './${component}.js';`)
     .join('\n');
 
   return `${exports}\n`;

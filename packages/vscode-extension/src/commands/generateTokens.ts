@@ -2,7 +2,7 @@ import * as vscode from 'vscode';
 import {
   isCLIInstalled,
   showCLINotInstalledError,
-} from '../utils/cliRunner';
+} from '../utils/cliRunner.js';
 
 /**
  * Command: Generate Design Tokens

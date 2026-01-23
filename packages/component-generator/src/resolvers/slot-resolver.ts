@@ -9,9 +9,9 @@ import type {
   SlotScope,
   SlotRole,
   SlotDefinition,
-} from '../types/slot-types';
-import type { GlobalSlotRegistry } from '../registry/global-slot-registry';
-import type { LocalSlotRegistry } from '../registry/local-slot-registry';
+} from '../types/slot-types.js';
+import type { GlobalSlotRegistry } from '../registry/global-slot-registry.js';
+import type { LocalSlotRegistry } from '../registry/local-slot-registry.js';
 
 /**
  * Resolver for slot definitions across global and local registries

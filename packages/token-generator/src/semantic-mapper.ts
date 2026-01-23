@@ -1,5 +1,5 @@
 import type { OKLCHColor } from '@tekton/theme';
-import { generateNeutralPalette } from './neutral-palette';
+import { generateNeutralPalette } from './neutral-palette.js';
 
 /**
  * Semantic token configuration

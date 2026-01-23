@@ -3,8 +3,8 @@
  * @description Variant branching rules for all 20 headless hooks
  */
 
-import type { VariantBranching } from '../schemas/variant-branching';
-import variantBranchingRaw from './variant-branching.json' assert { type: 'json' };
+import type { VariantBranching } from '../schemas/variant-branching.js';
+import variantBranchingRaw from './variant-branching.json' with { type: 'json' };
 
 /**
  * Variant branching data for all 20 hooks

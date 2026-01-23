@@ -4,7 +4,7 @@
  */
 
 import * as t from '@babel/types';
-import type { ComponentBlueprint, SlotMapping } from '../types/knowledge-types';
+import type { ComponentBlueprint, SlotMapping } from '../types/knowledge-types.js';
 
 /**
  * Import information for a component

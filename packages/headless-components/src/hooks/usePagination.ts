@@ -1,6 +1,6 @@
 import { useState, useCallback, useMemo } from "react";
-import type { AriaAttributes } from "../types";
-import { generateAriaProps } from "../utils/aria";
+import type { AriaAttributes } from "../types/index.js";
+import { generateAriaProps } from "../utils/aria.js";
 
 /**
  * Props for the usePagination hook

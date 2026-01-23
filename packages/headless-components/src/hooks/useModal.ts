@@ -1,7 +1,7 @@
 import { useState, useCallback, KeyboardEvent, useEffect, useRef } from "react";
-import type { AriaAttributes } from "../types";
-import { useUniqueId } from "../utils/id";
-import { isKeyboardKey } from "../utils/keyboard";
+import type { AriaAttributes } from "../types/index.js";
+import { useUniqueId } from "../utils/id.js";
+import { isKeyboardKey } from "../utils/keyboard.js";
 
 /**
  * Props for the useModal hook

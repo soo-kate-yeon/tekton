@@ -1,8 +1,8 @@
 import { useState, useCallback, KeyboardEvent, useMemo } from "react";
-import type { AriaAttributes } from "../types";
-import { generateAriaProps } from "../utils/aria";
-import { createKeyboardHandler } from "../utils/keyboard";
-import { useUniqueId } from "../utils/id";
+import type { AriaAttributes } from "../types/index.js";
+import { generateAriaProps } from "../utils/aria.js";
+import { createKeyboardHandler } from "../utils/keyboard.js";
+import { useUniqueId } from "../utils/id.js";
 
 /**
  * Option in a select dropdown

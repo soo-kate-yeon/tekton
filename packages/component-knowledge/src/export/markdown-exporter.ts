@@ -6,7 +6,7 @@
  * REQ-LAYER2-009: Generate both JSON and Markdown formats
  */
 
-import type { ComponentKnowledge } from '../types/knowledge.types';
+import type { ComponentKnowledge } from '../types/knowledge.types.js';
 
 /**
  * MarkdownExporter exports component catalog as Markdown documentation

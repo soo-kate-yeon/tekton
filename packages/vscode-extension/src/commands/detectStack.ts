@@ -4,7 +4,7 @@ import {
   displayOutput,
   isCLIInstalled,
   showCLINotInstalledError,
-} from '../utils/cliRunner';
+} from '../utils/cliRunner.js';
 
 /**
  * Command: Detect Framework Stack

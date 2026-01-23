@@ -3,8 +3,8 @@
  * @description Hook prop mapping rules for all 20 headless hooks
  */
 
-import type { HookPropRule } from '../schemas/hook-prop-rule';
-import hookPropRulesRaw from './hook-prop-rules.json' assert { type: 'json' };
+import type { HookPropRule } from '../schemas/hook-prop-rule.js';
+import hookPropRulesRaw from './hook-prop-rules.json' with { type: 'json' };
 
 /**
  * Hook prop rules data for all 20 hooks

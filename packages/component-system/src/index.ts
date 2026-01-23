@@ -3,5 +3,5 @@
  * Hook Archetype Integration System for AI-driven component generation
  */
 
-export * from './schemas';
-export * from './validators';
+export * from './schemas/index.js';
+export * from './validators/index.js';

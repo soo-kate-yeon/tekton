@@ -1,4 +1,4 @@
-import type { AriaRole } from "../types";
+import type { AriaRole } from "../types/index.js";
 
 /**
  * ARIA props configuration

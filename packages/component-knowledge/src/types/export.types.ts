@@ -5,7 +5,7 @@
  * Types for export formats (JSON, Markdown) and Layer 3 integration
  */
 
-import type { ComponentKnowledge, ComponentState } from './knowledge.types';
+import type { ComponentKnowledge, ComponentState } from './knowledge.types.js';
 import type { z } from 'zod';
 
 /**

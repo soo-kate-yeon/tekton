@@ -9,8 +9,8 @@ import type {
   ComponentKnowledge,
   ComponentState,
   ValidationResult,
-} from '../types/knowledge.types';
-import { validateSlotAffinity, validateConstraints } from './constraint-validator';
+} from '../types/knowledge.types.js';
+import { validateSlotAffinity, validateConstraints } from './constraint-validator.js';
 
 /**
  * Required states that must be present in all ComponentKnowledge entries

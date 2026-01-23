@@ -4,7 +4,7 @@ import {
   environmentContractSchema,
   GridSystem,
   LayoutBehavior,
-} from '../environment';
+} from '../environment.js';
 
 describe('Environment Layer', () => {
   describe('Environment enum', () => {

@@ -14,28 +14,28 @@ export type {
   SlotConstraints,
   GlobalSlotType,
   LocalSlotType,
-} from "./types/slot-types";
+} from "./types/slot-types.js";
 
 export type {
   ValidationError,
   ValidationResult,
   SlotValidationOptions,
-} from "./types/validation-types";
+} from "./types/validation-types.js";
 
 // Registry exports
-export { GlobalSlotRegistry } from "./registry/global-slot-registry";
-export { LocalSlotRegistry } from "./registry/local-slot-registry";
+export { GlobalSlotRegistry } from "./registry/global-slot-registry.js";
+export { LocalSlotRegistry } from "./registry/local-slot-registry.js";
 
 // Validator exports
-export { SlotValidator } from "./validators/slot-validator";
-export { ComponentValidator } from "./validators/component-validator";
+export { SlotValidator } from "./validators/slot-validator.js";
+export { ComponentValidator } from "./validators/component-validator.js";
 export type {
   ValidationError as ComponentValidationError,
   ValidationResult as ComponentValidationResult,
-} from "./validators/component-validator";
+} from "./validators/component-validator.js";
 
 // Resolver exports
-export { SlotResolver } from "./resolvers/slot-resolver";
+export { SlotResolver } from "./resolvers/slot-resolver.js";
 
 // Safety exports
 export type {
@@ -46,15 +46,15 @@ export type {
   FallbackMetadata,
   SlotRole as SafetySlotRole,
   LevenshteinOptions,
-} from "./safety/safety.types";
+} from "./safety/safety.types.js";
 
 export {
   SCORE_THRESHOLD,
   SAFETY_ERROR_CODES,
   FALLBACK_COMPONENTS,
-} from "./safety/safety.types";
+} from "./safety/safety.types.js";
 
-export { ThresholdChecker } from "./safety/threshold-check";
+export { ThresholdChecker } from "./safety/threshold-check.js";
 
 // Knowledge Schema exports (TASK-001)
 export type {
@@ -66,20 +66,20 @@ export type {
   PropMapping,
   ComponentBlueprint,
   KnowledgeSchema,
-} from "./types/knowledge-types";
+} from "./types/knowledge-types.js";
 
 // Safety exports (M1-TASK-002)
-export { HallucinationChecker } from "./safety/hallucination-check";
+export { HallucinationChecker } from "./safety/hallucination-check.js";
 
 // Generator exports (TASK-003 to TASK-006 + M1-TASK-006)
-export { ASTImportGenerator } from "./generators/ast-import-generator";
-export { ASTJSXGenerator } from "./generators/ast-jsx-generator";
-export { ASTBuilder } from "./generators/ast-builder";
-export { JSXGenerator as LegacyJSXGenerator } from "./generators/jsx-generator";
-export { JSXGenerator } from "./generator/jsx-generator";
-export type { ImportInfo } from "./generators/ast-import-generator";
-export type { PrettierOptions } from "./generators/jsx-generator";
-export type { GenerationResult } from "./generator/jsx-generator";
+export { ASTImportGenerator } from "./generators/ast-import-generator.js";
+export { ASTJSXGenerator } from "./generators/ast-jsx-generator.js";
+export { ASTBuilder } from "./generators/ast-builder.js";
+export { JSXGenerator as LegacyJSXGenerator } from "./generators/jsx-generator.js";
+export { JSXGenerator } from "./generator/jsx-generator.js";
+export type { ImportInfo } from "./generators/ast-import-generator.js";
+export type { PrettierOptions } from "./generators/jsx-generator.js";
+export type { GenerationResult } from "./generator/jsx-generator.js";
 
 // Knowledge Schema exports (Layer 3)
 export type {
@@ -88,12 +88,12 @@ export type {
   BlueprintResult,
   BlueprintResultV2,
   Environment,
-} from "./types/knowledge-schema";
+} from "./types/knowledge-schema.js";
 export {
   BlueprintResultSchema,
   blueprintResultV2Schema,
   environmentValues,
-} from "./types/knowledge-schema";
+} from "./types/knowledge-schema.js";
 
 // Layout Schema exports (SPEC-LAYOUT-001)
 export type {
@@ -103,16 +103,16 @@ export type {
   GridBreakpointKey,
   GridConfig,
   GapConfig,
-} from "./types/layout-schema";
+} from "./types/layout-schema.js";
 export {
   blueprintLayoutSchema,
   containerValues,
   maxWidthValues,
   gridBreakpointKeys,
-} from "./types/layout-schema";
+} from "./types/layout-schema.js";
 
 // Class merge utilities (SPEC-LAYOUT-001 TASK-010)
-export { mergeClasses, mergeLayoutClasses } from "./utils/class-merge";
+export { mergeClasses, mergeLayoutClasses } from "./utils/class-merge.js";
 
 // Responsive class generator utilities (SPEC-LAYOUT-001 TASK-011)
 export {
@@ -120,4 +120,4 @@ export {
   generateResponsiveGridClasses,
   generateResponsivePaddingClasses,
   generateResponsiveGapClasses,
-} from "./utils/responsive-class-generator";
+} from "./utils/responsive-class-generator.js";

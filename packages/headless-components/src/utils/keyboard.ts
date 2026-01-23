@@ -1,4 +1,4 @@
-import type { KeyboardKey } from "../types";
+import type { KeyboardKey } from "../types/index.js";
 
 /**
  * Check if keyboard event matches a specific key or array of keys

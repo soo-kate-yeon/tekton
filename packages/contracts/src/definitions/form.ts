@@ -1,4 +1,4 @@
-import { type ComponentContract } from '../types';
+import { type ComponentContract } from '../types.js';
 
 /**
  * Form Component Contract

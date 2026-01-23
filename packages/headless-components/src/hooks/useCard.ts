@@ -1,7 +1,7 @@
 import { useState, useCallback, KeyboardEvent } from "react";
-import type { AriaAttributes } from "../types";
-import { handleKeyboardEvent } from "../utils/keyboard";
-import { useUniqueId } from "../utils/id";
+import type { AriaAttributes } from "../types/index.js";
+import { handleKeyboardEvent } from "../utils/keyboard.js";
+import { useUniqueId } from "../utils/id.js";
 
 /**
  * Props for the useCard hook

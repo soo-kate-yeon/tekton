@@ -9,7 +9,7 @@ import type {
   SlotAffinity,
   ComponentConstraints,
   ValidationResult,
-} from '../types/knowledge.types';
+} from '../types/knowledge.types.js';
 
 /**
  * Validates slot affinity values are within valid range (0.0 - 1.0)

@@ -5,7 +5,7 @@
  * @module validators/state-mapping-validator
  */
 
-import type { StateStyleMapping } from '../schemas/state-style-mapping';
+import type { StateStyleMapping } from '../schemas/state-style-mapping.js';
 
 /**
  * Validation result

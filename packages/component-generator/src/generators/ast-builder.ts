@@ -4,9 +4,9 @@
  */
 
 import * as t from '@babel/types';
-import { ASTImportGenerator } from './ast-import-generator';
-import { ASTJSXGenerator } from './ast-jsx-generator';
-import type { ComponentBlueprint } from '../types/knowledge-types';
+import { ASTImportGenerator } from './ast-import-generator.js';
+import { ASTJSXGenerator } from './ast-jsx-generator.js';
+import type { ComponentBlueprint } from '../types/knowledge-types.js';
 
 /**
  * Builds complete component AST from blueprint

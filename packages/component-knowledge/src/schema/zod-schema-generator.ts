@@ -7,7 +7,7 @@
  */
 
 import { z } from 'zod';
-import type { ComponentKnowledge } from '../types/knowledge.types';
+import type { ComponentKnowledge } from '../types/knowledge.types.js';
 
 /**
  * ZodSchemaGenerator generates Zod schemas from ComponentKnowledge

@@ -5,7 +5,7 @@
  * @module validators/hook-prop-validator
  */
 
-import type { HookPropRule } from '../schemas/hook-prop-rule';
+import type { HookPropRule } from '../schemas/hook-prop-rule.js';
 
 /**
  * Validation result

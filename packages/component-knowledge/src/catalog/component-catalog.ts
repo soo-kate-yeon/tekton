@@ -5,7 +5,7 @@
  * Complete catalog of 20 core components with ComponentKnowledge metadata
  */
 
-import type { ComponentKnowledge } from '../types/knowledge.types';
+import type { ComponentKnowledge } from '../types/knowledge.types.js';
 
 /**
  * Component Catalog - All 20 core components

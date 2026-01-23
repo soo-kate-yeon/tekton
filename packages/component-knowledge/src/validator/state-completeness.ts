@@ -11,7 +11,7 @@ import type {
   ComponentKnowledge,
   ComponentState,
   ValidationResult,
-} from '../types/knowledge.types';
+} from '../types/knowledge.types.js';
 
 /**
  * Required states that must be present in all ComponentKnowledge entries

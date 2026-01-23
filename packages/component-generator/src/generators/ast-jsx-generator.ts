@@ -4,7 +4,7 @@
  */
 
 import * as t from '@babel/types';
-import type { ComponentBlueprint, SlotMapping, PropMapping } from '../types/knowledge-types';
+import type { ComponentBlueprint, SlotMapping, PropMapping } from '../types/knowledge-types.js';
 
 /**
  * Generates Babel AST nodes for JSX elements

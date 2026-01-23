@@ -4,8 +4,8 @@
  * SPEC-LAYER3-MVP-001 M1-TASK-002
  */
 
-import { HallucinationChecker } from '../safety/hallucination-check';
-import type { HallucinationCheckResult } from '../safety/safety.types';
+import { HallucinationChecker } from '../safety/hallucination-check.js';
+import type { HallucinationCheckResult } from '../safety/safety.types.js';
 
 /**
  * Validates component names against the component catalog

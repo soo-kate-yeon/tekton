@@ -1,6 +1,6 @@
 import { useCallback } from "react";
-import type { AriaAttributes } from "../types";
-import { useUniqueId } from "../utils/id";
+import type { AriaAttributes } from "../types/index.js";
+import { useUniqueId } from "../utils/id.js";
 
 /**
  * Alert variant

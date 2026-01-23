@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest';
 import {
   SkeletonPreset,
   skeletonContractSchema,
-} from '../skeleton';
+} from '../skeleton.js';
 
 describe('Skeleton Layer', () => {
   describe('SkeletonPreset enum', () => {

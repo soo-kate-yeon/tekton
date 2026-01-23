@@ -6,7 +6,7 @@
  */
 
 import type { StructureTemplate } from '../schemas/structure-template.js';
-import structureTemplatesRaw from './structure-templates.json' assert { type: 'json' };
+import structureTemplatesRaw from './structure-templates.json' with { type: 'json' };
 
 /**
  * Structure templates data for all 20 hooks

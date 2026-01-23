@@ -3,7 +3,7 @@
  * @description Validation logic for variant branching rules
  */
 
-import type { VariantBranching } from '../schemas/variant-branching';
+import type { VariantBranching } from '../schemas/variant-branching.js';
 
 /**
  * Validation result for variant branching rules

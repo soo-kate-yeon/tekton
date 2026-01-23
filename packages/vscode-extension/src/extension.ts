@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
-import { detectStack } from './commands/detectStack';
-import { setupShadcn } from './commands/setupShadcn';
-import { generateTokens } from './commands/generateTokens';
+import { detectStack } from './commands/detectStack.js';
+import { setupShadcn } from './commands/setupShadcn.js';
+import { generateTokens } from './commands/generateTokens.js';
 
 /**
  * Extension activation

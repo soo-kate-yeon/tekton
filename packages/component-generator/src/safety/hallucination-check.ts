@@ -12,7 +12,7 @@ import {
 import {
   SAFETY_ERROR_CODES,
   type HallucinationCheckResult,
-} from "./safety.types";
+} from "./safety.types.js";
 
 /**
  * HallucinationChecker - Validates component existence in catalog
@@ -79,7 +79,7 @@ export class HallucinationChecker {
    * @returns Array of suggested component names
    */
   getSuggestions(componentName: string, maxSuggestions: number = 3): string[] {
-    const allComponents = COMPONENT_CATALOG.map((c) => c.name);
+    const allComponents = COMPONENT_CATALOG.map((c: { name: string }) => c.name);
     const distances: Array<{ name: string; distance: number }> = [];
 
     for (const name of allComponents) {
@@ -132,7 +132,7 @@ export class HallucinationChecker {
    * @returns Array of all component names
    */
   private getAllComponentNames(): string[] {
-    return COMPONENT_CATALOG.map((c) => c.name);
+    return COMPONENT_CATALOG.map((c: { name: string }) => c.name);
   }
 
   /**

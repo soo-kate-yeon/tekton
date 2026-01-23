@@ -7,7 +7,7 @@
  * REQ-LAYER2-013: No hardcoded token values
  */
 
-import type { ComponentKnowledge, TokenBindings } from '../types/knowledge.types';
+import type { ComponentKnowledge, TokenBindings } from '../types/knowledge.types.js';
 
 /**
  * VanillaExtractGenerator creates Vanilla Extract style recipes

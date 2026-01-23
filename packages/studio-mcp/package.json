@@ -30,8 +30,8 @@
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage --coverage.reporter=html --coverage.reporter=text --coverage.reporter=json",
     "build": "tsc",
-    "dev": "tsc && nodemon --watch src --ext ts --exec 'tsc && node ./dist/server/index.js'",
-    "start": "node ./dist/server/index.js",
+    "dev": "tsx watch src/server/index.ts",
+    "start": "tsx src/server/index.ts",
     "lint": "eslint src --ext .ts",
     "format": "prettier --write \"src/**/*.ts\" \"tests/**/*.ts\"",
     "prepublishOnly": "pnpm run build"

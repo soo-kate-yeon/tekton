@@ -20,17 +20,17 @@ export type {
   StateTokenBindings,
   ValidationResult,
   Layer1TokenMetadata,
-} from './types/knowledge.types';
+} from './types/knowledge.types.js';
 
 // Validator exports
 export {
   validateComponentKnowledge,
   validateSlotAffinity,
   validateConstraints,
-} from './catalog/component-knowledge';
+} from './catalog/component-knowledge.js';
 
-export { TokenValidator } from './validator/token-validator';
-export { StateCompletenessChecker } from './validator/state-completeness';
+export { TokenValidator } from './validator/token-validator.js';
+export { StateCompletenessChecker } from './validator/state-completeness.js';
 
 // Catalog exports
 export {
@@ -39,16 +39,16 @@ export {
   getAllComponents,
   getComponentsByType,
   getComponentsByCategory,
-} from './catalog/component-catalog';
+} from './catalog/component-catalog.js';
 
 // Schema and CSS-in-JS exports
-export { ZodSchemaGenerator } from './schema/zod-schema-generator';
-export { VanillaExtractGenerator } from './css-in-js/vanilla-extract-generator';
+export { ZodSchemaGenerator } from './schema/zod-schema-generator.js';
+export { VanillaExtractGenerator } from './css-in-js/vanilla-extract-generator.js';
 
 // Export utilities
-export { JSONExporter } from './export/json-exporter';
-export { MarkdownExporter } from './export/markdown-exporter';
-export { Layer3RegistryBuilder } from './export/registry-builder';
+export { JSONExporter } from './export/json-exporter.js';
+export { MarkdownExporter } from './export/markdown-exporter.js';
+export { Layer3RegistryBuilder } from './export/registry-builder.js';
 
 // Export types
-export type { JSONExportFormat, Layer2Output } from './types/export.types';
+export type { JSONExportFormat, Layer2Output } from './types/export.types.js';

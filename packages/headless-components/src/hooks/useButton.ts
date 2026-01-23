@@ -1,7 +1,7 @@
 import { useState, useCallback } from "react";
-import type { KeyboardHandler, ClickHandler } from "../types";
-import { generateAriaProps } from "../utils/aria";
-import { handleKeyboardEvent } from "../utils/keyboard";
+import type { KeyboardHandler, ClickHandler } from "../types/index.js";
+import { generateAriaProps } from "../utils/aria.js";
+import { handleKeyboardEvent } from "../utils/keyboard.js";
 
 export interface UseButtonProps {
   /** Whether the button is disabled */

@@ -3,10 +3,11 @@
  * TASK-006: Generate formatted JSX code from blueprints using Prettier
  */
 
-import generate from '@babel/generator';
+import generateDefault from '@babel/generator';
+const generate = generateDefault.default || generateDefault;
 import prettier from 'prettier';
-import { ASTBuilder } from './ast-builder';
-import type { ComponentBlueprint } from '../types/knowledge-types';
+import { ASTBuilder } from './ast-builder.js';
+import type { ComponentBlueprint } from '../types/knowledge-types.js';
 
 /**
  * Prettier formatting options

@@ -6,11 +6,11 @@
  * Integrates Zod schemas and CSS-in-JS bindings
  */
 
-import type { ComponentKnowledge, ComponentState } from '../types/knowledge.types';
-import type { Layer2Output } from '../types/export.types';
-import { ZodSchemaGenerator } from '../schema/zod-schema-generator';
-import { VanillaExtractGenerator } from '../css-in-js/vanilla-extract-generator';
-import { TokenValidator } from '../validator/token-validator';
+import type { ComponentKnowledge, ComponentState } from '../types/knowledge.types.js';
+import type { Layer2Output } from '../types/export.types.js';
+import { ZodSchemaGenerator } from '../schema/zod-schema-generator.js';
+import { VanillaExtractGenerator } from '../css-in-js/vanilla-extract-generator.js';
+import { TokenValidator } from '../validator/token-validator.js';
 
 /**
  * Layer3RegistryBuilder creates Layer 3 output format

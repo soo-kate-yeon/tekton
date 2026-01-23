@@ -16,7 +16,7 @@
 
 import { readFileSync } from 'fs';
 import { resolve } from 'path';
-import type { ThemeConfig, ResolvedTokens, OKLCHColor } from '../types/theme-types';
+import type { ThemeConfig, ResolvedTokens, OKLCHColor } from '../types/theme-types.js';
 
 /**
  * Default theme to use when theme is not found

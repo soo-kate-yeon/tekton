@@ -1,5 +1,5 @@
 import type { OKLCHColor } from '@tekton/theme';
-import type { SemanticTokens } from './semantic-mapper';
+import type { SemanticTokens } from './semantic-mapper.js';
 import { oklchToHex } from './color-conversion.js';
 
 /**

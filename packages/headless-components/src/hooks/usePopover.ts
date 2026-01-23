@@ -1,6 +1,6 @@
 import { useState, useCallback, KeyboardEvent } from "react";
-import { isKeyboardKey } from "../utils/keyboard";
-import { useUniqueId } from "../utils/id";
+import { isKeyboardKey } from "../utils/keyboard.js";
+import { useUniqueId } from "../utils/id.js";
 
 /**
  * Props for the usePopover hook

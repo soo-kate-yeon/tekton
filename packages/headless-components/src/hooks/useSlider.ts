@@ -1,7 +1,7 @@
 import { useState, useCallback, KeyboardEvent } from "react";
-import type { AriaAttributes } from "../types";
-import { generateAriaProps } from "../utils/aria";
-import { useUniqueId } from "../utils/id";
+import type { AriaAttributes } from "../types/index.js";
+import { generateAriaProps } from "../utils/aria.js";
+import { useUniqueId } from "../utils/id.js";
 
 /**
  * Props for the useSlider hook

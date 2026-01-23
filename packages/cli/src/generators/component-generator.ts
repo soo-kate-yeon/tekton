@@ -67,7 +67,7 @@ export function generateBarrelExport(componentNames: string[]): string {
   lines.push('');
 
   for (const name of componentNames) {
-    lines.push(`export { ${name} } from './${name}';`);
+    lines.push(`export { ${name} } from './${name}.js';`);
   }
 
   lines.push('');

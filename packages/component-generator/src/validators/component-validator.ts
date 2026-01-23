@@ -9,7 +9,7 @@ import type {
   KnowledgeSchema,
   SlotMapping,
   PropMapping,
-} from '../types/knowledge-types';
+} from '../types/knowledge-types.js';
 
 /**
  * Validation error types

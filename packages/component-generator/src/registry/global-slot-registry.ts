@@ -9,7 +9,7 @@ import type {
   SlotDefinition,
   SlotRole,
   SlotConstraints,
-} from '../types/slot-types';
+} from '../types/slot-types.js';
 
 /**
  * Registry for global application-level slots

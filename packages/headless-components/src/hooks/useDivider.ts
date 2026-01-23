@@ -1,4 +1,4 @@
-import { useUniqueId } from "../utils/id";
+import { useUniqueId } from "../utils/id.js";
 
 /**
  * Props for the useDivider hook

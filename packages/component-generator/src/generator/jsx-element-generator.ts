@@ -7,8 +7,8 @@
  */
 
 import * as t from '@babel/types';
-import type { ComponentNode } from '../types/knowledge-schema';
-import type { BuildContext } from '../types/theme-types';
+import type { ComponentNode } from '../types/knowledge-schema.js';
+import type { BuildContext } from '../types/theme-types.js';
 
 // Re-export BuildContext for convenience
 export type { BuildContext };
