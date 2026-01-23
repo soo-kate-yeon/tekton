@@ -163,7 +163,7 @@ export class SemanticScorer {
       this.hasConflictWithSiblings(conflictsWith, context.siblingComponents)
     ) {
       score += CONTEXT_PENALTIES.CONFLICT_WITH_SIBLING;
-      const conflictingComponents = conflictsWith.filter((c) =>
+      const conflictingComponents = conflictsWith.filter((c: string) =>
         context.siblingComponents.includes(c),
       );
       reasons.push(

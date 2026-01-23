@@ -1,4 +1,4 @@
-import type { ExtendedTokenPreset, BrandLevel } from '@tekton/theme';
+import type { ExtendedTokenTheme, BrandLevel } from '@tekton/theme';
 
 /**
  * OKLCH color type
@@ -97,7 +97,7 @@ export interface TypographyTokens {
  * Complete design tokens including colors and additional scales
  */
 export interface CompleteDesignTokens {
-  colors: ExtendedTokenPreset;
+  colors: ExtendedTokenTheme;
   spacing: SpacingTokens;
   radius: RadiusTokens;
   shadow: ShadowTokens;
@@ -108,7 +108,7 @@ export interface CompleteDesignTokens {
  * Token injection options
  */
 export interface TokenInjectionOptions {
-  tokens: ExtendedTokenPreset;
+  tokens: ExtendedTokenTheme;
   platform: 'web' | 'react-native';
   outputFormat: 'tailwind' | 'stylesheet' | 'css';
 }
@@ -126,7 +126,7 @@ export interface TokenInjectionResult {
 /**
  * Generate Tailwind CSS tokens
  */
-export function generateTailwindTokens(tokens: ExtendedTokenPreset): string {
+export function generateTailwindTokens(tokens: ExtendedTokenTheme): string {
   const lines: string[] = [];
 
   lines.push(':root {');
@@ -175,7 +175,7 @@ export function generateTailwindTokens(tokens: ExtendedTokenPreset): string {
 /**
  * Generate React Native StyleSheet tokens
  */
-export function generateStyleSheetTokens(tokens: ExtendedTokenPreset): string {
+export function generateStyleSheetTokens(tokens: ExtendedTokenTheme): string {
   const lines: string[] = [];
 
   lines.push("import { StyleSheet } from 'react-native';");
@@ -339,7 +339,7 @@ export const DEFAULT_TYPOGRAPHY: TypographyTokens = {
 /**
  * Default color tokens for offline/fallback mode
  */
-export const DEFAULT_COLOR_TOKENS: ExtendedTokenPreset = {
+export const DEFAULT_COLOR_TOKENS: ExtendedTokenTheme = {
   brand: {
     primary: {
       base: { l: 0.55, c: 0.2, h: 250 },
@@ -401,7 +401,7 @@ export function getDefaultTokens(): CompleteDesignTokens {
  * @param options - Optional configuration overrides
  */
 export function generateCompleteTokensCSS(
-  tokens?: ExtendedTokenPreset,
+  tokens?: ExtendedTokenTheme,
   options?: {
     spacing?: SpacingTokens;
     radius?: RadiusTokens;

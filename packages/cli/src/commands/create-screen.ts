@@ -355,7 +355,7 @@ export async function createScreen(options: CreateScreenOptions): Promise<Create
       }
 
       // Extract tokens from theme config if available
-      const tokens = themeTokens?.tokens as import('@tekton/theme').ExtendedTokenPreset | undefined;
+      const tokens = themeTokens?.tokens as import('@tekton/theme').ExtendedTokenTheme | undefined;
 
       const generationResult = await generateScreenFiles({
         name: options.name,
