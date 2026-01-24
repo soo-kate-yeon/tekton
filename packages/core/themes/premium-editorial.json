@@ -10,17 +10,17 @@
   "brandTone": "elegant",
   "colorPalette": {
     "primary": {
-      "l": 0.20,
-      "c": 0.00,
+      "l": 0.2,
+      "c": 0.0,
       "h": 0
     },
     "secondary": {
       "l": 0.98,
-      "c": 0.00,
+      "c": 0.0,
       "h": 0
     },
     "accent": {
-      "l": 0.50,
+      "l": 0.5,
       "c": 0.05,
       "h": 220
     },

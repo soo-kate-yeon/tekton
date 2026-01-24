@@ -29,11 +29,14 @@ const blueprint = createBlueprint({
   layout: 'dashboard',
   components: [
     { type: 'Heading', props: { level: 1 }, children: ['Welcome'] },
-    { type: 'Card', children: [
-      { type: 'Text', children: ['Your stats here'] },
-      { type: 'Button', props: { variant: 'primary' }, children: ['View More'] }
-    ]}
-  ]
+    {
+      type: 'Card',
+      children: [
+        { type: 'Text', children: ['Your stats here'] },
+        { type: 'Button', props: { variant: 'primary' }, children: ['View More'] },
+      ],
+    },
+  ],
 });
 
 // 3. Render to JSX
@@ -71,7 +74,7 @@ const blueprint = createBlueprint({
   description: 'Optional description',
   themeId: 'calm-wellness',
   layout: 'single-column', // or 'two-column', 'sidebar-left', 'dashboard', 'landing'
-  components: [{ type: 'Button', children: ['Click'] }]
+  components: [{ type: 'Button', children: ['Click'] }],
 });
 
 // Validate blueprint
@@ -103,9 +106,9 @@ const resultWithTheme = renderWithTheme(blueprint);
 
 // Render options
 const result = render(blueprint, {
-  typescript: true,  // Generate TypeScript (default: true)
-  indent: 2,         // Indentation spaces (default: 2)
-  semicolons: true   // Include semicolons (default: true)
+  typescript: true, // Generate TypeScript (default: true)
+  indent: 2, // Indentation spaces (default: 2)
+  semicolons: true, // Include semicolons (default: true)
 });
 
 // Quick render single component
@@ -114,20 +117,20 @@ const jsx = renderSingleComponent({ type: 'Button', children: ['Click'] });
 // Render multiple components without layout
 const jsx = renderComponents([
   { type: 'Heading', children: ['Title'] },
-  { type: 'Text', children: ['Content'] }
+  { type: 'Text', children: ['Content'] },
 ]);
 ```
 
 ## Available Layouts
 
-| Layout | Slots |
-|--------|-------|
-| `single-column` | header?, main, footer? |
-| `two-column` | header?, left, right, footer? |
-| `sidebar-left` | header?, sidebar, main, footer? |
+| Layout          | Slots                           |
+| --------------- | ------------------------------- |
+| `single-column` | header?, main, footer?          |
+| `two-column`    | header?, left, right, footer?   |
+| `sidebar-left`  | header?, sidebar, main, footer? |
 | `sidebar-right` | header?, main, sidebar, footer? |
-| `dashboard` | header, sidebar, main, footer? |
-| `landing` | hero, features?, cta?, footer? |
+| `dashboard`     | header, sidebar, main, footer?  |
+| `landing`       | hero, features?, cta?, footer?  |
 
 ## Available Components
 
@@ -159,12 +162,14 @@ Button, Input, Card, Text, Heading, Image, Link, List, Form, Modal, Tabs, Table,
 ### Design Decisions
 
 **Template-based rendering** (not AST-based):
+
 - Zero dependencies (no Babel, Prettier)
 - Faster execution
 - Easier to understand and debug
 - Sufficient for JSX generation use case
 
 **What was removed**:
+
 - Babel AST builders
 - Prettier formatting
 - Slot registries (Global/Local)

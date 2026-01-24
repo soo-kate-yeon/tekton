@@ -17,13 +17,13 @@
 
 ### Files Created
 
-| File | LOC | Purpose |
-|------|-----|---------|
-| `types.ts` | 94 | Core type definitions |
-| `theme.ts` | 131 | Theme loading & CSS generation |
+| File           | LOC | Purpose                         |
+| -------------- | --- | ------------------------------- |
+| `types.ts`     | 94  | Core type definitions           |
+| `theme.ts`     | 131 | Theme loading & CSS generation  |
 | `blueprint.ts` | 169 | Blueprint creation & validation |
-| `render.ts` | 297 | JSX template generation |
-| `index.ts` | 51 | Public API exports |
+| `render.ts`    | 297 | JSX template generation         |
+| `index.ts`     | 51  | Public API exports              |
 
 ### Removed (from original codebase)
 

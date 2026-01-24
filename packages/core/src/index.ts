@@ -43,9 +43,4 @@ export {
 } from './blueprint.js';
 
 // Render
-export {
-  render,
-  renderWithTheme,
-  renderSingleComponent,
-  renderComponents,
-} from './render.js';
+export { render, renderWithTheme, renderSingleComponent, renderComponents } from './render.js';

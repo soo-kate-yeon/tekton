@@ -40,13 +40,13 @@ export const LAYOUTS: Record<LayoutType, LayoutSlot[]> = {
     { name: 'sidebar', required: true },
     { name: 'footer', required: false },
   ],
-  'dashboard': [
+  dashboard: [
     { name: 'header', required: true },
     { name: 'sidebar', required: true },
     { name: 'main', required: true },
     { name: 'footer', required: false },
   ],
-  'landing': [
+  landing: [
     { name: 'hero', required: true },
     { name: 'features', required: false },
     { name: 'cta', required: false },
@@ -127,10 +127,18 @@ export function validateBlueprint(blueprint: Blueprint): ValidationResult {
   const errors: string[] = [];
 
   // Check required fields
-  if (!blueprint.id) errors.push('Missing blueprint id');
-  if (!blueprint.name) errors.push('Missing blueprint name');
-  if (!blueprint.themeId) errors.push('Missing themeId');
-  if (!blueprint.layout) errors.push('Missing layout');
+  if (!blueprint.id) {
+    errors.push('Missing blueprint id');
+  }
+  if (!blueprint.name) {
+    errors.push('Missing blueprint name');
+  }
+  if (!blueprint.themeId) {
+    errors.push('Missing themeId');
+  }
+  if (!blueprint.layout) {
+    errors.push('Missing layout');
+  }
 
   // Check layout validity
   if (blueprint.layout && !LAYOUTS[blueprint.layout]) {

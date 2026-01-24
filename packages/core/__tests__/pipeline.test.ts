@@ -309,10 +309,13 @@ describe('Render Module', () => {
     });
 
     it('should render multiple components without layout', () => {
-      const result = renderComponents([
-        { type: 'Heading', props: { level: 1 }, children: ['Title'] },
-        { type: 'Text', children: ['Content'] },
-      ], '  ');
+      const result = renderComponents(
+        [
+          { type: 'Heading', props: { level: 1 }, children: ['Title'] },
+          { type: 'Text', children: ['Content'] },
+        ],
+        '  '
+      );
 
       expect(result).toContain('<Heading');
       expect(result).toContain('<Text');
@@ -371,11 +374,7 @@ describe('Render Module', () => {
         name: 'Multi Component',
         themeId: 'calm-wellness',
         layout: 'single-column',
-        components: [
-          { type: 'Button' },
-          { type: 'Input' },
-          { type: 'Card' },
-        ],
+        components: [{ type: 'Button' }, { type: 'Input' }, { type: 'Card' }],
       });
 
       const result = render(bp);
@@ -498,9 +497,7 @@ describe('Render Module', () => {
         name: 'Form Page',
         themeId: 'calm-wellness',
         layout: 'single-column',
-        components: [
-          { type: 'Input', props: { type: 'email', placeholder: 'Enter email' } },
-        ],
+        components: [{ type: 'Input', props: { type: 'email', placeholder: 'Enter email' } }],
       });
 
       const result = render(bp);
@@ -516,9 +513,7 @@ describe('Render Module', () => {
         name: 'Gallery',
         themeId: 'calm-wellness',
         layout: 'single-column',
-        components: [
-          { type: 'Image', props: { src: '/photo.jpg', alt: 'Photo' } },
-        ],
+        components: [{ type: 'Image', props: { src: '/photo.jpg', alt: 'Photo' } }],
       });
 
       const result = render(bp);
@@ -534,9 +529,7 @@ describe('Render Module', () => {
         name: 'Nav Page',
         themeId: 'calm-wellness',
         layout: 'single-column',
-        components: [
-          { type: 'Link', props: { href: '/about' }, children: ['About Us'] },
-        ],
+        components: [{ type: 'Link', props: { href: '/about' }, children: ['About Us'] }],
       });
 
       const result = render(bp);
@@ -552,9 +545,7 @@ describe('Render Module', () => {
         name: 'List Page',
         themeId: 'calm-wellness',
         layout: 'single-column',
-        components: [
-          { type: 'List', children: [{ type: 'Text', children: ['Item 1'] }] },
-        ],
+        components: [{ type: 'List', children: [{ type: 'Text', children: ['Item 1'] }] }],
       });
 
       const result = render(bp);
@@ -569,9 +560,7 @@ describe('Render Module', () => {
         name: 'Form Page',
         themeId: 'calm-wellness',
         layout: 'single-column',
-        components: [
-          { type: 'Form', children: [{ type: 'Input' }] },
-        ],
+        components: [{ type: 'Form', children: [{ type: 'Input' }] }],
       });
 
       const result = render(bp);
@@ -586,9 +575,7 @@ describe('Render Module', () => {
         name: 'Modal Page',
         themeId: 'calm-wellness',
         layout: 'single-column',
-        components: [
-          { type: 'Modal', props: { title: 'Confirm' }, children: ['Are you sure?'] },
-        ],
+        components: [{ type: 'Modal', props: { title: 'Confirm' }, children: ['Are you sure?'] }],
       });
 
       const result = render(bp);
@@ -604,9 +591,7 @@ describe('Render Module', () => {
         name: 'Number Props',
         themeId: 'calm-wellness',
         layout: 'single-column',
-        components: [
-          { type: 'Heading', props: { level: 3 }, children: ['Title'] },
-        ],
+        components: [{ type: 'Heading', props: { level: 3 }, children: ['Title'] }],
       });
 
       const result = render(bp);
@@ -621,7 +606,11 @@ describe('Render Module', () => {
         themeId: 'calm-wellness',
         layout: 'single-column',
         components: [
-          { type: 'CustomComponent', props: { disabled: true, enabled: false }, children: ['Test'] },
+          {
+            type: 'CustomComponent',
+            props: { disabled: true, enabled: false },
+            children: ['Test'],
+          },
         ],
       });
 
@@ -637,9 +626,7 @@ describe('Render Module', () => {
         name: 'Unknown Component',
         themeId: 'calm-wellness',
         layout: 'single-column',
-        components: [
-          { type: 'UnknownWidget', props: { custom: 'value' }, children: ['Content'] },
-        ],
+        components: [{ type: 'UnknownWidget', props: { custom: 'value' }, children: ['Content'] }],
       });
 
       const result = render(bp);
@@ -654,9 +641,7 @@ describe('Render Module', () => {
         name: 'Object Props',
         themeId: 'calm-wellness',
         layout: 'single-column',
-        components: [
-          { type: 'CustomComponent', props: { config: { foo: 'bar' } } },
-        ],
+        components: [{ type: 'CustomComponent', props: { config: { foo: 'bar' } } }],
       });
 
       const result = render(bp);
@@ -670,9 +655,7 @@ describe('Render Module', () => {
         name: 'Null Props',
         themeId: 'calm-wellness',
         layout: 'single-column',
-        components: [
-          { type: 'Button', props: { value: null, other: undefined } },
-        ],
+        components: [{ type: 'Button', props: { value: null, other: undefined } }],
       });
 
       const result = render(bp);
@@ -687,9 +670,7 @@ describe('Render Module', () => {
         name: 'No Children',
         themeId: 'calm-wellness',
         layout: 'single-column',
-        components: [
-          { type: 'Divider' },
-        ],
+        components: [{ type: 'Divider' }],
       });
 
       const result = render(bp);
