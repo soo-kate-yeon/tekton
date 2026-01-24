@@ -1,8 +1,0 @@
-worktree:
-  auto_sync: true
-  cleanup_merged: true
-  worktree_root: /Users/asleep/worktrees/{PROJECT_NAME}/
-  default_base: master
-  sync_strategy: merge
-  max_worktrees: 10
-  stale_threshold_days: 30

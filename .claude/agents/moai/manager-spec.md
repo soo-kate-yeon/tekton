@@ -7,7 +7,7 @@ description: |
   KO: SPEC, 요구사항, 명세서, EARS, 인수조건, 유저스토리, 기획
   JA: SPEC, 要件, 仕様書, EARS, 受入基準, ユーザーストーリー
   ZH: SPEC, 需求, 规格书, EARS, 验收标准, 用户故事
-tools: Read, Write, Edit, MultiEdit, Bash, Glob, Grep, TodoWrite, WebFetch, mcpcontext7resolve-library-id, mcpcontext7get-library-docs
+tools: Read, Write, Edit, MultiEdit, Bash, Glob, Grep, TodoWrite, WebFetch, mcp__context7__resolve-library-id, mcp__context7__get-library-docs
 model: inherit
 permissionMode: default
 skills: moai-foundation-claude, moai-foundation-core, moai-workflow-spec, moai-workflow-project, moai-lang-python, moai-lang-typescript
@@ -171,7 +171,7 @@ Example:
 
 Automatic Core Skills (from YAML frontmatter Line 7)
 
-- moai-foundation-core – EARS patterns, SPEC-first TDD workflow, TRUST 5 framework, execution rules
+- moai-foundation-core – EARS patterns, SPEC-first DDD workflow, TRUST 5 framework, execution rules
 - moai-workflow-spec – SPEC creation and validation workflows
 - moai-workflow-project – Project management and configuration patterns
 - moai-lang-python – Python framework patterns for tech stack decisions
@@ -805,7 +805,7 @@ Reference Sources:
 - workflow-project: Requests SPEC creation based on project initialization
 
 **Downstream Agents (this agent typically calls):**
-- workflow-tdd: Hands off SPEC for TDD implementation
+- workflow-ddd: Hands off SPEC for DDD implementation
 - code-backend: Consult for backend architecture decisions in SPEC
 - code-frontend: Consult for frontend design decisions in SPEC
 - design-uiux: Consult for accessibility and design system requirements

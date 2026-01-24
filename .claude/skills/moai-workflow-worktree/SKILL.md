@@ -1,5 +1,5 @@
 ---
-name: "moai-worktree"
+name: "moai-workflow-worktree"
 description: "Git worktree management for parallel SPEC development with isolated workspaces, automatic registration, and seamless MoAI-ADK integration"
 version: 1.1.0
 category: "workflow"
@@ -8,6 +8,19 @@ user-invocable: false
 tags: ['git', 'worktree', 'parallel', 'development', 'spec', 'isolation']
 updated: 2026-01-08
 status: "active"
+
+# Progressive Disclosure Configuration
+progressive_disclosure:
+  enabled: true
+  level1_tokens: 100
+  level2_tokens: 5000
+
+# Trigger Conditions for Level 2 Loading
+triggers:
+  keywords: ["worktree", "git worktree", "parallel development", "isolated workspace", "multiple SPECs", "branch isolation", "feature branch"]
+  phases: ["plan", "run"]
+  agents: ["manager-git", "manager-spec", "manager-project"]
+
 allowed-tools:
   - Read
   - Write
@@ -52,85 +65,6 @@ Use Cases:
 
 ---
 
-## 🔗 MoAI Workflow Integration (1 minute)
-
-**IMPORTANT**: Worktrees integrate seamlessly with MoAI's SPEC-based development workflow.
-
-### Quick Integration Steps
-
-1. **Create SPEC with Worktree**:
-   ```bash
-   /moai:1-plan --worktree "Feature Description"
-   # Automatically creates SPEC and isolated worktree
-   ```
-
-2. **Develop in Isolation**:
-   ```bash
-   cd ~/.worktrees/SPEC-ID
-   /moai:2-run SPEC-ID  # TDD implementation in worktree
-   ```
-
-3. **Sync and Document**:
-   ```bash
-   /moai:3-sync SPEC-ID  # Documentation sync
-   tekton worktree sync SPEC-ID  # Git sync with base branch
-   ```
-
-4. **Create PR and Cleanup**:
-   ```bash
-   git push origin feature/SPEC-ID
-   # After PR merge:
-   tekton worktree clean --merged-only
-   ```
-
-### Why Use Worktrees with MoAI?
-
-**Without Worktrees**:
-- Frequent `git stash` when switching SPECs → Risk of losing work
-- Single development environment → Cannot work on multiple SPECs simultaneously
-- Context switching overhead → Mental load and time waste
-- Conflicts when switching branches → Frustrating development experience
-
-**With Worktrees**:
-- ✅ **Parallel SPEC Development**: Work on SPEC-001, SPEC-002, SPEC-003 simultaneously
-- ✅ **Zero Context Switching**: Instant switching between SPECs (no stashing)
-- ✅ **Isolated Testing**: Each SPEC has its own test environment
-- ✅ **Independent Dependencies**: SPEC-specific packages don't conflict
-- ✅ **Clean Git History**: Each SPEC maintains its own branch
-- ✅ **Safe Experimentation**: Break things in one SPEC without affecting others
-
-### When to Use Worktrees
-
-**Always Use**:
-- Developing 2+ SPECs in parallel
-- Long-running SPEC development (multiple days)
-- Experimental features that might be abandoned
-- Code review workflows requiring side-by-side comparison
-
-**Optional (but recommended)**:
-- All SPEC-based development (zero switching cost is worth it)
-- Any feature requiring isolated testing
-
-**Not Needed**:
-- Quick fixes or hotfixes (direct branch is faster)
-- Single SPEC development with no other work
-
-### Configuration
-
-Enable automatic worktree creation in `.moai/config/sections/worktree.yaml`:
-
-```yaml
-worktree:
-  auto_sync: false          # Manual sync preferred
-  cleanup_merged: true      # Auto-cleanup after PR merge
-  worktree_root: ~/worktrees/{PROJECT_NAME}/
-  default_base: master
-```
-
-**Full Integration Guide**: See section 4 below for complete MoAI-ADK integration patterns.
-
----
-
 ## Implementation Guide (5 minutes)
 
 ### 1. Core Architecture - Worktree Management System
@@ -151,7 +85,7 @@ The registry file stores worktree metadata in JSON format. Each worktree entry c
 
 File Structure:
 
-The worktree system creates a dedicated directory structure. At the worktree root (typically ~/worktrees/ProjectName/), you will find the central registry JSON file and individual directories for each SPEC. Each SPEC directory contains a .git file for worktree metadata and a complete copy of all project files.
+The worktree system creates a dedicated directory structure inside the project's .moai directory. At the worktree root ({repo}/.moai/worktrees/{ProjectName}/), you will find the central registry JSON file and individual directories for each SPEC. Each SPEC directory contains a .git file for worktree metadata and a complete copy of all project files.
 
 Detailed Reference: Refer to Worktree Management Module at modules/worktree-management.md
 

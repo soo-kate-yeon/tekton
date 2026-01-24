@@ -227,3 +227,19 @@ secret-*.*
 # Add to .gitignore if needed per project
 # uv.lock
 packages/studio-mcp/coverage/
+# Secrets and Credentials (CRITICAL)
+# Skill-specific credentials
+# Claude Code Configuration
+# Environment files
+# Updated: 2026-01-10
+# Python Cache & Bytecode
+# Build Tools & Frameworks
+.turbo/
+# Credential patterns in environment files
+# Deployment & CI/CD
+# Build Artifacts & Distribution
+dist-ssr/
+# Version: 0.33.0
+# ===========================================
+# Private keys (specific patterns to avoid false positives)
+.nuxt/
