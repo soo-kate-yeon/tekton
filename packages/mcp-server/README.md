@@ -187,6 +187,23 @@ All MCP tools reuse `@tekton/core` functions:
 
 **Zero code duplication** - Single source of truth maintained.
 
+## Documentation
+
+Comprehensive documentation is available in the `docs/` directory:
+
+- **[빠른 시작 가이드](./docs/01-quickstart.md)** - 5분 안에 시작하기
+- **[사용자 가이드](./docs/02-user-guide.md)** - 상세한 기능 설명과 워크플로우
+- **[API 참조](./docs/03-api-reference.md)** - MCP Tools와 HTTP 엔드포인트 상세 문서
+- **[아키텍처](./docs/04-architecture.md)** - 시스템 아키텍처와 데이터 흐름
+- **[개발자 가이드](./docs/05-developer-guide.md)** - 개발 환경 설정 및 기여 방법
+- **[통합 가이드](./docs/06-integration-guide.md)** - SPEC-PLAYGROUND-001 및 Claude Code 통합
+
+### Quick Links
+
+- 📖 [전체 문서 목록](./docs/README.md)
+- 🎯 [SPEC-MCP-002](../../.moai/specs/SPEC-MCP-002/spec.md) - 완전한 명세 문서
+- 🧪 [테스트 커버리지 리포트](./coverage/) - 87.82% 커버리지
+
 ## Development
 
 ```bash
@@ -202,6 +219,10 @@ pnpm test:coverage
 # Watch mode
 pnpm dev
 ```
+
+## Contributing
+
+Please see the [Developer Guide](./docs/05-developer-guide.md) for detailed contribution guidelines.
 
 ## License
 
