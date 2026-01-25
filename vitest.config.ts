@@ -10,13 +10,22 @@ export default defineConfig({
       exclude: [
         'node_modules/**',
         'dist/**',
+        '**/dist/**',
+        'coverage/**',
         'tests/**',
         '**/*.test.ts',
+        '**/*.test.js',
         '**/*.config.ts',
+        '**/*.config.js',
+        '**/*.config.mjs',
         'examples/**',
         'eslint.config.js',
+        'src/**', // Legacy code (moved to packages/core)
+        'packages/.archived/**', // Archived packages
         'packages/playground-web/**', // WIP: Next.js 16 playground
         'packages/mcp-server/**', // Separate test suite
+        '**/__tests__/**', // Test files
+        '**/coverage/**', // Coverage reports
       ],
       thresholds: {
         lines: 85,
@@ -25,7 +34,7 @@ export default defineConfig({
         statements: 85,
       },
     },
-    include: ['tests/**/*.test.ts'],
+    include: ['tests/**/*.test.ts', 'packages/core/__tests__/**/*.test.ts'],
     exclude: [
       'node_modules/**',
       'dist/**',
