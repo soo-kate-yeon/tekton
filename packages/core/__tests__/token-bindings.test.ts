@@ -58,7 +58,10 @@ describe('Token Bindings Validation', () => {
           if (!isValidReference) {
             console.log(`INVALID: ${schema.type}.${key} = "${value}"`);
           }
-          expect(isValidReference, `${schema.type}.${key} should reference a token or template variable`).toBe(true);
+          expect(
+            isValidReference,
+            `${schema.type}.${key} should reference a token or template variable`
+          ).toBe(true);
         });
       });
     });
@@ -148,9 +151,9 @@ describe('Token Bindings Validation', () => {
       expect(
         buttonBindings.includes('component.button') || buttonBindings.includes('semantic.')
       ).toBe(true);
-      expect(
-        inputBindings.includes('component.input') || inputBindings.includes('semantic.')
-      ).toBe(true);
+      expect(inputBindings.includes('component.input') || inputBindings.includes('semantic.')).toBe(
+        true
+      );
     });
   });
 

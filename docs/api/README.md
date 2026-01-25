@@ -846,22 +846,23 @@ const buttonSchema: ComponentSchema = {
       required: false,
       description: 'Visual style variant',
       defaultValue: 'primary',
-      options: ['primary', 'secondary', 'outline', 'ghost', 'danger']
-    }
+      options: ['primary', 'secondary', 'outline', 'ghost', 'danger'],
+    },
   ],
   tokenBindings: {
     background: 'component.button.{variant}.background',
-    foreground: 'component.button.{variant}.foreground'
+    foreground: 'component.button.{variant}.foreground',
   },
   a11y: {
     role: 'button',
     wcag: 'WCAG 2.1 AA',
-    ariaAttributes: ['aria-label', 'aria-disabled']
-  }
+    ariaAttributes: ['aria-label', 'aria-disabled'],
+  },
 };
 ```
 
 **Properties:**
+
 - `type` (string): Component type identifier (e.g., "Button", "Input")
 - `category` ('primitive' | 'composed'): Component category
 - `description` (string, optional): Human-readable description
@@ -882,11 +883,12 @@ const propDef: PropDefinition = {
   required: false,
   description: 'Component size',
   defaultValue: 'medium',
-  options: ['small', 'medium', 'large']
+  options: ['small', 'medium', 'large'],
 };
 ```
 
 **Properties:**
+
 - `name` (string): Property name
 - `type` (string): TypeScript-style type (e.g., "string", "boolean", "ReactNode")
 - `required` (boolean): Whether the property is required
@@ -907,11 +909,12 @@ const a11y: A11yRequirements = {
   ariaAttributes: ['aria-label', 'aria-disabled', 'aria-pressed'],
   keyboard: ['Enter', 'Space'],
   focus: 'Visible focus indicator with semantic.border.focus',
-  screenReader: 'Announces button label and state'
+  screenReader: 'Announces button label and state',
 };
 ```
 
 **Properties:**
+
 - `role` (string): ARIA role
 - `wcag` (string): WCAG compliance level (must include "2.1")
 - `ariaAttributes` (string[], optional): Required ARIA attributes
@@ -930,11 +933,12 @@ const bindings: TokenBindings = {
   background: 'component.button.{variant}.background',
   foreground: 'component.button.{variant}.foreground',
   borderRadius: 'atomic.radius.md',
-  paddingX: 'atomic.spacing.{size}'
+  paddingX: 'atomic.spacing.{size}',
 };
 ```
 
 **Template Variables:**
+
 - `{variant}`: Resolves to component variant (e.g., "primary", "secondary")
 - `{size}`: Resolves to component size (e.g., "small", "medium", "large")
 - `{color}`: Resolves to semantic color (e.g., "primary", "accent")
@@ -948,7 +952,7 @@ import {
   ALL_COMPONENTS,
   PRIMITIVE_COMPONENTS,
   COMPOSED_COMPONENTS,
-  getComponentSchema
+  getComponentSchema,
 } from 'tekton/core';
 
 // Get all 20 components
@@ -964,6 +968,7 @@ console.log(buttonSchema?.type); // "Button"
 ```
 
 **Exports:**
+
 - `ALL_COMPONENTS`: Array of all 20 component schemas
 - `PRIMITIVE_COMPONENTS`: Array of 10 primitive component schemas
 - `COMPOSED_COMPONENTS`: Array of 10 composed component schemas
@@ -993,9 +998,15 @@ import { validateComponentSchema, type ComponentSchema } from 'tekton/core';
 const schema: ComponentSchema = {
   type: 'Button',
   category: 'primitive',
-  props: [/* ... */],
-  tokenBindings: {/* ... */},
-  a11y: {/* ... */}
+  props: [
+    /* ... */
+  ],
+  tokenBindings: {
+    /* ... */
+  },
+  a11y: {
+    /* ... */
+  },
 };
 
 const result = validateComponentSchema(schema);
@@ -1008,6 +1019,7 @@ if (result.valid) {
 ```
 
 **Returns:**
+
 ```typescript
 {
   valid: boolean;
@@ -1037,6 +1049,7 @@ if (result.warnings) {
 ```
 
 **Returns:**
+
 ```typescript
 {
   valid: boolean;
@@ -1046,6 +1059,7 @@ if (result.warnings) {
 ```
 
 **Validation Checks:**
+
 - 20 component schemas registered
 - 10 primitive + 10 composed components
 - No duplicate component types
@@ -1062,13 +1076,14 @@ const prop: PropDefinition = {
   name: 'variant',
   type: 'string',
   required: false,
-  description: 'Visual style variant'
+  description: 'Visual style variant',
 };
 
 const result = validateProp(prop);
 ```
 
 **Validation Rules:**
+
 - `name`: Required, non-empty string
 - `type`: Required, non-empty string
 - `required`: Required boolean
@@ -1086,13 +1101,14 @@ import { validateA11y, type A11yRequirements } from 'tekton/core';
 const a11y: A11yRequirements = {
   role: 'button',
   wcag: 'WCAG 2.1 AA',
-  ariaAttributes: ['aria-label']
+  ariaAttributes: ['aria-label'],
 };
 
 const result = validateA11y(a11y);
 ```
 
 **Validation Rules:**
+
 - `role`: Required, non-empty string
 - `wcag`: Required, must include "2.1" for WCAG 2.1 compliance
 - `ariaAttributes`: Optional array of strings
@@ -1110,7 +1126,7 @@ import { validateTokenBindings } from 'tekton/core';
 const bindings = {
   background: 'component.button.{variant}.background',
   foreground: 'semantic.foreground.primary',
-  borderRadius: 'atomic.radius.md'
+  borderRadius: 'atomic.radius.md',
 };
 
 const result = validateTokenBindings(bindings);
@@ -1122,11 +1138,13 @@ if (result.warnings) {
 ```
 
 **Validation Rules:**
+
 - Minimum 2 token bindings required per component
 - Template variable detection (e.g., `{variant}`, `{size}`)
-- Token reference validation (semantic.*, atomic.*, component.*)
+- Token reference validation (semantic._, atomic._, component.\*)
 
 **Warnings:**
+
 - No template variables used
 - No token references (semantic, atomic, component)
 
@@ -1154,6 +1172,7 @@ summary.validationResults.forEach(result => {
 ```
 
 **Returns:**
+
 ```typescript
 {
   totalComponents: number;
@@ -1176,7 +1195,9 @@ Assert single schema is valid (throws on invalid).
 ```typescript
 import { assertValidSchema, type ComponentSchema } from 'tekton/core';
 
-const schema: ComponentSchema = {/* ... */};
+const schema: ComponentSchema = {
+  /* ... */
+};
 
 try {
   assertValidSchema(schema);

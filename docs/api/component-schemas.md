@@ -12,6 +12,7 @@
 Component Schemas provide platform-agnostic component interface specifications for 20 core UI components. Each schema defines props, token bindings with template variables, and accessibility requirements compliant with WCAG 2.1 AA standards.
 
 **Key Features:**
+
 - 20 component schemas (10 primitive + 10 composed)
 - Platform-agnostic design (React, Vue, Svelte, React Native compatible)
 - Token bindings with template variables (`{variant}`, `{size}`, `{color}`)
@@ -92,12 +93,14 @@ const ButtonSchema = getComponentSchema('Button');
 ```
 
 **Props (4):**
+
 - `variant`: 'primary' | 'secondary' | 'outline' | 'ghost' | 'danger' (default: 'primary')
 - `size`: 'small' | 'medium' | 'large' (default: 'medium')
 - `disabled`: boolean (default: false)
 - `children`: ReactNode (required)
 
 **Token Bindings (11):**
+
 ```typescript
 {
   background: 'component.button.{variant}.background',
@@ -115,6 +118,7 @@ const ButtonSchema = getComponentSchema('Button');
 ```
 
 **Accessibility:**
+
 - **Role**: `button`
 - **WCAG**: 2.1 AA
 - **ARIA Attributes**: `aria-label`, `aria-disabled`, `aria-pressed`
@@ -132,6 +136,7 @@ const InputSchema = getComponentSchema('Input');
 ```
 
 **Props (6):**
+
 - `type`: 'text' | 'email' | 'password' | 'number' | 'tel' | 'url' (default: 'text')
 - `size`: 'small' | 'medium' | 'large' (default: 'medium')
 - `placeholder`: string (optional)
@@ -140,6 +145,7 @@ const InputSchema = getComponentSchema('Input');
 - `value`: string (optional)
 
 **Token Bindings (11):**
+
 ```typescript
 {
   background: 'component.input.background',
@@ -157,6 +163,7 @@ const InputSchema = getComponentSchema('Input');
 ```
 
 **Accessibility:**
+
 - **Role**: `textbox`
 - **WCAG**: 2.1 AA
 - **ARIA Attributes**: `aria-label`, `aria-describedby`, `aria-invalid`, `aria-required`
@@ -173,12 +180,14 @@ const TextSchema = getComponentSchema('Text');
 ```
 
 **Props (4):**
+
 - `variant`: 'body' | 'caption' | 'label' | 'code' (default: 'body')
 - `size`: 'small' | 'medium' | 'large' (default: 'medium')
 - `color`: 'primary' | 'secondary' | 'muted' | 'accent' | 'inverse' (default: 'primary')
 - `children`: ReactNode (required)
 
 **Token Bindings (4):**
+
 ```typescript
 {
   color: 'semantic.foreground.{color}',
@@ -189,6 +198,7 @@ const TextSchema = getComponentSchema('Text');
 ```
 
 **Accessibility:**
+
 - **Role**: `text`
 - **WCAG**: 2.1 AA
 - **ARIA Attributes**: `aria-label`
@@ -204,11 +214,13 @@ const HeadingSchema = getComponentSchema('Heading');
 ```
 
 **Props (3):**
+
 - `level`: 1 | 2 | 3 | 4 | 5 | 6 (default: 1)
 - `size`: 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl' (default: 'xl')
 - `children`: ReactNode (required)
 
 **Token Bindings (5):**
+
 ```typescript
 {
   color: 'semantic.foreground.primary',
@@ -220,6 +232,7 @@ const HeadingSchema = getComponentSchema('Heading');
 ```
 
 **Accessibility:**
+
 - **Role**: `heading`
 - **WCAG**: 2.1 AA
 - **ARIA Attributes**: `aria-level`
@@ -235,11 +248,13 @@ const CheckboxSchema = getComponentSchema('Checkbox');
 ```
 
 **Props (3):**
+
 - `checked`: boolean (default: false)
 - `disabled`: boolean (default: false)
 - `label`: string (optional)
 
 **Token Bindings (7):**
+
 ```typescript
 {
   background: 'semantic.surface.primary',
@@ -253,6 +268,7 @@ const CheckboxSchema = getComponentSchema('Checkbox');
 ```
 
 **Accessibility:**
+
 - **Role**: `checkbox`
 - **WCAG**: 2.1 AA
 - **ARIA Attributes**: `aria-checked`, `aria-disabled`, `aria-labelledby`
@@ -269,12 +285,14 @@ const RadioSchema = getComponentSchema('Radio');
 ```
 
 **Props (4):**
+
 - `checked`: boolean (default: false)
 - `disabled`: boolean (default: false)
 - `label`: string (optional)
 - `name`: string (required)
 
 **Token Bindings (7):**
+
 ```typescript
 {
   background: 'semantic.surface.primary',
@@ -288,6 +306,7 @@ const RadioSchema = getComponentSchema('Radio');
 ```
 
 **Accessibility:**
+
 - **Role**: `radio`
 - **WCAG**: 2.1 AA
 - **ARIA Attributes**: `aria-checked`, `aria-disabled`, `aria-labelledby`
@@ -304,11 +323,13 @@ const SwitchSchema = getComponentSchema('Switch');
 ```
 
 **Props (3):**
+
 - `checked`: boolean (default: false)
 - `disabled`: boolean (default: false)
 - `label`: string (optional)
 
 **Token Bindings (7):**
+
 ```typescript
 {
   trackBackground: 'semantic.background.muted',
@@ -322,6 +343,7 @@ const SwitchSchema = getComponentSchema('Switch');
 ```
 
 **Accessibility:**
+
 - **Role**: `switch`
 - **WCAG**: 2.1 AA
 - **ARIA Attributes**: `aria-checked`, `aria-disabled`, `aria-labelledby`
@@ -338,6 +360,7 @@ const SliderSchema = getComponentSchema('Slider');
 ```
 
 **Props (5):**
+
 - `value`: number (default: 0)
 - `min`: number (default: 0)
 - `max`: number (default: 100)
@@ -345,6 +368,7 @@ const SliderSchema = getComponentSchema('Slider');
 - `disabled`: boolean (default: false)
 
 **Token Bindings (8):**
+
 ```typescript
 {
   trackBackground: 'semantic.background.muted',
@@ -359,6 +383,7 @@ const SliderSchema = getComponentSchema('Slider');
 ```
 
 **Accessibility:**
+
 - **Role**: `slider`
 - **WCAG**: 2.1 AA
 - **ARIA Attributes**: `aria-valuenow`, `aria-valuemin`, `aria-valuemax`, `aria-disabled`
@@ -375,11 +400,13 @@ const BadgeSchema = getComponentSchema('Badge');
 ```
 
 **Props (3):**
+
 - `variant`: 'default' | 'success' | 'warning' | 'error' | 'info' (default: 'default')
 - `size`: 'small' | 'medium' | 'large' (default: 'medium')
 - `children`: ReactNode (required)
 
 **Token Bindings (7):**
+
 ```typescript
 {
   background: 'semantic.foreground.{variant}',
@@ -393,6 +420,7 @@ const BadgeSchema = getComponentSchema('Badge');
 ```
 
 **Accessibility:**
+
 - **Role**: `status`
 - **WCAG**: 2.1 AA
 - **ARIA Attributes**: `aria-label`
@@ -408,12 +436,14 @@ const AvatarSchema = getComponentSchema('Avatar');
 ```
 
 **Props (4):**
+
 - `src`: string (optional)
 - `alt`: string (required)
 - `size`: 'small' | 'medium' | 'large' | 'xl' (default: 'medium')
 - `fallback`: string (optional)
 
 **Token Bindings (6):**
+
 ```typescript
 {
   background: 'semantic.background.muted',
@@ -426,6 +456,7 @@ const AvatarSchema = getComponentSchema('Avatar');
 ```
 
 **Accessibility:**
+
 - **Role**: `img`
 - **WCAG**: 2.1 AA
 - **ARIA Attributes**: `aria-label`, `alt`
@@ -443,10 +474,12 @@ const CardSchema = getComponentSchema('Card');
 ```
 
 **Props (2):**
+
 - `variant`: 'default' | 'outlined' | 'elevated' (default: 'default')
 - `children`: ReactNode (required)
 
 **Token Bindings (6):**
+
 ```typescript
 {
   background: 'component.card.background',
@@ -459,6 +492,7 @@ const CardSchema = getComponentSchema('Card');
 ```
 
 **Accessibility:**
+
 - **Role**: `article`
 - **WCAG**: 2.1 AA
 - **ARIA Attributes**: `aria-label`
@@ -474,12 +508,14 @@ const ModalSchema = getComponentSchema('Modal');
 ```
 
 **Props (4):**
+
 - `open`: boolean (required)
 - `onClose`: function (required)
 - `title`: string (optional)
 - `children`: ReactNode (required)
 
 **Token Bindings (7):**
+
 ```typescript
 {
   overlayBackground: 'semantic.surface.inverse',
@@ -493,6 +529,7 @@ const ModalSchema = getComponentSchema('Modal');
 ```
 
 **Accessibility:**
+
 - **Role**: `dialog`
 - **WCAG**: 2.1 AA
 - **ARIA Attributes**: `aria-modal`, `aria-labelledby`, `aria-describedby`
@@ -509,11 +546,13 @@ const DropdownSchema = getComponentSchema('Dropdown');
 ```
 
 **Props (3):**
+
 - `trigger`: ReactNode (required)
 - `items`: array (required)
 - `placement`: 'top' | 'bottom' | 'left' | 'right' (default: 'bottom-start')
 
 **Token Bindings (8):**
+
 ```typescript
 {
   menuBackground: 'semantic.surface.elevated',
@@ -528,6 +567,7 @@ const DropdownSchema = getComponentSchema('Dropdown');
 ```
 
 **Accessibility:**
+
 - **Role**: `menu`
 - **WCAG**: 2.1 AA
 - **ARIA Attributes**: `aria-haspopup`, `aria-expanded`, `aria-controls`
@@ -544,10 +584,12 @@ const TabsSchema = getComponentSchema('Tabs');
 ```
 
 **Props (2):**
+
 - `tabs`: array (required)
 - `defaultTab`: string (optional)
 
 **Token Bindings (10):**
+
 ```typescript
 {
   tabListBackground: 'semantic.surface.secondary',
@@ -564,6 +606,7 @@ const TabsSchema = getComponentSchema('Tabs');
 ```
 
 **Accessibility:**
+
 - **Role**: `tablist`
 - **WCAG**: 2.1 AA
 - **ARIA Attributes**: `aria-selected`, `aria-controls`, `aria-labelledby`
@@ -580,11 +623,13 @@ const LinkSchema = getComponentSchema('Link');
 ```
 
 **Props (3):**
+
 - `href`: string (required)
 - `external`: boolean (default: false)
 - `children`: ReactNode (required)
 
 **Token Bindings (4):**
+
 ```typescript
 {
   color: 'semantic.foreground.accent',
@@ -595,6 +640,7 @@ const LinkSchema = getComponentSchema('Link');
 ```
 
 **Accessibility:**
+
 - **Role**: `link`
 - **WCAG**: 2.1 AA
 - **ARIA Attributes**: `aria-label`, `aria-current`
@@ -611,11 +657,13 @@ const TableSchema = getComponentSchema('Table');
 ```
 
 **Props (3):**
+
 - `columns`: array (required)
 - `data`: array (required)
 - `striped`: boolean (default: false)
 
 **Token Bindings (8):**
+
 ```typescript
 {
   background: 'semantic.surface.primary',
@@ -630,6 +678,7 @@ const TableSchema = getComponentSchema('Table');
 ```
 
 **Accessibility:**
+
 - **Role**: `table`
 - **WCAG**: 2.1 AA
 - **ARIA Attributes**: `aria-label`, `aria-describedby`
@@ -646,10 +695,12 @@ const ListSchema = getComponentSchema('List');
 ```
 
 **Props (2):**
+
 - `items`: array (required)
 - `ordered`: boolean (default: false)
 
 **Token Bindings (5):**
+
 ```typescript
 {
   color: 'semantic.foreground.primary',
@@ -661,6 +712,7 @@ const ListSchema = getComponentSchema('List');
 ```
 
 **Accessibility:**
+
 - **Role**: `list`
 - **WCAG**: 2.1 AA
 - **ARIA Attributes**: `aria-label`
@@ -676,12 +728,14 @@ const ImageSchema = getComponentSchema('Image');
 ```
 
 **Props (4):**
+
 - `src`: string (required)
 - `alt`: string (required)
 - `aspectRatio`: string (default: '16/9')
 - `loading`: 'lazy' | 'eager' (default: 'lazy')
 
 **Token Bindings (3):**
+
 ```typescript
 {
   borderRadius: 'atomic.radius.md',
@@ -691,6 +745,7 @@ const ImageSchema = getComponentSchema('Image');
 ```
 
 **Accessibility:**
+
 - **Role**: `img`
 - **WCAG**: 2.1 AA
 - **ARIA Attributes**: `alt`, `aria-label`
@@ -706,10 +761,12 @@ const FormSchema = getComponentSchema('Form');
 ```
 
 **Props (2):**
+
 - `onSubmit`: function (required)
 - `children`: ReactNode (required)
 
 **Token Bindings (4):**
+
 ```typescript
 {
   spacing: 'atomic.spacing.4',
@@ -720,6 +777,7 @@ const FormSchema = getComponentSchema('Form');
 ```
 
 **Accessibility:**
+
 - **Role**: `form`
 - **WCAG**: 2.1 AA
 - **ARIA Attributes**: `aria-label`, `aria-describedby`
@@ -736,11 +794,13 @@ const ProgressSchema = getComponentSchema('Progress');
 ```
 
 **Props (3):**
+
 - `value`: number (optional, 0-100)
 - `indeterminate`: boolean (default: false)
 - `size`: 'small' | 'medium' | 'large' (default: 'medium')
 
 **Token Bindings (4):**
+
 ```typescript
 {
   trackBackground: 'semantic.background.muted',
@@ -751,6 +811,7 @@ const ProgressSchema = getComponentSchema('Progress');
 ```
 
 **Accessibility:**
+
 - **Role**: `progressbar`
 - **WCAG**: 2.1 AA
 - **ARIA Attributes**: `aria-valuenow`, `aria-valuemin`, `aria-valuemax`, `aria-label`
@@ -763,13 +824,13 @@ Component schemas support template variables in token bindings for dynamic token
 
 ### Supported Template Variables
 
-| Variable | Description | Example Values | Used By |
-|----------|-------------|----------------|---------|
-| `{variant}` | Component style variant | primary, secondary, outline, ghost, danger | Button, Badge, Text, Card |
-| `{size}` | Component size | small, medium, large, xl | Button, Input, Text, Heading, Badge, Avatar, Slider, Progress |
-| `{color}` | Semantic color | primary, secondary, muted, accent, inverse | Text |
-| `{placement}` | Placement direction | top, bottom, left, right | Dropdown |
-| `{aspectRatio}` | Image aspect ratio | 16/9, 4/3, 1/1 | Image |
+| Variable        | Description             | Example Values                             | Used By                                                       |
+| --------------- | ----------------------- | ------------------------------------------ | ------------------------------------------------------------- |
+| `{variant}`     | Component style variant | primary, secondary, outline, ghost, danger | Button, Badge, Text, Card                                     |
+| `{size}`        | Component size          | small, medium, large, xl                   | Button, Input, Text, Heading, Badge, Avatar, Slider, Progress |
+| `{color}`       | Semantic color          | primary, secondary, muted, accent, inverse | Text                                                          |
+| `{placement}`   | Placement direction     | top, bottom, left, right                   | Dropdown                                                      |
+| `{aspectRatio}` | Image aspect ratio      | 16/9, 4/3, 1/1                             | Image                                                         |
 
 ### Template Variable Usage
 
@@ -784,8 +845,7 @@ console.log(buttonSchema?.tokenBindings.background);
 
 // Runtime resolution (pseudo-code)
 const variant = 'primary';
-const resolvedToken = buttonSchema?.tokenBindings.background
-  .replace('{variant}', variant);
+const resolvedToken = buttonSchema?.tokenBindings.background.replace('{variant}', variant);
 // "component.button.primary.background"
 ```
 

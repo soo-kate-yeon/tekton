@@ -154,6 +154,7 @@ rules: {
 프로젝트에서 사용하는 두 가지 패턴:
 
 1. **루트 레벨 테스트**: `tests/` 디렉토리
+
    ```
    tests/
    ├── types.test.ts
@@ -181,21 +182,27 @@ rules: {
 ### 문제 1: `beforeEach is not defined`
 
 **원인**:
+
 - vitest에서 `beforeEach` import 누락
 - ESLint globals 미설정 (일반적으로 이미 설정됨)
 
 **해결**:
+
 ```typescript
 // ❌ 잘못된 예시
 describe('MyTest', () => {
-  beforeEach(() => { /* ... */ });
+  beforeEach(() => {
+    /* ... */
+  });
 });
 
 // ✅ 올바른 예시
 import { describe, it, expect, beforeEach } from 'vitest';
 
 describe('MyTest', () => {
-  beforeEach(() => { /* ... */ });
+  beforeEach(() => {
+    /* ... */
+  });
 });
 ```
 
@@ -204,10 +211,12 @@ describe('MyTest', () => {
 ### 문제 2: `console is not defined`
 
 **원인**:
+
 - 테스트 파일이 ESLint 패턴에서 제외됨
 - `.js` 확장자 파일이 테스트 패턴에 포함되지 않음
 
 **해결**:
+
 1. 파일명이 테스트 패턴과 일치하는지 확인:
    - `tests/**/*.js`
    - `**/*.test.js`
@@ -219,16 +228,17 @@ describe('MyTest', () => {
 ### 문제 3: `Expected { after 'if' condition`
 
 **원인**:
+
 - ESLint `curly` 규칙 위반
 - 단일 라인 if문에서 중괄호 생략
 
 **해결**:
+
 ```typescript
 // ❌ 잘못된 예시
 if (condition) return true;
 
-if (error)
-  throw new Error('Something went wrong');
+if (error) throw new Error('Something went wrong');
 
 // ✅ 올바른 예시
 if (condition) {
@@ -247,9 +257,11 @@ if (error) {
 ### 문제 4: `'expect' is assigned a value but never used`
 
 **원인**:
+
 - `expect`를 import 했지만 테스트에서 사용하지 않음
 
 **해결**:
+
 ```typescript
 // ❌ 잘못된 예시
 import { describe, it, expect } from 'vitest';
@@ -332,6 +344,7 @@ pnpm ci:test
 ```
 
 **포함 내용**:
+
 - Lint 검사
 - 타입 검사
 - 테스트 실행
@@ -353,6 +366,7 @@ pnpm exec lint-staged
 ```
 
 **검사 내용**:
+
 - ESLint 자동 검사 및 수정
 - Prettier 자동 포맷팅
 - TypeScript 타입 검사

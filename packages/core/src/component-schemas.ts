@@ -1132,10 +1132,7 @@ export const COMPOSED_COMPONENTS: ComponentSchema[] = [
 /**
  * All components registry (20 total)
  */
-export const ALL_COMPONENTS: ComponentSchema[] = [
-  ...PRIMITIVE_COMPONENTS,
-  ...COMPOSED_COMPONENTS,
-];
+export const ALL_COMPONENTS: ComponentSchema[] = [...PRIMITIVE_COMPONENTS, ...COMPOSED_COMPONENTS];
 
 /**
  * Get component schema by type

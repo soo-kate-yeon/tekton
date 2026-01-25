@@ -12,6 +12,7 @@
 Schema Validation provides Zod-based runtime validation for component schemas, props, accessibility requirements, and token bindings. The validation system ensures type safety, WCAG 2.1 AA compliance, and template variable integrity across all 20 component schemas.
 
 **Key Features:**
+
 - 8 validation utilities with comprehensive error messaging
 - Zod schemas for PropDefinition, A11yRequirements, TokenBindings, ComponentSchema
 - Custom validation rules (WCAG compliance, template variable detection)
@@ -77,18 +78,18 @@ const schema: ComponentSchema = {
       required: false,
       description: 'Visual style variant',
       defaultValue: 'primary',
-      options: ['primary', 'secondary', 'outline']
-    }
+      options: ['primary', 'secondary', 'outline'],
+    },
   ],
   tokenBindings: {
     background: 'component.button.{variant}.background',
-    foreground: 'component.button.{variant}.foreground'
+    foreground: 'component.button.{variant}.foreground',
   },
   a11y: {
     role: 'button',
     wcag: 'WCAG 2.1 AA',
-    ariaAttributes: ['aria-label', 'aria-disabled']
-  }
+    ariaAttributes: ['aria-label', 'aria-disabled'],
+  },
 };
 
 const result = validateComponentSchema(schema);
@@ -102,6 +103,7 @@ if (result.valid) {
 ```
 
 **Returns:**
+
 ```typescript
 {
   valid: boolean;
@@ -111,6 +113,7 @@ if (result.valid) {
 ```
 
 **Validation Rules:**
+
 - `type`: Required, non-empty string
 - `category`: Must be "primitive" or "composed"
 - `props`: Array with at least 1 PropDefinition
@@ -119,6 +122,7 @@ if (result.valid) {
 
 **Error Format:**
 Errors include path information for precise debugging:
+
 ```
 "props.0.name: Property name is required"
 "a11y.wcag: WCAG 2.1 compliance required"
@@ -149,6 +153,7 @@ if (result.warnings) {
 ```
 
 **Returns:**
+
 ```typescript
 {
   valid: boolean;
@@ -158,6 +163,7 @@ if (result.warnings) {
 ```
 
 **Validation Checks:**
+
 1. All 20 schemas pass individual Zod validation
 2. Exactly 20 components registered
 3. Exactly 10 primitive components
@@ -165,6 +171,7 @@ if (result.warnings) {
 5. No duplicate component types
 
 **Example Output:**
+
 ```typescript
 {
   valid: true,
@@ -200,7 +207,7 @@ const prop: PropDefinition = {
   required: false,
   description: 'Visual style variant',
   defaultValue: 'primary',
-  options: ['primary', 'secondary', 'outline']
+  options: ['primary', 'secondary', 'outline'],
 };
 
 const result = validateProp(prop);
@@ -211,6 +218,7 @@ if (!result.valid) {
 ```
 
 **Validation Rules:**
+
 - `name`: Required, non-empty string
 - `type`: Required, non-empty string (TypeScript-style type)
 - `required`: Required boolean
@@ -219,6 +227,7 @@ if (!result.valid) {
 - `options`: Optional, array of strings
 
 **Common Validation Errors:**
+
 ```typescript
 // Missing required fields
 {
@@ -253,7 +262,7 @@ const a11y: A11yRequirements = {
   ariaAttributes: ['aria-label', 'aria-disabled', 'aria-pressed'],
   keyboard: ['Enter', 'Space'],
   focus: 'Visible focus indicator with semantic.border.focus',
-  screenReader: 'Announces button label and state'
+  screenReader: 'Announces button label and state',
 };
 
 const result = validateA11y(a11y);
@@ -264,6 +273,7 @@ if (!result.valid) {
 ```
 
 **Validation Rules:**
+
 - `role`: Required, non-empty ARIA role string
 - `wcag`: Required, must include "2.1" for WCAG 2.1 compliance
 - `ariaAttributes`: Optional array of ARIA attribute strings
@@ -272,6 +282,7 @@ if (!result.valid) {
 - `screenReader`: Optional screen reader announcement description
 
 **WCAG Compliance Validation:**
+
 ```typescript
 // Valid WCAG references
 "WCAG 2.1 AA" ✅
@@ -285,6 +296,7 @@ if (!result.valid) {
 ```
 
 **Example Validation Error:**
+
 ```typescript
 {
   valid: false,
@@ -307,7 +319,7 @@ const bindings = {
   background: 'component.button.{variant}.background',
   foreground: 'component.button.{variant}.foreground',
   borderRadius: 'atomic.radius.md',
-  paddingX: 'atomic.spacing.{size}'
+  paddingX: 'atomic.spacing.{size}',
 };
 
 const result = validateTokenBindings(bindings);
@@ -318,11 +330,13 @@ if (result.warnings) {
 ```
 
 **Validation Rules:**
+
 1. **Minimum Bindings**: At least 2 token bindings required per component
 2. **Template Variables**: Detection of `{variable}` patterns
 3. **Token References**: Validation of `semantic.*`, `atomic.*`, `component.*` prefixes
 
 **Template Variable Detection:**
+
 ```typescript
 // Detected template variables
 /{[a-zA-Z]+}/.test(value) === true
@@ -334,6 +348,7 @@ if (result.warnings) {
 ```
 
 **Token Reference Validation:**
+
 ```typescript
 // Valid token references
 "semantic.foreground.primary" ✅
@@ -346,6 +361,7 @@ if (result.warnings) {
 ```
 
 **Example Output:**
+
 ```typescript
 {
   valid: true,
@@ -395,6 +411,7 @@ summary.validationResults.forEach(result => {
 ```
 
 **Returns:**
+
 ```typescript
 {
   totalComponents: number;
@@ -411,6 +428,7 @@ summary.validationResults.forEach(result => {
 ```
 
 **Example Output:**
+
 ```typescript
 {
   totalComponents: 20,
@@ -428,6 +446,7 @@ summary.validationResults.forEach(result => {
 ```
 
 **Use Cases:**
+
 - Build-time validation in CI/CD pipelines
 - Development-time schema health checks
 - Documentation generation statistics
@@ -445,9 +464,15 @@ import { assertValidSchema, type ComponentSchema } from 'tekton/core';
 const schema: ComponentSchema = {
   type: 'Button',
   category: 'primitive',
-  props: [/* ... */],
-  tokenBindings: {/* ... */},
-  a11y: {/* ... */}
+  props: [
+    /* ... */
+  ],
+  tokenBindings: {
+    /* ... */
+  },
+  a11y: {
+    /* ... */
+  },
 };
 
 try {
@@ -460,10 +485,12 @@ try {
 ```
 
 **Behavior:**
+
 - **Valid Schema**: No exception, continues execution
 - **Invalid Schema**: Throws Error with detailed validation error messages
 
 **Error Message Format:**
+
 ```
 "Invalid component schema: {detailed_errors}"
 
@@ -472,6 +499,7 @@ try {
 ```
 
 **Use Cases:**
+
 - Build-time validation (fail fast on invalid schemas)
 - Pre-deployment checks
 - Integration test assertions
@@ -496,10 +524,12 @@ try {
 ```
 
 **Behavior:**
+
 - **All Valid**: No exception, continues execution
 - **Any Invalid**: Throws Error with detailed validation errors
 
 **Error Message Format:**
+
 ```
 "Schema validation failed: {detailed_errors}"
 
@@ -508,12 +538,14 @@ try {
 ```
 
 **Use Cases:**
+
 - CI/CD pipeline quality gates
 - Pre-deployment validation
 - Build-time schema integrity checks
 - Automated testing suites
 
 **Example CI/CD Integration:**
+
 ```typescript
 // scripts/validate-schemas.ts
 import { assertAllSchemasValid } from 'tekton/core';
@@ -538,44 +570,44 @@ main();
 
 ### ComponentSchema Validation
 
-| Field | Rule | Error Message |
-|-------|------|---------------|
-| `type` | Required, non-empty string | "Component type is required" |
-| `category` | Must be "primitive" or "composed" | "Category must be 'primitive' or 'composed'" |
-| `props` | Array with ≥1 PropDefinition | "At least one prop is required" |
-| `tokenBindings` | Object with ≥2 bindings | "At least 2 token bindings required per component" |
-| `a11y` | Valid A11yRequirements | Nested validation errors |
-| `description` | Optional string | - |
+| Field           | Rule                              | Error Message                                      |
+| --------------- | --------------------------------- | -------------------------------------------------- |
+| `type`          | Required, non-empty string        | "Component type is required"                       |
+| `category`      | Must be "primitive" or "composed" | "Category must be 'primitive' or 'composed'"       |
+| `props`         | Array with ≥1 PropDefinition      | "At least one prop is required"                    |
+| `tokenBindings` | Object with ≥2 bindings           | "At least 2 token bindings required per component" |
+| `a11y`          | Valid A11yRequirements            | Nested validation errors                           |
+| `description`   | Optional string                   | -                                                  |
 
 ### PropDefinition Validation
 
-| Field | Rule | Error Message |
-|-------|------|---------------|
-| `name` | Required, non-empty string | "Property name is required" |
-| `type` | Required, non-empty string | "Property type is required" |
-| `required` | Required boolean | "Expected boolean, received {type}" |
-| `description` | Required, non-empty string | "Property description is required" |
-| `defaultValue` | Optional, any type | - |
-| `options` | Optional array of strings | "Expected array of strings" |
+| Field          | Rule                       | Error Message                       |
+| -------------- | -------------------------- | ----------------------------------- |
+| `name`         | Required, non-empty string | "Property name is required"         |
+| `type`         | Required, non-empty string | "Property type is required"         |
+| `required`     | Required boolean           | "Expected boolean, received {type}" |
+| `description`  | Required, non-empty string | "Property description is required"  |
+| `defaultValue` | Optional, any type         | -                                   |
+| `options`      | Optional array of strings  | "Expected array of strings"         |
 
 ### A11yRequirements Validation
 
-| Field | Rule | Error Message |
-|-------|------|---------------|
-| `role` | Required, non-empty string | "ARIA role is required" |
-| `wcag` | Required, includes "2.1" | "WCAG 2.1 compliance required" |
-| `ariaAttributes` | Optional array of strings | - |
-| `keyboard` | Optional array of strings | - |
-| `focus` | Optional string | - |
-| `screenReader` | Optional string | - |
+| Field            | Rule                       | Error Message                  |
+| ---------------- | -------------------------- | ------------------------------ |
+| `role`           | Required, non-empty string | "ARIA role is required"        |
+| `wcag`           | Required, includes "2.1"   | "WCAG 2.1 compliance required" |
+| `ariaAttributes` | Optional array of strings  | -                              |
+| `keyboard`       | Optional array of strings  | -                              |
+| `focus`          | Optional string            | -                              |
+| `screenReader`   | Optional string            | -                              |
 
 ### TokenBindings Validation
 
-| Rule | Warning Message |
-|------|-----------------|
-| Minimum 2 bindings | "At least 2 token bindings required per component" |
-| Template variables | "Consider using template variables like {variant} or {size}" |
-| Token references | "Token bindings should reference semantic, atomic, or component tokens" |
+| Rule               | Warning Message                                                         |
+| ------------------ | ----------------------------------------------------------------------- |
+| Minimum 2 bindings | "At least 2 token bindings required per component"                      |
+| Template variables | "Consider using template variables like {variant} or {size}"            |
+| Token references   | "Token bindings should reference semantic, atomic, or component tokens" |
 
 ---
 
@@ -650,10 +682,7 @@ async function validateSchemasWithProgress() {
 ```typescript
 import { validateComponentSchema, type ComponentSchema } from 'tekton/core';
 
-function validateSchemaMigration(
-  oldSchema: ComponentSchema,
-  newSchema: ComponentSchema
-): string[] {
+function validateSchemaMigration(oldSchema: ComponentSchema, newSchema: ComponentSchema): string[] {
   const errors: string[] = [];
 
   // Validate new schema structure
@@ -672,13 +701,9 @@ function validateSchemaMigration(
   }
 
   // Check for removed required props
-  const oldRequiredProps = oldSchema.props
-    .filter(p => p.required)
-    .map(p => p.name);
+  const oldRequiredProps = oldSchema.props.filter(p => p.required).map(p => p.name);
 
-  const newRequiredProps = newSchema.props
-    .filter(p => p.required)
-    .map(p => p.name);
+  const newRequiredProps = newSchema.props.filter(p => p.required).map(p => p.name);
 
   oldRequiredProps.forEach(propName => {
     if (!newRequiredProps.includes(propName)) {
@@ -702,7 +727,7 @@ import {
   validateComponentSchema,
   validateAllSchemas,
   assertValidSchema,
-  assertAllSchemasValid
+  assertAllSchemasValid,
 } from 'tekton/core';
 
 describe('Component Schema Validation', () => {
@@ -730,10 +755,7 @@ describe('Component Schema Validation', () => {
 ### Jest Integration
 
 ```typescript
-import {
-  validateComponentSchema,
-  getComponentSchema
-} from 'tekton/core';
+import { validateComponentSchema, getComponentSchema } from 'tekton/core';
 
 describe('Button Schema Validation', () => {
   const buttonSchema = getComponentSchema('Button');
@@ -834,6 +856,7 @@ main();
 ```
 
 **Add to package.json:**
+
 ```json
 {
   "scripts": {
@@ -851,9 +874,7 @@ main();
 ```typescript
 import { validateComponentSchema, type ComponentSchema } from 'tekton/core';
 
-function loadComponentSchema(
-  type: string
-): ComponentSchema | null {
+function loadComponentSchema(type: string): ComponentSchema | null {
   const schema = getComponentSchema(type);
 
   if (!schema) {

@@ -39,12 +39,11 @@ export const A11yRequirementsSchema = z.object({
 /**
  * TokenBindings Zod Schema
  */
-export const TokenBindingsSchema = z.record(z.string(), z.string()).refine(
-  bindings => Object.keys(bindings).length >= 2,
-  {
+export const TokenBindingsSchema = z
+  .record(z.string(), z.string())
+  .refine(bindings => Object.keys(bindings).length >= 2, {
     message: 'At least 2 token bindings required per component',
-  }
-);
+  });
 
 /**
  * ComponentSchema Zod Schema
@@ -174,9 +173,7 @@ export function validateTokenBindings(bindings: Record<string, string>): Validat
     TokenBindingsSchema.parse(bindings);
 
     // Check for template variable usage
-    const hasTemplateVars = Object.values(bindings).some(value =>
-      /\{[a-zA-Z]+\}/.test(value)
-    );
+    const hasTemplateVars = Object.values(bindings).some(value => /\{[a-zA-Z]+\}/.test(value));
 
     if (!hasTemplateVars) {
       warnings.push('Consider using template variables like {variant} or {size}');
@@ -185,9 +182,7 @@ export function validateTokenBindings(bindings: Record<string, string>): Validat
     // Check for token references
     const hasTokenReferences = Object.values(bindings).some(
       value =>
-        value.includes('semantic.') ||
-        value.includes('atomic.') ||
-        value.includes('component.')
+        value.includes('semantic.') || value.includes('atomic.') || value.includes('component.')
     );
 
     if (!hasTokenReferences) {
