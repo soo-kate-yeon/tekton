@@ -92,3 +92,14 @@ export interface RenderOptions {
   indent?: number;
   semicolons?: boolean;
 }
+
+// ============================================================================
+// Token Types (re-exported from tokens.ts)
+// ============================================================================
+
+export type {
+  AtomicTokens,
+  SemanticTokens,
+  ComponentTokens,
+  ThemeWithTokens,
+} from './tokens.js';
