@@ -23,7 +23,7 @@ describe('MCP Server Integration', () => {
     const response = await fetch(`${baseUrl}/tools`);
     expect(response.status).toBe(200);
 
-    const data = await response.json();
+    const data = await response.json() as any;
     expect(data.tools).toBeDefined();
     expect(data.tools).toHaveLength(3);
 
@@ -46,7 +46,7 @@ describe('MCP Server Integration', () => {
 
     expect(response.status).toBe(200);
 
-    const data = await response.json();
+    const data = await response.json() as any;
     expect(data.success).toBe(true);
     expect(data.blueprint).toBeDefined();
     expect(data.previewUrl).toBeDefined();
@@ -63,7 +63,7 @@ describe('MCP Server Integration', () => {
 
     expect(response.status).toBe(200);
 
-    const data = await response.json();
+    const data = await response.json() as any;
     expect(data.success).toBe(true);
     expect(data.theme).toBeDefined();
     expect(data.theme.cssVariables).toBeDefined();
@@ -82,7 +82,7 @@ describe('MCP Server Integration', () => {
 
     expect(response.status).toBe(400);
 
-    const data = await response.json();
+    const data = await response.json() as any;
     expect(data.success).toBe(false);
     expect(data.error).toContain('Validation errors');
   });
@@ -91,7 +91,7 @@ describe('MCP Server Integration', () => {
     const response = await fetch(`${baseUrl}/api/themes`);
     expect(response.status).toBe(200);
 
-    const data = await response.json();
+    const data = await response.json() as any;
     expect(data.success).toBe(true);
     expect(data.themes).toBeDefined();
     expect(data.themes.length).toBeGreaterThan(0);

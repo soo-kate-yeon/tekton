@@ -36,7 +36,7 @@ describe('API Routes', () => {
       const response = await fetch(`${baseUrl}/api/blueprints/${timestamp}`);
       expect(response.status).toBe(200);
 
-      const data = await response.json();
+      const data = await response.json() as any;
       expect(data.success).toBe(true);
       expect(data.blueprint).toBeDefined();
       expect(data.blueprint.themeId).toBe('calm-wellness');
@@ -46,7 +46,7 @@ describe('API Routes', () => {
       const response = await fetch(`${baseUrl}/api/blueprints/9999999999999`);
       expect(response.status).toBe(404);
 
-      const data = await response.json();
+      const data = await response.json() as any;
       expect(data.success).toBe(false);
       expect(data.error).toContain('Blueprint not found');
     });
@@ -62,7 +62,7 @@ describe('API Routes', () => {
       const response = await fetch(`${baseUrl}/api/themes`);
       expect(response.status).toBe(200);
 
-      const data = await response.json();
+      const data = await response.json() as any;
       expect(data.success).toBe(true);
       expect(data.themes).toBeDefined();
       expect(Array.isArray(data.themes)).toBe(true);
@@ -71,7 +71,7 @@ describe('API Routes', () => {
 
     it('should include theme metadata', async () => {
       const response = await fetch(`${baseUrl}/api/themes`);
-      const data = await response.json();
+      const data = await response.json() as any;
 
       const theme = data.themes[0];
       expect(theme.id).toBeDefined();
@@ -81,7 +81,7 @@ describe('API Routes', () => {
 
     it('should include calm-wellness theme', async () => {
       const response = await fetch(`${baseUrl}/api/themes`);
-      const data = await response.json();
+      const data = await response.json() as any;
 
       const themeIds = data.themes.map((t: any) => t.id);
       expect(themeIds).toContain('calm-wellness');

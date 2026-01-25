@@ -4,7 +4,7 @@
  */
 
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
-import { rmSync, existsSync, readFileSync, mkdirSync } from 'fs';
+import { rmSync, existsSync, readFileSync } from 'fs';
 import { exportScreenTool } from '../../src/tools/export-screen.js';
 import { generateBlueprintTool } from '../../src/tools/generate-blueprint.js';
 
