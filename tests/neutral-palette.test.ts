@@ -1,9 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import {
   generateNeutralPalette,
-  type NeutralPaletteConfig,
 } from '../src/generator/neutral-palette';
-import type { ColorScale } from '../src/schemas';
 
 describe('Neutral Palette Generator - TASK-001 to TASK-003', () => {
   describe('Light Mode Neutral Palette - TASK-001 (SDR-001)', () => {
@@ -24,7 +22,7 @@ describe('Neutral Palette Generator - TASK-001 to TASK-003', () => {
         tinting: 'pure',
       });
 
-      expect(palette['50'].l).toBeGreaterThanOrEqual(0.95);
+      expect(palette['50']?.l).toBeGreaterThanOrEqual(0.95);
     });
 
     it('should ensure Neutral-900 lightness <= 0.20 (foreground)', () => {
@@ -33,7 +31,7 @@ describe('Neutral Palette Generator - TASK-001 to TASK-003', () => {
         tinting: 'pure',
       });
 
-      expect(palette['900'].l).toBeLessThanOrEqual(0.20);
+      expect(palette['900']?.l).toBeLessThanOrEqual(0.20);
     });
 
     it('should generate background-based lightness scaling', () => {
@@ -43,8 +41,8 @@ describe('Neutral Palette Generator - TASK-001 to TASK-003', () => {
       });
 
       // Verify perceptually uniform distribution
-      const steps = ['50', '100', '200', '300', '400', '500', '600', '700', '800', '900', '950'];
-      const lightnesses = steps.map((step) => palette[step].l);
+      const steps = ['50', '100', '200', '300', '400', '500', '600', '700', '800', '900', '950'] as const;
+      const lightnesses = steps.map((step) => palette[step]?.l ?? 0);
 
       // Light mode: 50 should be lightest, 950 should be darkest
       expect(lightnesses[0]).toBeGreaterThan(lightnesses[10]);
@@ -84,8 +82,8 @@ describe('Neutral Palette Generator - TASK-001 to TASK-003', () => {
       });
 
       // Neutral-50 (background) vs Neutral-900 (foreground) should have contrast >= 4.5
-      const bgLightness = palette['50'].l;
-      const fgLightness = palette['900'].l;
+      const bgLightness = palette['50']?.l ?? 1;
+      const fgLightness = palette['900']?.l ?? 0;
 
       // Simple contrast approximation: lighter/darker ratio
       const contrastRatio = bgLightness / fgLightness;
@@ -114,7 +112,7 @@ describe('Neutral Palette Generator - TASK-001 to TASK-003', () => {
       });
 
       // In dark mode, 900 becomes the background (inverted)
-      expect(palette['900'].l).toBeLessThanOrEqual(0.15);
+      expect(palette['900']?.l).toBeLessThanOrEqual(0.15);
     });
 
     it('should ensure Neutral-50 lightness >= 0.95 in dark mode (foreground)', () => {
@@ -124,7 +122,7 @@ describe('Neutral Palette Generator - TASK-001 to TASK-003', () => {
       });
 
       // In dark mode, 50 becomes the foreground (inverted)
-      expect(palette['50'].l).toBeGreaterThanOrEqual(0.95);
+      expect(palette['50']?.l).toBeGreaterThanOrEqual(0.95);
     });
 
     it('should maintain consistent scale distribution in dark mode', () => {
@@ -133,8 +131,8 @@ describe('Neutral Palette Generator - TASK-001 to TASK-003', () => {
         tinting: 'pure',
       });
 
-      const steps = ['50', '100', '200', '300', '400', '500', '600', '700', '800', '900', '950'];
-      const lightnesses = steps.map((step) => darkPalette[step].l);
+      const steps = ['50', '100', '200', '300', '400', '500', '600', '700', '800', '900', '950'] as const;
+      const lightnesses = steps.map((step) => darkPalette[step]?.l ?? 0);
 
       // Dark mode: 50 should be lightest (foreground), 950 should be darkest (background)
       expect(lightnesses[0]).toBeGreaterThan(lightnesses[10]);
@@ -152,8 +150,8 @@ describe('Neutral Palette Generator - TASK-001 to TASK-003', () => {
       });
 
       // Dark mode: Neutral-900 (dark background) vs Neutral-50 (light foreground)
-      const bgLightness = palette['900'].l;
-      const fgLightness = palette['50'].l;
+      const bgLightness = palette['900']?.l ?? 0;
+      const fgLightness = palette['50']?.l ?? 1;
 
       // Foreground should be much lighter than background
       expect(fgLightness).toBeGreaterThan(bgLightness);
@@ -216,10 +214,10 @@ describe('Neutral Palette Generator - TASK-001 to TASK-003', () => {
       });
 
       // Tinted should have higher chroma than pure
-      expect(tintedPalette['500'].c).toBeGreaterThan(purePalette['500'].c);
+      expect(tintedPalette['500']?.c).toBeGreaterThan(purePalette['500']?.c ?? 0);
 
       // But still subtle (less than 0.02)
-      expect(tintedPalette['500'].c).toBeLessThan(0.02);
+      expect(tintedPalette['500']?.c).toBeLessThan(0.02);
     });
 
     it('should apply tinting consistently across all scale steps', () => {
@@ -229,11 +227,11 @@ describe('Neutral Palette Generator - TASK-001 to TASK-003', () => {
         primaryHue: 280,
       });
 
-      const steps = ['50', '100', '200', '300', '400', '500', '600', '700', '800', '900', '950'];
+      const steps = ['50', '100', '200', '300', '400', '500', '600', '700', '800', '900', '950'] as const;
 
       steps.forEach((step) => {
-        expect(palette[step].h).toBe(280);
-        expect(palette[step].c).toBeGreaterThan(0);
+        expect(palette[step]?.h).toBe(280);
+        expect(palette[step]?.c).toBeGreaterThan(0);
       });
     });
 
@@ -300,8 +298,8 @@ describe('Neutral Palette Generator - TASK-001 to TASK-003', () => {
       });
 
       // Implementation should handle these gracefully
-      expect(palette1['500'].h).toBeDefined();
-      expect(palette2['500'].h).toBeDefined();
+      expect(palette1['500']?.h).toBeDefined();
+      expect(palette2['500']?.h).toBeDefined();
     });
   });
 });

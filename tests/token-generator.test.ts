@@ -199,7 +199,10 @@ describe('Token Generator - TASK-009 to TASK-013', () => {
       });
 
       expect(tokens[0].metadata?.generated).toBeDefined();
-      expect(new Date(tokens[0].metadata!.generated)).toBeInstanceOf(Date);
+      const generated = tokens[0].metadata?.generated;
+      if (typeof generated === 'string' || typeof generated === 'number' || generated instanceof Date) {
+        expect(new Date(generated)).toBeInstanceOf(Date);
+      }
     });
   });
 });

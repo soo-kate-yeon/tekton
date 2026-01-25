@@ -1,8 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import {
   mapSemanticTokens,
-  type SemanticTokenConfig,
-  type SemanticTokens,
 } from '../src/generator/semantic-mapper';
 import type { OKLCHColor } from '../src/schemas';
 

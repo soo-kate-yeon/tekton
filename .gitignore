@@ -87,6 +87,18 @@ node_modules/
 .next/
 out/
 
+# TypeScript compilation outputs (prevent committing build artifacts)
+# Only exclude from source/test directories in packages
+packages/*/src/**/*.js
+packages/*/src/**/*.d.ts
+packages/*/src/**/*.js.map
+packages/*/__tests__/**/*.js
+packages/*/__tests__/**/*.d.ts
+packages/*/__tests__/**/*.js.map
+packages/*/*.config.js
+packages/*/*.config.d.ts
+packages/*/*.config.js.map
+
 # ---------------------------------------------
 # Logs & Temporary Files
 # ---------------------------------------------
@@ -110,6 +122,13 @@ htmlcov/
 coverage/
 packages/*/coverage/
 *.lcov
+
+# Test-generated data
+.tekton/
+.tekton-test/
+packages/*/.tekton/
+packages/*/.tekton-test/
+test-exports/
 
 # ---------------------------------------------
 # Environment Variables & Secrets

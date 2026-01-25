@@ -1,6 +1,5 @@
 import { describe, it, expect } from 'vitest';
 import { loadTheme, loadDefaultTheme, ThemeValidationError } from '../../src/themes/loader';
-import type { Theme } from '../../src/themes/types';
 
 describe('loadTheme', () => {
   describe('valid themes', () => {
