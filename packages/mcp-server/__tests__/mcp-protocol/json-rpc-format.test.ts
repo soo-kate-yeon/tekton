@@ -30,7 +30,7 @@ describe('JSON-RPC format validation', () => {
         reject(new Error('Request timeout'));
       }, 5000);
 
-      server.stdout?.on('data', (data) => {
+      server.stdout?.on('data', data => {
         stdoutData += data.toString();
 
         try {
@@ -46,7 +46,7 @@ describe('JSON-RPC format validation', () => {
         }
       });
 
-      server.on('error', (error) => {
+      server.on('error', error => {
         clearTimeout(timeout);
         reject(error);
       });
@@ -62,7 +62,7 @@ describe('JSON-RPC format validation', () => {
         jsonrpc: '2.0',
         id: 1,
         method: 'tools/list',
-        params: {}
+        params: {},
       };
 
       const response = await sendJsonRpcRequest(request);
@@ -77,7 +77,7 @@ describe('JSON-RPC format validation', () => {
         jsonrpc: '2.0',
         id: testId,
         method: 'tools/list',
-        params: {}
+        params: {},
       };
 
       const response = await sendJsonRpcRequest(request);
@@ -91,7 +91,7 @@ describe('JSON-RPC format validation', () => {
         jsonrpc: '2.0',
         id: 1,
         method: 'tools/list',
-        params: {}
+        params: {},
       };
 
       const response = await sendJsonRpcRequest(request);
@@ -105,7 +105,7 @@ describe('JSON-RPC format validation', () => {
         jsonrpc: '2.0',
         id: 1,
         method: 'tools/list',
-        params: {}
+        params: {},
       };
 
       const response = await sendJsonRpcRequest(request);
@@ -125,7 +125,7 @@ describe('JSON-RPC format validation', () => {
         jsonrpc: '2.0',
         id: 1,
         method: 'tools/list',
-        params: {}
+        params: {},
       };
 
       const response = await sendJsonRpcRequest(request);
@@ -139,7 +139,7 @@ describe('JSON-RPC format validation', () => {
         jsonrpc: '2.0',
         id: 1,
         method: 'tools/list',
-        params: {}
+        params: {},
       };
 
       const response = await sendJsonRpcRequest(request);
@@ -165,8 +165,8 @@ describe('JSON-RPC format validation', () => {
         method: 'tools/call',
         params: {
           name: 'preview-theme',
-          arguments: { themeId: 'calm-wellness' }
-        }
+          arguments: { themeId: 'calm-wellness' },
+        },
       };
 
       const response = await sendJsonRpcRequest(request);
@@ -183,8 +183,8 @@ describe('JSON-RPC format validation', () => {
         method: 'tools/call',
         params: {
           name: 'preview-theme',
-          arguments: { themeId: 'calm-wellness' }
-        }
+          arguments: { themeId: 'calm-wellness' },
+        },
       };
 
       const response = await sendJsonRpcRequest(request);
@@ -205,8 +205,8 @@ describe('JSON-RPC format validation', () => {
         method: 'tools/call',
         params: {
           name: 'unknown-tool',
-          arguments: {}
-        }
+          arguments: {},
+        },
       };
 
       const response = await sendJsonRpcRequest(request);
@@ -229,8 +229,8 @@ describe('JSON-RPC format validation', () => {
           name: 'preview-theme',
           arguments: {
             // Missing required themeId
-          }
-        }
+          },
+        },
       };
 
       const response = await sendJsonRpcRequest(request);
@@ -248,8 +248,8 @@ describe('JSON-RPC format validation', () => {
         method: 'tools/call',
         params: {
           name: 'invalid-tool',
-          arguments: {}
-        }
+          arguments: {},
+        },
       };
 
       const response = await sendJsonRpcRequest(request);
@@ -262,7 +262,12 @@ describe('JSON-RPC format validation', () => {
     it('should always include jsonrpc version', async () => {
       const requests = [
         { jsonrpc: '2.0', id: 1, method: 'tools/list', params: {} },
-        { jsonrpc: '2.0', id: 2, method: 'tools/call', params: { name: 'preview-theme', arguments: { themeId: 'calm-wellness' } } }
+        {
+          jsonrpc: '2.0',
+          id: 2,
+          method: 'tools/call',
+          params: { name: 'preview-theme', arguments: { themeId: 'calm-wellness' } },
+        },
       ];
 
       for (const request of requests) {
@@ -279,7 +284,7 @@ describe('JSON-RPC format validation', () => {
           jsonrpc: '2.0',
           id,
           method: 'tools/list',
-          params: {}
+          params: {},
         };
 
         const response = await sendJsonRpcRequest(request);
@@ -290,7 +295,7 @@ describe('JSON-RPC format validation', () => {
 
   describe('malformed requests', () => {
     it('should handle request with invalid JSON gracefully', async () => {
-      return new Promise<void>((resolve) => {
+      return new Promise<void>(resolve => {
         const server: ChildProcess = spawn('node', [serverPath]);
 
         let responded = false;

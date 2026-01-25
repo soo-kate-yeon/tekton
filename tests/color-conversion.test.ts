@@ -1,10 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import {
-  oklchToRgb,
-  rgbToOklch,
-  oklchToHex,
-  hexToOklch,
-} from '../src/color-conversion';
+import { oklchToRgb, rgbToOklch, oklchToHex, hexToOklch } from '../src/color-conversion';
 
 describe('Color Space Utilities - TASK-006', () => {
   describe('oklchToRgb', () => {

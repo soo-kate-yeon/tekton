@@ -35,7 +35,7 @@ describe('exportScreenTool', () => {
     const genResult = await generateBlueprintTool({
       description: 'Test screen for export',
       layout: 'single-column',
-      themeId: 'calm-wellness'
+      themeId: 'calm-wellness',
     });
 
     expect(genResult.success).toBe(true);
@@ -44,7 +44,7 @@ describe('exportScreenTool', () => {
     // Export to JSX using blueprint object
     const result = await exportScreenTool({
       blueprint,
-      format: 'jsx'
+      format: 'jsx',
     });
 
     expect(result.success).toBe(true);
@@ -58,7 +58,7 @@ describe('exportScreenTool', () => {
     const genResult = await generateBlueprintTool({
       description: 'Test dashboard',
       layout: 'single-column',
-      themeId: 'dynamic-fitness'
+      themeId: 'dynamic-fitness',
     });
 
     expect(genResult.success).toBe(true);
@@ -66,7 +66,7 @@ describe('exportScreenTool', () => {
     // Export to TSX using blueprint object
     const result = await exportScreenTool({
       blueprint: genResult.blueprint!,
-      format: 'tsx'
+      format: 'tsx',
     });
 
     expect(result.success).toBe(true);
@@ -80,7 +80,7 @@ describe('exportScreenTool', () => {
     const genResult = await generateBlueprintTool({
       description: 'Vue test screen',
       layout: 'single-column',
-      themeId: 'calm-wellness'
+      themeId: 'calm-wellness',
     });
 
     expect(genResult.success).toBe(true);
@@ -88,7 +88,7 @@ describe('exportScreenTool', () => {
     // Export to Vue using blueprint object
     const result = await exportScreenTool({
       blueprint: genResult.blueprint!,
-      format: 'vue'
+      format: 'vue',
     });
 
     expect(result.success).toBe(true);
@@ -101,7 +101,7 @@ describe('exportScreenTool', () => {
   it('should return error for missing blueprint object', async () => {
     const result = await exportScreenTool({
       blueprint: null,
-      format: 'jsx'
+      format: 'jsx',
     });
 
     expect(result.success).toBe(false);
@@ -112,7 +112,7 @@ describe('exportScreenTool', () => {
   it('should return error for undefined blueprint', async () => {
     const result = await exportScreenTool({
       blueprint: undefined,
-      format: 'jsx'
+      format: 'jsx',
     });
 
     expect(result.success).toBe(false);
@@ -124,7 +124,7 @@ describe('exportScreenTool', () => {
     const genResult = await generateBlueprintTool({
       description: 'Multi-format test',
       layout: 'single-column',
-      themeId: 'calm-wellness'
+      themeId: 'calm-wellness',
     });
 
     expect(genResult.success).toBe(true);
@@ -136,7 +136,7 @@ describe('exportScreenTool', () => {
     for (const format of formats) {
       const result = await exportScreenTool({
         blueprint,
-        format
+        format,
       });
 
       expect(result.success).toBe(true);
@@ -149,12 +149,12 @@ describe('exportScreenTool', () => {
     const genResult = await generateBlueprintTool({
       description: 'JSX structure test',
       layout: 'single-column',
-      themeId: 'calm-wellness'
+      themeId: 'calm-wellness',
     });
 
     const result = await exportScreenTool({
       blueprint: genResult.blueprint!,
-      format: 'jsx'
+      format: 'jsx',
     });
 
     expect(result.success).toBe(true);
@@ -171,19 +171,19 @@ describe('exportScreenTool', () => {
     const genResult = await generateBlueprintTool({
       description: 'TSX structure test',
       layout: 'single-column',
-      themeId: 'calm-wellness'
+      themeId: 'calm-wellness',
     });
 
     const result = await exportScreenTool({
       blueprint: genResult.blueprint!,
-      format: 'tsx'
+      format: 'tsx',
     });
 
     expect(result.success).toBe(true);
     expect(result.code).toBeDefined();
 
     const code = result.code!;
-    expect(code).toContain('import React from \'react\'');
+    expect(code).toContain("import React from 'react'");
     expect(code).toMatch(/export default function \w+\(\): React\.ReactElement/);
   });
 
@@ -191,12 +191,12 @@ describe('exportScreenTool', () => {
     const genResult = await generateBlueprintTool({
       description: 'Vue structure test',
       layout: 'single-column',
-      themeId: 'calm-wellness'
+      themeId: 'calm-wellness',
     });
 
     const result = await exportScreenTool({
       blueprint: genResult.blueprint!,
-      format: 'vue'
+      format: 'vue',
     });
 
     expect(result.success).toBe(true);
@@ -222,14 +222,14 @@ describe('exportScreenTool', () => {
         {
           type: 'Card',
           props: { title: 'Test Card' },
-          children: []
-        }
-      ]
+          children: [],
+        },
+      ],
     };
 
     const result = await exportScreenTool({
       blueprint: mockBlueprint,
-      format: 'jsx'
+      format: 'jsx',
     });
 
     expect(result.success).toBe(true);
@@ -244,7 +244,7 @@ describe('exportScreenTool', () => {
 
     const result = await exportScreenTool({
       blueprint: malformedBlueprint,
-      format: 'jsx'
+      format: 'jsx',
     });
 
     // Should handle error gracefully
@@ -256,12 +256,12 @@ describe('exportScreenTool', () => {
     const genResult = await generateBlueprintTool({
       description: 'MCP format test',
       layout: 'single-column',
-      themeId: 'calm-wellness'
+      themeId: 'calm-wellness',
     });
 
     const result = await exportScreenTool({
       blueprint: genResult.blueprint!,
-      format: 'jsx'
+      format: 'jsx',
     });
 
     expect(result.success).toBe(true);
@@ -276,14 +276,14 @@ describe('exportScreenTool', () => {
       description: 'Dashboard with cards, buttons, and text components',
       layout: 'dashboard',
       themeId: 'dynamic-fitness',
-      componentHints: ['Card', 'Button', 'Text', 'Avatar']
+      componentHints: ['Card', 'Button', 'Text', 'Avatar'],
     });
 
     expect(genResult.success).toBe(true);
 
     const result = await exportScreenTool({
       blueprint: genResult.blueprint!,
-      format: 'tsx'
+      format: 'tsx',
     });
 
     expect(result.success).toBe(true);
@@ -295,7 +295,7 @@ describe('exportScreenTool', () => {
     const genResult = await generateBlueprintTool({
       description: 'Data preservation test',
       layout: 'single-column',
-      themeId: 'premium-editorial'
+      themeId: 'premium-editorial',
     });
 
     const originalBlueprint = genResult.blueprint!;
@@ -304,7 +304,7 @@ describe('exportScreenTool', () => {
 
     const result = await exportScreenTool({
       blueprint: originalBlueprint,
-      format: 'jsx'
+      format: 'jsx',
     });
 
     expect(result.success).toBe(true);

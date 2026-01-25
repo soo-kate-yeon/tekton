@@ -49,7 +49,7 @@ describe('Lightness Scale Generator - TASK-007', () => {
     const base = { l: 0.5, c: 0.15, h: 220 };
     const scale = generateLightnessScale(base);
 
-    Object.values(scale).forEach((color) => {
+    Object.values(scale).forEach(color => {
       expect(color.h).toBeCloseTo(base.h, 1);
     });
   });
@@ -58,7 +58,7 @@ describe('Lightness Scale Generator - TASK-007', () => {
     const base = { l: 0.5, c: 0.15, h: 220 };
     const scale = generateLightnessScale(base);
 
-    Object.values(scale).forEach((color) => {
+    Object.values(scale).forEach(color => {
       expect(color.c).toBeGreaterThanOrEqual(0);
       expect(color.c).toBeLessThanOrEqual(0.5);
     });
@@ -69,7 +69,7 @@ describe('Lightness Scale Generator - TASK-007', () => {
     const scale = generateLightnessScale(gray);
 
     expect(Object.keys(scale)).toHaveLength(11);
-    Object.values(scale).forEach((color) => {
+    Object.values(scale).forEach(color => {
       expect(color.c).toBeLessThan(0.05);
     });
   });

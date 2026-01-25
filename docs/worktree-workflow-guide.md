@@ -43,6 +43,7 @@ The Tekton Worktree Management System provides isolated Git workspaces for paral
 ### Traditional Branch Workflow Pain Points
 
 **Single Branch Development**:
+
 ```bash
 # Problem: Switching branches requires clean working directory
 git checkout feature/SPEC-001
@@ -55,6 +56,7 @@ git stash pop  # Restore changes
 ```
 
 **Issues**:
+
 - Frequent `git stash` operations
 - Risk of losing uncommitted work
 - Context switching overhead
@@ -64,6 +66,7 @@ git stash pop  # Restore changes
 ### Worktree Solution
 
 **Parallel Worktree Development**:
+
 ```bash
 # Create isolated worktrees
 tekton worktree new SPEC-001 "User Authentication"
@@ -77,6 +80,7 @@ cd ~/.worktrees/SPEC-002  # Work on payments
 ```
 
 **Benefits**:
+
 - Each SPEC has its own directory
 - Independent Git state per worktree
 - Simultaneous development on multiple SPECs
@@ -212,6 +216,7 @@ sequenceDiagram
 ### Phase 1: /moai:1-plan (Planning Phase)
 
 **Without Worktrees**:
+
 ```bash
 # Traditional approach
 /moai:1-plan "User Authentication System"
@@ -220,6 +225,7 @@ sequenceDiagram
 ```
 
 **With Worktrees**:
+
 ```bash
 # Step 1: Create SPEC
 /moai:1-plan "User Authentication System"
@@ -243,6 +249,7 @@ cd ~/.worktrees/SPEC-AUTH-001
 ### Phase 2: /moai:2-run (Development Phase)
 
 **Worktree-Aware Development**:
+
 ```bash
 # Navigate to worktree
 cd ~/.worktrees/SPEC-AUTH-001
@@ -255,6 +262,7 @@ cd ~/.worktrees/SPEC-AUTH-001
 ```
 
 **Benefits**:
+
 - Independent test execution per SPEC
 - Isolated dependency installation
 - No cross-contamination between SPECs
@@ -265,6 +273,7 @@ cd ~/.worktrees/SPEC-AUTH-001
 ### Phase 3: /moai:3-sync (Synchronization Phase)
 
 **Pre-PR Synchronization**:
+
 ```bash
 # Check worktree status before creating PR
 tekton worktree status SPEC-AUTH-001
@@ -292,6 +301,7 @@ tekton worktree sync SPEC-AUTH-001
 ### Phase 4: Post-PR Cleanup
 
 **After PR Merge**:
+
 ```bash
 # Clean up merged worktrees automatically
 tekton worktree clean --merged-only
@@ -425,6 +435,7 @@ cd ~/.worktrees/SPEC-001
 ### 1. Worktree Naming Conventions
 
 **Good**:
+
 ```bash
 tekton worktree new SPEC-AUTH-001 "JWT Authentication with Refresh Tokens"
 tekton worktree new SPEC-PAY-001 "Stripe Integration for Subscriptions"
@@ -432,6 +443,7 @@ tekton worktree new SPEC-DASH-001 "Real-time Analytics Dashboard"
 ```
 
 **Bad**:
+
 ```bash
 tekton worktree new SPEC-001 "auth"  # Too vague
 tekton worktree new SPEC-TEST "test" # Not descriptive
@@ -440,6 +452,7 @@ tekton worktree new SPEC-TEST "test" # Not descriptive
 ### 2. Regular Synchronization
 
 **Check sync status regularly**:
+
 ```bash
 # Before starting work
 tekton worktree status SPEC-001
@@ -455,6 +468,7 @@ tekton worktree sync SPEC-001
 ### 3. Cleanup Merged Worktrees
 
 **Weekly cleanup**:
+
 ```bash
 # Remove all merged worktrees
 tekton worktree clean --merged-only
@@ -466,6 +480,7 @@ tekton worktree list --status merged
 ### 4. Configuration Management
 
 **Set project-specific configuration**:
+
 ```bash
 # Use project-specific worktree root
 tekton worktree config set worktree_root ~/dev/myproject/worktrees
@@ -480,6 +495,7 @@ tekton worktree config set cleanup_merged true
 ### 5. Shell Integration
 
 **Add to `.bashrc` or `.zshrc`**:
+
 ```bash
 # Worktree aliases
 alias tw='tekton worktree'
@@ -502,12 +518,14 @@ twgo() {
 ### Issue 1: Worktree Creation Fails
 
 **Symptom**:
+
 ```bash
 tekton worktree new SPEC-001 "Test"
 # ✗ Invalid SPEC ID: SPEC-001
 ```
 
 **Solution**:
+
 ```bash
 # Use proper SPEC ID format: SPEC-XXX-001
 tekton worktree new SPEC-ABC-001 "Test"
@@ -516,12 +534,14 @@ tekton worktree new SPEC-ABC-001 "Test"
 ### Issue 2: Sync Conflicts
 
 **Symptom**:
+
 ```bash
 tekton worktree sync SPEC-001
 # ✗ Merge conflict detected
 ```
 
 **Solution**:
+
 ```bash
 # 1. Navigate to worktree
 cd ~/.worktrees/SPEC-001
@@ -540,12 +560,14 @@ tekton worktree sync SPEC-001
 ### Issue 3: Cannot Remove Worktree
 
 **Symptom**:
+
 ```bash
 tekton worktree remove SPEC-001
 # ✗ Worktree has uncommitted changes
 ```
 
 **Solution**:
+
 ```bash
 # Option 1: Commit changes
 cd ~/.worktrees/SPEC-001
@@ -561,12 +583,14 @@ tekton worktree remove SPEC-001 --force
 ### Issue 4: Worktree Path Not Found
 
 **Symptom**:
+
 ```bash
 cd ~/.worktrees/SPEC-001
 # bash: cd: /Users/you/.worktrees/SPEC-001: No such file or directory
 ```
 
 **Solution**:
+
 ```bash
 # Check configured worktree root
 tekton worktree config get worktree_root
@@ -699,12 +723,12 @@ tekton worktree config get <key>
 
 ### Integration Points
 
-| Phase | Command | Worktree Action |
-|-------|---------|----------------|
-| Plan | `/moai:1-plan` | Suggest: `tekton worktree new` |
-| Run | `/moai:2-run` | Detect worktree context |
-| Sync | `/moai:3-sync` | Check: `tekton worktree status` |
-| Post-PR | - | Cleanup: `tekton worktree clean` |
+| Phase   | Command        | Worktree Action                  |
+| ------- | -------------- | -------------------------------- |
+| Plan    | `/moai:1-plan` | Suggest: `tekton worktree new`   |
+| Run     | `/moai:2-run`  | Detect worktree context          |
+| Sync    | `/moai:3-sync` | Check: `tekton worktree status`  |
+| Post-PR | -              | Cleanup: `tekton worktree clean` |
 
 ---
 

@@ -1,10 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import {
-  TokenGenerator,
-  generateComponentPresets,
-  oklchToRgb,
-  hexToOklch,
-} from '../src';
+import { TokenGenerator, generateComponentPresets, oklchToRgb, hexToOklch } from '../src';
 
 describe('Integration Tests - TASK-021', () => {
   describe('End-to-end token generation', () => {
@@ -19,7 +14,7 @@ describe('Integration Tests - TASK-021', () => {
       const tokens = generator.generateTokens(palette);
 
       expect(tokens).toHaveLength(3);
-      tokens.forEach((token) => {
+      tokens.forEach(token => {
         expect(token.id).toBeDefined();
         expect(token.name).toBeDefined();
         expect(token.value).toBeDefined();
@@ -49,7 +44,7 @@ describe('Integration Tests - TASK-021', () => {
 
       expect(presets).toHaveLength(8);
 
-      presets.forEach((preset) => {
+      presets.forEach(preset => {
         expect(preset.name).toBeDefined();
         expect(preset.states).toBeDefined();
         expect(Object.keys(preset.states).length).toBeGreaterThan(0);
@@ -88,7 +83,7 @@ describe('Integration Tests - TASK-021', () => {
       });
 
       expect(tokens.length).toBeGreaterThanOrEqual(2);
-      const darkToken = tokens.find((t) => t.name.includes('dark'));
+      const darkToken = tokens.find(t => t.name.includes('dark'));
       expect(darkToken).toBeDefined();
     });
   });
@@ -164,9 +159,9 @@ describe('Integration Tests - TASK-021', () => {
       expect(presets).toHaveLength(8);
 
       // Step 6: Verify WCAG compliance
-      presets.forEach((preset) => {
+      presets.forEach(preset => {
         if (preset.accessibility) {
-          preset.accessibility.forEach((check) => {
+          preset.accessibility.forEach(check => {
             expect(check.wcagLevel).toBe('AA');
           });
         }

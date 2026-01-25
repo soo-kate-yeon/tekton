@@ -25,24 +25,24 @@
 
 ### ✅ 완료된 것
 
-| 레이어 | 구현체 | 설명 |
-|--------|--------|------|
-| **Component System** | `@tekton/component-system` | 20개 훅의 스타일 규칙 정의 |
-| **Token Contract** | `@tekton/token-contract` | OKLCH 토큰 스키마, 7개 프리셋 |
-| **Studio MCP** | `@tekton/studio-mcp` | AI용 아키타입 조회 API |
-| **Studio API** | `studio-api` | 프리셋 CRUD REST API |
-| **Studio Web** | `studio-web` | 프리셋 갤러리 UI |
-| **Contracts** | `@tekton/contracts` | Intent, Skeleton, Environment 스키마 |
-| **create-screen 로직** | `cli/create-screen.ts` | 파일 생성 로직 (단, CLI 미등록) |
+| 레이어                 | 구현체                     | 설명                                 |
+| ---------------------- | -------------------------- | ------------------------------------ |
+| **Component System**   | `@tekton/component-system` | 20개 훅의 스타일 규칙 정의           |
+| **Token Contract**     | `@tekton/token-contract`   | OKLCH 토큰 스키마, 7개 프리셋        |
+| **Studio MCP**         | `@tekton/studio-mcp`       | AI용 아키타입 조회 API               |
+| **Studio API**         | `studio-api`               | 프리셋 CRUD REST API                 |
+| **Studio Web**         | `studio-web`               | 프리셋 갤러리 UI                     |
+| **Contracts**          | `@tekton/contracts`        | Intent, Skeleton, Environment 스키마 |
+| **create-screen 로직** | `cli/create-screen.ts`     | 파일 생성 로직 (단, CLI 미등록)      |
 
 ### ❌ 미완료 / 연결 안됨
 
-| 문제 | 현재 상태 | 필요한 작업 |
-|------|----------|------------|
-| **CLI 명령 미등록** | `index.ts`에 create-screen 없음 | 명령어 등록 |
-| **MCP 연동 없음** | create-screen이 MCP 호출 안함 | ArchetypeTools 연동 |
-| **프리셋 토큰 미적용** | 프리셋 조회 로직 없음 | Studio API 연동 |
-| **컴포넌트 코드 미생성** | 빈 스켈레톤만 생성 | 템플릿 엔진 구현 |
+| 문제                     | 현재 상태                       | 필요한 작업         |
+| ------------------------ | ------------------------------- | ------------------- |
+| **CLI 명령 미등록**      | `index.ts`에 create-screen 없음 | 명령어 등록         |
+| **MCP 연동 없음**        | create-screen이 MCP 호출 안함   | ArchetypeTools 연동 |
+| **프리셋 토큰 미적용**   | 프리셋 조회 로직 없음           | Studio API 연동     |
+| **컴포넌트 코드 미생성** | 빈 스켈레톤만 생성              | 템플릿 엔진 구현    |
 
 ---
 
@@ -124,10 +124,10 @@
 
 ## 관련 파일
 
-| 파일 | 역할 |
-|------|------|
-| `packages/cli/src/index.ts` | CLI 진입점 |
-| `packages/cli/src/commands/create-screen.ts` | 화면 생성 로직 |
-| `packages/cli/src/generators/screen-generator.ts` | 파일 생성기 |
-| `packages/studio-mcp/src/component/tools.ts` | 아키타입 MCP 도구 |
-| `packages/studio-api/src/studio_api/api/v2/themes.py` | 프리셋 API |
+| 파일                                                  | 역할              |
+| ----------------------------------------------------- | ----------------- |
+| `packages/cli/src/index.ts`                           | CLI 진입점        |
+| `packages/cli/src/commands/create-screen.ts`          | 화면 생성 로직    |
+| `packages/cli/src/generators/screen-generator.ts`     | 파일 생성기       |
+| `packages/studio-mcp/src/component/tools.ts`          | 아키타입 MCP 도구 |
+| `packages/studio-api/src/studio_api/api/v2/themes.py` | 프리셋 API        |

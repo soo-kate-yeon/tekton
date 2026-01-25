@@ -62,7 +62,7 @@ export function loadTheme(themeData: unknown): Theme {
 
   if (!result.success) {
     const errorMessages = result.error.issues
-      .map((issue) => {
+      .map(issue => {
         const path = issue.path.join('.');
         return `${path}: ${issue.message}`;
       })

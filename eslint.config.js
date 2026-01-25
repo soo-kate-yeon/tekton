@@ -6,6 +6,9 @@ import globals from 'globals';
 export default [
   js.configs.recommended,
   {
+    ignores: ['**/*.d.ts', '**/dist/**', '**/build/**', '**/.next/**', '**/node_modules/**'],
+  },
+  {
     files: ['**/*.ts', '**/*.tsx'],
     languageOptions: {
       parser: tsParser,
@@ -32,26 +35,29 @@ export default [
       // TypeScript-specific rules
       '@typescript-eslint/explicit-function-return-type': 'off',
       '@typescript-eslint/no-explicit-any': 'warn',
-      '@typescript-eslint/no-unused-vars': ['error', {
-        argsIgnorePattern: '^_',
-        varsIgnorePattern: '^_',
-        ignoreRestSiblings: true,
-        caughtErrors: 'none',
-      }],
+      '@typescript-eslint/no-unused-vars': [
+        'error',
+        {
+          argsIgnorePattern: '^_',
+          varsIgnorePattern: '^_',
+          ignoreRestSiblings: true,
+          caughtErrors: 'none',
+        },
+      ],
 
       // Code quality rules
-      'no-console': 'warn',
+      'no-console': 'off', // Disabled for MCP server stderr output
       'prefer-const': 'error',
       'no-var': 'error',
 
       // Best practices
-      'eqeqeq': ['error', 'always'],
-      'curly': ['error', 'all'],
+      eqeqeq: ['error', 'always'],
+      curly: ['error', 'all'],
       'no-throw-literal': 'error',
     },
   },
   {
-    files: ['tests/**/*.ts', '**/*.test.ts'],
+    files: ['tests/**/*.ts', '**/*.test.ts', '**/__tests__/**/*.ts'],
     languageOptions: {
       parser: tsParser,
       parserOptions: {
@@ -77,13 +83,46 @@ export default [
     },
   },
   {
-    ignores: [
-      'dist/**',
-      'node_modules/**',
-      'coverage/**',
-      '*.config.js',
-      '.claude/**',
-      '.moai/**',
-    ],
+    files: ['**/__tests__/**/*.js', '**/*.test.js'],
+    languageOptions: {
+      ecmaVersion: 'latest',
+      sourceType: 'module',
+      globals: {
+        ...globals.node,
+        ...globals.jest,
+      },
+    },
+    rules: {
+      // Relax rules for JavaScript test files
+      'no-console': 'off',
+      'no-unused-vars': 'off',
+    },
+  },
+  {
+    files: ['packages/mcp-server/**/*.js'],
+    languageOptions: {
+      ecmaVersion: 'latest',
+      sourceType: 'module',
+      globals: {
+        ...globals.node,
+      },
+    },
+    rules: {
+      // Relax console warnings for MCP server (intentional stderr output)
+      'no-console': 'off',
+      // Support underscore prefix for unused variables
+      'no-unused-vars': [
+        'error',
+        {
+          argsIgnorePattern: '^_',
+          varsIgnorePattern: '^_',
+          ignoreRestSiblings: true,
+          caughtErrors: 'none',
+        },
+      ],
+    },
+  },
+  {
+    ignores: ['dist/**', 'node_modules/**', 'coverage/**', '*.config.js', '.claude/**', '.moai/**'],
   },
 ];

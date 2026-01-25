@@ -27,6 +27,7 @@
 The Component Knowledge System (Layer 2) transforms raw design tokens into AI-understandable component knowledge with semantic metadata. This enables intelligent component placement, type-safe prop validation, and CSS-in-JS binding generation.
 
 **Key Features**:
+
 - ComponentKnowledge catalog for 20 core components
 - Slot affinity scoring (0.0-1.0) for placement recommendations
 - Semantic descriptions for AI context injection
@@ -49,10 +50,10 @@ interface ComponentKnowledge {
   name: string;
 
   /** Atomic Design hierarchy level */
-  type: "atom" | "molecule" | "organism" | "template";
+  type: 'atom' | 'molecule' | 'organism' | 'template';
 
   /** Functional category for filtering */
-  category: "display" | "input" | "action" | "container" | "navigation";
+  category: 'display' | 'input' | 'action' | 'container' | 'navigation';
 
   /**
    * Slot Affinity Scoring
@@ -72,10 +73,10 @@ interface ComponentKnowledge {
     purpose: string;
 
     /** Visual prominence level */
-    visualImpact: "subtle" | "neutral" | "prominent";
+    visualImpact: 'subtle' | 'neutral' | 'prominent';
 
     /** Implementation complexity */
-    complexity: "low" | "medium" | "high";
+    complexity: 'low' | 'medium' | 'high';
   };
 
   /**
@@ -218,6 +219,7 @@ function getAllComponents(): ComponentKnowledge[];
 ```
 
 **Example**:
+
 ```typescript
 import { getAllComponents } from '@tekton/component-knowledge';
 
@@ -240,11 +242,13 @@ function getComponentByName(name: string): ComponentKnowledge | undefined;
 ```
 
 **Parameters**:
+
 - `name` (string): Component name (e.g., "Button", "DataTable")
 
 **Returns**: ComponentKnowledge object or undefined if not found
 
 **Example**:
+
 ```typescript
 import { getComponentByName } from '@tekton/component-knowledge';
 
@@ -263,16 +267,18 @@ Filters components by Atomic Design type.
 
 ```typescript
 function filterComponentsByType(
-  type: "atom" | "molecule" | "organism" | "template"
+  type: 'atom' | 'molecule' | 'organism' | 'template'
 ): ComponentKnowledge[];
 ```
 
 **Parameters**:
+
 - `type`: Atomic Design hierarchy level
 
 **Returns**: Array of matching components
 
 **Example**:
+
 ```typescript
 import { filterComponentsByType } from '@tekton/component-knowledge';
 
@@ -292,16 +298,18 @@ Filters components by functional category.
 
 ```typescript
 function filterComponentsByCategory(
-  category: "display" | "input" | "action" | "container" | "navigation"
+  category: 'display' | 'input' | 'action' | 'container' | 'navigation'
 ): ComponentKnowledge[];
 ```
 
 **Parameters**:
+
 - `category`: Functional category
 
 **Returns**: Array of matching components
 
 **Example**:
+
 ```typescript
 import { filterComponentsByCategory } from '@tekton/component-knowledge';
 
@@ -318,12 +326,11 @@ console.log(inputComponents); // Input, Checkbox, Radio, Switch, Slider, Select,
 Validates a ComponentKnowledge entry for completeness and consistency.
 
 ```typescript
-function validateComponentKnowledge(
-  component: ComponentKnowledge
-): ValidationResult;
+function validateComponentKnowledge(component: ComponentKnowledge): ValidationResult;
 ```
 
 **Validation Checks**:
+
 - Slot affinity values in 0.0-1.0 range
 - Excluded slots have affinity = 0.0
 - Required components exist in catalog
@@ -331,6 +338,7 @@ function validateComponentKnowledge(
 - All 5 states defined
 
 **Returns**:
+
 ```typescript
 interface ValidationResult {
   valid: boolean;
@@ -340,6 +348,7 @@ interface ValidationResult {
 ```
 
 **Example**:
+
 ```typescript
 import { getComponentByName, validateComponentKnowledge } from '@tekton/component-knowledge';
 
@@ -367,12 +376,14 @@ function validateTokenReferences(
 ```
 
 **Parameters**:
+
 - `component`: ComponentKnowledge to validate
 - `layer1Tokens`: Token metadata from Layer 1
 
 **Returns**: ValidationResult with missing token references
 
 **Example**:
+
 ```typescript
 import { validateTokenReferences } from '@tekton/component-knowledge';
 
@@ -392,12 +403,11 @@ if (!validation.valid) {
 Ensures all 5 required states are defined for a component.
 
 ```typescript
-function validateStateCompleteness(
-  component: ComponentKnowledge
-): ValidationResult;
+function validateStateCompleteness(component: ComponentKnowledge): ValidationResult;
 ```
 
 **Required States**:
+
 - `default`
 - `hover`
 - `focus`
@@ -405,6 +415,7 @@ function validateStateCompleteness(
 - `disabled`
 
 **Example**:
+
 ```typescript
 import { validateStateCompleteness } from '@tekton/component-knowledge';
 
@@ -439,6 +450,7 @@ class ZodSchemaGenerator {
 ```
 
 **Example**:
+
 ```typescript
 import { ZodSchemaGenerator, getComponentByName } from '@tekton/component-knowledge';
 import { z } from 'zod';
@@ -453,7 +465,7 @@ const buttonSchema = generator.generateSchema(button);
 const validProps = buttonSchema.parse({
   variant: 'primary',
   size: 'medium',
-  disabled: false
+  disabled: false,
 });
 
 // Generate TypeScript type
@@ -483,6 +495,7 @@ class TypeScriptTypeGenerator {
 ```
 
 **Example**:
+
 ```typescript
 import { TypeScriptTypeGenerator, getComponentByName } from '@tekton/component-knowledge';
 
@@ -527,6 +540,7 @@ class VanillaExtractGenerator {
 ```
 
 **Example**:
+
 ```typescript
 import { VanillaExtractGenerator, getComponentByName } from '@tekton/component-knowledge';
 
@@ -574,6 +588,7 @@ class StitchesGenerator {
 ```
 
 **Example**:
+
 ```typescript
 import { StitchesGenerator, getComponentByName } from '@tekton/component-knowledge';
 
@@ -620,6 +635,7 @@ class JSONExporter {
 ```
 
 **Example**:
+
 ```typescript
 import { JSONExporter, getAllComponents } from '@tekton/component-knowledge';
 import fs from 'fs';
@@ -660,6 +676,7 @@ class MarkdownExporter {
 ```
 
 **Example**:
+
 ```typescript
 import { MarkdownExporter, getAllComponents } from '@tekton/component-knowledge';
 import fs from 'fs';
@@ -701,6 +718,7 @@ class RegistryBuilder {
 ```
 
 **Example**:
+
 ```typescript
 import { RegistryBuilder, getAllComponents } from '@tekton/component-knowledge';
 import fs from 'fs';
@@ -802,19 +820,19 @@ interface SlotDefinition {
 
 ## Error Codes
 
-| Code | Type | Description |
-|------|------|-------------|
-| LAYER2-E001 | Token Validation | Token reference not found in Layer 1 metadata |
-| LAYER2-E002 | State Completeness | Required state missing from component mapping |
-| LAYER2-E003 | Schema Generation | Invalid Zod schema structure generated |
-| LAYER2-E004 | CSS-in-JS Output | Invalid binding output format |
-| LAYER2-E005 | Contract Violation | Layer 1 metadata does not match expected contract |
-| LAYER2-E006 | Affinity Range | slotAffinity value outside 0.0-1.0 range |
-| LAYER2-E007 | Constraint Invalid | Invalid constraint reference (missing component) |
-| LAYER2-E008 | Excluded Slot Mismatch | excludedSlots doesn't match slotAffinity=0 |
-| LAYER2-W001 | Warning | Custom state detected (non-standard) |
-| LAYER2-W002 | Warning | Hardcoded value detected in binding |
-| LAYER2-W003 | Warning | High affinity (>0.95) may cause over-selection |
+| Code        | Type                   | Description                                       |
+| ----------- | ---------------------- | ------------------------------------------------- |
+| LAYER2-E001 | Token Validation       | Token reference not found in Layer 1 metadata     |
+| LAYER2-E002 | State Completeness     | Required state missing from component mapping     |
+| LAYER2-E003 | Schema Generation      | Invalid Zod schema structure generated            |
+| LAYER2-E004 | CSS-in-JS Output       | Invalid binding output format                     |
+| LAYER2-E005 | Contract Violation     | Layer 1 metadata does not match expected contract |
+| LAYER2-E006 | Affinity Range         | slotAffinity value outside 0.0-1.0 range          |
+| LAYER2-E007 | Constraint Invalid     | Invalid constraint reference (missing component)  |
+| LAYER2-E008 | Excluded Slot Mismatch | excludedSlots doesn't match slotAffinity=0        |
+| LAYER2-W001 | Warning                | Custom state detected (non-standard)              |
+| LAYER2-W002 | Warning                | Hardcoded value detected in binding               |
+| LAYER2-W003 | Warning                | High affinity (>0.95) may cause over-selection    |
 
 ---
 
@@ -826,7 +844,7 @@ interface SlotDefinition {
 import {
   getAllComponents,
   filterComponentsByType,
-  getComponentByName
+  getComponentByName,
 } from '@tekton/component-knowledge';
 
 // Get all components
@@ -870,7 +888,7 @@ import {
   getComponentByName,
   ZodSchemaGenerator,
   VanillaExtractGenerator,
-  JSONExporter
+  JSONExporter,
 } from '@tekton/component-knowledge';
 import fs from 'fs';
 
@@ -903,7 +921,7 @@ import {
   validateComponentKnowledge,
   validateTokenReferences,
   RegistryBuilder,
-  MarkdownExporter
+  MarkdownExporter,
 } from '@tekton/component-knowledge';
 import fs from 'fs';
 
@@ -917,7 +935,7 @@ const components = getAllComponents();
 const validationResults = components.map(component => ({
   name: component.name,
   validation: validateComponentKnowledge(component),
-  tokenValidation: validateTokenReferences(component, layer1Tokens)
+  tokenValidation: validateTokenReferences(component, layer1Tokens),
 }));
 
 // Check for errors
@@ -985,6 +1003,7 @@ export async function lazyLoadComponent(name: string): Promise<ComponentKnowledg
 ### Migrating from v1.x to v2.0
 
 **Breaking Changes**:
+
 1. ComponentKnowledge now includes `slotAffinity` and `semanticDescription`
 2. Constraint validation is stricter
 3. Stitches support is now legacy (use Vanilla Extract)

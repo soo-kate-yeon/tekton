@@ -95,7 +95,7 @@ describe('Zod Schemas - TASK-003', () => {
 
     it('should validate WCAG level enum', () => {
       const validLevels = ['AA', 'AAA'];
-      validLevels.forEach((level) => {
+      validLevels.forEach(level => {
         const check = { contrastRatio: 4.5, wcagLevel: level, passed: true };
         expect(() => AccessibilityCheckSchema.parse(check)).not.toThrow();
       });

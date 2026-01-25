@@ -29,9 +29,9 @@ Validates OKLCH color objects.
 import { OKLCHColorSchema, type OKLCHColor } from 'tekton';
 
 const color: OKLCHColor = {
-  l: 0.5,  // Lightness: 0-1
+  l: 0.5, // Lightness: 0-1
   c: 0.15, // Chroma: 0-0.5 (typical range 0-0.4)
-  h: 220   // Hue: 0-360 degrees
+  h: 220, // Hue: 0-360 degrees
 };
 
 // Validate at runtime
@@ -39,6 +39,7 @@ OKLCHColorSchema.parse(color); // Throws if invalid
 ```
 
 **Properties:**
+
 - `l` (number): Lightness from 0 (black) to 1 (white)
 - `c` (number): Chroma (saturation) from 0 (gray) to 0.5 (maximum)
 - `h` (number): Hue angle from 0 to 360 degrees
@@ -51,15 +52,16 @@ Validates RGB color objects.
 import { RGBColorSchema, type RGBColor } from 'tekton';
 
 const color: RGBColor = {
-  r: 59,   // Red: 0-255
-  g: 130,  // Green: 0-255
-  b: 246   // Blue: 0-255
+  r: 59, // Red: 0-255
+  g: 130, // Green: 0-255
+  b: 246, // Blue: 0-255
 };
 
 RGBColorSchema.parse(color);
 ```
 
 **Properties:**
+
 - `r` (number): Red channel, integer 0-255
 - `g` (number): Green channel, integer 0-255
 - `b` (number): Blue channel, integer 0-255
@@ -73,9 +75,9 @@ import { type ColorScale } from 'tekton';
 
 const scale: ColorScale = {
   '50': { l: 0.98, c: 0.08, h: 220 },
-  '100': { l: 0.95, c: 0.10, h: 220 },
+  '100': { l: 0.95, c: 0.1, h: 220 },
   // ... steps 200-900
-  '950': { l: 0.05, c: 0.08, h: 220 }
+  '950': { l: 0.05, c: 0.08, h: 220 },
 };
 ```
 
@@ -98,12 +100,13 @@ const token: TokenDefinition = {
   },
   metadata: {
     generated: '2026-01-11T17:00:00.000Z',
-    gamutClipped: false
-  }
+    gamutClipped: false,
+  },
 };
 ```
 
 **Properties:**
+
 - `id` (string): Deterministic identifier
 - `name` (string): Token name
 - `value` (OKLCHColor): Base color value
@@ -122,11 +125,12 @@ const check: AccessibilityCheck = {
   wcagLevel: 'AA',
   passed: true,
   foreground: { r: 0, g: 0, b: 0 },
-  background: { r: 255, g: 255, b: 255 }
+  background: { r: 255, g: 255, b: 255 },
 };
 ```
 
 **Properties:**
+
 - `contrastRatio` (number): Calculated ratio (1-21)
 - `wcagLevel` ('AA' | 'AAA'): Target compliance level
 - `passed` (boolean): Whether compliance check passed
@@ -145,12 +149,10 @@ const theme: ComponentPreset = {
   states: {
     default: { l: 0.5, c: 0.15, h: 220 },
     hover: { l: 0.45, c: 0.15, h: 220 },
-    active: { l: 0.40, c: 0.15, h: 220 },
-    disabled: { l: 0.65, c: 0.08, h: 220 }
+    active: { l: 0.4, c: 0.15, h: 220 },
+    disabled: { l: 0.65, c: 0.08, h: 220 },
   },
-  accessibility: [
-    { contrastRatio: 4.8, wcagLevel: 'AA', passed: true }
-  ]
+  accessibility: [{ contrastRatio: 4.8, wcagLevel: 'AA', passed: true }],
 };
 ```
 
@@ -178,12 +180,14 @@ const rgb = oklchToRgb(oklch);
 ```
 
 **Algorithm**:
+
 1. Convert OKLCH to OKLab
 2. Transform OKLab to linear RGB
 3. Apply gamma correction (sRGB)
 4. Clamp values to 0-255 range
 
 **Parameters:**
+
 - `oklch` (OKLCHColor): Input OKLCH color
 
 **Returns:** RGBColor
@@ -201,11 +205,13 @@ const oklch = rgbToOklch(rgb);
 ```
 
 **Algorithm**:
+
 1. Convert sRGB to linear RGB
 2. Transform to OKLab
 3. Convert OKLab to OKLCH (polar coordinates)
 
 **Parameters:**
+
 - `rgb` (RGBColor): Input RGB color
 
 **Returns:** OKLCHColor
@@ -223,6 +229,7 @@ const hex = oklchToHex(oklch);
 ```
 
 **Parameters:**
+
 - `oklch` (OKLCHColor): Input OKLCH color
 
 **Returns:** string (uppercase hex with # prefix)
@@ -242,6 +249,7 @@ const oklch2 = hexToOklch('3B82F6');
 ```
 
 **Parameters:**
+
 - `hex` (string): Hex color string (with or without #)
 
 **Returns:** OKLCHColor
@@ -269,24 +277,27 @@ const scale = generateLightnessScale(baseColor);
 ```
 
 **Lightness Mapping:**
+
 - 50: 0.98 (near white)
 - 100: 0.95
 - 200: 0.88
 - 300: 0.78
 - 400: 0.65
 - 500: base color lightness (reference point)
-- 600: base * 0.85 (minimum 0.35)
-- 700: base * 0.70 (minimum 0.25)
-- 800: base * 0.55 (minimum 0.15)
-- 900: base * 0.40 (minimum 0.10)
-- 950: base * 0.25 (minimum 0.05)
+- 600: base \* 0.85 (minimum 0.35)
+- 700: base \* 0.70 (minimum 0.25)
+- 800: base \* 0.55 (minimum 0.15)
+- 900: base \* 0.40 (minimum 0.10)
+- 950: base \* 0.25 (minimum 0.05)
 
 **Chroma Adjustment:**
-- Very light colors (L > 0.9): chroma * 0.5
-- Very dark colors (L < 0.2): chroma * 0.7
+
+- Very light colors (L > 0.9): chroma \* 0.5
+- Very dark colors (L < 0.2): chroma \* 0.7
 - Mid-range: preserve base chroma
 
 **Parameters:**
+
 - `baseColor` (OKLCHColor): Base color for scale generation
 
 **Returns:** ColorScale (10 steps)
@@ -301,7 +312,7 @@ import { generateColorScales } from 'tekton';
 const palette = {
   primary: { l: 0.5, c: 0.15, h: 220 },
   success: { l: 0.5, c: 0.15, h: 140 },
-  error: { l: 0.5, c: 0.15, h: 0 }
+  error: { l: 0.5, c: 0.15, h: 0 },
 };
 
 const scales = generateColorScales(palette);
@@ -313,6 +324,7 @@ const scales = generateColorScales(palette);
 ```
 
 **Parameters:**
+
 - `palette` (Record<string, OKLCHColor>): Named color palette
 
 **Returns:** Record<string, ColorScale>
@@ -335,11 +347,12 @@ import { generateTokensFromArchetype } from '@tekton/token-generator';
 const tokens = await generateTokensFromArchetype(archetype, {
   wcagLevel: 'AA',
   cacheEnabled: true,
-  cacheTTL: 3600000 // 1 hour
+  cacheTTL: 3600000, // 1 hour
 });
 ```
 
 **Options**:
+
 - `wcagLevel`: WCAG compliance level ('AA' | 'AAA')
 - `cacheEnabled`: Enable token caching (boolean)
 - `cacheTTL`: Cache time-to-live in milliseconds (number)
@@ -347,6 +360,7 @@ const tokens = await generateTokensFromArchetype(archetype, {
 **Returns**: Generated tokens object containing color tokens, semantic tokens, and metadata
 
 **Throws**:
+
 - `ArchetypeValidationError` if archetype JSON is invalid
 - `WCAGComplianceError` if colors cannot meet specified WCAG level
 
@@ -360,7 +374,7 @@ import { TokenCache } from '@tekton/token-generator';
 const cache = new TokenCache({
   maxSize: 100,
   ttl: 3600000,
-  invalidateOnChange: true
+  invalidateOnChange: true,
 });
 
 // Cache tokens
@@ -374,11 +388,13 @@ cache.clear();
 ```
 
 **Constructor Options**:
+
 - `maxSize`: Maximum number of cached entries (default: 100)
 - `ttl`: Time-to-live in milliseconds (default: 3600000)
 - `invalidateOnChange`: Auto-invalidate on file changes (default: true)
 
 **Methods**:
+
 - `set(key, value)`: Store tokens in cache
 - `get(key)`: Retrieve cached tokens
 - `has(key)`: Check if key exists in cache
@@ -402,6 +418,7 @@ const adjusted = autoAdjustContrast(
 ```
 
 **Parameters**:
+
 - `foreground`: RGB color object for text or foreground element
 - `background`: RGB color object for background surface
 - `wcagLevel`: Target compliance level ('AA' requires 4.5:1, 'AAA' requires 7:1)
@@ -409,6 +426,7 @@ const adjusted = autoAdjustContrast(
 **Returns**: Adjusted RGB color object that meets contrast requirement
 
 **Algorithm**:
+
 1. Calculate current contrast ratio
 2. If below threshold, darken foreground or lighten background
 3. Iterate in 0.05 lightness steps until ratio achieved
@@ -417,22 +435,18 @@ const adjusted = autoAdjustContrast(
 #### Export Functions
 
 ```typescript
-import {
-  exportToCSS,
-  exportToTailwind,
-  exportToDTCG
-} from '@tekton/token-generator';
+import { exportToCSS, exportToTailwind, exportToDTCG } from '@tekton/token-generator';
 
 // Export to CSS custom properties
 const css = exportToCSS(tokens, {
   format: 'oklch',
   prefix: '--',
-  minify: false
+  minify: false,
 });
 
 // Export to Tailwind config
 const tailwind = exportToTailwind(tokens, {
-  format: 'js' // or 'ts'
+  format: 'js', // or 'ts'
 });
 
 // Export to DTCG format
@@ -440,14 +454,17 @@ const dtcg = exportToDTCG(tokens);
 ```
 
 **`exportToCSS(tokens, options?)`**:
+
 - `format`: 'oklch' | 'rgb' | 'both' (default: 'oklch')
 - `prefix`: CSS variable prefix (default: '--')
 - `minify`: Remove whitespace for production (default: false)
 
 **`exportToTailwind(tokens, options?)`**:
+
 - `format`: 'js' | 'ts' - Output JavaScript or TypeScript config
 
 **`exportToDTCG(tokens)`**:
+
 - Exports Design Token Community Group compliant JSON
 - Includes type information and metadata for design tools
 
@@ -486,6 +503,7 @@ console.log(token.metadata); // { generated: ISO timestamp, gamutClipped: false 
 If the input color exceeds sRGB gamut boundaries, the function automatically reduces chroma in 0.01 steps until the color is displayable. This is tracked in `metadata.gamutClipped`.
 
 **Parameters:**
+
 - `name` (string): Token name
 - `baseColor` (OKLCHColor): Base color value
 
@@ -509,12 +527,14 @@ const id2 = generateTokenId('primary', { l: 0.5, c: 0.15, h: 220 });
 ```
 
 **Format:** `{name}-{lightness}-{chroma}-{hue}`
+
 - Lightness: 3 decimal places
 - Chroma: 3 decimal places
 - Hue: whole number
 - Non-alphanumeric characters replaced with hyphens
 
 **Parameters:**
+
 - `name` (string): Token name
 - `color` (OKLCHColor): Color value
 
@@ -530,11 +550,12 @@ import { TokenGenerator } from 'tekton';
 const generator = new TokenGenerator({
   generateDarkMode: true,
   validateWCAG: true,
-  wcagLevel: 'AA'
+  wcagLevel: 'AA',
 });
 ```
 
 **Constructor Options:**
+
 - `generateDarkMode?` (boolean): Generate dark mode variants (default: false)
 - `validateWCAG?` (boolean): Enable WCAG validation (default: true)
 - `wcagLevel?` ('AA' | 'AAA'): WCAG compliance level (default: 'AA')
@@ -546,7 +567,7 @@ Generate tokens from a color palette.
 ```typescript
 const palette = {
   primary: { l: 0.5, c: 0.15, h: 220 },
-  success: { l: 0.5, c: 0.15, h: 140 }
+  success: { l: 0.5, c: 0.15, h: 140 },
 };
 
 const tokens = generator.generateTokens(palette);
@@ -558,6 +579,7 @@ const tokens = generator.generateTokens(palette);
 **Dark Mode:** When enabled, generates additional tokens with `-dark` suffix and inverted lightness.
 
 **Parameters:**
+
 - `palette` (Record<string, OKLCHColor>): Named color palette
 
 **Returns:** TokenDefinition[]
@@ -574,17 +596,19 @@ const ts = generator.exportTokens(palette, 'ts');
 ```
 
 **CSS Output:**
+
 ```css
 :root {
-  --primary: #3B82F6;
-  --primary-50: #EFF6FF;
-  --primary-100: #DBEAFE;
+  --primary: #3b82f6;
+  --primary-50: #eff6ff;
+  --primary-100: #dbeafe;
   /* ... */
-  --primary-950: #0A2540;
+  --primary-950: #0a2540;
 }
 ```
 
 **JSON Output:**
+
 ```json
 {
   "primary": {
@@ -599,16 +623,18 @@ const ts = generator.exportTokens(palette, 'ts');
 ```
 
 **JavaScript Output:**
+
 ```javascript
 export const primary = '#3B82F6';
 export const primaryScale = {
-  '50': '#EFF6FF',
-  '100': '#DBEAFE',
+  50: '#EFF6FF',
+  100: '#DBEAFE',
   // ...
 };
 ```
 
 **TypeScript Output:**
+
 ```typescript
 export const primary = '#3B82F6' as const;
 export const primaryScale = {
@@ -619,6 +645,7 @@ export const primaryScale = {
 ```
 
 **Parameters:**
+
 - `palette` (Record<string, OKLCHColor>): Color palette
 - `format` (TokenOutputFormat): Export format
 
@@ -656,6 +683,7 @@ const button = buttonPreset(baseColor);
 ```
 
 **States:**
+
 - `default`: Base color
 - `hover`: Darkened for hover interaction
 - `active`: Darkened further for active/pressed state
@@ -678,6 +706,7 @@ const input = inputPreset(baseColor);
 ```
 
 **States:**
+
 - `default`: Base color
 - `focus`: Increased chroma (up to 0.4 maximum)
 - `error`: Red error state
@@ -699,6 +728,7 @@ const card = cardPreset(baseColor);
 ```
 
 **States:**
+
 - `background`: L: 0.98, C: 0.02 (subtle tint)
 - `border`: L: 0.85, C: 0.05
 - `shadow`: L: 0.30, C: 0.02
@@ -1201,6 +1231,7 @@ const ratio = calculateContrastRatio(foreground, background);
 **Range:** 1 (no contrast) to 21 (maximum contrast)
 
 **Parameters:**
+
 - `color1` (RGBColor): First color
 - `color2` (RGBColor): Second color
 
@@ -1221,14 +1252,17 @@ const largeText = checkWCAGCompliance(3.2, 'AA', true);
 ```
 
 **WCAG AA Requirements:**
+
 - Normal text: minimum 4.5:1
 - Large text (18pt+): minimum 3:1
 
 **WCAG AAA Requirements:**
+
 - Normal text: minimum 7:1
 - Large text: minimum 4.5:1
 
 **Parameters:**
+
 - `contrastRatio` (number): Calculated ratio
 - `level` ('AA' | 'AAA'): Target compliance level
 - `isLargeText?` (boolean): Whether text is large (default: false)
@@ -1256,6 +1290,7 @@ const result = validateColorPair(fg, bg, 'AA', false);
 ```
 
 **Parameters:**
+
 - `foreground` (RGBColor): Text/foreground color
 - `background` (RGBColor): Background color
 - `level?` ('AA' | 'AAA'): Target level (default: 'AA')
@@ -1282,6 +1317,7 @@ const suggestion = suggestLightnessAdjustment(fg, bg, 'AA');
 **Note:** This is a simple heuristic. For production use, iterate with OKLCH lightness adjustments.
 
 **Parameters:**
+
 - `foreground` (RGBColor): Text color
 - `background` (RGBColor): Background color
 - `targetLevel?` ('AA' | 'AAA'): Target level (default: 'AA')
@@ -1301,7 +1337,7 @@ import {
   generateComponentPresets,
   validateColorPair,
   oklchToRgb,
-  oklchToHex
+  oklchToHex,
 } from 'tekton';
 
 // 1. Define brand color in OKLCH
@@ -1335,7 +1371,7 @@ import { TokenGenerator } from 'tekton';
 const generator = new TokenGenerator();
 const palette = {
   primary: { l: 0.5, c: 0.15, h: 220 },
-  secondary: { l: 0.5, c: 0.12, h: 280 }
+  secondary: { l: 0.5, c: 0.12, h: 280 },
 };
 
 // Generate tokens
@@ -1388,8 +1424,8 @@ function createDesignSystem(
       primary: generateToken('primary', primary),
       secondary: generateToken('secondary', secondary),
       success: generateToken('success', success),
-      error: generateToken('error', error)
-    }
+      error: generateToken('error', error),
+    },
   };
 }
 ```

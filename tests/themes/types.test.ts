@@ -64,7 +64,7 @@ describe('ThemeSchema', () => {
     it('validates all framework types', () => {
       const frameworks = ['nextjs', 'vite', 'remix'] as const;
 
-      frameworks.forEach((framework) => {
+      frameworks.forEach(framework => {
         const theme = {
           id: `test-${framework}`,
           version: '1.0.0',
@@ -109,7 +109,7 @@ describe('ThemeSchema', () => {
       const result = ThemeSchema.safeParse(theme);
       expect(result.success).toBe(false);
       if (!result.success) {
-        expect(result.error.issues.some((i) => i.path.includes('id'))).toBe(true);
+        expect(result.error.issues.some(i => i.path.includes('id'))).toBe(true);
       }
     });
 
@@ -133,7 +133,7 @@ describe('ThemeSchema', () => {
       const result = ThemeSchema.safeParse(theme);
       expect(result.success).toBe(false);
       if (!result.success) {
-        expect(result.error.issues.some((i) => i.path.includes('version'))).toBe(true);
+        expect(result.error.issues.some(i => i.path.includes('version'))).toBe(true);
       }
     });
 
@@ -158,7 +158,7 @@ describe('ThemeSchema', () => {
       const result = ThemeSchema.safeParse(theme);
       expect(result.success).toBe(false);
       if (!result.success) {
-        expect(result.error.issues.some((i) => i.path.includes('framework'))).toBe(true);
+        expect(result.error.issues.some(i => i.path.includes('framework'))).toBe(true);
       }
     });
 
@@ -183,7 +183,7 @@ describe('ThemeSchema', () => {
       const result = ThemeSchema.safeParse(theme);
       expect(result.success).toBe(false);
       if (!result.success) {
-        expect(result.error.issues.some((i) => i.path.includes('brandTone'))).toBe(true);
+        expect(result.error.issues.some(i => i.path.includes('brandTone'))).toBe(true);
       }
     });
 
@@ -208,7 +208,7 @@ describe('ThemeSchema', () => {
       const result = ThemeSchema.safeParse(theme);
       expect(result.success).toBe(false);
       if (!result.success) {
-        expect(result.error.issues.some((i) => i.path.includes('id'))).toBe(true);
+        expect(result.error.issues.some(i => i.path.includes('id'))).toBe(true);
       }
     });
 
@@ -233,7 +233,7 @@ describe('ThemeSchema', () => {
       const result = ThemeSchema.safeParse(theme);
       expect(result.success).toBe(false);
       if (!result.success) {
-        expect(result.error.issues.some((i) => i.path.includes('name'))).toBe(true);
+        expect(result.error.issues.some(i => i.path.includes('name'))).toBe(true);
       }
     });
   });

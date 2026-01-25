@@ -1,10 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import {
-  oklchToRgb,
-  rgbToOklch,
-  generateLightnessScale,
-  TokenGenerator,
-} from '../src';
+import { oklchToRgb, rgbToOklch, generateLightnessScale, TokenGenerator } from '../src';
 
 describe('Edge Cases - TASK-023', () => {
   describe('Gamut boundary values', () => {
@@ -69,7 +64,7 @@ describe('Edge Cases - TASK-023', () => {
       const scale = generateLightnessScale(color);
 
       expect(Object.keys(scale)).toHaveLength(11);
-      Object.values(scale).forEach((c) => {
+      Object.values(scale).forEach(c => {
         expect(c.c).toBeLessThan(0.1);
       });
     });
@@ -158,7 +153,7 @@ describe('Edge Cases - TASK-023', () => {
       const veryLight = { l: 0.99, c: 0.05, h: 180 };
       const scale = generateLightnessScale(veryLight);
 
-      Object.values(scale).forEach((color) => {
+      Object.values(scale).forEach(color => {
         expect(color.l).toBeGreaterThanOrEqual(0);
         expect(color.l).toBeLessThanOrEqual(1);
       });
@@ -168,7 +163,7 @@ describe('Edge Cases - TASK-023', () => {
       const highChroma = { l: 0.5, c: 0.4, h: 180 };
       const scale = generateLightnessScale(highChroma);
 
-      Object.values(scale).forEach((color) => {
+      Object.values(scale).forEach(color => {
         expect(color.c).toBeGreaterThanOrEqual(0);
       });
     });

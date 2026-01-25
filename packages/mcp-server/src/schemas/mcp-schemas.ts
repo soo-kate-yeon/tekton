@@ -18,8 +18,25 @@ export const LayoutTypeSchema = z.enum([
   'sidebar-left',
   'sidebar-right',
   'dashboard',
-  'landing'
+  'landing',
 ]);
+
+/**
+ * ComponentNode schema - recursive structure from @tekton/core
+ */
+const ComponentNodeSchema: z.ZodType<{
+  type: string;
+  props?: Record<string, unknown>;
+  children?: (unknown | string)[];
+  slot?: string;
+}> = z.lazy(() =>
+  z.object({
+    type: z.string(),
+    props: z.record(z.string(), z.unknown()).optional(),
+    children: z.array(z.union([ComponentNodeSchema, z.string()])).optional(),
+    slot: z.string().optional(),
+  })
+);
 
 /**
  * Theme ID validation - alphanumeric with hyphens only (security: prevent path traversal)
@@ -40,7 +57,7 @@ export const GenerateBlueprintInputSchema = z.object({
     .max(500, 'Description must not exceed 500 characters'),
   layout: LayoutTypeSchema,
   themeId: ThemeIdSchema,
-  componentHints: z.array(z.string()).optional()
+  componentHints: z.array(z.string()).optional(),
 });
 
 export type GenerateBlueprintInput = z.infer<typeof GenerateBlueprintInputSchema>;
@@ -56,11 +73,11 @@ export const GenerateBlueprintOutputSchema = z.object({
       name: z.string(),
       themeId: z.string(),
       layout: LayoutTypeSchema,
-      components: z.array(z.any()), // ComponentNode[] from @tekton/core
-      timestamp: z.number()
+      components: z.array(ComponentNodeSchema), // ComponentNode[] from @tekton/core
+      timestamp: z.number(),
     })
   ),
-  error: z.string().optional()
+  error: z.string().optional(),
 });
 
 export type GenerateBlueprintOutput = z.infer<typeof GenerateBlueprintOutputSchema>;
@@ -74,7 +91,7 @@ export type GenerateBlueprintOutput = z.infer<typeof GenerateBlueprintOutputSche
  * SPEC: E-002 Theme Preview Request
  */
 export const PreviewThemeInputSchema = z.object({
-  themeId: ThemeIdSchema
+  themeId: ThemeIdSchema,
 });
 
 export type PreviewThemeInput = z.infer<typeof PreviewThemeInputSchema>;
@@ -89,10 +106,10 @@ export const PreviewThemeOutputSchema = z.object({
       id: z.string(),
       name: z.string(),
       description: z.string(),
-      cssVariables: z.record(z.string(), z.string())
+      cssVariables: z.record(z.string(), z.string()),
     })
   ),
-  error: z.string().optional()
+  error: z.string().optional(),
 });
 
 export type PreviewThemeOutput = z.infer<typeof PreviewThemeOutputSchema>;
@@ -114,8 +131,8 @@ export type ExportFormat = z.infer<typeof ExportFormatSchema>;
  * SPEC: E-003 Screen Export Request
  */
 export const ExportScreenInputSchema = z.object({
-  blueprint: z.any(), // Blueprint from @tekton/core (accept any object for flexibility)
-  format: ExportFormatSchema
+  blueprint: z.unknown(), // Blueprint from @tekton/core (accept any object for flexibility)
+  format: ExportFormatSchema,
 });
 
 export type ExportScreenInput = z.infer<typeof ExportScreenInputSchema>;
@@ -126,7 +143,7 @@ export type ExportScreenInput = z.infer<typeof ExportScreenInputSchema>;
 export const ExportScreenOutputSchema = z.object({
   success: z.boolean(),
   code: z.string().optional(),
-  error: z.string().optional()
+  error: z.string().optional(),
 });
 
 export type ExportScreenOutput = z.infer<typeof ExportScreenOutputSchema>;
@@ -141,7 +158,7 @@ export type ExportScreenOutput = z.infer<typeof ExportScreenOutputSchema>;
  */
 export const ErrorResponseSchema = z.object({
   success: z.literal(false),
-  error: z.string()
+  error: z.string(),
 });
 
 export type ErrorResponse = z.infer<typeof ErrorResponseSchema>;

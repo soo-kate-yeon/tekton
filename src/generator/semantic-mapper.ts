@@ -46,13 +46,13 @@ function generateScale(baseColor: OKLCHColor): Record<string, OKLCHColor> {
     400: 0.65,
     500: baseColor.l,
     600: Math.max(baseColor.l * 0.85, 0.35),
-    700: Math.max(baseColor.l * 0.70, 0.25),
+    700: Math.max(baseColor.l * 0.7, 0.25),
     800: Math.max(baseColor.l * 0.55, 0.15),
-    900: Math.max(baseColor.l * 0.40, 0.10),
+    900: Math.max(baseColor.l * 0.4, 0.1),
     950: Math.max(baseColor.l * 0.25, 0.05),
   };
 
-  steps.forEach((step) => {
+  steps.forEach(step => {
     scale[step.toString()] = {
       l: lightnessMap[step],
       c: baseColor.c,

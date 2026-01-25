@@ -13,9 +13,9 @@ export const SUPPORTED_FRAMEWORKS = ['nextjs', 'vite', 'remix'];
  * @property components - Component library (currently only shadcn/ui)
  */
 export const StackSchema = z.object({
-    framework: z.enum(SUPPORTED_FRAMEWORKS),
-    styling: z.literal('tailwindcss'),
-    components: z.literal('shadcn-ui'),
+  framework: z.enum(SUPPORTED_FRAMEWORKS),
+  styling: z.literal('tailwindcss'),
+  components: z.literal('shadcn-ui'),
 });
 /**
  * Theme metadata schema
@@ -26,9 +26,9 @@ export const StackSchema = z.object({
  * @property homepage - Optional URL to theme documentation or homepage
  */
 export const ThemeMetadataSchema = z.object({
-    tags: z.array(z.string()).optional(),
-    author: z.string().optional(),
-    homepage: z.string().url().optional(),
+  tags: z.array(z.string()).optional(),
+  author: z.string().optional(),
+  homepage: z.string().url().optional(),
 });
 /**
  * Complete theme schema
@@ -63,12 +63,12 @@ export const ThemeMetadataSchema = z.object({
  * ```
  */
 export const ThemeSchema = z.object({
-    id: z.string().min(1, 'Theme id is required'),
-    version: z.string().min(1, 'Theme version is required'),
-    name: z.string().min(1, 'Theme name is required'),
-    description: z.string(),
-    stack: StackSchema,
-    questionnaire: QuestionnaireSchema,
-    metadata: ThemeMetadataSchema.optional(),
+  id: z.string().min(1, 'Theme id is required'),
+  version: z.string().min(1, 'Theme version is required'),
+  name: z.string().min(1, 'Theme name is required'),
+  description: z.string(),
+  stack: StackSchema,
+  questionnaire: QuestionnaireSchema,
+  metadata: ThemeMetadataSchema.optional(),
 });
 //# sourceMappingURL=types.js.map
