@@ -19,7 +19,7 @@
     "allowSyntheticDefaultImports": true,
     "isolatedModules": true
   },
-  "exclude": ["node_modules", "dist", "coverage"],
+  "exclude": ["node_modules", "dist", "coverage", "packages/playground-web"],
   "references": [
     { "path": "./packages/core" }
   ]

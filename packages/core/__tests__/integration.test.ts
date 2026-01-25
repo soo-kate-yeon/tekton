@@ -15,6 +15,7 @@ import {
   resolveToken,
   resolveWithFallback,
   type ThemeWithTokens,
+  type ComponentTokens,
   type TokenValidationResult,
 } from '../src/index.js';
 
@@ -279,7 +280,7 @@ describe('Integration - TypeScript Types', () => {
             inverse: '#111827',
           },
         },
-        component: {},
+        component: {} as ComponentTokens,
       },
     };
 

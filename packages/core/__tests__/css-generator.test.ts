@@ -6,7 +6,7 @@
 
 import { describe, it, expect } from 'vitest';
 import { generateThemeCSS } from '../src/css-generator.js';
-import type { ThemeWithTokens } from '../src/tokens.js';
+import type { ThemeWithTokens, SemanticTokens, ComponentTokens } from '../src/tokens.js';
 
 // ============================================================================
 // Test Fixture: Complete Theme with 3-Layer Tokens
@@ -292,13 +292,13 @@ describe('generateThemeCSS - Dark Mode', () => {
           semantic: {
             background: {
               page: 'atomic.color.neutral.900',
-            },
+            } as SemanticTokens['background'],
           },
           component: {
             button: {
               primary: {
                 background: 'atomic.color.blue.400',
-              },
+              } as ComponentTokens['button']['primary'],
             },
           },
         },
@@ -320,7 +320,7 @@ describe('generateThemeCSS - Dark Mode', () => {
             background: {
               page: 'atomic.color.neutral.900',
               surface: 'atomic.color.neutral.900',
-            },
+            } as SemanticTokens['background'],
           },
           component: {},
         },
@@ -343,7 +343,7 @@ describe('generateThemeCSS - Dark Mode', () => {
             button: {
               primary: {
                 background: 'atomic.color.blue.400',
-              },
+              } as ComponentTokens['button']['primary'],
             },
           },
         },

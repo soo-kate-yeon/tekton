@@ -1,32 +1,41 @@
----
+d---
 id: SPEC-COMPONENT-001
-version: "1.0.0"
-status: "planned"
+version: "2.0.0"
+status: "decomposed"
 created: "2026-01-25"
 updated: "2026-01-25"
 author: "MoAI-ADK"
 priority: "HIGH"
 lifecycle: "spec-anchored"
-tags: ["SPEC-COMPONENT-001", "Component", "Catalog", "Token", "CSS-Variables", "Hybrid"]
+tags: ["SPEC-COMPONENT-001", "Master-SPEC", "Component-System", "Token", "CSS-Variables", "Hybrid"]
+sub_specs:
+  - SPEC-COMPONENT-001-A  # Token System
+  - SPEC-COMPONENT-001-B  # Component Schemas
+  - SPEC-COMPONENT-001-C  # @tekton/ui Library
+  - SPEC-COMPONENT-001-D  # Export Pipeline
 ---
 
 ## HISTORY
+- 2026-01-25 v2.0.0: Decomposed into 4 sub-SPECs (A: Token System, B: Schemas, C: UI Library, D: Export Pipeline)
 - 2026-01-25 v1.0.0: Initial SPEC creation - Hybrid Component System with 3-Layer Token Architecture
 
 ---
 
-# SPEC-COMPONENT-001: Hybrid Component Catalog System
+# SPEC-COMPONENT-001: Hybrid Component Catalog System (Master SPEC)
+
+> **이 SPEC은 마스터 SPEC입니다.** 실제 구현은 4개의 하위 SPEC으로 분할되어 있습니다.
+> 각 하위 SPEC은 독립적으로 실행 가능하며, 순차적 의존성을 가집니다.
 
 ## Executive Summary
 
 **Purpose**: Implement a hybrid component system that combines pre-built reference implementations (Tier 1) with LLM-generated custom components (Tier 2), enabling consistent high-quality code generation across diverse themes through CSS Variables-based theming.
 
-**Scope**: Design and implement:
-1. 3-Layer Token System (Atomic → Semantic → Component)
-2. Component Interface Schemas (platform-agnostic contracts)
-3. Reference Implementation Library (@tekton/ui)
-4. CSS Variables Generation Pipeline
-5. Hybrid Export System (Reference + LLM fallback)
+**Scope Overview**: This master SPEC has been decomposed into 4 sequential sub-SPECs:
+
+1. **[SPEC-COMPONENT-001-A](../SPEC-COMPONENT-001-A/spec.md)**: 3-Layer Token System Architecture
+2. **[SPEC-COMPONENT-001-B](../SPEC-COMPONENT-001-B/spec.md)**: Component Interface & Schema Definition
+3. **[SPEC-COMPONENT-001-C](../SPEC-COMPONENT-001-C/spec.md)**: @tekton/ui Reference Implementation Library
+4. **[SPEC-COMPONENT-001-D](../SPEC-COMPONENT-001-D/spec.md)**: Hybrid Export System & Generation Pipeline
 
 **Priority**: HIGH - Foundational architecture for scalable design system code generation.
 
@@ -45,6 +54,167 @@ tags: ["SPEC-COMPONENT-001", "Component", "Catalog", "Token", "CSS-Variables", "
 - **vs shadcn**: Dynamic theme binding, not static copy-paste
 - **vs Material-UI**: Theme-agnostic tokens, not coupled theming
 - **vs Tailwind UI**: Programmatic generation, not manual templates
+
+---
+
+## SUB-SPECS OVERVIEW
+
+### SPEC-COMPONENT-001-A: 3-Layer Token System Architecture
+
+**Purpose**: Foundation token architecture (Atomic → Semantic → Component)
+
+**Key Deliverables**:
+- Token type definitions (`@tekton/core/src/tokens.ts`)
+- Token resolution logic with fallback chain
+- CSS Variables generation from tokens
+- Dark mode token support
+
+**Dependencies**: None (foundation layer)
+
+**Status**: Planned
+
+**Run Command**: `/moai:2-run SPEC-COMPONENT-001-A`
+
+---
+
+### SPEC-COMPONENT-001-B: Component Interface & Schema Definition
+
+**Purpose**: Platform-agnostic component contracts for all 20 core components
+
+**Key Deliverables**:
+- Component schema type definitions
+- 20 core component schemas (Button, Input, Card, etc.)
+- Token binding specifications
+- Accessibility requirements (WCAG 2.1 AA)
+
+**Dependencies**: SPEC-COMPONENT-001-A (token types)
+
+**Status**: Planned
+
+**Run Command**: `/moai:2-run SPEC-COMPONENT-001-B`
+
+---
+
+### SPEC-COMPONENT-001-C: @tekton/ui Reference Implementation Library
+
+**Purpose**: High-quality reference implementations for Tier 1 components
+
+**Key Deliverables**:
+- @tekton/ui package with 20 components
+- Radix UI primitive wrappers
+- CVA-based variant management
+- CSS Variables integration
+- 90%+ test coverage
+
+**Dependencies**:
+- SPEC-COMPONENT-001-A (token types)
+- SPEC-COMPONENT-001-B (component schemas)
+
+**Status**: Planned
+
+**Run Command**: `/moai:2-run SPEC-COMPONENT-001-C`
+
+---
+
+### SPEC-COMPONENT-001-D: Hybrid Export System & Generation Pipeline
+
+**Purpose**: Complete code generation pipeline with Tier 1/2 routing
+
+**Key Deliverables**:
+- CSS Variables generator (Theme → CSS)
+- Tier 1 resolver (copy from @tekton/ui)
+- Tier 2 LLM generator (schema + examples → code)
+- Validation & retry logic
+- Hybrid routing in export-screen tool
+
+**Dependencies**:
+- SPEC-COMPONENT-001-A (CSS generation)
+- SPEC-COMPONENT-001-B (schemas for LLM context)
+- SPEC-COMPONENT-001-C (Tier 1 components to copy)
+
+**Status**: Planned
+
+**Run Command**: `/moai:2-run SPEC-COMPONENT-001-D`
+
+---
+
+## IMPLEMENTATION ROADMAP
+
+### Phase A: Token Foundation (SPEC-001-A)
+**Timeline**: Week 1
+**Effort**: Medium
+**Milestone**: Token system operational, CSS generation working
+
+**Completion Criteria**:
+- ✅ Token types compile with TypeScript strict mode
+- ✅ Token resolver handles all valid references
+- ✅ CSS Variables generator produces valid CSS
+- ✅ Dark mode CSS generation works
+
+**Next**: Proceed to SPEC-001-B
+
+---
+
+### Phase B: Component Contracts (SPEC-001-B)
+**Timeline**: Week 1-2
+**Effort**: Large (20 schemas)
+**Milestone**: All component APIs documented
+
+**Completion Criteria**:
+- ✅ All 20 component schemas defined
+- ✅ Token bindings documented for each component
+- ✅ Accessibility requirements specified
+- ✅ Schema validation passes
+
+**Next**: Proceed to SPEC-001-C
+
+---
+
+### Phase C: Reference Library (SPEC-001-C)
+**Timeline**: Week 2-4
+**Effort**: Very Large (20 implementations)
+**Milestone**: @tekton/ui package ready for production
+
+**Completion Criteria**:
+- ✅ All 20 components implemented
+- ✅ WCAG 2.1 AA accessibility compliance
+- ✅ Zero hardcoded colors
+- ✅ 90%+ test coverage
+
+**Next**: Proceed to SPEC-001-D
+
+---
+
+### Phase D: Export Pipeline (SPEC-001-D)
+**Timeline**: Week 4-5
+**Effort**: Large
+**Milestone**: Complete hybrid export system operational
+
+**Completion Criteria**:
+- ✅ CSS generation integrated
+- ✅ Tier 1 export working
+- ✅ Tier 2 LLM generation achieving 90%+ success
+- ✅ Hybrid routing functional
+
+**Next**: Integration testing and SPEC-COMPONENT-001 completion
+
+---
+
+## DEPENDENCY GRAPH
+
+```
+SPEC-001-A (Token System)
+    ↓
+SPEC-001-B (Component Schemas) ← depends on token types
+    ↓
+SPEC-001-C (@tekton/ui) ← depends on tokens + schemas
+    ↓
+SPEC-001-D (Export Pipeline) ← depends on all above
+```
+
+**Execution Strategy**: Sequential (Phase A → B → C → D)
+
+**Rationale**: Each phase provides foundation for the next. No parallel execution possible due to hard dependencies.
 
 ---
 

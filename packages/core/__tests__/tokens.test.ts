@@ -300,13 +300,13 @@ describe('ThemeWithTokens Type', () => {
           semantic: {
             background: {
               page: 'atomic.color.neutral.900',
-            },
+            } as SemanticTokens['background'],
           },
           component: {
             button: {
               primary: {
                 background: 'atomic.color.primary.400',
-              },
+              } as ComponentTokens['button']['primary'],
             },
           },
         },
@@ -324,13 +324,13 @@ describe('ThemeWithTokens Type', () => {
         semantic: {
           background: {
             page: 'atomic.color.neutral.900',
-          },
+          } as SemanticTokens['background'],
         },
         component: {},
       },
     };
 
-    expect(partialDarkMode.tokens.semantic?.background?.page).toBe('atomic.color.neutral.900');
-    expect(partialDarkMode.tokens.component).toEqual({});
+    expect(partialDarkMode?.tokens.semantic?.background?.page).toBe('atomic.color.neutral.900');
+    expect(partialDarkMode?.tokens.component).toEqual({});
   });
 });

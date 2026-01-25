@@ -6,7 +6,7 @@
 
 import { describe, it, expect } from 'vitest';
 import { validateTheme } from '../src/token-validation.js';
-import type { ThemeWithTokens } from '../src/tokens.js';
+import type { ThemeWithTokens, SemanticTokens, ComponentTokens } from '../src/tokens.js';
 
 // ============================================================================
 // Valid Theme Fixtures
@@ -178,13 +178,13 @@ describe('validateTheme - Success Cases', () => {
           semantic: {
             background: {
               page: 'atomic.color.neutral.900',
-            },
+            } as SemanticTokens['background'],
           },
           component: {
             button: {
               primary: {
                 background: 'atomic.color.blue.400',
-              },
+              } as ComponentTokens['button']['primary'],
             },
           },
         },
@@ -204,7 +204,7 @@ describe('validateTheme - Success Cases', () => {
             background: {
               page: 'atomic.color.neutral.900',
               // Other semantic tokens optional in dark mode
-            },
+            } as SemanticTokens['background'],
           },
           component: {},
         },
@@ -398,7 +398,7 @@ describe('validateTheme - Component Token Errors', () => {
       ...validThemeWithTokens,
       tokens: {
         ...validThemeWithTokens.tokens,
-        component: {}, // Empty but present
+        component: {} as ComponentTokens, // Empty but present
       },
     };
 
