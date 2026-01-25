@@ -11,9 +11,12 @@ tags: ["SPEC-PLAYGROUND-001", "Implementation", "Plan"]
 
 **Objective**: Build Next.js 16 React playground with timestamp-based preview routing, CSS variable theming, production layouts, and MCP server integration.
 
-**Approach**: Next.js App Router with Server Components for initial render, Client Components for interactivity. CSS variable-based theming for HMR-compatible theme switching. Blueprint validation with Zod for runtime safety.
+**Approach**: Next.js App Router with Server Components for initial render, Client Components for interactivity. CSS variable-based theming (provided by SPEC-COMPONENT-001) for HMR-compatible theme switching. Blueprint validation with Zod for runtime safety. Component rendering using @tekton/ui reference implementations.
 
-**Estimated Complexity**: Medium-High - Next.js 16 Server Components are well-documented, CSS variable theming is straightforward, production layout implementation requires careful design.
+**Estimated Complexity**: Medium - Next.js 16 Server Components are well-documented, CSS variable theming is provided by SPEC-COMPONENT-001, production layout implementation requires careful design.
+
+**Dependencies**:
+- **SPEC-COMPONENT-001** (CRITICAL): Provides @tekton/ui components, 3-Layer Token System, and CSS Variables generation. Must be completed before Milestone 3-5.
 
 ---
 
@@ -28,12 +31,16 @@ tags: ["SPEC-PLAYGROUND-001", "Implementation", "Plan"]
 **Tasks**:
 1. Initialize Next.js 16 project with TypeScript and App Router
 2. Configure `tsconfig.json` for strict mode and path aliases
-3. Install dependencies: Zod, @tekton/core (local workspace), TanStack Query (optional)
+3. Install dependencies:
+   - Zod (validation)
+   - @tekton/core (workspace) - types, schemas, theme loading
+   - @tekton/ui (workspace) - **from SPEC-COMPONENT-001** - UI components
+   - TanStack Query (optional) - data fetching
 4. Set up ESLint and Prettier for code quality
 5. Configure environment variables (MCP_SERVER_URL)
 6. Create basic directory structure (app/, components/, lib/, styles/)
 
-**Dependencies**: None
+**Dependencies**: None (can proceed independently, but @tekton/ui usage starts at Milestone 3)
 
 **Success Criteria**:
 - Next.js dev server runs without errors
@@ -98,66 +105,58 @@ export default async function PreviewPage({ params }: PageProps) {
 
 ---
 
-### Milestone 3: ThemeProvider and CSS Variable Injection
+### Milestone 3: Theme Integration with SPEC-COMPONENT-001
 
 **Priority**: HIGH (Primary Goal)
 
-**Objective**: Implement ThemeProvider with CSS variable injection for dynamic theming.
+**Objective**: Integrate CSS Variables from SPEC-COMPONENT-001's theme system for dynamic theming.
+
+**Dependencies**:
+- Milestone 2 (Dynamic Routing)
+- **SPEC-COMPONENT-001** (3-Layer Token System, CSS Generation)
 
 **Tasks**:
-1. Create `ThemeProvider.tsx` Client Component with Context API
-2. Implement CSS variable injection using `document.documentElement.style.setProperty`
-3. Load theme from MCP server or @tekton/core's `loadTheme`
-4. Extract CSS variables using @tekton/core's `generateCSSVariables`
-5. Add theme switching UI (`ThemeSwitch.tsx`)
-6. Configure global CSS with CSS variable defaults
-
-**Dependencies**: Milestone 2 (Dynamic Routing)
+1. Import `generateThemeCSS` from `@tekton/core` (provided by SPEC-COMPONENT-001)
+2. Inject pre-generated CSS Variables from theme into document head
+3. Load theme from MCP server using `loadTheme` from `@tekton/core`
+4. Add theme switching UI (`ThemeSwitch.tsx`) for URL parameter changes
+5. Configure global CSS imports for @tekton/ui base styles
 
 **Technical Approach**:
 ```tsx
-// components/theme/ThemeProvider.tsx
-'use client';
+// app/layout.tsx
+import { generateThemeCSS } from '@tekton/core';
+import '@tekton/ui/styles/tokens.css';  // Base CSS Variables
 
-import { createContext, useContext, useEffect, useState } from 'react';
-import { loadTheme, generateCSSVariables } from '@tekton/core';
-import type { Theme } from '@tekton/core';
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <html lang="en">
+      <head>
+        {/* CSS Variables injected server-side or dynamically */}
+      </head>
+      <body>{children}</body>
+    </html>
+  );
+}
 
-export function ThemeProvider({
-  children,
-  themeId
-}: {
-  children: React.ReactNode;
-  themeId: string;
-}) {
-  const [theme, setTheme] = useState<Theme | null>(null);
+// lib/theme-loader.ts
+import { loadTheme, generateThemeCSS } from '@tekton/core';
 
-  useEffect(() => {
-    const loadedTheme = loadTheme(themeId);
-    if (loadedTheme) {
-      setTheme(loadedTheme);
-
-      // Inject CSS variables
-      const vars = generateCSSVariables(loadedTheme);
-      const root = document.documentElement;
-
-      Object.entries(vars).forEach(([key, value]) => {
-        root.style.setProperty(key, value);
-      });
-    }
-  }, [themeId]);
-
-  return <div className="themed-container">{children}</div>;
+export function loadThemeCSS(themeId: string): string {
+  const theme = loadTheme(themeId);
+  return generateThemeCSS(theme);  // Uses SPEC-COMPONENT-001 generator
 }
 ```
 
 **Success Criteria**:
-- CSS variables injected into `:root` element
+- CSS Variables from SPEC-COMPONENT-001 loaded correctly
 - Theme switching updates variables without page reload
 - OKLCH colors render correctly in modern browsers
 - Fallback values prevent broken layouts on theme load failure
 
-**Test Coverage**: ≥ 85% for ThemeProvider logic
+**Test Coverage**: ≥ 85% for theme integration logic
+
+**Note**: ThemeProvider implementation is provided by SPEC-COMPONENT-001's @tekton/ui package.
 
 ---
 
@@ -250,35 +249,50 @@ DashboardLayout.Slot = function Slot({
 
 ---
 
-### Milestone 5: Component Catalog and Blueprint Renderer
+### Milestone 5: Blueprint Renderer with @tekton/ui Integration
 
 **Priority**: HIGH (Secondary Goal)
 
-**Objective**: Implement all 20 catalog components and BlueprintRenderer for component mapping.
+**Objective**: Implement BlueprintRenderer that maps blueprint nodes to @tekton/ui components.
+
+**Dependencies**:
+- Milestone 4 (Production Layouts)
+- **SPEC-COMPONENT-001** (@tekton/ui package with 20 reference components)
 
 **Tasks**:
-1. Create UI components (Button, Card, Input, Text, Heading, Image, Link, List, Form, Modal, Tabs, Table, Badge, Avatar, Dropdown, Checkbox, Radio, Switch, Slider, Progress)
-2. Style components with CSS Modules and CSS variables
-3. Implement `ComponentResolver.tsx` for blueprint node → React component mapping
-4. Implement `BlueprintRenderer.tsx` for layout + component assembly
-5. Add unknown component placeholder handling
-6. Validate component props with TypeScript
-
-**Dependencies**: Milestone 4 (Production Layouts)
+1. Import all 20 components from `@tekton/ui` (Button, Card, Input, Text, Heading, Image, Link, List, Form, Modal, Tabs, Table, Badge, Avatar, Dropdown, Checkbox, Radio, Switch, Slider, Progress)
+2. Implement `ComponentResolver.tsx` for blueprint node → @tekton/ui component mapping
+3. Implement `BlueprintRenderer.tsx` for layout + component assembly
+4. Add unknown component placeholder handling
+5. Validate component props with TypeScript using COMPONENT_SCHEMAS from @tekton/core
 
 **Technical Approach**:
 ```tsx
 // components/blueprint/ComponentResolver.tsx
 import type { ComponentNode } from '@tekton/core';
-import * as UI from '@/components/ui';
+import * as TektonUI from '@tekton/ui';  // Import from SPEC-COMPONENT-001
 
 const COMPONENT_MAP = {
-  Button: UI.Button,
-  Card: UI.Card,
-  Input: UI.Input,
-  Text: UI.Text,
-  Heading: UI.Heading,
-  // ... all 20 components
+  Button: TektonUI.Button,
+  Card: TektonUI.Card,
+  Input: TektonUI.Input,
+  Text: TektonUI.Text,
+  Heading: TektonUI.Heading,
+  Image: TektonUI.Image,
+  Link: TektonUI.Link,
+  List: TektonUI.List,
+  Form: TektonUI.Form,
+  Modal: TektonUI.Modal,
+  Tabs: TektonUI.Tabs,
+  Table: TektonUI.Table,
+  Badge: TektonUI.Badge,
+  Avatar: TektonUI.Avatar,
+  Dropdown: TektonUI.Dropdown,
+  Checkbox: TektonUI.Checkbox,
+  Radio: TektonUI.Radio,
+  Switch: TektonUI.Switch,
+  Slider: TektonUI.Slider,
+  Progress: TektonUI.Progress,
 } as const;
 
 export function ComponentResolver({ node }: { node: ComponentNode }) {
@@ -299,7 +313,7 @@ export function ComponentResolver({ node }: { node: ComponentNode }) {
 
 function UnknownComponent({ type }: { type: string }) {
   return (
-    <div style={{ border: '2px dashed red', padding: '1rem' }}>
+    <div className="border-2 border-dashed border-red-500 p-4 rounded">
       Unknown component: {type}
     </div>
   );
@@ -307,12 +321,14 @@ function UnknownComponent({ type }: { type: string }) {
 ```
 
 **Success Criteria**:
-- All 20 components render correctly with props
+- All 20 @tekton/ui components render correctly with props
 - BlueprintRenderer maps blueprint nodes to components
 - Unknown components render placeholder without crashing
-- Component styles use CSS variables
+- Component styles use CSS Variables from SPEC-COMPONENT-001
 
-**Test Coverage**: ≥ 85% for component catalog and renderer
+**Test Coverage**: ≥ 85% for component resolver and renderer
+
+**Note**: Component implementations are provided by SPEC-COMPONENT-001. This milestone focuses on integration and rendering logic only.
 
 ---
 
@@ -511,18 +527,77 @@ HTML streamed to client with CSS variables
 
 ---
 
+## Dependencies
+
+### Internal Dependencies
+- **SPEC-COMPONENT-001** (CRITICAL, BLOCKING):
+  - @tekton/ui package with 20 reference components
+  - 3-Layer Token System (Atomic → Semantic → Component)
+  - CSS Variables generation pipeline
+  - Component Schemas
+  - **Status**: Must be completed before starting Milestone 3
+
+- **@tekton/core**: Base types, theme loading, blueprint schemas
+- **SPEC-MCP-002**: MCP server for blueprint fetching
+
+### External Dependencies
+- Next.js 16+
+- React 19
+- Zod
+- TanStack Query (optional)
+
+## Implementation Strategy
+
+### Phase 1: Foundation (Can Start Immediately)
+1. **Milestone 1-2**: Project setup and dynamic routing
+2. **Parallel**: Wait for SPEC-COMPONENT-001 completion
+
+### Phase 2: Integration (After SPEC-COMPONENT-001)
+3. **Milestone 3**: Theme integration with @tekton/ui
+4. **Milestone 4**: Production layouts (custom implementation)
+5. **Milestone 5**: Blueprint renderer with @tekton/ui components
+
+### Phase 3: Polish
+6. **Milestone 6-7**: Error handling and testing
+
 ## Next Steps
 
-1. **Initialize Next.js 16 project**: Create `packages/playground-web/` with TypeScript
-2. **Install dependencies**: Zod, @tekton/core, TanStack Query (optional)
-3. **Implement Milestone 1-2**: Project setup and dynamic routing
-4. **Test with SPEC-MCP-002**: Verify integration with MCP server
-5. **Implement Milestones 3-7**: Complete all remaining features
+### Immediate Actions
+1. ✅ **Dependency Resolution**: SPEC-COMPONENT-001 identified as blocking dependency
+2. 🔄 **Development Order**: Start SPEC-COMPONENT-001 first (/moai:2-run SPEC-COMPONENT-001)
+3. ⏸️ **SPEC-PLAYGROUND-001**: Begin Milestone 1-2, pause at Milestone 3 until SPEC-COMPONENT-001 completes
+
+### After SPEC-COMPONENT-001 Completion
+1. **Verify @tekton/ui**: Ensure all 20 components are available
+2. **Implement Milestone 3-5**: Theme integration and component rendering
+3. **Test integration**: Verify blueprint → @tekton/ui → rendered preview
+4. **Implement Milestone 6-7**: Error handling and optimization
+
+**Recommended Workflow**:
+```bash
+# Step 1: Complete SPEC-COMPONENT-001 first
+/moai:2-run SPEC-COMPONENT-001
+
+# Step 2: After SPEC-COMPONENT-001 is done, start SPEC-PLAYGROUND-001
+/moai:2-run SPEC-PLAYGROUND-001
+```
 
 **Implementation Branch**: `feature/SPEC-PLAYGROUND-001`
 
 ---
 
 **Last Updated**: 2026-01-25
-**Status**: Planned
-**Ready for**: /moai:2-run SPEC-PLAYGROUND-001
+**Status**: Planned (Blocked by SPEC-COMPONENT-001)
+**Ready for**: Wait for SPEC-COMPONENT-001 completion, then /moai:2-run SPEC-PLAYGROUND-001
+
+---
+
+## Change Log
+
+### 2026-01-25 - Dependency Resolution
+- **Identified**: Component implementation overlap with SPEC-COMPONENT-001
+- **Resolved**: Removed duplicate 20 component implementations
+- **Changed**: Milestone 3 - Now uses @tekton/ui theme system
+- **Changed**: Milestone 5 - Now imports components from @tekton/ui
+- **Added**: SPEC-COMPONENT-001 as critical blocking dependency
+- **Updated**: Implementation strategy to sequential execution (COMPONENT → PLAYGROUND)

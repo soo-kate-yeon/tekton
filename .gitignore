@@ -130,6 +130,11 @@ packages/*/.tekton/
 packages/*/.tekton-test/
 test-exports/
 
+# Playwright test artifacts
+playwright-report/
+test-results/
+.playwright/
+
 # ---------------------------------------------
 # Environment Variables & Secrets
 # ---------------------------------------------

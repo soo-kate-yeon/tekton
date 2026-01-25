@@ -25,9 +25,9 @@ function calculateTargetLightness(step: number, baseLightness: number): number {
     400: 0.65,
     500: baseLightness, // Base color
     600: Math.max(baseLightness * 0.85, 0.35),
-    700: Math.max(baseLightness * 0.70, 0.25),
+    700: Math.max(baseLightness * 0.7, 0.25),
     800: Math.max(baseLightness * 0.55, 0.15),
-    900: Math.max(baseLightness * 0.40, 0.10),
+    900: Math.max(baseLightness * 0.4, 0.1),
     950: Math.max(baseLightness * 0.25, 0.05),
   };
 
@@ -62,7 +62,7 @@ function adjustChromaForLightness(baseChroma: number, lightness: number): number
 export function generateLightnessScale(baseColor: OKLCHColor): ColorScale {
   const scale: ColorScale = {} as ColorScale;
 
-  SCALE_STEPS.forEach((step) => {
+  SCALE_STEPS.forEach(step => {
     const targetLightness = calculateTargetLightness(step, baseColor.l);
     const adjustedChroma = adjustChromaForLightness(baseColor.c, targetLightness);
 

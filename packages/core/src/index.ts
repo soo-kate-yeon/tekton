@@ -16,6 +16,11 @@ export type {
   LayoutType,
   RenderResult,
   RenderOptions,
+  // Token Types (SPEC-COMPONENT-001-A)
+  AtomicTokens,
+  SemanticTokens,
+  ComponentTokens,
+  ThemeWithTokens,
 } from './types.js';
 
 // Theme
@@ -44,3 +49,12 @@ export {
 
 // Render
 export { render, renderWithTheme, renderSingleComponent, renderComponents } from './render.js';
+
+// Token System (SPEC-COMPONENT-001-A)
+export { resolveToken, resolveWithFallback, type TokenReference } from './token-resolver.js';
+export {
+  validateTheme,
+  ThemeWithTokensSchema,
+  type ValidationResult as TokenValidationResult,
+} from './token-validation.js';
+export { generateThemeCSS } from './css-generator.js';

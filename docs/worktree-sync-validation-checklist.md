@@ -25,6 +25,7 @@ Before starting documentation sync, verify:
 **Action**: Insert MoAI workflow integration example after line 349
 
 **Checklist**:
+
 - [ ] Open README.md in editor
 - [ ] Locate worktree section (lines 330-389)
 - [ ] Find insertion point (after line 349)
@@ -33,6 +34,7 @@ Before starting documentation sync, verify:
 - [ ] Save file
 
 **Validation**:
+
 ```bash
 # Verify markdown syntax
 markdownlint README.md
@@ -42,6 +44,7 @@ cat README.md | grep -A 5 "Phase 1 - Planning"
 ```
 
 **Expected Result**:
+
 - ✅ Markdown linting passes
 - ✅ MoAI integration clearly visible
 - ✅ Code examples properly formatted
@@ -55,6 +58,7 @@ cat README.md | grep -A 5 "Phase 1 - Planning"
 **Action**: Insert MoAI integration callout after line 51
 
 **Checklist**:
+
 - [ ] Open SKILL.md in editor
 - [ ] Locate use cases section (lines 25-52)
 - [ ] Find insertion point (after line 51)
@@ -63,6 +67,7 @@ cat README.md | grep -A 5 "Phase 1 - Planning"
 - [ ] Save file
 
 **Validation**:
+
 ```bash
 # Verify markdown syntax
 markdownlint .claude/skills/moai-workflow-worktree/SKILL.md
@@ -72,6 +77,7 @@ grep -i "moai" .claude/skills/moai-workflow-worktree/SKILL.md
 ```
 
 **Expected Result**:
+
 - ✅ Markdown linting passes
 - ✅ MoAI integration callout visible in Quick Reference
 - ✅ Links to MoAI commands present
@@ -85,6 +91,7 @@ grep -i "moai" .claude/skills/moai-workflow-worktree/SKILL.md
 **Action**: Insert Mermaid workflow diagram after line 87
 
 **Checklist**:
+
 - [ ] Open worktree-workflow-guide.md in editor
 - [ ] Locate integration section (lines 88-190)
 - [ ] Find insertion point (after line 87, before "Phase 1")
@@ -93,7 +100,8 @@ grep -i "moai" .claude/skills/moai-workflow-worktree/SKILL.md
 - [ ] Save file
 
 **Validation**:
-```bash
+
+````bash
 # Verify markdown syntax
 markdownlint docs/worktree-workflow-guide.md
 
@@ -102,9 +110,10 @@ grep -A 20 "```mermaid" docs/worktree-workflow-guide.md
 
 # Optional: Render diagram (if mmdc installed)
 # mmdc -i docs/worktree-workflow-guide.md -o /tmp/diagram.png
-```
+````
 
 **Expected Result**:
+
 - ✅ Markdown linting passes
 - ✅ Mermaid diagram renders correctly
 - ✅ Diagram shows complete workflow lifecycle
@@ -118,6 +127,7 @@ grep -A 20 "```mermaid" docs/worktree-workflow-guide.md
 **Purpose**: Verify all markdown files have correct syntax
 
 **Commands**:
+
 ```bash
 # Lint all worktree documentation
 markdownlint .claude/skills/moai-workflow-worktree/**/*.md
@@ -126,6 +136,7 @@ markdownlint README.md
 ```
 
 **Checklist**:
+
 - [ ] No linting errors in SKILL.md
 - [ ] No linting errors in workflow-guide.md
 - [ ] No linting errors in README.md
@@ -141,6 +152,7 @@ markdownlint README.md
 **Purpose**: Verify all internal and external links work
 
 **Commands**:
+
 ```bash
 # Check all links in worktree documentation
 markdown-link-check .claude/skills/moai-workflow-worktree/**/*.md
@@ -148,6 +160,7 @@ markdown-link-check docs/worktree-*.md
 ```
 
 **Checklist**:
+
 - [ ] All internal links resolve (modules/, examples.md, reference.md)
 - [ ] All cross-references work (between files)
 - [ ] External links valid (Git documentation, MoAI-ADK docs)
@@ -162,6 +175,7 @@ markdown-link-check docs/worktree-*.md
 **Purpose**: Verify all command examples execute successfully
 
 **Commands**:
+
 ```bash
 # Extract and test all command examples
 grep -r "tekton worktree" docs/ .claude/skills/moai-workflow-worktree/ | \
@@ -178,6 +192,7 @@ grep -r "tekton worktree" docs/ .claude/skills/moai-workflow-worktree/ | \
 ```
 
 **Checklist**:
+
 - [ ] `tekton worktree new --help` works
 - [ ] `tekton worktree list --help` works
 - [ ] `tekton worktree switch --help` works
@@ -196,6 +211,7 @@ grep -r "tekton worktree" docs/ .claude/skills/moai-workflow-worktree/ | \
 **Purpose**: Verify all module cross-references resolve correctly
 
 **Commands**:
+
 ```bash
 # Check all markdown links in skill directory
 find .claude/skills/moai-workflow-worktree -name "*.md" -exec grep -H "\[.*\](.*\.md)" {} \; | \
@@ -208,9 +224,10 @@ find .claude/skills/moai-workflow-worktree -name "*.md" -exec grep -H "\[.*\](.*
 ```
 
 **Checklist**:
-- [ ] SKILL.md → modules/* links work
-- [ ] modules/* → other modules links work
-- [ ] docs/* → .claude/skills/* links work (if any)
+
+- [ ] SKILL.md → modules/\* links work
+- [ ] modules/\* → other modules links work
+- [ ] docs/_ → .claude/skills/_ links work (if any)
 - [ ] examples.md → reference.md links work
 
 **Expected Output**: `0 broken links`
@@ -222,15 +239,17 @@ find .claude/skills/moai-workflow-worktree -name "*.md" -exec grep -H "\[.*\](.*
 **Purpose**: Verify Mermaid diagrams have correct syntax
 
 **Commands**:
-```bash
+
+````bash
 # Extract Mermaid blocks
 grep -A 30 "```mermaid" docs/worktree-workflow-guide.md
 
 # Optional: Validate syntax (if mmdc installed)
 # mmdc -i docs/worktree-workflow-guide.md -o /tmp/test.png
-```
+````
 
 **Checklist**:
+
 - [ ] Mermaid diagram opens with `flowchart TD` or similar
 - [ ] All nodes defined (A[], B{}, C(), etc.)
 - [ ] All connections valid (-->, -->|, etc.)
@@ -246,6 +265,7 @@ grep -A 30 "```mermaid" docs/worktree-workflow-guide.md
 **Purpose**: Verify no spelling errors in user-facing text
 
 **Commands**:
+
 ```bash
 # Spell check all documentation
 aspell check docs/worktree-workflow-guide.md
@@ -254,6 +274,7 @@ aspell check README.md
 ```
 
 **Checklist**:
+
 - [ ] No spelling errors in README.md
 - [ ] No spelling errors in SKILL.md
 - [ ] No spelling errors in workflow-guide.md
@@ -271,6 +292,7 @@ aspell check README.md
 **Test Scenario**: Create SPEC with worktree, develop, sync, cleanup
 
 **Commands**:
+
 ```bash
 # Step 1: Create worktree (following README.md example)
 tekton worktree new SPEC-TEST-001 "Documentation Test"
@@ -296,6 +318,7 @@ tekton worktree remove SPEC-TEST-001 --force
 ```
 
 **Checklist**:
+
 - [ ] Worktree creation works as documented
 - [ ] Directory switching works as documented
 - [ ] Status command works as documented
@@ -314,6 +337,7 @@ tekton worktree remove SPEC-TEST-001 --force
 **Reviewer**: Technical lead or feature implementer
 
 **Checklist**:
+
 - [ ] All command syntax matches CLI implementation
 - [ ] Configuration options match YAML schema
 - [ ] Workflow examples reflect actual behavior
@@ -322,7 +346,7 @@ tekton worktree remove SPEC-TEST-001 --force
 
 **Method**: Side-by-side comparison of docs and code
 
-**Sign-off**: ______________________________ Date: __________
+**Sign-off**: **\*\***\*\***\*\***\_\_**\*\***\*\***\*\*** Date: \***\*\_\_\*\***
 
 ---
 
@@ -331,6 +355,7 @@ tekton worktree remove SPEC-TEST-001 --force
 **Reviewer**: Developer unfamiliar with worktree feature
 
 **Checklist**:
+
 - [ ] Can create worktree following README only
 - [ ] Can complete workflow following workflow guide only
 - [ ] Troubleshooting section addresses encountered issues
@@ -339,7 +364,7 @@ tekton worktree remove SPEC-TEST-001 --force
 
 **Method**: Complete workflow from scratch following docs
 
-**Sign-off**: ______________________________ Date: __________
+**Sign-off**: **\*\***\*\***\*\***\_\_**\*\***\*\***\*\*** Date: \***\*\_\_\*\***
 
 ---
 
@@ -348,6 +373,7 @@ tekton worktree remove SPEC-TEST-001 --force
 **Reviewer**: Documentation specialist or technical writer
 
 **Checklist**:
+
 - [ ] Consistent terminology (worktree vs work tree)
 - [ ] Clear headings and section structure
 - [ ] Proper code block formatting
@@ -356,7 +382,7 @@ tekton worktree remove SPEC-TEST-001 --force
 
 **Method**: Read-through and editorial review
 
-**Sign-off**: ______________________________ Date: __________
+**Sign-off**: **\*\***\*\***\*\***\_\_**\*\***\*\***\*\*** Date: \***\*\_\_\*\***
 
 ---
 
@@ -433,6 +459,7 @@ Add entry to CHANGELOG.md:
 ## [Unreleased]
 
 ### Documentation
+
 - Enhanced MoAI workflow integration in worktree documentation
 - Added visual workflow diagram to worktree-workflow-guide.md
 - Created comprehensive documentation sync plan
@@ -443,6 +470,7 @@ Add entry to CHANGELOG.md:
 ### Notification
 
 Notify team:
+
 - [ ] Update project status dashboard
 - [ ] Notify stakeholders of documentation completion
 - [ ] Share documentation sync results in team channel
@@ -482,12 +510,12 @@ If proceeding with Actions 2-3:
 
 Track these metrics post-release:
 
-| Metric | Baseline | Target | Measurement Method |
-|--------|----------|--------|-------------------|
-| Worktree Adoption | 0% | 40% | Count worktree creations vs SPECs |
-| Support Requests | TBD | -50% | Track worktree-related questions |
-| User Satisfaction | N/A | 80%+ | Survey after 2 weeks |
-| Documentation Accuracy | 100% | 100% | Monitor bug reports |
+| Metric                 | Baseline | Target | Measurement Method                |
+| ---------------------- | -------- | ------ | --------------------------------- |
+| Worktree Adoption      | 0%       | 40%    | Count worktree creations vs SPECs |
+| Support Requests       | TBD      | -50%   | Track worktree-related questions  |
+| User Satisfaction      | N/A      | 80%+   | Survey after 2 weeks              |
+| Documentation Accuracy | 100%     | 100%   | Monitor bug reports               |
 
 ---
 
@@ -497,4 +525,4 @@ Track these metrics post-release:
 
 ---
 
-*This validation checklist ensures comprehensive quality assurance for the moai-worktree documentation synchronization.*
+_This validation checklist ensures comprehensive quality assurance for the moai-worktree documentation synchronization._

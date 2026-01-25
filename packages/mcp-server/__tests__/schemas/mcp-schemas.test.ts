@@ -8,7 +8,7 @@ import {
   GenerateBlueprintInputSchema,
   PreviewThemeInputSchema,
   ExportScreenInputSchema,
-  ThemeIdSchema
+  ThemeIdSchema,
 } from '../../src/schemas/mcp-schemas.js';
 
 describe('MCP Schemas', () => {
@@ -38,7 +38,7 @@ describe('MCP Schemas', () => {
         description: 'User dashboard with profile card',
         layout: 'sidebar-left',
         themeId: 'calm-wellness',
-        componentHints: ['Card', 'Avatar']
+        componentHints: ['Card', 'Avatar'],
       };
       expect(GenerateBlueprintInputSchema.safeParse(input).success).toBe(true);
     });
@@ -47,7 +47,7 @@ describe('MCP Schemas', () => {
       const input = {
         description: 'Short',
         layout: 'sidebar-left',
-        themeId: 'calm-wellness'
+        themeId: 'calm-wellness',
       };
       const result = GenerateBlueprintInputSchema.safeParse(input);
       expect(result.success).toBe(false);
@@ -60,7 +60,7 @@ describe('MCP Schemas', () => {
       const input = {
         description: 'A'.repeat(501),
         layout: 'sidebar-left',
-        themeId: 'calm-wellness'
+        themeId: 'calm-wellness',
       };
       const result = GenerateBlueprintInputSchema.safeParse(input);
       expect(result.success).toBe(false);
@@ -73,7 +73,7 @@ describe('MCP Schemas', () => {
       const input = {
         description: 'Test dashboard',
         layout: 'invalid-layout',
-        themeId: 'calm-wellness'
+        themeId: 'calm-wellness',
       };
       expect(GenerateBlueprintInputSchema.safeParse(input).success).toBe(false);
     });
@@ -94,7 +94,7 @@ describe('MCP Schemas', () => {
       const input = {
         blueprintId: '1738123456789',
         format: 'tsx',
-        outputPath: 'src/screens/dashboard.tsx'
+        outputPath: 'src/screens/dashboard.tsx',
       };
       expect(ExportScreenInputSchema.safeParse(input).success).toBe(true);
     });
@@ -102,7 +102,7 @@ describe('MCP Schemas', () => {
     it('should accept input without outputPath', () => {
       const input = {
         blueprintId: '1738123456789',
-        format: 'jsx'
+        format: 'jsx',
       };
       expect(ExportScreenInputSchema.safeParse(input).success).toBe(true);
     });
@@ -110,7 +110,7 @@ describe('MCP Schemas', () => {
     it('should reject invalid format', () => {
       const input = {
         blueprintId: '1738123456789',
-        format: 'invalid'
+        format: 'invalid',
       };
       expect(ExportScreenInputSchema.safeParse(input).success).toBe(false);
     });

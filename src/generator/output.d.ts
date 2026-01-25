@@ -4,12 +4,12 @@ import type { SemanticTokens } from './semantic-mapper';
  * Export configuration
  */
 export interface ExportConfig {
-    semanticTokens: SemanticTokens;
-    darkTokens?: SemanticTokens;
-    colorScales?: Record<string, Record<string, OKLCHColor>>;
-    minify?: boolean;
-    prefix?: string;
-    format?: 'js' | 'ts';
+  semanticTokens: SemanticTokens;
+  darkTokens?: SemanticTokens;
+  colorScales?: Record<string, Record<string, OKLCHColor>>;
+  minify?: boolean;
+  prefix?: string;
+  format?: 'js' | 'ts';
 }
 /**
  * Export semantic tokens to CSS variables

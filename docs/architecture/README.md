@@ -26,6 +26,7 @@ Tekton is a 3-layer design system architecture for generating deterministic desi
 ### Layer Architecture
 
 **Layer 1: Token Generator Engine (SPEC-LAYER1-001)** ✅ Complete
+
 - Generates deterministic design tokens from archetype JSON presets
 - OKLCH color space transformations with culori 3.3.0
 - WCAG AA/AAA automatic validation and adjustment
@@ -33,11 +34,13 @@ Tekton is a 3-layer design system architecture for generating deterministic desi
 - Performance optimization: LRU cache, <100ms generation
 
 **Layer 2: Component Theme Mapper (SPEC-LAYER2-001)** 🚧 In Progress
+
 - Maps generated tokens to component-specific themes
 - Semantic token mapping for UI components
 - Theme variant generation (light/dark modes)
 
 **Layer 3: Framework Adapter (SPEC-LAYER3-001)** 🚧 In Progress
+
 - Adapts component themes to specific frontend frameworks
 - Framework-specific code generation (React, Vue, Svelte)
 - Build tool integration (Vite, Webpack, Rollup)
@@ -92,41 +95,49 @@ graph TD
 ### Data Flow Pipeline
 
 **Stage 1: Archetype Parsing**
+
 - Input: Archetype JSON preset file
 - Validation: Zod schema validation for structure
 - Output: Validated archetype object
 
 **Stage 2: OKLCH Conversion**
+
 - Input: Base colors from archetype (hex, rgb, or direct OKLCH)
 - Transformation: Convert all to OKLCH format using culori
 - Output: Normalized OKLCH color objects
 
 **Stage 3: Gamut Clipping**
+
 - Input: OKLCH colors (may be out of sRGB gamut)
 - Processing: Iterative chroma reduction until displayable
 - Output: sRGB-compatible OKLCH colors with metadata
 
 **Stage 4: WCAG Validation**
+
 - Input: Foreground-background color pairs
 - Calculation: Contrast ratio using relative luminance
 - Output: Pass/fail result with suggested adjustments
 
 **Stage 5: Auto-Adjustment**
+
 - Input: Failed WCAG validation pairs
 - Processing: Lightness adjustment in 0.05 increments
 - Output: Adjusted colors meeting WCAG thresholds
 
 **Stage 6: Token Generation**
+
 - Input: Validated and adjusted colors
 - Processing: Token structure creation with metadata
 - Output: Complete token collection
 
 **Stage 7: Multi-Format Export**
+
 - Input: Token collection
 - Processing: Format-specific serialization
 - Output: CSS variables, Tailwind config, DTCG JSON
 
 **Stage 8: Caching**
+
 - Input: Generated tokens and archetype hash
 - Processing: LRU cache storage with TTL
 - Output: Cached tokens for future requests
@@ -134,6 +145,7 @@ graph TD
 ### Performance Characteristics
 
 **Token Generation Pipeline**:
+
 - Archetype parsing: ~5ms
 - OKLCH conversion: ~10ms for 50 colors
 - Gamut clipping: ~15ms (only for out-of-gamut colors)
@@ -143,6 +155,7 @@ graph TD
 - **Total (uncached)**: ~65-100ms for typical archetype
 
 **Caching Performance**:
+
 - Cache lookup: <1ms (O(1) Map access)
 - Cache hit: ~10ms (includes validation)
 - Cache miss: Full generation pipeline
@@ -152,15 +165,18 @@ graph TD
 ### Module Dependencies
 
 **Zero-Dependency Modules**:
+
 - `schema-validator.ts` - Zod-based validation only
 - `token-cache.ts` - Native Map-based LRU cache
 
 **Core Dependencies**:
+
 - `culori ^3.3.0` - OKLCH color space support
 - `wcag-contrast ^3.0.0` - WCAG ratio calculation
 - `zod ^3.22+` - Runtime schema validation
 
 **Test Dependencies**:
+
 - `vitest ^2.0.0` - Unit testing framework
 - `@vitest/coverage-v8` - Coverage reporting
 
@@ -204,22 +220,26 @@ graph TD
 ### Layered Architecture
 
 **Layer 1: Public API**
+
 - Entry point for all external interactions
 - Type-safe interfaces with TypeScript
 - Zod schema validation for runtime safety
 
 **Layer 2: Generation Engine**
+
 - OKLCH color space calculations
 - 10-step perceptually uniform scales
 - Neutral palette generation (pure/tinted/custom)
 - Semantic token mapping (shadcn/ui compatible)
 
 **Layer 3: Validation System**
+
 - WCAG AA/AAA compliance checking
 - Contract-based component validation
 - Schema validation with Zod
 
 **Layer 4: Conversion & Export**
+
 - Color space conversions (OKLCH ↔ RGB ↔ Hex)
 - Multi-format export (CSS, JSON, JS, TS)
 - Gamut clipping for sRGB compatibility
@@ -266,25 +286,30 @@ graph LR
 ### Module Categories
 
 **Foundation Modules** (Zero Dependencies)
+
 - `schemas.ts` - Zod validation schemas for all data structures
 - `color-conversion.ts` - Color space conversion algorithms
 
 **Generation Modules** (Depend on Foundation)
+
 - `scale-generator.ts` - Perceptually uniform scale generation
 - `neutral-palette.ts` - Background-based neutral scales
 - `semantic-mapper.ts` - shadcn/ui semantic tokens
 - `token-generator.ts` - Core token generation orchestrator
 
 **Validation Modules** (Depend on Foundation + Generation)
+
 - `wcag-validator.ts` - WCAG AA/AAA compliance validation
 - `contracts/` - Component contract validation system
 
 **Theme Modules** (Depend on Generation)
+
 - `themes/types.ts` - Theme type definitions
 - `themes/loader.ts` - Theme loading with validation
 - `themes/index.ts` - Theme-to-token integration
 
 **Export Modules** (Depend on All)
+
 - `generator/output.ts` - Multi-format export (CSS, DTCG, Tailwind)
 - `index.ts` - Public API surface
 
@@ -423,17 +448,17 @@ The lightness scale is designed for perceptual uniformity:
 
 ```typescript
 const LIGHTNESS_SCALE = {
-  50: 0.97,   // Lightest - backgrounds
+  50: 0.97, // Lightest - backgrounds
   100: 0.93,
   200: 0.85,
   300: 0.75,
   400: 0.64,
-  500: 0.50,  // Base color
+  500: 0.5, // Base color
   600: 0.42,
   700: 0.33,
   800: 0.23,
-  900: 0.15,  // Darkest - text on light backgrounds
-  950: 0.10   // Extra dark (optional)
+  900: 0.15, // Darkest - text on light backgrounds
+  950: 0.1, // Extra dark (optional)
 };
 ```
 
@@ -443,17 +468,17 @@ Chroma (saturation) is adjusted per step to maintain visual consistency:
 
 ```typescript
 const CHROMA_INTENSITY = {
-  50: 0.3,    // Desaturated for backgrounds
+  50: 0.3, // Desaturated for backgrounds
   100: 0.4,
   200: 0.5,
   300: 0.7,
   400: 0.9,
-  500: 1.0,   // Full chroma at base
+  500: 1.0, // Full chroma at base
   600: 1.0,
   700: 0.95,
   800: 0.85,
-  900: 0.7,   // Reduced for dark tones
-  950: 0.5
+  900: 0.7, // Reduced for dark tones
+  950: 0.5,
 };
 ```
 
@@ -569,6 +594,7 @@ graph TD
 **Performance**: O(1) lookup time (< 1ms) using Map-based registry
 
 **Validation Steps**:
+
 1. Component name lookup in registry
 2. Iterate through constraint array
 3. Apply rule-specific validation logic
@@ -611,12 +637,14 @@ if (button.hasIcon && !button.hasText && !button.ariaLabel) {
 ### Generation Performance
 
 **Token Generation Speed**:
+
 - Single color scale (10 steps): ~2ms
 - Complete palette (4 colors × 10 steps): ~8ms
 - Full design system (50+ tokens): ~50ms
 - Theme-based generation: ~60ms (includes validation)
 
 **Optimization Strategies**:
+
 1. **Lazy Evaluation**: Generate tokens only when requested
 2. **Memoization**: Cache generated scales by input hash
 3. **Batch Processing**: Generate multiple scales in parallel
@@ -625,12 +653,14 @@ if (button.hasIcon && !button.hasText && !button.ariaLabel) {
 ### Memory Footprint
 
 **Bundle Sizes**:
+
 - Core library (tree-shaken): ~15KB gzipped
 - With theme system: ~22KB gzipped
 - With contract system: ~45KB gzipped
 - Full package: ~60KB gzipped
 
 **Runtime Memory**:
+
 - Token cache: ~50KB for 100 tokens
 - Contract registry: ~30KB for 8 components
 - Temporary conversion buffers: ~10KB
@@ -638,11 +668,13 @@ if (button.hasIcon && !button.hasText && !button.ariaLabel) {
 ### Validation Performance
 
 **WCAG Validation**:
+
 - Single color pair: < 0.1ms
 - Full palette validation (40 pairs): ~2ms
 - Batch validation (200 pairs): ~8ms
 
 **Contract Validation**:
+
 - Contract lookup: O(1), < 0.01ms
 - Single constraint check: ~0.5ms
 - Component validation (15 constraints): ~7ms
@@ -651,16 +683,19 @@ if (button.hasIcon && !button.hasText && !button.ariaLabel) {
 ### Scalability Characteristics
 
 **Linear Scaling**:
+
 - Token generation: O(n) where n = number of colors
 - Color conversion: O(1) per color
 - Scale generation: O(10) per color (fixed 10 steps)
 
 **Performance Benchmarks**:
+
 - 10 tokens: ~10ms
 - 100 tokens: ~100ms
 - 1000 tokens: ~1000ms (1 second)
 
 **Bottlenecks**:
+
 - OKLCH → RGB conversion (gamma correction): 30% of time
 - WCAG validation (contrast calculation): 25% of time
 - Gamut clipping (iterative reduction): 20% of time
@@ -673,19 +708,23 @@ if (button.hasIcon && !button.hasText && !button.ariaLabel) {
 ### Core Dependencies
 
 **Color Space Mathematics**:
+
 - `culori` (v4.0.0) - OKLCH color space support, gamut mapping
 - Custom gamma correction algorithms for sRGB compliance
 
 **Validation & Type Safety**:
+
 - `zod` (v3.22+) - Runtime schema validation
 - TypeScript 5.0+ - Compile-time type safety
 - Strict mode enabled with zero `any` types in public APIs
 
 **Accessibility**:
+
 - `chroma-js` (v2.4.0) - WCAG contrast ratio calculation
 - Custom WCAG AA/AAA validation logic
 
 **Testing**:
+
 - `vitest` (v1.0.0) - Unit and integration testing
 - `@vitest/coverage-v8` - Code coverage reporting
 - 497 tests with 98.7% coverage
@@ -693,16 +732,19 @@ if (button.hasIcon && !button.hasText && !button.ariaLabel) {
 ### Development Tools
 
 **Code Quality**:
+
 - ESLint with TypeScript rules
 - Prettier for consistent formatting
 - Husky for pre-commit hooks
 
 **Build System**:
+
 - TypeScript compiler (tsc) for type checking
 - Rollup/Vite for bundling
 - Tree-shaking for minimal bundle size
 
 **Documentation**:
+
 - TSDoc for inline API documentation
 - Markdown for guides and architecture docs
 - Mermaid for diagrams (this document)
@@ -725,8 +767,8 @@ function generateToken(name: string, baseColor: OKLCHColor): TokenDefinition {
     scale: generateLightnessScale(baseColor),
     metadata: {
       createdAt: new Date(),
-      deterministic: true
-    }
+      deterministic: true,
+    },
   };
 }
 ```
@@ -791,14 +833,14 @@ Zod schemas enable composable validation:
 const OKLCHColorSchema = z.object({
   l: z.number().min(0).max(1),
   c: z.number().min(0).max(0.4),
-  h: z.number().min(0).max(360)
+  h: z.number().min(0).max(360),
 });
 
 const TokenDefinitionSchema = z.object({
   id: z.string(),
   name: z.string(),
   value: OKLCHColorSchema,
-  scale: ColorScaleSchema
+  scale: ColorScaleSchema,
 });
 ```
 
@@ -825,17 +867,20 @@ function oklchToRgb(oklch: OKLCHColor): RGBColor {
 **Decision**: Use OKLCH as the primary color space for token generation.
 
 **Rationale**:
+
 - Perceptual uniformity ensures consistent visual steps
 - Hue preservation during chroma/lightness adjustments
 - Future-proof for wide-gamut displays (P3, Rec.2020)
 - CSS Color Level 4 native support
 
 **Alternatives Considered**:
+
 - HSL: Not perceptually uniform, poor for scale generation
 - Lab/LCH: Better than HSL but less browser support
 - RGB: No semantic control over lightness/saturation
 
 **Consequences**:
+
 - Requires gamut clipping for sRGB compatibility
 - Learning curve for designers unfamiliar with OKLCH
 - Dependency on `culori` library for conversions
@@ -845,17 +890,20 @@ function oklchToRgb(oklch: OKLCHColor): RGBColor {
 **Decision**: Use Zod for runtime schema validation.
 
 **Rationale**:
+
 - Type-safe validation with TypeScript integration
 - Composable schemas with detailed error messages
 - Zero dependencies, small bundle size
 - Active maintenance and community support
 
 **Alternatives Considered**:
+
 - JSON Schema: Verbose, requires separate type definitions
 - Yup: Heavier bundle size, less TypeScript integration
 - Manual validation: Error-prone, verbose code
 
 **Consequences**:
+
 - Single runtime dependency (acceptable trade-off)
 - Excellent developer experience with type inference
 - Consistent validation across modules
@@ -865,17 +913,20 @@ function oklchToRgb(oklch: OKLCHColor): RGBColor {
 **Decision**: Use JavaScript Map for component contract storage.
 
 **Rationale**:
+
 - O(1) lookup performance (< 1ms requirement)
 - Native JavaScript data structure (no dependencies)
 - Type-safe with TypeScript generics
 - Memory efficient for 8-50 components
 
 **Alternatives Considered**:
+
 - Plain objects: Slower lookup, prototype pollution risks
 - Arrays: O(n) lookup, inefficient for large registries
 - External storage: Added complexity, unnecessary for static data
 
 **Consequences**:
+
 - Excellent performance for component lookup
 - Simple implementation and maintenance
 - Easily extensible for additional components
@@ -887,11 +938,13 @@ function oklchToRgb(oklch: OKLCHColor): RGBColor {
 ### Planned Enhancements
 
 **Phase B (FigmArchitect)**:
+
 - Figma plugin integration for real-time token generation
 - Visual editor for contract customization
 - AI-powered accessibility suggestions
 
 **Post-v1.0.0**:
+
 - Monorepo structure for multi-package organization
 - Advanced caching strategies for large design systems
 - WebAssembly compilation for performance-critical paths
@@ -900,11 +953,13 @@ function oklchToRgb(oklch: OKLCHColor): RGBColor {
 ### Scalability Roadmap
 
 **Target Performance** (v2.0.0):
+
 - 10,000 tokens generated in < 1 second
 - Contract validation for 1,000 components in < 500ms
 - Bundle size < 30KB gzipped (core + contracts)
 
 **Architecture Evolution**:
+
 - Extract color conversion to separate package
 - Create plugin system for custom export formats
 - Implement worker threads for parallel generation

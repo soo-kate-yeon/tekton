@@ -11,6 +11,7 @@
 ### The Problem
 
 When calling `knowledge.renderScreen` MCP tool, the error occurs:
+
 ```
 Unexpected error: generate is not a function
 ```
@@ -20,6 +21,7 @@ Unexpected error: generate is not a function
 #### 1. Package Type Mismatch
 
 **@babel/generator is a CommonJS package**:
+
 ```json
 // node_modules/@babel/generator/package.json
 {
@@ -28,6 +30,7 @@ Unexpected error: generate is not a function
 ```
 
 Our packages are ESM:
+
 ```json
 // packages/component-generator/package.json
 {
@@ -55,10 +58,11 @@ import generate from '@babel/generator';
 #### 3. TypeScript Compilation Issue
 
 **TypeScript configuration**:
+
 ```json
 {
   "compilerOptions": {
-    "moduleResolution": "bundler",  // ← Designed for bundlers
+    "moduleResolution": "bundler", // ← Designed for bundlers
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true
   }
@@ -66,6 +70,7 @@ import generate from '@babel/generator';
 ```
 
 **The problem**:
+
 - TypeScript with `moduleResolution: "bundler"` assumes a bundler will handle imports
 - It compiles `import generate from '@babel/generator'` to exactly that in the .js output
 - Node.js ESM (without bundler) gives us the wrapper object, not the function
@@ -74,11 +79,13 @@ import generate from '@babel/generator';
 #### 4. Why Tests Pass but Runtime Fails
 
 **Tests (Vitest)**:
+
 - Vitest has custom module resolution
 - Handles CJS ↔ ESM interop automatically
 - Works perfectly ✅
 
 **Runtime (Node.js with tsx)**:
+
 - tsx can start the server (module loading works)
 - But tsx doesn't bundle - it just transpiles on-the-fly
 - Native Node.js ESM rules apply
@@ -93,6 +100,7 @@ import generate from '@babel/generator';
 **Change**: Modify import statement to use named export
 
 **Implementation**:
+
 ```typescript
 // Before (BROKEN):
 import generate from '@babel/generator';
@@ -102,12 +110,14 @@ import { generate } from '@babel/generator';
 ```
 
 **Pros**:
+
 - ✅ Simplest solution
 - ✅ No build system changes
 - ✅ Works with current setup
 - ✅ 2-minute fix
 
 **Cons**:
+
 - ⚠️ Requires changing TypeScript source
 - ⚠️ May need similar fixes for other CJS dependencies
 
@@ -122,11 +132,13 @@ import { generate } from '@babel/generator';
 **Implementation**:
 
 1. Install esbuild:
+
 ```bash
 pnpm add -D esbuild
 ```
 
 2. Create build script (`scripts/build-bundle.js`):
+
 ```javascript
 import { build } from 'esbuild';
 
@@ -142,7 +154,7 @@ await build({
     '@tekton/component-knowledge',
     '@tekton/theme',
     'prettier',
-    'zod'
+    'zod',
   ],
   sourcemap: true,
   minify: false, // Keep readable for debugging
@@ -150,6 +162,7 @@ await build({
 ```
 
 3. Update package.json:
+
 ```json
 {
   "scripts": {
@@ -160,18 +173,21 @@ await build({
 ```
 
 **How it solves the problem**:
+
 - esbuild resolves ALL imports at build time
 - Bundles everything into single file
 - No runtime import resolution needed
 - Handles CJS ↔ ESM automatically
 
 **Pros**:
+
 - ✅ Resolves ALL potential import issues
 - ✅ Faster runtime (no module resolution overhead)
 - ✅ Smaller dist size (tree-shaking)
 - ✅ Production-ready approach
 
 **Cons**:
+
 - ⚠️ More complex build process
 - ⚠️ Need to manage externals list
 - ⚠️ Debugging bundled code is harder
@@ -185,27 +201,31 @@ await build({
 **Change**: Switch from "bundler" to "node16" or "nodenext"
 
 **Implementation**:
+
 ```json
 // tsconfig.base.json
 {
   "compilerOptions": {
-    "moduleResolution": "node16",  // or "nodenext"
-    "module": "Node16"              // or "NodeNext"
+    "moduleResolution": "node16", // or "nodenext"
+    "module": "Node16" // or "NodeNext"
   }
 }
 ```
 
 **How it solves the problem**:
+
 - TypeScript generates Node.js-compatible ESM output
 - Better handles CJS/ESM interop
 - Stricter about import/export syntax
 
 **Pros**:
+
 - ✅ More correct for Node.js projects
 - ✅ Better type checking
 - ✅ Future-proof
 
 **Cons**:
+
 - ⚠️ May require fixing other imports
 - ⚠️ May break existing code
 - ⚠️ Requires .js extensions in imports (already done)
@@ -219,6 +239,7 @@ await build({
 **Change**: Add runtime check for CJS wrapper
 
 **Current approach** (already attempted):
+
 ```typescript
 import babelGenerate from '@babel/generator';
 const generate = babelGenerate.default || babelGenerate;
@@ -227,6 +248,7 @@ const generate = babelGenerate.default || babelGenerate;
 **Status**: ❌ This doesn't work because TypeScript still treats the import incorrectly
 
 **Why it fails**:
+
 - The runtime fix happens AFTER TypeScript compilation
 - TypeScript already generated code assuming default import works
 - By the time our fix runs, the damage is done
@@ -240,6 +262,7 @@ const generate = babelGenerate.default || babelGenerate;
 **Goal**: Get v0.1.0 working immediately
 
 **Steps**:
+
 1. Change import in `jsx-generator.ts`:
    ```typescript
    import { generate } from '@babel/generator';
@@ -258,6 +281,7 @@ const generate = babelGenerate.default || babelGenerate;
 **Goal**: Bulletproof solution for production
 
 **Steps**:
+
 1. Implement esbuild bundling (Option B)
 2. Test all MCP tools with bundled version
 3. Update build documentation
@@ -320,28 +344,34 @@ ls -lh dist/index.js
 
 ### Module Resolution Comparison
 
-| Setting | Best For | Node.js Compatible? | Bundle Required? |
-|---------|----------|---------------------|------------------|
-| `bundler` | Webpack, esbuild, Vite | ⚠️ Partial | Yes |
-| `node16` | Node.js ESM projects | ✅ Yes | No |
-| `nodenext` | Node.js (latest) | ✅ Yes | No |
-| `node` (legacy) | Old Node.js | ❌ Outdated | No |
+| Setting         | Best For               | Node.js Compatible? | Bundle Required? |
+| --------------- | ---------------------- | ------------------- | ---------------- |
+| `bundler`       | Webpack, esbuild, Vite | ⚠️ Partial          | Yes              |
+| `node16`        | Node.js ESM projects   | ✅ Yes              | No               |
+| `nodenext`      | Node.js (latest)       | ✅ Yes              | No               |
+| `node` (legacy) | Old Node.js            | ❌ Outdated         | No               |
 
 ### ESM Import Behavior
 
 ```javascript
 // CommonJS module (old style):
-module.exports = function generate() { /* ... */ };
-module.exports.CodeGenerator = class { /* ... */ };
+module.exports = function generate() {
+  /* ... */
+};
+module.exports.CodeGenerator = class {
+  /* ... */
+};
 
 // ESM import from CJS (Node.js wrapper):
 import x from 'cjs-module';
 // x = { default: [Function], __esModule: true, ... }
 
 // What actually works:
-import { generate } from 'cjs-module';  // ✅ Named export
-import x from 'cjs-module'; x.default(); // ✅ Access via .default
-import x from 'cjs-module'; x();         // ❌ Wrapper object, not function
+import { generate } from 'cjs-module'; // ✅ Named export
+import x from 'cjs-module';
+x.default(); // ✅ Access via .default
+import x from 'cjs-module';
+x(); // ❌ Wrapper object, not function
 ```
 
 ---
@@ -349,12 +379,14 @@ import x from 'cjs-module'; x();         // ❌ Wrapper object, not function
 ## Success Criteria
 
 ### v0.1.0 (Quick Fix)
+
 - [ ] renderScreen MCP tool returns success
 - [ ] Generated code file is created correctly
 - [ ] All existing tests still pass
 - [ ] No regression in other MCP tools
 
 ### v0.2.0 (Production)
+
 - [ ] esbuild bundling working
 - [ ] All tests pass with bundled version
 - [ ] Build time acceptable (< 5 seconds)
@@ -371,6 +403,7 @@ import x from 'cjs-module'; x();         // ❌ Wrapper object, not function
 **Long-term strategy**: Implement Option B (esbuild bundling) for v0.2.0 to ensure production stability and prevent similar issues with other dependencies.
 
 **Root lesson**: When building Node.js ESM packages that import CommonJS dependencies, either:
+
 1. Use named imports when available
 2. Bundle with esbuild/webpack to resolve all imports at build time
 3. Use `moduleResolution: "node16"` for better Node.js compatibility

@@ -12,7 +12,7 @@ import type { ErrorResponse } from '../schemas/mcp-schemas.js';
 export function createErrorResponse(error: string): ErrorResponse {
   return {
     success: false,
-    error
+    error,
   };
 }
 
@@ -20,11 +20,12 @@ export function createErrorResponse(error: string): ErrorResponse {
  * Format theme not found error with available themes list
  * SPEC: S-002 Theme Availability Check
  */
-export function createThemeNotFoundError(themeId: string, availableThemes: string[]): ErrorResponse {
+export function createThemeNotFoundError(
+  themeId: string,
+  availableThemes: string[]
+): ErrorResponse {
   const themeList = availableThemes.join(', ');
-  return createErrorResponse(
-    `Theme not found: ${themeId}. Available themes: ${themeList}`
-  );
+  return createErrorResponse(`Theme not found: ${themeId}. Available themes: ${themeList}`);
 }
 
 /**

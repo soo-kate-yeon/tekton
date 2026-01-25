@@ -148,6 +148,7 @@ Requirements are categorized into 5 types:
 **Scope**: FigmArchitect Phase A - Design System Foundation
 
 **Phases**:
+
 - A1: Preset Definition System (Not Started)
 - **A2: Token Generator (In Progress - 75% Complete)**
 - A3: Component Contracts (Not Started)
@@ -207,6 +208,7 @@ describe('generateToken', () => {
 ```
 
 **Run test** (should fail):
+
 ```bash
 npm test -- --run
 # FAIL: generateToken is not defined
@@ -229,6 +231,7 @@ export function generateToken(name: string, color: OKLCHColor): TokenDefinition 
 ```
 
 **Run test** (should pass):
+
 ```bash
 npm test -- --run
 # PASS: generateToken creates deterministic ID
@@ -263,6 +266,7 @@ export function generateToken(name: string, baseColor: OKLCHColor): TokenDefinit
 ```
 
 **Run all tests** (should still pass):
+
 ```bash
 npm test -- --run
 # PASS: All tests green after refactoring
@@ -279,6 +283,7 @@ npm run test:coverage
 ```
 
 **Coverage Requirements**:
+
 - **Target**: ≥85% for all modules
 - **Statements**: ≥85%
 - **Branches**: ≥80%
@@ -288,6 +293,7 @@ npm run test:coverage
 ### Writing Good Tests
 
 **DO**:
+
 - Test behavior, not implementation
 - Use descriptive test names
 - Follow Arrange-Act-Assert pattern
@@ -295,6 +301,7 @@ npm run test:coverage
 - Keep tests isolated and independent
 
 **DON'T**:
+
 - Test private functions directly
 - Mock unnecessarily
 - Write tests after implementation
@@ -315,7 +322,7 @@ describe('generateLightnessScale', () => {
     // Assert
     expect(Object.keys(scale)).toHaveLength(11);
     expect(scale['50'].l).toBeGreaterThan(0.95);
-    expect(scale['950'].l).toBeLessThan(0.10);
+    expect(scale['950'].l).toBeLessThan(0.1);
   });
 
   it('should maintain hue across all steps', () => {
@@ -364,22 +371,22 @@ jobs:
         with:
           node-version: 20
       - run: npm ci
-      - run: npm run build      # Type safety
-      - run: npm run lint       # Code quality
-      - run: npm test           # All tests pass
+      - run: npm run build # Type safety
+      - run: npm run lint # Code quality
+      - run: npm test # All tests pass
       - run: npm run test:coverage # Coverage ≥85%
 ```
 
 ### Quality Standards
 
-| Metric | Requirement | Current Status |
-|--------|-------------|----------------|
-| Test Coverage | ≥85% | ✅ 98.04% (exceeds target) |
-| Type Safety | Zero `any` types in public API | ✅ Pass |
-| Linting | Zero errors, warnings allowed | ⚠️ 3 issues (2 warn, 1 fixable) |
-| Tests | 100% passing | ✅ 242/242 pass |
-| Build | Clean compilation | ✅ Pass |
-| Security | No high/critical vulnerabilities | ✅ Pass (6 moderate dev deps) |
+| Metric        | Requirement                      | Current Status                  |
+| ------------- | -------------------------------- | ------------------------------- |
+| Test Coverage | ≥85%                             | ✅ 98.04% (exceeds target)      |
+| Type Safety   | Zero `any` types in public API   | ✅ Pass                         |
+| Linting       | Zero errors, warnings allowed    | ⚠️ 3 issues (2 warn, 1 fixable) |
+| Tests         | 100% passing                     | ✅ 242/242 pass                 |
+| Build         | Clean compilation                | ✅ Pass                         |
+| Security      | No high/critical vulnerabilities | ✅ Pass (6 moderate dev deps)   |
 
 ---
 
@@ -393,6 +400,7 @@ jobs:
    - Acceptance criteria are met
 
 2. **Run Quality Checks**
+
    ```bash
    npm run build    # Must pass
    npm run lint     # Zero errors
@@ -429,6 +437,7 @@ Types:
 ```
 
 **Examples**:
+
 - `feat(token-generator): Add tinted neutral palette generation`
 - `fix(wcag-validator): Correct contrast ratio calculation for edge cases`
 - `docs(api): Add component presets usage examples`
@@ -438,33 +447,40 @@ Types:
 
 ```markdown
 ## Summary
+
 Brief description of changes and motivation.
 
 ## SPEC Reference
+
 - SPEC ID: SPEC-PHASEAB-001
 - Requirement IDs: UR-002, EDR-003
 - Acceptance Criteria: [Link to acceptance.md]
 
 ## Changes
+
 - Added X functionality
 - Fixed Y bug
 - Updated Z documentation
 
 ## Testing
+
 - [ ] All tests pass
 - [ ] Coverage ≥85% (or justification for exception)
 - [ ] Manual testing completed
 
 ## Quality Checklist
+
 - [ ] TypeScript compiles without errors
 - [ ] Linter passes (or warnings justified)
 - [ ] Documentation updated
 - [ ] CHANGELOG.md updated
 
 ## Breaking Changes
+
 None / [List breaking changes]
 
 ## Screenshots (if UI changes)
+
 [Add screenshots if applicable]
 ```
 
@@ -490,11 +506,13 @@ None / [List breaking changes]
 **DO NOT** open public issues for security vulnerabilities.
 
 **Instead**:
+
 1. Email security@tekton-project.org (if available)
 2. Use GitHub Security Advisories (private disclosure)
 3. Provide detailed description and reproduction steps
 
 **We will**:
+
 - Acknowledge receipt within 48 hours
 - Provide timeline for fix within 7 days
 - Credit reporter (unless anonymity requested)
@@ -502,6 +520,7 @@ None / [List breaking changes]
 ### Security Best Practices
 
 When contributing:
+
 - Never commit secrets (API keys, tokens, passwords)
 - Validate all external inputs
 - Use Zod schemas for runtime validation
@@ -515,12 +534,14 @@ When contributing:
 ### Our Standards
 
 **Positive Behavior**:
+
 - Using welcoming and inclusive language
 - Being respectful of differing viewpoints
 - Accepting constructive criticism gracefully
 - Focusing on what's best for the community
 
 **Unacceptable Behavior**:
+
 - Harassment, trolling, or insulting comments
 - Personal or political attacks
 - Public or private harassment
@@ -529,6 +550,7 @@ When contributing:
 ### Enforcement
 
 Violations may result in:
+
 1. Warning
 2. Temporary ban
 3. Permanent ban

@@ -44,6 +44,7 @@ pnpm inspect
 See [Claude Code Integration Guide](../../.moai/specs/SPEC-MCP-002/CLAUDE-CODE-INTEGRATION.md) for complete setup instructions.
 
 **Quick Config** (`~/Library/Application Support/Claude/claude_desktop_config.json`):
+
 ```json
 {
   "mcpServers": {
@@ -65,6 +66,7 @@ See [Claude Code Integration Guide](../../.moai/specs/SPEC-MCP-002/CLAUDE-CODE-I
 **Description**: Generate a UI blueprint from natural language description
 
 **Input**:
+
 ```json
 {
   "description": "User profile dashboard with avatar, bio, settings link",
@@ -75,6 +77,7 @@ See [Claude Code Integration Guide](../../.moai/specs/SPEC-MCP-002/CLAUDE-CODE-I
 ```
 
 **Output** (Data-Only, v2.0.0):
+
 ```json
 {
   "success": true,
@@ -98,6 +101,7 @@ See [Claude Code Integration Guide](../../.moai/specs/SPEC-MCP-002/CLAUDE-CODE-I
 **Description**: Preview a Tekton theme and retrieve its design tokens
 
 **Input**:
+
 ```json
 {
   "themeId": "premium-editorial"
@@ -105,6 +109,7 @@ See [Claude Code Integration Guide](../../.moai/specs/SPEC-MCP-002/CLAUDE-CODE-I
 ```
 
 **Output** (Data-Only, v2.0.0):
+
 ```json
 {
   "success": true,
@@ -131,6 +136,7 @@ See [Claude Code Integration Guide](../../.moai/specs/SPEC-MCP-002/CLAUDE-CODE-I
 **Description**: Export a blueprint to production-ready code (TSX/JSX/Vue)
 
 **Input** (v2.0.0: accepts blueprint object):
+
 ```json
 {
   "blueprint": {
@@ -146,6 +152,7 @@ See [Claude Code Integration Guide](../../.moai/specs/SPEC-MCP-002/CLAUDE-CODE-I
 ```
 
 **Output** (Data-Only, v2.0.0):
+
 ```json
 {
   "success": true,
@@ -201,6 +208,7 @@ packages/mcp-server/
 ```
 
 **Key Changes in v2.0.0**:
+
 - ✅ stdio transport (StdioServerTransport)
 - ✅ JSON-RPC 2.0 protocol
 - ✅ stderr-only logging (stdout reserved for MCP messages)
@@ -227,15 +235,16 @@ packages/mcp-server/
 
 ## Quality Metrics (SPEC-MCP-002 v2.0.0)
 
-| Metric | Target | Current | Status |
-|--------|--------|---------|--------|
-| **Test Coverage** | ≥ 85% | **94.39%** | ✅ |
-| **TypeScript Errors** | 0 | **0** | ✅ |
-| **Critical Vulnerabilities** | 0 | **0** | ✅ |
-| **Tool Response Time** | < 500ms | < 100ms | ✅ |
-| **Server Startup** | < 1s | < 500ms | ✅ |
+| Metric                       | Target  | Current    | Status |
+| ---------------------------- | ------- | ---------- | ------ |
+| **Test Coverage**            | ≥ 85%   | **94.39%** | ✅     |
+| **TypeScript Errors**        | 0       | **0**      | ✅     |
+| **Critical Vulnerabilities** | 0       | **0**      | ✅     |
+| **Tool Response Time**       | < 500ms | < 100ms    | ✅     |
+| **Server Startup**           | < 1s    | < 500ms    | ✅     |
 
 **Test Results**:
+
 - 22 test files
 - 214 test cases
 - 100% pass rate
@@ -244,6 +253,7 @@ packages/mcp-server/
 ## Integration with @tekton/core
 
 All MCP tools reuse `@tekton/core` functions:
+
 - `loadTheme()` - Theme loading
 - `createBlueprint()` - Blueprint creation
 - `validateBlueprint()` - Schema validation
@@ -314,6 +324,7 @@ pnpm inspect
 ## Migration from v1.0.0 (HTTP) to v2.0.0 (stdio)
 
 **Breaking Changes**:
+
 - ❌ HTTP endpoints removed → stdio transport only
 - ❌ `previewUrl` field removed from `generate-blueprint` and `preview-theme` outputs
 - ❌ `filePath` field removed from `export-screen` output
@@ -321,6 +332,7 @@ pnpm inspect
 - ✅ `export-screen` now accepts `blueprint` object instead of `blueprintId`
 
 **Why?**
+
 - **Claude Code Integration**: stdio is the standard MCP transport
 - **Data-Only Philosophy**: Claude Code handles all file operations
 - **Security**: No file system side effects from MCP tools
@@ -330,6 +342,7 @@ pnpm inspect
 ## Contributing
 
 Contributions welcome! Please ensure:
+
 - Tests pass (`pnpm test`)
 - Coverage ≥ 85% (`pnpm test:coverage`)
 - TypeScript strict mode compliance (`pnpm build`)

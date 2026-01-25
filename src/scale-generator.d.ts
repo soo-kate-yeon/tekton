@@ -7,5 +7,7 @@ export declare function generateLightnessScale(baseColor: OKLCHColor): ColorScal
 /**
  * Generate multiple color scales from a color palette
  */
-export declare function generateColorScales(palette: Record<string, OKLCHColor>): Record<string, ColorScale>;
+export declare function generateColorScales(
+  palette: Record<string, OKLCHColor>
+): Record<string, ColorScale>;
 //# sourceMappingURL=scale-generator.d.ts.map

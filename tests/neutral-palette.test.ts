@@ -1,7 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import {
-  generateNeutralPalette,
-} from '../src/generator/neutral-palette';
+import { generateNeutralPalette } from '../src/generator/neutral-palette';
 
 describe('Neutral Palette Generator - TASK-001 to TASK-003', () => {
   describe('Light Mode Neutral Palette - TASK-001 (SDR-001)', () => {
@@ -31,7 +29,7 @@ describe('Neutral Palette Generator - TASK-001 to TASK-003', () => {
         tinting: 'pure',
       });
 
-      expect(palette['900']?.l).toBeLessThanOrEqual(0.20);
+      expect(palette['900']?.l).toBeLessThanOrEqual(0.2);
     });
 
     it('should generate background-based lightness scaling', () => {
@@ -41,8 +39,20 @@ describe('Neutral Palette Generator - TASK-001 to TASK-003', () => {
       });
 
       // Verify perceptually uniform distribution
-      const steps = ['50', '100', '200', '300', '400', '500', '600', '700', '800', '900', '950'] as const;
-      const lightnesses = steps.map((step) => palette[step]?.l ?? 0);
+      const steps = [
+        '50',
+        '100',
+        '200',
+        '300',
+        '400',
+        '500',
+        '600',
+        '700',
+        '800',
+        '900',
+        '950',
+      ] as const;
+      const lightnesses = steps.map(step => palette[step]?.l ?? 0);
 
       // Light mode: 50 should be lightest, 950 should be darkest
       expect(lightnesses[0]).toBeGreaterThan(lightnesses[10]);
@@ -59,7 +69,7 @@ describe('Neutral Palette Generator - TASK-001 to TASK-003', () => {
         tinting: 'pure',
       });
 
-      Object.values(palette).forEach((color) => {
+      Object.values(palette).forEach(color => {
         expect(color.h).toBe(0);
       });
     });
@@ -70,7 +80,7 @@ describe('Neutral Palette Generator - TASK-001 to TASK-003', () => {
         tinting: 'pure',
       });
 
-      Object.values(palette).forEach((color) => {
+      Object.values(palette).forEach(color => {
         expect(color.c).toBeLessThanOrEqual(0.005);
       });
     });
@@ -131,8 +141,20 @@ describe('Neutral Palette Generator - TASK-001 to TASK-003', () => {
         tinting: 'pure',
       });
 
-      const steps = ['50', '100', '200', '300', '400', '500', '600', '700', '800', '900', '950'] as const;
-      const lightnesses = steps.map((step) => darkPalette[step]?.l ?? 0);
+      const steps = [
+        '50',
+        '100',
+        '200',
+        '300',
+        '400',
+        '500',
+        '600',
+        '700',
+        '800',
+        '900',
+        '950',
+      ] as const;
+      const lightnesses = steps.map(step => darkPalette[step]?.l ?? 0);
 
       // Dark mode: 50 should be lightest (foreground), 950 should be darkest (background)
       expect(lightnesses[0]).toBeGreaterThan(lightnesses[10]);
@@ -168,7 +190,7 @@ describe('Neutral Palette Generator - TASK-001 to TASK-003', () => {
         tinting: 'pure',
       });
 
-      Object.values(palette).forEach((color) => {
+      Object.values(palette).forEach(color => {
         expect(color.c).toBeLessThanOrEqual(0.005);
         expect(color.h).toBe(0);
       });
@@ -181,7 +203,7 @@ describe('Neutral Palette Generator - TASK-001 to TASK-003', () => {
         primaryHue: 220,
       });
 
-      Object.values(palette).forEach((color) => {
+      Object.values(palette).forEach(color => {
         expect(color.h).toBe(220);
         expect(color.c).toBeCloseTo(0.012, 3);
       });
@@ -192,12 +214,12 @@ describe('Neutral Palette Generator - TASK-001 to TASK-003', () => {
         mode: 'light',
         tinting: 'custom',
         primaryHue: 180,
-        chromaIntensity: 0.020,
+        chromaIntensity: 0.02,
       });
 
-      Object.values(palette).forEach((color) => {
+      Object.values(palette).forEach(color => {
         expect(color.h).toBe(180);
-        expect(color.c).toBeCloseTo(0.020, 3);
+        expect(color.c).toBeCloseTo(0.02, 3);
       });
     });
 
@@ -227,9 +249,21 @@ describe('Neutral Palette Generator - TASK-001 to TASK-003', () => {
         primaryHue: 280,
       });
 
-      const steps = ['50', '100', '200', '300', '400', '500', '600', '700', '800', '900', '950'] as const;
+      const steps = [
+        '50',
+        '100',
+        '200',
+        '300',
+        '400',
+        '500',
+        '600',
+        '700',
+        '800',
+        '900',
+        '950',
+      ] as const;
 
-      steps.forEach((step) => {
+      steps.forEach(step => {
         expect(palette[step]?.h).toBe(280);
         expect(palette[step]?.c).toBeGreaterThan(0);
       });
@@ -242,7 +276,7 @@ describe('Neutral Palette Generator - TASK-001 to TASK-003', () => {
         primaryHue: 200,
       });
 
-      Object.values(palette).forEach((color) => {
+      Object.values(palette).forEach(color => {
         expect(color.h).toBe(200);
         expect(color.c).toBeCloseTo(0.012, 3);
       });
@@ -253,7 +287,7 @@ describe('Neutral Palette Generator - TASK-001 to TASK-003', () => {
         mode: 'light',
       });
 
-      Object.values(palette).forEach((color) => {
+      Object.values(palette).forEach(color => {
         expect(color.c).toBeLessThanOrEqual(0.005);
       });
     });
@@ -266,7 +300,7 @@ describe('Neutral Palette Generator - TASK-001 to TASK-003', () => {
         chromaIntensity: 1.5, // Exceeds max
       });
 
-      Object.values(palette).forEach((color) => {
+      Object.values(palette).forEach(color => {
         expect(color.c).toBeLessThanOrEqual(0.5);
       });
     });
@@ -279,7 +313,7 @@ describe('Neutral Palette Generator - TASK-001 to TASK-003', () => {
         chromaIntensity: -0.1,
       });
 
-      Object.values(palette).forEach((color) => {
+      Object.values(palette).forEach(color => {
         expect(color.c).toBeGreaterThanOrEqual(0);
       });
     });

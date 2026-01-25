@@ -32,7 +32,7 @@ export interface StorageConfig {
  */
 const DEFAULT_CONFIG: StorageConfig = {
   baseDir: '.tekton/blueprints',
-  ttlDays: 30
+  ttlDays: 30,
 };
 
 /**
@@ -72,7 +72,7 @@ export class BlueprintStorage {
         timestamp: timestampId,
         themeId: blueprint.themeId,
         createdAt: new Date().toISOString(),
-        ttl: Date.now() + this.config.ttlDays * 24 * 60 * 60 * 1000
+        ttl: Date.now() + this.config.ttlDays * 24 * 60 * 60 * 1000,
       };
       const metadataPath = join(blueprintDir, 'metadata.json');
       writeFileSync(metadataPath, JSON.stringify(metadata, null, 2), 'utf-8');

@@ -30,12 +30,21 @@ export type RGBColor = z.infer<typeof RGBColorSchema>;
  * Color Scale Schema
  * Valid scale values: 50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950
  */
-const scaleKeys = ['50', '100', '200', '300', '400', '500', '600', '700', '800', '900', '950'] as const;
+const scaleKeys = [
+  '50',
+  '100',
+  '200',
+  '300',
+  '400',
+  '500',
+  '600',
+  '700',
+  '800',
+  '900',
+  '950',
+] as const;
 
-export const ColorScaleSchema = z.record(
-  z.enum(scaleKeys),
-  OKLCHColorSchema
-);
+export const ColorScaleSchema = z.record(z.enum(scaleKeys), OKLCHColorSchema);
 
 export type ColorScale = z.infer<typeof ColorScaleSchema>;
 

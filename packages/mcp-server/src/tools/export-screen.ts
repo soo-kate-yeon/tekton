@@ -46,12 +46,13 @@ function convertToVue(jsxCode: string, componentName: string): string {
   const jsxContent = returnMatch[1].trim();
 
   // Convert React-style JSX to Vue template syntax
-  const vueTemplate = jsxContent
-    .replace(/className=/g, 'class=')
-    .replace(/{([^}]+)}/g, '{{ $1 }}'); // Convert interpolation
+  const vueTemplate = jsxContent.replace(/className=/g, 'class=').replace(/{([^}]+)}/g, '{{ $1 }}'); // Convert interpolation
 
   return `<template>
-${vueTemplate.split('\n').map(line => '  ' + line).join('\n')}
+${vueTemplate
+  .split('\n')
+  .map(line => '  ' + line)
+  .join('\n')}
 </template>
 
 <script setup lang="ts">
@@ -85,9 +86,7 @@ function extractComponentName(blueprintName: string): string {
  * @param input - Blueprint object and export format
  * @returns Generated code (MCP JSON-RPC format - no file write, no filePath)
  */
-export async function exportScreenTool(
-  input: ExportScreenInput
-): Promise<ExportScreenOutput> {
+export async function exportScreenTool(input: ExportScreenInput): Promise<ExportScreenOutput> {
   try {
     // MCP JSON-RPC format: Accept blueprint object directly (no storage lookup)
     const blueprint = input.blueprint as Blueprint;
@@ -129,12 +128,12 @@ export async function exportScreenTool(
     // MCP JSON-RPC format: Return code only (no file write, no filePath)
     return {
       success: true,
-      code: finalCode
+      code: finalCode,
     };
   } catch (error) {
     return {
       success: false,
-      error: extractErrorMessage(error)
+      error: extractErrorMessage(error),
     };
   }
 }

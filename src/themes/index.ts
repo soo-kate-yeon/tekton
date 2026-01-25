@@ -56,10 +56,7 @@ export interface GenerateTokensOptions {
  * const tailwind = generateTokensFromTheme(theme, { format: 'tailwind' });
  * ```
  */
-export function generateTokensFromTheme(
-  theme: Theme,
-  options: GenerateTokensOptions = {}
-): string {
+export function generateTokensFromTheme(theme: Theme, options: GenerateTokensOptions = {}): string {
   const { format = 'css' } = options;
   const { questionnaire } = theme;
 

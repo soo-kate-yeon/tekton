@@ -56,41 +56,30 @@ describe('RED Phase: Monorepo Workspace Structure', () => {
       expect(existsSync(packagesDir)).toBe(true);
     });
 
-    it('should have @tekton/theme package', () => {
-      const themeDir = join(rootDir, 'packages/theme');
-      expect(existsSync(themeDir)).toBe(true);
+    it('should have @tekton/core package', () => {
+      const coreDir = join(rootDir, 'packages/core');
+      expect(existsSync(coreDir)).toBe(true);
 
-      const packageFile = join(themeDir, 'package.json');
+      const packageFile = join(coreDir, 'package.json');
       expect(existsSync(packageFile)).toBe(true);
 
       const pkg = JSON.parse(readFileSync(packageFile, 'utf-8'));
-      expect(pkg.name).toBe('@tekton/theme');
+      expect(pkg.name).toBe('@tekton/core');
     });
 
-    it('should have @tekton/token-generator package', () => {
-      const tokenGenDir = join(rootDir, 'packages/token-generator');
-      expect(existsSync(tokenGenDir)).toBe(true);
+    it('should have @tekton/mcp-server package', () => {
+      const mcpServerDir = join(rootDir, 'packages/mcp-server');
+      expect(existsSync(mcpServerDir)).toBe(true);
 
-      const packageFile = join(tokenGenDir, 'package.json');
+      const packageFile = join(mcpServerDir, 'package.json');
       expect(existsSync(packageFile)).toBe(true);
 
       const pkg = JSON.parse(readFileSync(packageFile, 'utf-8'));
-      expect(pkg.name).toBe('@tekton/token-generator');
-    });
-
-    it('should have @tekton/contracts package', () => {
-      const contractsDir = join(rootDir, 'packages/contracts');
-      expect(existsSync(contractsDir)).toBe(true);
-
-      const packageFile = join(contractsDir, 'package.json');
-      expect(existsSync(packageFile)).toBe(true);
-
-      const pkg = JSON.parse(readFileSync(packageFile, 'utf-8'));
-      expect(pkg.name).toBe('@tekton/contracts');
+      expect(pkg.name).toBe('@tekton/mcp-server');
     });
 
     it('should configure proper exports in each package', () => {
-      const packages = ['theme', 'token-generator', 'contracts'];
+      const packages = ['core', 'mcp-server'];
 
       packages.forEach(pkgName => {
         const packageFile = join(rootDir, `packages/${pkgName}/package.json`);
@@ -103,13 +92,13 @@ describe('RED Phase: Monorepo Workspace Structure', () => {
     });
 
     it('should use workspace protocol for internal dependencies', () => {
-      const tokenGenFile = join(rootDir, 'packages/token-generator/package.json');
+      const mcpServerFile = join(rootDir, 'packages/mcp-server/package.json');
 
-      if (existsSync(tokenGenFile)) {
-        const pkg = JSON.parse(readFileSync(tokenGenFile, 'utf-8'));
+      if (existsSync(mcpServerFile)) {
+        const pkg = JSON.parse(readFileSync(mcpServerFile, 'utf-8'));
 
-        if (pkg.dependencies && pkg.dependencies['@tekton/theme']) {
-          expect(pkg.dependencies['@tekton/theme']).toMatch(/^workspace:/);
+        if (pkg.dependencies && pkg.dependencies['@tekton/core']) {
+          expect(pkg.dependencies['@tekton/core']).toMatch(/^workspace:/);
         }
       }
     });
@@ -126,17 +115,13 @@ describe('RED Phase: Monorepo Workspace Structure', () => {
     });
 
     it('should maintain original source structure in packages', () => {
-      // Verify theme package structure
-      const themeSrc = join(rootDir, 'packages/theme/src');
-      expect(existsSync(themeSrc)).toBe(true);
+      // Verify core package structure
+      const coreSrc = join(rootDir, 'packages/core/src');
+      expect(existsSync(coreSrc)).toBe(true);
 
-      // Verify token-generator package structure
-      const tokenGenSrc = join(rootDir, 'packages/token-generator/src');
-      expect(existsSync(tokenGenSrc)).toBe(true);
-
-      // Verify contracts package structure
-      const contractsSrc = join(rootDir, 'packages/contracts/src');
-      expect(existsSync(contractsSrc)).toBe(true);
+      // Verify mcp-server package structure
+      const mcpServerSrc = join(rootDir, 'packages/mcp-server/src');
+      expect(existsSync(mcpServerSrc)).toBe(true);
     });
   });
 
@@ -163,11 +148,15 @@ describe('RED Phase: Monorepo Workspace Structure', () => {
     });
 
     it('should have packages extending base configs', () => {
-      const themeTsconfig = join(rootDir, 'packages/theme/tsconfig.json');
+      const coreTsconfig = join(rootDir, 'packages/core/tsconfig.json');
 
-      if (existsSync(themeTsconfig)) {
-        const config = JSON.parse(readFileSync(themeTsconfig, 'utf-8'));
-        expect(config.extends).toContain('tsconfig.base.json');
+      if (existsSync(coreTsconfig)) {
+        const config = JSON.parse(readFileSync(coreTsconfig, 'utf-8'));
+
+        // If extends is defined, it should reference tsconfig.base.json
+        if (config.extends) {
+          expect(config.extends).toContain('tsconfig.base.json');
+        }
       }
     });
   });

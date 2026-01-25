@@ -3,12 +3,7 @@
  * TASK-025: Example code writing
  */
 
-import {
-  TokenGenerator,
-  generateComponentThemes,
-  oklchToHex,
-  hexToOklch,
-} from '../src';
+import { TokenGenerator, generateComponentThemes, oklchToHex, hexToOklch } from '../src';
 
 // Example 1: Generate design tokens from OKLCH colors
 function example1_basicTokenGeneration() {
@@ -21,7 +16,7 @@ function example1_basicTokenGeneration() {
   });
 
   console.log('Generated tokens:', tokens.length);
-  tokens.forEach((token) => {
+  tokens.forEach(token => {
     console.log(`${token.name}: ${oklchToHex(token.value)}`);
   });
 }
@@ -48,7 +43,7 @@ function example3_componentThemes() {
   const themes = generateComponentThemes(baseColor);
 
   console.log('Component themes:', themes.length);
-  themes.forEach((theme) => {
+  themes.forEach(theme => {
     console.log(`${theme.name}:`, Object.keys(theme.states));
   });
 }
@@ -62,7 +57,7 @@ function example4_darkMode() {
   });
 
   console.log('Generated tokens with dark mode:', tokens.length);
-  tokens.forEach((token) => {
+  tokens.forEach(token => {
     console.log(`${token.name}: L=${token.value.l.toFixed(2)}`);
   });
 }

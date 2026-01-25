@@ -23,7 +23,9 @@
     "test:coverage": "vitest run --coverage",
     "lint": "eslint src __tests__ --ext .ts"
   },
-  "dependencies": {},
+  "dependencies": {
+    "zod": "^3.25.76"
+  },
   "devDependencies": {
     "@types/node": "^22.10.5",
     "@typescript-eslint/eslint-plugin": "^8.20.0",

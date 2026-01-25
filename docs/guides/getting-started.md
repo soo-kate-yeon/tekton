@@ -66,9 +66,9 @@ import { generateToken, oklchToHex } from 'tekton';
 
 // Define a blue color in OKLCH
 const blueColor = {
-  l: 0.5,   // Medium lightness
-  c: 0.15,  // Moderate saturation
-  h: 220    // Blue hue
+  l: 0.5, // Medium lightness
+  c: 0.15, // Moderate saturation
+  h: 220, // Blue hue
 };
 
 // Generate a complete design token
@@ -127,13 +127,13 @@ const brandColor = hexToOklch('#FF6B6B'); // Coral red
 const token = generateToken('brand', brandColor);
 
 // Access specific shades
-const lightestShade = oklchToHex(token.scale['50']);  // Near white
-const baseColor = oklchToHex(token.scale['500']);     // Original color
-const darkestShade = oklchToHex(token.scale['950']);  // Near black
+const lightestShade = oklchToHex(token.scale['50']); // Near white
+const baseColor = oklchToHex(token.scale['500']); // Original color
+const darkestShade = oklchToHex(token.scale['950']); // Near black
 
-console.log('50:', lightestShade);   // For backgrounds
-console.log('500:', baseColor);      // For primary use
-console.log('950:', darkestShade);   // For text
+console.log('50:', lightestShade); // For backgrounds
+console.log('500:', baseColor); // For primary use
+console.log('950:', darkestShade); // For text
 ```
 
 ### Complete Palette System
@@ -145,12 +145,12 @@ const generator = new TokenGenerator();
 
 // Define semantic colors
 const palette = {
-  primary: { l: 0.5, c: 0.15, h: 220 },     // Blue
-  secondary: { l: 0.5, c: 0.12, h: 280 },   // Purple
-  success: { l: 0.5, c: 0.15, h: 140 },     // Green
-  warning: { l: 0.6, c: 0.15, h: 60 },      // Yellow
-  error: { l: 0.5, c: 0.15, h: 0 },         // Red
-  neutral: { l: 0.5, c: 0.02, h: 220 },     // Subtle blue-gray
+  primary: { l: 0.5, c: 0.15, h: 220 }, // Blue
+  secondary: { l: 0.5, c: 0.12, h: 280 }, // Purple
+  success: { l: 0.5, c: 0.15, h: 140 }, // Green
+  warning: { l: 0.6, c: 0.15, h: 60 }, // Yellow
+  error: { l: 0.5, c: 0.15, h: 0 }, // Red
+  neutral: { l: 0.5, c: 0.02, h: 220 }, // Subtle blue-gray
 };
 
 // Generate all tokens
@@ -235,20 +235,21 @@ console.log(css);
 ```
 
 **Output**:
+
 ```css
 :root {
-  --primary: #0066CC;
-  --primary-50: #EFF6FF;
-  --primary-100: #DBEAFE;
-  --primary-200: #BFDBFE;
-  --primary-300: #93C5FD;
-  --primary-400: #60A5FA;
-  --primary-500: #0066CC;
-  --primary-600: #0052A3;
-  --primary-700: #003D7A;
+  --primary: #0066cc;
+  --primary-50: #eff6ff;
+  --primary-100: #dbeafe;
+  --primary-200: #bfdbfe;
+  --primary-300: #93c5fd;
+  --primary-400: #60a5fa;
+  --primary-500: #0066cc;
+  --primary-600: #0052a3;
+  --primary-700: #003d7a;
   --primary-800: #002952;
   --primary-900: #001429;
-  --primary-950: #000A14;
+  --primary-950: #000a14;
 }
 ```
 
@@ -260,6 +261,7 @@ console.log(json);
 ```
 
 **Output**:
+
 ```json
 {
   "primary": {
@@ -282,6 +284,7 @@ console.log(ts);
 ```
 
 **Output**:
+
 ```typescript
 export const primary = '#0066CC' as const;
 export const primaryScale = {
@@ -317,13 +320,11 @@ tokens.forEach(token => {
 });
 
 // Save to file
-fs.writeFileSync(
-  'tailwind-colors.json',
-  JSON.stringify(tailwindColors, null, 2)
-);
+fs.writeFileSync('tailwind-colors.json', JSON.stringify(tailwindColors, null, 2));
 ```
 
 **tailwind.config.js**:
+
 ```javascript
 const colors = require('./tailwind-colors.json');
 
@@ -337,10 +338,9 @@ module.exports = {
 ```
 
 **Usage in HTML**:
+
 ```html
-<button class="bg-primary-500 hover:bg-primary-600 text-white">
-  Click me
-</button>
+<button class="bg-primary-500 hover:bg-primary-600 text-white">Click me</button>
 ```
 
 ---
@@ -353,7 +353,7 @@ module.exports = {
 import { TokenGenerator } from 'tekton';
 
 const generator = new TokenGenerator({
-  generateDarkMode: true,  // Enable dark mode variants
+  generateDarkMode: true, // Enable dark mode variants
 });
 
 const palette = {
@@ -379,6 +379,7 @@ const css = generator.exportTokens(palette, 'css');
 ```
 
 **Output**:
+
 ```css
 :root {
   --primary: #0066CC;
@@ -391,6 +392,7 @@ const css = generator.exportTokens(palette, 'css');
 ```
 
 **Usage**:
+
 ```css
 .button {
   background: var(--primary-500);
@@ -532,10 +534,7 @@ interface DesignSystem {
 }
 
 // Type-safe token creation
-function createMyDesignSystem(
-  brandColor: OKLCHColor,
-  accentColor: OKLCHColor
-): DesignSystem {
+function createMyDesignSystem(brandColor: OKLCHColor, accentColor: OKLCHColor): DesignSystem {
   return {
     colors: {
       brand: generateToken('brand', brandColor),
@@ -548,10 +547,7 @@ function createMyDesignSystem(
   };
 }
 
-const system = createMyDesignSystem(
-  { l: 0.5, c: 0.15, h: 220 },
-  { l: 0.6, c: 0.12, h: 340 }
-);
+const system = createMyDesignSystem({ l: 0.5, c: 0.15, h: 220 }, { l: 0.6, c: 0.12, h: 340 });
 
 // Full TypeScript autocomplete
 console.log(system.colors.brand.scale['500']);

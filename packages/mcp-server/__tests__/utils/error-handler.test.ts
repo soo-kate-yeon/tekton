@@ -9,7 +9,7 @@ import {
   createThemeNotFoundError,
   createValidationError,
   createStorageError,
-  extractErrorMessage
+  extractErrorMessage,
 } from '../../src/utils/error-handler.js';
 
 describe('Error Handler', () => {
@@ -18,7 +18,7 @@ describe('Error Handler', () => {
       const result = createErrorResponse('Test error message');
       expect(result).toEqual({
         success: false,
-        error: 'Test error message'
+        error: 'Test error message',
       });
     });
   });
@@ -28,7 +28,7 @@ describe('Error Handler', () => {
       const result = createThemeNotFoundError('invalid-theme', [
         'calm-wellness',
         'dynamic-fitness',
-        'premium-editorial'
+        'premium-editorial',
       ]);
 
       expect(result.success).toBe(false);
@@ -41,10 +41,7 @@ describe('Error Handler', () => {
 
   describe('createValidationError', () => {
     it('should create validation error with multiple errors', () => {
-      const result = createValidationError([
-        'Field is required',
-        'Value must be positive'
-      ]);
+      const result = createValidationError(['Field is required', 'Value must be positive']);
 
       expect(result.success).toBe(false);
       expect(result.error).toContain('Validation errors:');

@@ -92,29 +92,37 @@ Welcome to the Tekton documentation! This guide will help you find the informati
 ### Looking for Specific Information?
 
 **Installation**:
+
 - [Getting Started - Installation](./guides/getting-started.md#installation)
 
 **Color Conversion**:
+
 - [API Reference - Color Conversion Module](./api/README.md#color-conversion-module)
 
 **Component Themes**:
+
 - [Getting Started - Component Themes](./guides/getting-started.md#using-component-themes)
 - [API Reference - Component Themes Module](./api/README.md#component-themes-module)
 
 **Accessibility / WCAG**:
+
 - [Getting Started - WCAG Compliance](./guides/getting-started.md#wcag-compliance-validation)
 - [API Reference - WCAG Validator Module](./api/README.md#wcag-validator-module)
 
 **Dark Mode**:
+
 - [Getting Started - Dark Mode Setup](./guides/getting-started.md#dark-mode-setup)
 
 **Export Formats**:
+
 - [Getting Started - Exporting Tokens](./guides/getting-started.md#exporting-tokens)
 
 **Contributing**:
+
 - [CONTRIBUTING.md](../CONTRIBUTING.md)
 
 **Project Status**:
+
 - [README - Project Status](../README.md#project-status)
 - [Implementation Status](../.moai/specs/SPEC-PHASEAB-001/implementation-status.md)
 

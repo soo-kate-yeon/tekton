@@ -9,7 +9,7 @@ import { previewThemeTool } from '../../src/tools/preview-theme.js';
 describe('previewThemeTool', () => {
   it('should generate preview for valid theme', async () => {
     const result = await previewThemeTool({
-      themeId: 'calm-wellness'
+      themeId: 'calm-wellness',
     });
 
     expect(result.success).toBe(true);
@@ -22,7 +22,7 @@ describe('previewThemeTool', () => {
 
   it('should include OKLCH CSS variables', async () => {
     const result = await previewThemeTool({
-      themeId: 'premium-editorial'
+      themeId: 'premium-editorial',
     });
 
     expect(result.success).toBe(true);
@@ -36,7 +36,7 @@ describe('previewThemeTool', () => {
 
   it('should return error for invalid theme ID', async () => {
     const result = await previewThemeTool({
-      themeId: 'non-existent-theme'
+      themeId: 'non-existent-theme',
     });
 
     expect(result.success).toBe(false);
@@ -46,9 +46,7 @@ describe('previewThemeTool', () => {
   });
 
   it('should return theme without custom base URL', async () => {
-    const result = await previewThemeTool(
-      { themeId: 'calm-wellness' }
-    );
+    const result = await previewThemeTool({ themeId: 'calm-wellness' });
 
     expect(result.success).toBe(true);
     expect(result.theme).toBeDefined();

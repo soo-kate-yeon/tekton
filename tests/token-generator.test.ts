@@ -1,9 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import {
-  generateToken,
-  generateTokenId,
-  TokenGenerator,
-} from '../src/token-generator';
+import { generateToken, generateTokenId, TokenGenerator } from '../src/token-generator';
 
 describe('Token Generator - TASK-009 to TASK-013', () => {
   describe('generateTokenId - TASK-013', () => {
@@ -115,10 +111,7 @@ describe('Token Generator - TASK-009 to TASK-013', () => {
 
     it('should export to CSS format - TASK-012', () => {
       const generator = new TokenGenerator();
-      const css = generator.exportTokens(
-        { primary: { l: 0.5, c: 0.15, h: 220 } },
-        'css'
-      );
+      const css = generator.exportTokens({ primary: { l: 0.5, c: 0.15, h: 220 } }, 'css');
 
       expect(css).toContain('--');
       expect(css).toContain(':root');
@@ -126,20 +119,14 @@ describe('Token Generator - TASK-009 to TASK-013', () => {
 
     it('should export to JSON format - TASK-012', () => {
       const generator = new TokenGenerator();
-      const json = generator.exportTokens(
-        { primary: { l: 0.5, c: 0.15, h: 220 } },
-        'json'
-      );
+      const json = generator.exportTokens({ primary: { l: 0.5, c: 0.15, h: 220 } }, 'json');
 
       expect(() => JSON.parse(json)).not.toThrow();
     });
 
     it('should export to JavaScript format - TASK-012', () => {
       const generator = new TokenGenerator();
-      const js = generator.exportTokens(
-        { primary: { l: 0.5, c: 0.15, h: 220 } },
-        'js'
-      );
+      const js = generator.exportTokens({ primary: { l: 0.5, c: 0.15, h: 220 } }, 'js');
 
       expect(js).toContain('export');
       expect(js).toContain('const');
@@ -157,10 +144,7 @@ describe('Token Generator - TASK-009 to TASK-013', () => {
 
     it('should export to TypeScript format - TASK-012', () => {
       const generator = new TokenGenerator();
-      const ts = generator.exportTokens(
-        { primary: { l: 0.5, c: 0.15, h: 220 } },
-        'ts'
-      );
+      const ts = generator.exportTokens({ primary: { l: 0.5, c: 0.15, h: 220 } }, 'ts');
 
       expect(ts).toContain('export');
       expect(ts).toContain('const');
@@ -200,7 +184,11 @@ describe('Token Generator - TASK-009 to TASK-013', () => {
 
       expect(tokens[0].metadata?.generated).toBeDefined();
       const generated = tokens[0].metadata?.generated;
-      if (typeof generated === 'string' || typeof generated === 'number' || generated instanceof Date) {
+      if (
+        typeof generated === 'string' ||
+        typeof generated === 'number' ||
+        generated instanceof Date
+      ) {
         expect(new Date(generated)).toBeInstanceOf(Date);
       }
     });
