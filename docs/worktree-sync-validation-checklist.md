@@ -346,7 +346,7 @@ tekton worktree remove SPEC-TEST-001 --force
 
 **Method**: Side-by-side comparison of docs and code
 
-**Sign-off**: ******\*\*******\_\_******\*\******* Date: \***\*\_\_\*\***
+**Sign-off**: **\*\***\*\***\*\***\_\_**\*\***\*\***\*\*** Date: \***\*\_\_\*\***
 
 ---
 
@@ -364,7 +364,7 @@ tekton worktree remove SPEC-TEST-001 --force
 
 **Method**: Complete workflow from scratch following docs
 
-**Sign-off**: ******\*\*******\_\_******\*\******* Date: \***\*\_\_\*\***
+**Sign-off**: **\*\***\*\***\*\***\_\_**\*\***\*\***\*\*** Date: \***\*\_\_\*\***
 
 ---
 
@@ -382,7 +382,7 @@ tekton worktree remove SPEC-TEST-001 --force
 
 **Method**: Read-through and editorial review
 
-**Sign-off**: ******\*\*******\_\_******\*\******* Date: \***\*\_\_\*\***
+**Sign-off**: **\*\***\*\***\*\***\_\_**\*\***\*\***\*\*** Date: \***\*\_\_\*\***
 
 ---
 

@@ -15,6 +15,8 @@ export default defineConfig({
         '**/*.config.ts',
         'examples/**',
         'eslint.config.js',
+        'packages/playground-web/**', // WIP: Next.js 16 playground
+        'packages/mcp-server/**', // Separate test suite
       ],
       thresholds: {
         lines: 85,
