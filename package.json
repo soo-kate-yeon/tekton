@@ -27,6 +27,7 @@
   "author": "",
   "license": "MIT",
   "devDependencies": {
+    "@types/culori": "^4.0.1",
     "@types/node": "^22.10.5",
     "@typescript-eslint/eslint-plugin": "^8.20.0",
     "@typescript-eslint/parser": "^8.20.0",

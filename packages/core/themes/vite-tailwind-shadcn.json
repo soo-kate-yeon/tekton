@@ -1,0 +1,35 @@
+{
+  "id": "vite-tailwind-shadcn",
+  "name": "Vite + Tailwind + shadcn/ui",
+  "description": "Fast single-page applications with Vite, Tailwind CSS, and shadcn/ui. Optimized for rapid development and lightning-fast hot module replacement.",
+  "stackInfo": {
+    "framework": "vite",
+    "styling": "tailwindcss",
+    "components": "shadcn-ui"
+  },
+  "brandTone": "creative",
+  "colorPalette": {
+    "primary": { "l": 0.55, "c": 0.2, "h": 280 },
+    "secondary": { "l": 0.6, "c": 0.15, "h": 320 },
+    "accent": { "l": 0.65, "c": 0.18, "h": 50 },
+    "neutral": { "l": 0.5, "c": 0.02, "h": 280 }
+  },
+  "typography": {
+    "fontFamily": "Geist, Inter, system-ui, sans-serif",
+    "fontScale": "medium",
+    "headingWeight": 700,
+    "bodyWeight": 400
+  },
+  "componentDefaults": {
+    "borderRadius": "large",
+    "density": "comfortable",
+    "contrast": "high"
+  },
+  "aiContext": {
+    "brandTone": "creative",
+    "designPhilosophy": "Modern, dynamic design that embraces creativity while maintaining usability. Perfect for startups, portfolios, and interactive applications.",
+    "colorGuidance": "Vibrant purple primary with complementary accent colors. Use gradients sparingly for visual interest. Maintain readability with proper contrast.",
+    "componentGuidance": "Leverage Vite's fast refresh for rapid iteration. Use shadcn/ui components with custom color themes. Consider micro-interactions for engagement.",
+    "accessibilityNotes": "Maintain WCAG 2.1 AA standards. Ensure animations respect prefers-reduced-motion. Test with screen readers."
+  }
+}

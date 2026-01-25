@@ -88,6 +88,15 @@ export interface TokenGeneratorConfig {
 }
 
 /**
+ * JSON export token structure
+ */
+interface JSONTokenOutput {
+  value: string;
+  oklch: OKLCHColor;
+  scale: Record<string, string>;
+}
+
+/**
  * Token Generator class with caching and optimization
  * TASK-011: Dark mode auto-generation
  * TASK-015: Performance optimization (Map-based caching)
@@ -210,7 +219,7 @@ export class TokenGenerator {
   }
 
   private exportToJSON(tokens: TokenDefinition[]): string {
-    const output: Record<string, any> = {};
+    const output: Record<string, JSONTokenOutput> = {};
 
     tokens.forEach((token) => {
       output[token.name] = {

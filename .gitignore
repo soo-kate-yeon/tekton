@@ -87,6 +87,18 @@ node_modules/
 .next/
 out/
 
+# TypeScript compilation outputs (prevent committing build artifacts)
+# Only exclude from source/test directories in packages
+packages/*/src/**/*.js
+packages/*/src/**/*.d.ts
+packages/*/src/**/*.js.map
+packages/*/__tests__/**/*.js
+packages/*/__tests__/**/*.d.ts
+packages/*/__tests__/**/*.js.map
+packages/*/*.config.js
+packages/*/*.config.d.ts
+packages/*/*.config.js.map
+
 # ---------------------------------------------
 # Logs & Temporary Files
 # ---------------------------------------------
@@ -100,10 +112,23 @@ logs/
 # ---------------------------------------------
 # Test Coverage
 # ---------------------------------------------
+# Python coverage
 .coverage
 coverage.json
 htmlcov/
 .pytest_cache/
+
+# JavaScript/TypeScript coverage
+coverage/
+packages/*/coverage/
+*.lcov
+
+# Test-generated data
+.tekton/
+.tekton-test/
+packages/*/.tekton/
+packages/*/.tekton-test/
+test-exports/
 
 # ---------------------------------------------
 # Environment Variables & Secrets
@@ -220,3 +245,20 @@ secret-*.*
 # uv.lock is intentionally included for reproducible builds
 # Add to .gitignore if needed per project
 # uv.lock
+packages/studio-mcp/coverage/
+# Secrets and Credentials (CRITICAL)
+# Skill-specific credentials
+# Claude Code Configuration
+# Environment files
+# Updated: 2026-01-10
+# Python Cache & Bytecode
+# Build Tools & Frameworks
+.turbo/
+# Credential patterns in environment files
+# Deployment & CI/CD
+# Build Artifacts & Distribution
+dist-ssr/
+# Version: 0.33.0
+# ===========================================
+# Private keys (specific patterns to avoid false positives)
+.nuxt/

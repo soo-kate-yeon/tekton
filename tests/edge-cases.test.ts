@@ -79,7 +79,7 @@ describe('Edge Cases - TASK-023', () => {
       const scale = generateLightnessScale(color);
 
       expect(scale['50']).toBeDefined();
-      expect(scale['50'].l).toBeLessThanOrEqual(1.0);
+      expect(scale['50']?.l).toBeLessThanOrEqual(1.0);
     });
 
     it('should handle very dark base color', () => {
@@ -87,7 +87,7 @@ describe('Edge Cases - TASK-023', () => {
       const scale = generateLightnessScale(color);
 
       expect(scale['950']).toBeDefined();
-      expect(scale['950'].l).toBeGreaterThanOrEqual(0.0);
+      expect(scale['950']?.l).toBeGreaterThanOrEqual(0.0);
     });
   });
 

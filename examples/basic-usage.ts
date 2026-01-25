@@ -5,7 +5,7 @@
 
 import {
   TokenGenerator,
-  generateComponentPresets,
+  generateComponentThemes,
   oklchToHex,
   hexToOklch,
 } from '../src';
@@ -42,14 +42,14 @@ function example2_exportToCSS() {
   console.log(css);
 }
 
-// Example 3: Generate component presets
-function example3_componentPresets() {
+// Example 3: Generate component themes
+function example3_componentThemes() {
   const baseColor = { l: 0.5, c: 0.15, h: 220 };
-  const presets = generateComponentPresets(baseColor);
+  const themes = generateComponentThemes(baseColor);
 
-  console.log('Component presets:', presets.length);
-  presets.forEach((preset) => {
-    console.log(`${preset.name}:`, Object.keys(preset.states));
+  console.log('Component themes:', themes.length);
+  themes.forEach((theme) => {
+    console.log(`${theme.name}:`, Object.keys(theme.states));
   });
 }
 
@@ -100,8 +100,8 @@ if (require.main === module) {
   console.log('\n=== Example 2: Export to CSS ===');
   example2_exportToCSS();
 
-  console.log('\n=== Example 3: Component Presets ===');
-  example3_componentPresets();
+  console.log('\n=== Example 3: Component Themes ===');
+  example3_componentThemes();
 
   console.log('\n=== Example 4: Dark Mode ===');
   example4_darkMode();

@@ -3,10 +3,8 @@ import {
   exportToCSS,
   exportToDTCG,
   exportToTailwind,
-  type ExportConfig,
 } from '../src/generator/output';
 import type { SemanticTokens } from '../src/generator/semantic-mapper';
-import type { OKLCHColor } from '../src/schemas';
 
 describe('Output Format Exporters - TASK-005 to TASK-007', () => {
   const mockTokens: SemanticTokens = {

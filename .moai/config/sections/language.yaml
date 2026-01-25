@@ -1,56 +1,26 @@
-# Language Configuration
-# Centralized language settings for MoAI-ADK
-# This file is automatically loaded by CLAUDE.md
-
 language:
-  # Primary conversation language (user-facing responses)
-  # Options: en, ko, ja, zh, es, fr, de
-  conversation_language: en
-
-  # Human-readable language name
-  conversation_language_name: English
-
-  # Agent internal prompt language (instructions to agents)
-  # Default: English (for consistency across agents)
+  conversation_language: ko
+  conversation_language_name: Korean (한국어)
   agent_prompt_language: en
-
-  # Code comment language
-  # Options: en, ko, ja, zh (default: en for global standards)
-  code_comments: en
-
-  # Documentation language
-  # Options: same_as_conversation, en, ko, ja, zh
-  documentation: en
-
-  # SPEC document language
-  # Options: same_as_conversation, en, ko, ja, zh
+  code_comments: ko
+  documentation: ko
   spec_documents: en
-
-# Language enforcement rules
+  git_commit_messages: ko
 enforcement:
-  # Enforce conversation_language in all user responses
   strict_response_language: true
-
-  # Allow technical terms in English regardless of conversation_language
   preserve_technical_terms: true
-
-  # Preserve code examples in original language
   preserve_code_language: true
-
-# Multi-language support
 supported_languages:
-  - code: en
-    name: English
-    native_name: English
-  - code: ko
-    name: Korean
-    native_name: 한국어
-  - code: ja
-    name: Japanese
-    native_name: 日本語
-  - code: zh
-    name: Chinese
-    native_name: 中文
-
-# Updated timestamp
-updated_at: "2026-01-14T00:00:00Z"
+- code: en
+  name: English
+  native_name: English
+- code: ko
+  name: Korean
+  native_name: 한국어
+- code: ja
+  name: Japanese
+  native_name: 日本語
+- code: zh
+  name: Chinese
+  native_name: 中文
+updated_at: '2026-01-14T00:00:00Z'

@@ -68,16 +68,28 @@ export const AccessibilityCheckSchema = z.object({
 export type AccessibilityCheck = z.infer<typeof AccessibilityCheckSchema>;
 
 /**
- * Component Preset Schema
+ * Component Theme Schema
  * Defines color tokens for component states
  */
-export const ComponentPresetSchema = z.object({
+export const ComponentThemeSchema = z.object({
   name: z.string(),
   states: z.record(z.string(), OKLCHColorSchema),
   accessibility: z.array(AccessibilityCheckSchema).optional(),
 });
 
-export type ComponentPreset = z.infer<typeof ComponentPresetSchema>;
+export type ComponentTheme = z.infer<typeof ComponentThemeSchema>;
+
+/**
+ * Backward compatibility alias for ComponentThemeSchema
+ * @deprecated Use ComponentThemeSchema instead
+ */
+export const ComponentPresetSchema = ComponentThemeSchema;
+
+/**
+ * Backward compatibility type alias
+ * @deprecated Use ComponentTheme instead
+ */
+export type ComponentPreset = ComponentTheme;
 
 /**
  * Token Output Format Schema

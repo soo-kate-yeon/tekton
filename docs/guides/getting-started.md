@@ -7,7 +7,7 @@ Complete guide to installing and using Tekton for OKLCH-based design token gener
 - [Installation](#installation)
 - [Basic Usage](#basic-usage)
 - [Generating Color Palettes](#generating-color-palettes)
-- [Using Component Presets](#using-component-presets)
+- [Using Component Themes](#using-component-themes)
 - [Exporting Tokens](#exporting-tokens)
 - [Dark Mode Setup](#dark-mode-setup)
 - [WCAG Compliance Validation](#wcag-compliance-validation)
@@ -163,7 +163,7 @@ tokens.forEach(token => {
 
 ---
 
-## Using Component Presets
+## Using Component Themes
 
 ### Button Component
 
@@ -191,16 +191,16 @@ console.log('Button Colors:', colors);
 console.log('WCAG Compliant:', button.accessibility[0].passed);
 ```
 
-### All Component Presets
+### All Component Themes
 
 ```typescript
 import { generateComponentPresets, oklchToHex } from 'tekton';
 
-const presets = generateComponentPresets({ l: 0.5, c: 0.15, h: 220 });
+const themes = generateComponentPresets({ l: 0.5, c: 0.15, h: 220 });
 
-presets.forEach(preset => {
-  console.log(`\n${preset.name} states:`);
-  Object.entries(preset.states).forEach(([state, color]) => {
+themes.forEach(theme => {
+  console.log(`\n${theme.name} states:`);
+  Object.entries(theme.states).forEach(([state, color]) => {
     console.log(`  ${state}: ${oklchToHex(color)}`);
   });
 });

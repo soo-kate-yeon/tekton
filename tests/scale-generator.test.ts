@@ -18,31 +18,31 @@ describe('Lightness Scale Generator - TASK-007', () => {
     const base = { l: 0.5, c: 0.15, h: 220 };
     const scale = generateLightnessScale(base);
 
-    expect(scale['500'].l).toBeCloseTo(base.l, 2);
-    expect(scale['500'].c).toBeCloseTo(base.c, 2);
-    expect(scale['500'].h).toBeCloseTo(base.h, 2);
+    expect(scale['500']?.l).toBeCloseTo(base.l, 2);
+    expect(scale['500']?.c).toBeCloseTo(base.c, 2);
+    expect(scale['500']?.h).toBeCloseTo(base.h, 2);
   });
 
   it('should generate lighter tints (50-400)', () => {
     const base = { l: 0.5, c: 0.15, h: 220 };
     const scale = generateLightnessScale(base);
 
-    expect(scale['50'].l).toBeGreaterThan(scale['100'].l);
-    expect(scale['100'].l).toBeGreaterThan(scale['200'].l);
-    expect(scale['200'].l).toBeGreaterThan(scale['300'].l);
-    expect(scale['300'].l).toBeGreaterThan(scale['400'].l);
-    expect(scale['400'].l).toBeGreaterThan(scale['500'].l);
+    expect(scale['50']?.l).toBeGreaterThan(scale['100']?.l ?? 0);
+    expect(scale['100']?.l).toBeGreaterThan(scale['200']?.l ?? 0);
+    expect(scale['200']?.l).toBeGreaterThan(scale['300']?.l ?? 0);
+    expect(scale['300']?.l).toBeGreaterThan(scale['400']?.l ?? 0);
+    expect(scale['400']?.l).toBeGreaterThan(scale['500']?.l ?? 0);
   });
 
   it('should generate darker shades (600-950)', () => {
     const base = { l: 0.5, c: 0.15, h: 220 };
     const scale = generateLightnessScale(base);
 
-    expect(scale['500'].l).toBeGreaterThan(scale['600'].l);
-    expect(scale['600'].l).toBeGreaterThan(scale['700'].l);
-    expect(scale['700'].l).toBeGreaterThan(scale['800'].l);
-    expect(scale['800'].l).toBeGreaterThan(scale['900'].l);
-    expect(scale['900'].l).toBeGreaterThan(scale['950'].l);
+    expect(scale['500']?.l).toBeGreaterThan(scale['600']?.l ?? 0);
+    expect(scale['600']?.l).toBeGreaterThan(scale['700']?.l ?? 0);
+    expect(scale['700']?.l).toBeGreaterThan(scale['800']?.l ?? 0);
+    expect(scale['800']?.l).toBeGreaterThan(scale['900']?.l ?? 0);
+    expect(scale['900']?.l).toBeGreaterThan(scale['950']?.l ?? 0);
   });
 
   it('should preserve hue across scale', () => {
@@ -78,16 +78,16 @@ describe('Lightness Scale Generator - TASK-007', () => {
     const light = { l: 0.9, c: 0.1, h: 180 };
     const scale = generateLightnessScale(light);
 
-    expect(scale['50'].l).toBeLessThanOrEqual(1);
-    expect(scale['950'].l).toBeGreaterThanOrEqual(0);
+    expect(scale['50']?.l).toBeLessThanOrEqual(1);
+    expect(scale['950']?.l).toBeGreaterThanOrEqual(0);
   });
 
   it('should handle very dark base colors', () => {
     const dark = { l: 0.2, c: 0.1, h: 180 };
     const scale = generateLightnessScale(dark);
 
-    expect(scale['50'].l).toBeLessThanOrEqual(1);
-    expect(scale['950'].l).toBeGreaterThanOrEqual(0);
+    expect(scale['50']?.l).toBeLessThanOrEqual(1);
+    expect(scale['950']?.l).toBeGreaterThanOrEqual(0);
   });
 
   it('should reduce chroma at extreme lightness values', () => {
@@ -95,10 +95,10 @@ describe('Lightness Scale Generator - TASK-007', () => {
     const scale = generateLightnessScale(base);
 
     // Very light (>0.9) should have reduced chroma
-    expect(scale['50'].c).toBeLessThan(base.c);
+    expect(scale['50']?.c).toBeLessThan(base.c);
 
     // Very dark (<0.2) should have reduced chroma
-    expect(scale['950'].c).toBeLessThan(base.c);
+    expect(scale['950']?.c).toBeLessThan(base.c);
   });
 });
 
@@ -138,7 +138,7 @@ describe('Color Scales Generator - Multiple Palettes', () => {
 
     const scales = generateColorScales(palette);
 
-    expect(scales.blue['500'].h).toBe(220);
-    expect(scales.green['500'].h).toBe(140);
+    expect(scales.blue['500']?.h).toBe(220);
+    expect(scales.green['500']?.h).toBe(140);
   });
 });
