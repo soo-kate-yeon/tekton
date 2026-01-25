@@ -9,6 +9,8 @@ Complete reference documentation for all public exports from Tekton.
 - [Scale Generation Module](#scale-generation-module)
 - [Token Generator Module](#token-generator-module)
 - [Component Presets Module](#component-presets-module)
+- [Component Schemas Module](#component-schemas-module) ✨ NEW
+- [Schema Validation Module](#schema-validation-module) ✨ NEW
 - [WCAG Validator Module](#wcag-validator-module)
 - [Usage Patterns](#usage-patterns)
 
@@ -645,6 +647,391 @@ const button = COMPONENT_PRESETS.button(baseColor);
 const input = COMPONENT_PRESETS.input(baseColor);
 // ...
 ```
+
+---
+
+## Component Schemas Module
+
+Platform-agnostic component interface specifications with token bindings and accessibility requirements for 20 core UI components.
+
+### ComponentSchema
+
+Complete component schema definition interface.
+
+```typescript
+import { type ComponentSchema } from 'tekton/core';
+
+const buttonSchema: ComponentSchema = {
+  type: 'Button',
+  category: 'primitive',
+  description: 'Interactive button element for user actions',
+  props: [
+    {
+      name: 'variant',
+      type: 'string',
+      required: false,
+      description: 'Visual style variant',
+      defaultValue: 'primary',
+      options: ['primary', 'secondary', 'outline', 'ghost', 'danger']
+    }
+  ],
+  tokenBindings: {
+    background: 'component.button.{variant}.background',
+    foreground: 'component.button.{variant}.foreground'
+  },
+  a11y: {
+    role: 'button',
+    wcag: 'WCAG 2.1 AA',
+    ariaAttributes: ['aria-label', 'aria-disabled']
+  }
+};
+```
+
+**Properties:**
+- `type` (string): Component type identifier (e.g., "Button", "Input")
+- `category` ('primitive' | 'composed'): Component category
+- `description` (string, optional): Human-readable description
+- `props` (PropDefinition[]): Array of component properties
+- `tokenBindings` (TokenBindings): Design token bindings with template variables
+- `a11y` (A11yRequirements): Accessibility requirements (WCAG 2.1 AA)
+
+### PropDefinition
+
+Property definition for component props.
+
+```typescript
+import { type PropDefinition } from 'tekton/core';
+
+const propDef: PropDefinition = {
+  name: 'size',
+  type: 'string',
+  required: false,
+  description: 'Component size',
+  defaultValue: 'medium',
+  options: ['small', 'medium', 'large']
+};
+```
+
+**Properties:**
+- `name` (string): Property name
+- `type` (string): TypeScript-style type (e.g., "string", "boolean", "ReactNode")
+- `required` (boolean): Whether the property is required
+- `description` (string): Human-readable description
+- `defaultValue` (unknown, optional): Default value if not required
+- `options` (string[], optional): Allowed values for enum-like props
+
+### A11yRequirements
+
+Accessibility requirements for a component.
+
+```typescript
+import { type A11yRequirements } from 'tekton/core';
+
+const a11y: A11yRequirements = {
+  role: 'button',
+  wcag: 'WCAG 2.1 AA',
+  ariaAttributes: ['aria-label', 'aria-disabled', 'aria-pressed'],
+  keyboard: ['Enter', 'Space'],
+  focus: 'Visible focus indicator with semantic.border.focus',
+  screenReader: 'Announces button label and state'
+};
+```
+
+**Properties:**
+- `role` (string): ARIA role
+- `wcag` (string): WCAG compliance level (must include "2.1")
+- `ariaAttributes` (string[], optional): Required ARIA attributes
+- `keyboard` (string[], optional): Keyboard interaction requirements
+- `focus` (string, optional): Focus management requirements
+- `screenReader` (string, optional): Screen reader announcements
+
+### TokenBindings
+
+Token bindings map component properties to design tokens with template variable support.
+
+```typescript
+import { type TokenBindings } from 'tekton/core';
+
+const bindings: TokenBindings = {
+  background: 'component.button.{variant}.background',
+  foreground: 'component.button.{variant}.foreground',
+  borderRadius: 'atomic.radius.md',
+  paddingX: 'atomic.spacing.{size}'
+};
+```
+
+**Template Variables:**
+- `{variant}`: Resolves to component variant (e.g., "primary", "secondary")
+- `{size}`: Resolves to component size (e.g., "small", "medium", "large")
+- `{color}`: Resolves to semantic color (e.g., "primary", "accent")
+
+### Component Schema Registry
+
+Access to all 20 component schemas.
+
+```typescript
+import {
+  ALL_COMPONENTS,
+  PRIMITIVE_COMPONENTS,
+  COMPOSED_COMPONENTS,
+  getComponentSchema
+} from 'tekton/core';
+
+// Get all 20 components
+console.log(ALL_COMPONENTS.length); // 20
+
+// Filter by category
+console.log(PRIMITIVE_COMPONENTS.length); // 10
+console.log(COMPOSED_COMPONENTS.length); // 10
+
+// Get specific schema
+const buttonSchema = getComponentSchema('Button');
+console.log(buttonSchema?.type); // "Button"
+```
+
+**Exports:**
+- `ALL_COMPONENTS`: Array of all 20 component schemas
+- `PRIMITIVE_COMPONENTS`: Array of 10 primitive component schemas
+- `COMPOSED_COMPONENTS`: Array of 10 composed component schemas
+- `getComponentSchema(type: string)`: Get schema by component type
+
+**Primitive Components (10):**
+Button, Input, Text, Heading, Checkbox, Radio, Switch, Slider, Badge, Avatar
+
+**Composed Components (10):**
+Card, Modal, Dropdown, Tabs, Link, Table, List, Image, Form, Progress
+
+For detailed component schema reference, see [component-schemas.md](./component-schemas.md).
+
+---
+
+## Schema Validation Module
+
+Zod-based runtime validation for component schemas, props, accessibility requirements, and token bindings.
+
+### validateComponentSchema
+
+Validate a single component schema.
+
+```typescript
+import { validateComponentSchema, type ComponentSchema } from 'tekton/core';
+
+const schema: ComponentSchema = {
+  type: 'Button',
+  category: 'primitive',
+  props: [/* ... */],
+  tokenBindings: {/* ... */},
+  a11y: {/* ... */}
+};
+
+const result = validateComponentSchema(schema);
+
+if (result.valid) {
+  console.log('Schema is valid!');
+} else {
+  console.error('Validation errors:', result.errors);
+}
+```
+
+**Returns:**
+```typescript
+{
+  valid: boolean;
+  errors?: string[];
+  warnings?: string[];
+}
+```
+
+### validateAllSchemas
+
+Validate all 20 component schemas.
+
+```typescript
+import { validateAllSchemas } from 'tekton/core';
+
+const result = validateAllSchemas();
+
+console.log(`Valid schemas: ${result.validSchemas}/20`);
+console.log(`Invalid schemas: ${result.invalidSchemas}`);
+
+if (!result.valid) {
+  console.error('Errors:', result.errors);
+}
+if (result.warnings) {
+  console.warn('Warnings:', result.warnings);
+}
+```
+
+**Returns:**
+```typescript
+{
+  valid: boolean;
+  errors?: string[];
+  warnings?: string[];
+}
+```
+
+**Validation Checks:**
+- 20 component schemas registered
+- 10 primitive + 10 composed components
+- No duplicate component types
+- All schemas pass Zod validation
+
+### validateProp
+
+Validate a single PropDefinition.
+
+```typescript
+import { validateProp, type PropDefinition } from 'tekton/core';
+
+const prop: PropDefinition = {
+  name: 'variant',
+  type: 'string',
+  required: false,
+  description: 'Visual style variant'
+};
+
+const result = validateProp(prop);
+```
+
+**Validation Rules:**
+- `name`: Required, non-empty string
+- `type`: Required, non-empty string
+- `required`: Required boolean
+- `description`: Required, non-empty string
+- `defaultValue`: Optional
+- `options`: Optional array of strings
+
+### validateA11y
+
+Validate accessibility requirements.
+
+```typescript
+import { validateA11y, type A11yRequirements } from 'tekton/core';
+
+const a11y: A11yRequirements = {
+  role: 'button',
+  wcag: 'WCAG 2.1 AA',
+  ariaAttributes: ['aria-label']
+};
+
+const result = validateA11y(a11y);
+```
+
+**Validation Rules:**
+- `role`: Required, non-empty string
+- `wcag`: Required, must include "2.1" for WCAG 2.1 compliance
+- `ariaAttributes`: Optional array of strings
+- `keyboard`: Optional array of strings
+- `focus`: Optional string
+- `screenReader`: Optional string
+
+### validateTokenBindings
+
+Validate token bindings format and detect template variables.
+
+```typescript
+import { validateTokenBindings } from 'tekton/core';
+
+const bindings = {
+  background: 'component.button.{variant}.background',
+  foreground: 'semantic.foreground.primary',
+  borderRadius: 'atomic.radius.md'
+};
+
+const result = validateTokenBindings(bindings);
+
+if (result.warnings) {
+  console.warn('Warnings:', result.warnings);
+  // Example: "Consider using template variables like {variant} or {size}"
+}
+```
+
+**Validation Rules:**
+- Minimum 2 token bindings required per component
+- Template variable detection (e.g., `{variant}`, `{size}`)
+- Token reference validation (semantic.*, atomic.*, component.*)
+
+**Warnings:**
+- No template variables used
+- No token references (semantic, atomic, component)
+
+### getValidationSummary
+
+Get comprehensive validation summary for all schemas.
+
+```typescript
+import { getValidationSummary } from 'tekton/core';
+
+const summary = getValidationSummary();
+
+console.log(`Total components: ${summary.totalComponents}`);
+console.log(`Primitive: ${summary.primitiveComponents}`);
+console.log(`Composed: ${summary.composedComponents}`);
+console.log(`Valid: ${summary.validSchemas}`);
+console.log(`Invalid: ${summary.invalidSchemas}`);
+
+summary.validationResults.forEach(result => {
+  console.log(`${result.type}: ${result.valid ? '✅' : '❌'}`);
+  if (!result.valid && result.errors) {
+    console.error(`Errors: ${result.errors.join(', ')}`);
+  }
+});
+```
+
+**Returns:**
+```typescript
+{
+  totalComponents: number;
+  primitiveComponents: number;
+  composedComponents: number;
+  validSchemas: number;
+  invalidSchemas: number;
+  validationResults: Array<{
+    type: string;
+    valid: boolean;
+    errors?: string[];
+  }>;
+}
+```
+
+### assertValidSchema
+
+Assert single schema is valid (throws on invalid).
+
+```typescript
+import { assertValidSchema, type ComponentSchema } from 'tekton/core';
+
+const schema: ComponentSchema = {/* ... */};
+
+try {
+  assertValidSchema(schema);
+  console.log('Schema is valid!');
+} catch (error) {
+  console.error('Invalid schema:', error.message);
+}
+```
+
+**Throws:** Error with detailed validation error messages
+
+### assertAllSchemasValid
+
+Assert all 20 schemas are valid (throws on invalid).
+
+```typescript
+import { assertAllSchemasValid } from 'tekton/core';
+
+try {
+  assertAllSchemasValid();
+  console.log('All 20 schemas are valid!');
+} catch (error) {
+  console.error('Schema validation failed:', error.message);
+}
+```
+
+**Use Case:** Integration tests, build-time validation, pre-deployment checks
+
+For detailed validation system reference, see [schema-validation.md](./schema-validation.md).
 
 ---
 
