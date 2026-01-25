@@ -181,8 +181,8 @@ describe('stdio transport', () => {
     return new Promise((resolve, reject) => {
       const server: ChildProcess = spawn('node', [serverPath]);
 
-      let stdoutLines: string[] = [];
-      let stderrLines: string[] = [];
+      const stdoutLines: string[] = [];
+      const stderrLines: string[] = [];
       let receivedResponse = false;
 
       const timeout = setTimeout(() => {

@@ -22,6 +22,23 @@ export const LayoutTypeSchema = z.enum([
 ]);
 
 /**
+ * ComponentNode schema - recursive structure from @tekton/core
+ */
+const ComponentNodeSchema: z.ZodType<{
+  type: string;
+  props?: Record<string, unknown>;
+  children?: (unknown | string)[];
+  slot?: string;
+}> = z.lazy(() =>
+  z.object({
+    type: z.string(),
+    props: z.record(z.string(), z.unknown()).optional(),
+    children: z.array(z.union([ComponentNodeSchema, z.string()])).optional(),
+    slot: z.string().optional()
+  })
+);
+
+/**
  * Theme ID validation - alphanumeric with hyphens only (security: prevent path traversal)
  * SPEC: UW-002 No Theme ID Injection
  */
@@ -56,7 +73,7 @@ export const GenerateBlueprintOutputSchema = z.object({
       name: z.string(),
       themeId: z.string(),
       layout: LayoutTypeSchema,
-      components: z.array(z.any()), // ComponentNode[] from @tekton/core
+      components: z.array(ComponentNodeSchema), // ComponentNode[] from @tekton/core
       timestamp: z.number()
     })
   ),
@@ -114,7 +131,7 @@ export type ExportFormat = z.infer<typeof ExportFormatSchema>;
  * SPEC: E-003 Screen Export Request
  */
 export const ExportScreenInputSchema = z.object({
-  blueprint: z.any(), // Blueprint from @tekton/core (accept any object for flexibility)
+  blueprint: z.unknown(), // Blueprint from @tekton/core (accept any object for flexibility)
   format: ExportFormatSchema
 });
 

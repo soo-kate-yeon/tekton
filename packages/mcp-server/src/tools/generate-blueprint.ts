@@ -15,6 +15,8 @@ import type { GenerateBlueprintInput, GenerateBlueprintOutput } from '../schemas
 import { getDefaultStorage } from '../storage/blueprint-storage.js';
 import { createThemeNotFoundError, createValidationError, extractErrorMessage } from '../utils/error-handler.js';
 
+type ComponentType = (typeof COMPONENT_CATALOG)[number];
+
 /**
  * Parse natural language description to extract component hints
  * Initial implementation: Simple keyword extraction
@@ -30,9 +32,9 @@ function parseDescriptionToComponents(
   // If component hints provided, use them first
   if (componentHints && componentHints.length > 0) {
     for (const hint of componentHints) {
-      if (COMPONENT_CATALOG.includes(hint as any)) {
+      if (COMPONENT_CATALOG.includes(hint as ComponentType)) {
         components.push({
-          type: hint as any,
+          type: hint,
           slot: 'main',
           children: []
         });

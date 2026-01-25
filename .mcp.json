@@ -1,23 +1,13 @@
 {
   "mcpServers": {
-    "context7": {
-      "$comment": "Cross-platform MCP configuration - see .mcp.windows.json for Windows",
-      "command": "npx",
-      "args": [
-        "-y",
-        "@upstash/context7-mcp@latest"
-      ]
-    },
-    "tekton-mcp": {
+    "tekton": {
       "command": "node",
       "args": [
-        "packages/mcp-server/dist/index.js"
-      ]
+        "/Users/asleep/Developer/tekton/packages/mcp-server/dist/index.js"
+      ],
+      "env": {
+        "NODE_ENV": "production"
+      }
     }
-  },
-  "staggeredStartup": {
-    "enabled": true,
-    "delayMs": 500,
-    "connectionTimeout": 15000
   }
 }
