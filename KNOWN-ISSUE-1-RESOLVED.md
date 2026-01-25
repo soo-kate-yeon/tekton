@@ -10,12 +10,15 @@
 ## Issue Summary
 
 ### Problem
+
 The `knowledge.renderScreen` MCP tool was failing with the error:
+
 ```
 Unexpected error: generate is not a function
 ```
 
 ### Impact
+
 - **Severity**: Critical - Blocked primary MCP tool functionality
 - **Affected Component**: `@tekton/component-generator` package
 - **User Impact**: Unable to generate React component files from blueprints
@@ -29,12 +32,14 @@ Unexpected error: generate is not a function
 ### Technical Explanation
 
 The issue occurred due to **CommonJS/ESM interoperability mismatch** between:
+
 - **@babel/generator**: CommonJS package (`"type": "commonjs"`)
 - **@tekton/component-generator**: ESM package (`"type": "module"`)
 
 ### The Problem Chain
 
 1. **TypeScript Configuration**:
+
    ```json
    {
      "compilerOptions": {
@@ -43,11 +48,13 @@ The issue occurred due to **CommonJS/ESM interoperability mismatch** between:
      }
    }
    ```
+
    - `moduleResolution: "bundler"` assumes a bundler will handle imports
    - TypeScript compiles `import generate from '@babel/generator'` as-is
 
 2. **Node.js ESM Wrapper Behavior**:
    When importing CommonJS into ESM, Node.js creates a wrapper:
+
    ```javascript
    // import generate from '@babel/generator'
    // Actually gives us:
@@ -76,6 +83,7 @@ The issue occurred due to **CommonJS/ESM interoperability mismatch** between:
 ### Solution: Use Named Import
 
 **Before (Broken)**:
+
 ```typescript
 import generate from '@babel/generator';
 
@@ -84,6 +92,7 @@ const result = generate(ast); // ❌ Error!
 ```
 
 **After (Working)**:
+
 ```typescript
 import { generate } from '@babel/generator';
 
@@ -172,21 +181,21 @@ Test Files  13 passed (13)
 
 ### Before Fix
 
-| Tool | Status |
-|------|--------|
-| `knowledge.getSchema` | ✅ Working |
-| `knowledge.getComponentList` | ✅ Working |
-| `knowledge.renderScreen` | ❌ **BROKEN** |
+| Tool                         | Status        |
+| ---------------------------- | ------------- |
+| `knowledge.getSchema`        | ✅ Working    |
+| `knowledge.getComponentList` | ✅ Working    |
+| `knowledge.renderScreen`     | ❌ **BROKEN** |
 
 **Overall**: 2/3 tools working (67%)
 
 ### After Fix
 
-| Tool | Status |
-|------|--------|
-| `knowledge.getSchema` | ✅ Working |
-| `knowledge.getComponentList` | ✅ Working |
-| `knowledge.renderScreen` | ✅ **WORKING** |
+| Tool                         | Status         |
+| ---------------------------- | -------------- |
+| `knowledge.getSchema`        | ✅ Working     |
+| `knowledge.getComponentList` | ✅ Working     |
+| `knowledge.renderScreen`     | ✅ **WORKING** |
 
 **Overall**: 3/3 tools working (100%) ✅
 
@@ -210,6 +219,7 @@ npx tsx dist/server/index.js
 ```
 
 ### Build Output
+
 - ✅ No TypeScript errors
 - ✅ All imports resolved correctly
 - ✅ ESM output valid
@@ -220,11 +230,13 @@ npx tsx dist/server/index.js
 ## Impact Analysis
 
 ### User-Facing Changes
+
 - **v0.1.0 Release Status**: Now production-ready
 - **E2E Workflow**: Fully operational
 - **Known Issues**: Resolved
 
 ### Internal Changes
+
 - **Import Pattern**: Changed from default to named import
 - **Build Process**: No changes required
 - **Test Suite**: No changes required (already passing)
@@ -234,6 +246,7 @@ npx tsx dist/server/index.js
 ## Future Recommendations
 
 ### Short-Term (v0.1.1)
+
 - ✅ No immediate action needed
 - Monitor for similar CJS/ESM issues with other dependencies
 
@@ -242,12 +255,14 @@ npx tsx dist/server/index.js
 **Consider implementing esbuild bundling** for production hardening:
 
 **Benefits**:
+
 - Resolves ALL import issues at build time
 - Faster runtime (no module resolution overhead)
 - Smaller bundle size (tree-shaking)
 - Eliminates entire class of ESM/CJS issues
 
 **Implementation**:
+
 ```javascript
 // scripts/build-bundle.js
 import { build } from 'esbuild';
@@ -309,6 +324,7 @@ await build({
 ## Conclusion
 
 **Known Issue #1 is fully resolved** with a simple, robust fix that:
+
 - ✅ Solves the immediate problem
 - ✅ Doesn't break any existing functionality
 - ✅ Requires no build system changes
@@ -320,6 +336,7 @@ await build({
 
 **Resolution Credit**: Named import pattern for CJS/ESM interoperability
 **Debugging Artifacts**:
+
 - `DEBUGGING-PLAN-KNOWN-ISSUE-1.md` - Complete analysis and solution options
 - `test-render-fix.mjs` - Verification script
 

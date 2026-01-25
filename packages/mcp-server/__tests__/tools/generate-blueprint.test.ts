@@ -34,7 +34,7 @@ describe('generateBlueprintTool', () => {
       description: 'User profile dashboard with avatar and bio',
       layout: 'sidebar-left',
       themeId: 'calm-wellness',
-      componentHints: ['Card', 'Avatar', 'Text']
+      componentHints: ['Card', 'Avatar', 'Text'],
     });
 
     expect(result.success).toBe(true);
@@ -48,9 +48,10 @@ describe('generateBlueprintTool', () => {
 
   it('should extract components from description keywords', async () => {
     const result = await generateBlueprintTool({
-      description: 'A dashboard with a card showing user profile information and a button to edit settings',
+      description:
+        'A dashboard with a card showing user profile information and a button to edit settings',
       layout: 'single-column',
-      themeId: 'dynamic-fitness'
+      themeId: 'dynamic-fitness',
     });
 
     expect(result.success).toBe(true);
@@ -65,7 +66,7 @@ describe('generateBlueprintTool', () => {
     const result = await generateBlueprintTool({
       description: 'Test dashboard',
       layout: 'single-column',
-      themeId: 'invalid-theme'
+      themeId: 'invalid-theme',
     });
 
     expect(result.success).toBe(false);
@@ -78,7 +79,7 @@ describe('generateBlueprintTool', () => {
     const result = await generateBlueprintTool({
       description: 'Simple test screen',
       layout: 'single-column',
-      themeId: 'calm-wellness'
+      themeId: 'calm-wellness',
     });
 
     expect(result.success).toBe(true);
@@ -95,13 +96,13 @@ describe('generateBlueprintTool', () => {
     const result1 = await generateBlueprintTool({
       description: 'First screen',
       layout: 'single-column',
-      themeId: 'calm-wellness'
+      themeId: 'calm-wellness',
     });
 
     const result2 = await generateBlueprintTool({
       description: 'Second screen',
       layout: 'single-column',
-      themeId: 'calm-wellness'
+      themeId: 'calm-wellness',
     });
 
     expect(result1.success).toBe(true);

@@ -21,9 +21,8 @@ function clipToGamut(color: OKLCHColor): OKLCHColor {
   const rgb = oklchToRgb(color);
 
   // Check if any RGB value is out of bounds
-  const isInGamut = rgb.r >= 0 && rgb.r <= 255 &&
-                    rgb.g >= 0 && rgb.g <= 255 &&
-                    rgb.b >= 0 && rgb.b <= 255;
+  const isInGamut =
+    rgb.r >= 0 && rgb.r <= 255 && rgb.g >= 0 && rgb.g <= 255 && rgb.b >= 0 && rgb.b <= 255;
 
   if (isInGamut) {
     return color;
@@ -37,9 +36,13 @@ function clipToGamut(color: OKLCHColor): OKLCHColor {
     clippedColor.c = Math.max(0, clippedColor.c - step);
     const testRgb = oklchToRgb(clippedColor);
 
-    const testInGamut = testRgb.r >= 0 && testRgb.r <= 255 &&
-                        testRgb.g >= 0 && testRgb.g <= 255 &&
-                        testRgb.b >= 0 && testRgb.b <= 255;
+    const testInGamut =
+      testRgb.r >= 0 &&
+      testRgb.r <= 255 &&
+      testRgb.g >= 0 &&
+      testRgb.g <= 255 &&
+      testRgb.b >= 0 &&
+      testRgb.b <= 255;
 
     if (testInGamut) {
       break;
@@ -202,7 +205,7 @@ export class TokenGenerator {
   private exportToCSS(tokens: TokenDefinition[]): string {
     const lines = [':root {'];
 
-    tokens.forEach((token) => {
+    tokens.forEach(token => {
       // Export base value
       const hex = oklchToHex(token.value);
       lines.push(`  --${token.name}: ${hex};`);
@@ -221,15 +224,12 @@ export class TokenGenerator {
   private exportToJSON(tokens: TokenDefinition[]): string {
     const output: Record<string, JSONTokenOutput> = {};
 
-    tokens.forEach((token) => {
+    tokens.forEach(token => {
       output[token.name] = {
         value: oklchToHex(token.value),
         oklch: token.value,
         scale: Object.fromEntries(
-          Object.entries(token.scale || {}).map(([step, color]) => [
-            step,
-            oklchToHex(color),
-          ])
+          Object.entries(token.scale || {}).map(([step, color]) => [step, oklchToHex(color)])
         ),
       };
     });
@@ -240,7 +240,7 @@ export class TokenGenerator {
   private exportToJS(tokens: TokenDefinition[]): string {
     const lines = ['// Generated design tokens'];
 
-    tokens.forEach((token) => {
+    tokens.forEach(token => {
       lines.push(`export const ${token.name} = '${oklchToHex(token.value)}';`);
 
       lines.push(`export const ${token.name}Scale = {`);
@@ -256,7 +256,7 @@ export class TokenGenerator {
   private exportToTS(tokens: TokenDefinition[]): string {
     const lines = ['// Generated design tokens', ''];
 
-    tokens.forEach((token) => {
+    tokens.forEach(token => {
       lines.push(`export const ${token.name} = '${oklchToHex(token.value)}' as const;`);
 
       lines.push(`export const ${token.name}Scale = {`);

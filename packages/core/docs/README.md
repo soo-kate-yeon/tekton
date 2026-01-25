@@ -71,6 +71,7 @@ CSS Variables
 ```
 
 **Topics Covered:**
+
 - Architecture principles and design philosophy
 - Each layer's structure and purpose
 - Token resolution algorithm
@@ -84,6 +85,7 @@ CSS Variables
 Complete API documentation with examples:
 
 **Type Definitions:**
+
 - `AtomicTokens` - Foundation tokens
 - `SemanticTokens` - Meaning-based mappings
 - `ComponentTokens` - Component-specific bindings
@@ -91,6 +93,7 @@ Complete API documentation with examples:
 - `ValidationResult` - Validation output
 
 **Functions:**
+
 - `resolveToken()` - Token reference resolution
 - `resolveWithFallback()` - Fallback chain resolution
 - `generateThemeCSS()` - CSS Variables generation
@@ -101,11 +104,13 @@ Complete API documentation with examples:
 Real-world usage patterns:
 
 **Basic Patterns:**
+
 - Minimal theme setup
 - Token resolution
 - CSS generation
 
 **Advanced Patterns:**
+
 - E-commerce theme (complete example)
 - Dark mode implementation
 - Custom component tokens
@@ -113,6 +118,7 @@ Real-world usage patterns:
 - Build-time optimization
 
 **Migration:**
+
 - Backward compatibility
 - Gradual migration strategy
 - Performance optimization
@@ -132,7 +138,7 @@ Professional design token system with clear separation of concerns:
 Multi-level token reference resolution with circular detection:
 
 ```typescript
-resolveToken('component.button.primary.background', tokens)
+resolveToken('component.button.primary.background', tokens);
 // → '#3b82f6' (semantic.foreground.accent → atomic.color.blue.500)
 ```
 
@@ -143,7 +149,11 @@ Built-in dark mode with token overrides:
 ```typescript
 darkMode: {
   tokens: {
-    semantic: { background: { page: 'atomic.color.neutral.900' } }
+    semantic: {
+      background: {
+        page: 'atomic.color.neutral.900';
+      }
+    }
   }
 }
 ```

@@ -142,14 +142,14 @@ WCAG 2.1 AA 규정 준수를 검증하는 핵심 테스트 파일입니다.
 
 ### 주요 검사 항목
 
-| 규칙 ID | 설명 | WCAG 기준 |
-|---------|------|-----------|
-| `color-contrast` | 색상 대비 검사 | 1.4.3 (AA) |
-| `label` | 폼 레이블 검사 | 1.3.1, 4.1.2 |
-| `aria-*` | ARIA 속성 검증 | 4.1.2 |
-| `heading-order` | 헤딩 순서 검사 | 1.3.1 |
-| `image-alt` | 이미지 대체 텍스트 | 1.1.1 |
-| `landmark-*` | 랜드마크 영역 검사 | 1.3.1 |
+| 규칙 ID          | 설명               | WCAG 기준    |
+| ---------------- | ------------------ | ------------ |
+| `color-contrast` | 색상 대비 검사     | 1.4.3 (AA)   |
+| `label`          | 폼 레이블 검사     | 1.3.1, 4.1.2 |
+| `aria-*`         | ARIA 속성 검증     | 4.1.2        |
+| `heading-order`  | 헤딩 순서 검사     | 1.3.1        |
+| `image-alt`      | 이미지 대체 텍스트 | 1.1.1        |
+| `landmark-*`     | 랜드마크 영역 검사 | 1.3.1        |
 
 ## 테스트 작성 가이드
 
@@ -177,28 +177,20 @@ test('새로운 접근성 테스트', async ({ page }) => {
 
 ```typescript
 // 특정 규칙만 활성화
-const results = await new AxeBuilder({ page })
-  .withRules(['color-contrast', 'label'])
-  .analyze();
+const results = await new AxeBuilder({ page }).withRules(['color-contrast', 'label']).analyze();
 
 // 특정 규칙 비활성화
-const results = await new AxeBuilder({ page })
-  .disableRules(['color-contrast'])
-  .analyze();
+const results = await new AxeBuilder({ page }).disableRules(['color-contrast']).analyze();
 ```
 
 ### 특정 요소만 검사
 
 ```typescript
 // CSS 선택자로 특정 요소만 검사
-const results = await new AxeBuilder({ page })
-  .include('#main-content')
-  .analyze();
+const results = await new AxeBuilder({ page }).include('#main-content').analyze();
 
 // 특정 요소 제외
-const results = await new AxeBuilder({ page })
-  .exclude('.third-party-widget')
-  .analyze();
+const results = await new AxeBuilder({ page }).exclude('.third-party-widget').analyze();
 ```
 
 ## CI/CD 통합
@@ -239,11 +231,13 @@ jobs:
 ### 테스트 실패 시
 
 1. **리포트 확인**
+
    ```bash
    pnpm test:a11y:report
    ```
 
 2. **디버그 모드로 실행**
+
    ```bash
    pnpm test:a11y:debug
    ```

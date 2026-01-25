@@ -63,22 +63,22 @@ const theme: ThemeWithTokens = {
     atomic: {
       color: {
         blue: { '500': '#3b82f6', '600': '#2563eb' },
-        neutral: { '50': '#f9fafb', '900': '#111827' }
+        neutral: { '50': '#f9fafb', '900': '#111827' },
       },
       spacing: { '4': '16px', '8': '32px' },
-      radius: { 'md': '8px' }
+      radius: { md: '8px' },
     },
 
     // Layer 2: Semantic Tokens (meaning-based)
     semantic: {
       background: {
         page: 'atomic.color.neutral.50',
-        surface: '#ffffff'
+        surface: '#ffffff',
       },
       foreground: {
         primary: 'atomic.color.neutral.900',
-        accent: 'atomic.color.blue.500'
-      }
+        accent: 'atomic.color.blue.500',
+      },
     },
 
     // Layer 3: Component Tokens (component-specific)
@@ -87,11 +87,11 @@ const theme: ThemeWithTokens = {
         primary: {
           background: 'semantic.foreground.accent',
           foreground: '#ffffff',
-          hover: { background: 'atomic.color.blue.600' }
-        }
-      }
-    }
-  }
+          hover: { background: 'atomic.color.blue.600' },
+        },
+      },
+    },
+  },
 };
 
 // Resolve token with automatic reference resolution
@@ -109,6 +109,7 @@ const css = generateThemeCSS(theme);
 ```
 
 **Key Features:**
+
 - ✅ **3-Layer Architecture**: Atomic → Semantic → Component
 - ✅ **Automatic Resolution**: Multi-level reference resolution with circular detection
 - ✅ **Fallback Chain**: Component → Semantic → Atomic
@@ -132,9 +133,9 @@ resolveToken('component.button.primary.background', tokens);
 
 // Fallback chain (most specific to least specific)
 resolveWithFallback(
-  'component.button.custom.background',  // Try component first
-  'semantic.foreground.accent',          // Fallback to semantic
-  'atomic.color.blue.500',               // Final fallback to atomic
+  'component.button.custom.background', // Try component first
+  'semantic.foreground.accent', // Fallback to semantic
+  'atomic.color.blue.500', // Final fallback to atomic
   tokens
 );
 ```
@@ -149,18 +150,18 @@ const theme: ThemeWithTokens = {
       semantic: {
         background: {
           page: 'atomic.color.neutral.900',
-          surface: 'atomic.color.neutral.800'
-        }
+          surface: 'atomic.color.neutral.800',
+        },
       },
       component: {
         button: {
           primary: {
-            background: 'atomic.color.blue.400'
-          }
-        }
-      }
-    }
-  }
+            background: 'atomic.color.blue.400',
+          },
+        },
+      },
+    },
+  },
 };
 
 // Generate CSS with dark mode
@@ -189,12 +190,7 @@ if (!result.valid) {
 
 ```typescript
 // Type definitions
-import type {
-  AtomicTokens,
-  SemanticTokens,
-  ComponentTokens,
-  ThemeWithTokens
-} from '@tekton/core';
+import type { AtomicTokens, SemanticTokens, ComponentTokens, ThemeWithTokens } from '@tekton/core';
 
 // Token resolution
 import { resolveToken, resolveWithFallback } from '@tekton/core';
@@ -211,12 +207,14 @@ import { validateTheme } from '@tekton/core';
 Resolves a token reference to its final value with multi-level resolution.
 
 **Parameters:**
+
 - `ref: string` - Token reference in dot notation (e.g., `'atomic.color.blue.500'`)
 - `tokens: ThemeWithTokens['tokens']` - Theme token structure
 
 **Returns:** `string` - Resolved token value
 
 **Throws:**
+
 - `Error` - If token not found
 - `Error` - If circular reference detected
 
@@ -245,6 +243,7 @@ resolveToken('#3b82f6', tokens);
 Resolves token with graceful fallback: Component → Semantic → Atomic.
 
 **Parameters:**
+
 - `componentRef: string` - Component-level token reference
 - `semanticRef: string` - Semantic-level token reference (fallback)
 - `atomicRef: string` - Atomic-level token reference (final fallback)
@@ -258,9 +257,9 @@ Resolves token with graceful fallback: Component → Semantic → Atomic.
 
 ```typescript
 resolveWithFallback(
-  'component.button.custom.background',  // Missing (skipped)
-  'semantic.foreground.accent',          // Exists → returns '#3b82f6'
-  'atomic.color.blue.500',               // Not evaluated
+  'component.button.custom.background', // Missing (skipped)
+  'semantic.foreground.accent', // Exists → returns '#3b82f6'
+  'atomic.color.blue.500', // Not evaluated
   tokens
 );
 ```
@@ -270,6 +269,7 @@ resolveWithFallback(
 Generates complete CSS with CSS Variables from theme tokens.
 
 **Parameters:**
+
 - `theme: ThemeWithTokens` - Theme with 3-layer token structure
 
 **Returns:** `string` - Generated CSS with `:root` and `.dark` selectors
@@ -304,13 +304,15 @@ const css = generateThemeCSS(theme);
 Validates theme with token structure using Zod schemas.
 
 **Parameters:**
+
 - `theme: unknown` - Theme object to validate
 
 **Returns:** `ValidationResult`
+
 ```typescript
 interface ValidationResult {
   valid: boolean;
-  errors?: string[];  // Present if valid is false
+  errors?: string[]; // Present if valid is false
 }
 ```
 
@@ -407,6 +409,7 @@ const jsx = renderComponents([
 The token system generates CSS Variables with a consistent naming pattern:
 
 ### Atomic Tokens
+
 ```css
 --color-{palette}-{shade}: {value}
 --spacing-{size}: {value}
@@ -419,6 +422,7 @@ The token system generates CSS Variables with a consistent naming pattern:
 ```
 
 **Examples:**
+
 ```css
 --color-blue-500: #3b82f6;
 --color-neutral-50: #f9fafb;
@@ -429,11 +433,13 @@ The token system generates CSS Variables with a consistent naming pattern:
 ```
 
 ### Semantic Tokens
+
 ```css
 --{category}-{name}: {value}
 ```
 
 **Examples:**
+
 ```css
 --background-page: #f9fafb;
 --foreground-primary: #111827;
@@ -442,12 +448,14 @@ The token system generates CSS Variables with a consistent naming pattern:
 ```
 
 ### Component Tokens
+
 ```css
 --{component}-{variant}-{property}: {value}
 --{component}-{variant}-{state}-{property}: {value}
 ```
 
 **Examples:**
+
 ```css
 /* Button primary variant */
 --button-primary-background: #3b82f6;
@@ -463,6 +471,7 @@ The token system generates CSS Variables with a consistent naming pattern:
 ```
 
 ### Dark Mode Overrides
+
 Dark mode uses the same variable names but scoped to `.dark` class:
 
 ```css
@@ -498,12 +507,14 @@ Dark mode uses the same variable names but scoped to `.dark` class:
 ### From Old Theme System
 
 **Before (0.1.0):**
+
 ```typescript
 const theme = loadTheme('calm-wellness');
 const cssVars = generateCSSVariables(theme);
 ```
 
 **After (0.2.0 with Token System):**
+
 ```typescript
 import type { ThemeWithTokens } from '@tekton/core';
 import { generateThemeCSS } from '@tekton/core';
@@ -515,10 +526,16 @@ const theme = loadTheme('calm-wellness');
 const themeWithTokens: ThemeWithTokens = {
   ...theme,
   tokens: {
-    atomic: { /* ... */ },
-    semantic: { /* ... */ },
-    component: { /* ... */ }
-  }
+    atomic: {
+      /* ... */
+    },
+    semantic: {
+      /* ... */
+    },
+    component: {
+      /* ... */
+    },
+  },
 };
 
 const css = generateThemeCSS(themeWithTokens);
@@ -590,6 +607,7 @@ Button, Input, Card, Text, Heading, Image, Link, List, Form, Modal, Tabs, Table,
 - **Component Layer**: Component-specific bindings (button.primary.background) - usage
 
 Benefits:
+
 - Clear separation of concerns
 - Maintainable theming system
 - Type-safe token references
@@ -625,13 +643,13 @@ Current: **132 tests**, **96.37% coverage**
 
 ### Test Coverage by Module
 
-| Module               | Tests | Coverage |
-|---------------------|-------|----------|
-| Token Types         | 28    | 100%     |
-| Token Resolution    | 35    | 98.5%    |
-| Token Validation    | 32    | 97.2%    |
-| CSS Generation      | 37    | 95.8%    |
-| Core Pipeline       | -     | 83%      |
+| Module           | Tests | Coverage |
+| ---------------- | ----- | -------- |
+| Token Types      | 28    | 100%     |
+| Token Resolution | 35    | 98.5%    |
+| Token Validation | 32    | 97.2%    |
+| CSS Generation   | 37    | 95.8%    |
+| Core Pipeline    | -     | 83%      |
 
 ## Performance
 

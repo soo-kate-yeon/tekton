@@ -2,12 +2,8 @@ export default function HomePage() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-center p-24">
       <div className="max-w-5xl w-full">
-        <h1 className="text-4xl font-bold mb-8 text-center">
-          Tekton Playground
-        </h1>
-        <p className="text-xl text-center mb-8">
-          OKLCH 기반 디자인 토큰 생성기
-        </p>
+        <h1 className="text-4xl font-bold mb-8 text-center">Tekton Playground</h1>
+        <p className="text-xl text-center mb-8">OKLCH 기반 디자인 토큰 생성기</p>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="p-6 border rounded-lg">
             <h2 className="text-2xl font-semibold mb-4">Blueprint 생성</h2>

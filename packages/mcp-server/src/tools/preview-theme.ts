@@ -14,9 +14,7 @@ import { createThemeNotFoundError, extractErrorMessage } from '../utils/error-ha
  * @param input - Theme ID to preview
  * @returns Theme metadata with CSS variables (MCP JSON-RPC format - no preview URL)
  */
-export async function previewThemeTool(
-  input: PreviewThemeInput
-): Promise<PreviewThemeOutput> {
+export async function previewThemeTool(input: PreviewThemeInput): Promise<PreviewThemeOutput> {
   try {
     // SPEC: U-003 @tekton/core Integration - Use loadTheme from @tekton/core
     const theme = loadTheme(input.themeId);
@@ -37,13 +35,13 @@ export async function previewThemeTool(
         id: theme.id,
         name: theme.name,
         description: theme.description,
-        cssVariables
-      }
+        cssVariables,
+      },
     };
   } catch (error) {
     return {
       success: false,
-      error: extractErrorMessage(error)
+      error: extractErrorMessage(error),
     };
   }
 }

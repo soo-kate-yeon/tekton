@@ -12,9 +12,7 @@ function calculateRelativeLuminance(rgb: RGBColor): number {
 
   // Apply gamma correction
   const linearize = (channel: number): number => {
-    return channel <= 0.03928
-      ? channel / 12.92
-      : Math.pow((channel + 0.055) / 1.055, 2.4);
+    return channel <= 0.03928 ? channel / 12.92 : Math.pow((channel + 0.055) / 1.055, 2.4);
   };
 
   const [rl, gl, bl] = [linearize(rs), linearize(gs), linearize(bs)];
@@ -48,9 +46,7 @@ export function checkWCAGCompliance(
   level: 'AA' | 'AAA',
   isLargeText: boolean = false
 ): AccessibilityCheck {
-  const threshold = isLargeText
-    ? level === 'AA' ? 3.0 : 4.5
-    : level === 'AA' ? 4.5 : 7.0;
+  const threshold = isLargeText ? (level === 'AA' ? 3.0 : 4.5) : level === 'AA' ? 4.5 : 7.0;
 
   return {
     contrastRatio,

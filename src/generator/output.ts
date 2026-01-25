@@ -46,7 +46,9 @@ export function exportToCSS(config: ExportConfig): string {
   // Color scales
   Object.entries(colorScales).forEach(([scaleName, scale]) => {
     Object.entries(scale).forEach(([step, color]) => {
-      lines.push(`${indent}--${prefixStr}${scaleName}-${step}:${space}${formatOKLCH(color)};${newline}`);
+      lines.push(
+        `${indent}--${prefixStr}${scaleName}-${step}:${space}${formatOKLCH(color)};${newline}`
+      );
     });
   });
 

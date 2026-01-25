@@ -21,6 +21,7 @@ Tekton MCP Server의 시스템 아키텍처와 데이터 흐름을 설명합니�
 Tekton MCP Server는 **MCP Protocol** 기반의 AI 통합 서버로, Claude Code와의 자연어 상호작용을 통해 디자인 시스템 화면을 생성합니다.
 
 **주요 구성 요소**:
+
 - **MCP Tools**: Claude Code와 통신하는 3개의 MCP 도구
 - **HTTP Server**: 미리보기와 API 엔드포인트를 제공하는 웹 서버
 - **Blueprint Storage**: 타임스탬프 기반 불변 저장소
@@ -233,6 +234,7 @@ graph TD
 ### 블루프린트 생성 흐름
 
 **1단계: 입력 검증**
+
 ```typescript
 // Zod 스키마로 입력 검증
 const validated = GenerateBlueprintInputSchema.parse(input);
@@ -240,6 +242,7 @@ const validated = GenerateBlueprintInputSchema.parse(input);
 ```
 
 **2단계: 테마 로드**
+
 ```typescript
 // @tekton/core에서 테마 로드
 const theme = await loadTheme(validated.themeId);
@@ -247,17 +250,19 @@ const theme = await loadTheme(validated.themeId);
 ```
 
 **3단계: 블루프린트 생성**
+
 ```typescript
 // @tekton/core로 블루프린트 생성
 const blueprint = await createBlueprint({
   description: validated.description,
   layout: validated.layout,
   theme: theme,
-  componentHints: validated.componentHints
+  componentHints: validated.componentHints,
 });
 ```
 
 **4단계: 블루프린트 검증**
+
 ```typescript
 // @tekton/core로 구조 검증
 const isValid = validateBlueprint(blueprint);
@@ -265,6 +270,7 @@ const isValid = validateBlueprint(blueprint);
 ```
 
 **5단계: 타임스탬프 생성 및 충돌 확인**
+
 ```typescript
 let timestamp = Date.now();
 const exists = await storage.exists(timestamp);
@@ -275,17 +281,19 @@ if (exists) {
 ```
 
 **6단계: 저장**
+
 ```typescript
 await storage.save(timestamp, {
   blueprint,
   metadata: {
     createdAt: new Date().toISOString(),
-    themeId: validated.themeId
-  }
+    themeId: validated.themeId,
+  },
 });
 ```
 
 **7단계: 미리보기 URL 생성**
+
 ```typescript
 const previewUrl = `${baseUrl}/preview/${timestamp}/${validated.themeId}`;
 ```
@@ -293,12 +301,14 @@ const previewUrl = `${baseUrl}/preview/${timestamp}/${validated.themeId}`;
 ### 미리보기 렌더링 흐름
 
 **클라이언트 측**:
+
 1. 사용자가 미리보기 URL 방문
 2. HTML 페이지가 테마 CSS 변수와 함께 로드
 3. JavaScript가 `/api/blueprints/:timestamp`에서 블루프린트 가져오기
 4. SPEC-PLAYGROUND-001이 블루프린트를 렌더링
 
 **서버 측**:
+
 ```mermaid
 sequenceDiagram
     participant Browser
@@ -363,29 +373,24 @@ graph LR
 
 ### 재사용되는 함수
 
-| @tekton/core 함수 | 사용 위치 | 목적 |
-|-------------------|----------|------|
-| `loadTheme(id)` | generate-blueprint, preview-theme | 테마 로드 |
-| `createBlueprint()` | generate-blueprint | 블루프린트 생성 |
-| `validateBlueprint()` | generate-blueprint | 구조 검증 |
-| `generateCSSVariables()` | preview-theme, preview-routes | CSS 변수 생성 |
-| `render()` | export-screen | 코드 생성 |
+| @tekton/core 함수        | 사용 위치                         | 목적            |
+| ------------------------ | --------------------------------- | --------------- |
+| `loadTheme(id)`          | generate-blueprint, preview-theme | 테마 로드       |
+| `createBlueprint()`      | generate-blueprint                | 블루프린트 생성 |
+| `validateBlueprint()`    | generate-blueprint                | 구조 검증       |
+| `generateCSSVariables()` | preview-theme, preview-routes     | CSS 변수 생성   |
+| `render()`               | export-screen                     | 코드 생성       |
 
 ### 타입 공유
 
 ```typescript
 // @tekton/core에서 타입 import
-import type {
-  Theme,
-  Blueprint,
-  ComponentNode,
-  LayoutType
-} from '@tekton/core';
+import type { Theme, Blueprint, ComponentNode, LayoutType } from '@tekton/core';
 
 // MCP 서버에서 재사용
 export interface GenerateBlueprintOutput {
   success: boolean;
-  blueprint?: Blueprint;  // @tekton/core의 타입
+  blueprint?: Blueprint; // @tekton/core의 타입
   previewUrl?: string;
   error?: string;
 }
@@ -418,10 +423,13 @@ export interface GenerateBlueprintOutput {
 ```typescript
 interface BlueprintStorage {
   // 블루프린트 저장
-  save(timestamp: number, data: {
-    blueprint: Blueprint;
-    metadata: BlueprintMetadata;
-  }): Promise<void>;
+  save(
+    timestamp: number,
+    data: {
+      blueprint: Blueprint;
+      metadata: BlueprintMetadata;
+    }
+  ): Promise<void>;
 
   // 블루프린트 로드
   load(timestamp: number): Promise<Blueprint | null>;
@@ -484,6 +492,7 @@ themeId: "../../../etc/passwd"
 **방어**:
 
 1. **정규식 검증** (Zod 스키마):
+
 ```typescript
 const ThemeIdSchema = z
   .string()
@@ -491,6 +500,7 @@ const ThemeIdSchema = z
 ```
 
 2. **화이트리스트 검증**:
+
 ```typescript
 const VALID_THEMES = [
   'calm-wellness',
@@ -514,7 +524,7 @@ try {
   if (error instanceof ZodError) {
     return {
       success: false,
-      error: error.errors.map(e => e.message).join(', ')
+      error: error.errors.map(e => e.message).join(', '),
     };
   }
 }
@@ -523,11 +533,13 @@ try {
 ### CORS 설정
 
 **개발 환경**:
+
 ```typescript
 'Access-Control-Allow-Origin': '*'
 ```
 
 **프로덕션 환경** (권장):
+
 ```typescript
 'Access-Control-Allow-Origin': 'https://your-domain.com'
 ```
@@ -544,21 +556,21 @@ try {
 
 ### 블루프린트 생성
 
-| 최적화 기법 | 효과 |
-|------------|------|
-| @tekton/core 재사용 | 50% 빠른 생성 |
-| Zod 스키마 캐싱 | 20% 빠른 검증 |
+| 최적화 기법            | 효과            |
+| ---------------------- | --------------- |
+| @tekton/core 재사용    | 50% 빠른 생성   |
+| Zod 스키마 캐싱        | 20% 빠른 검증   |
 | 타임스탬프 충돌 최소화 | < 0.001% 충돌률 |
 
 **평균 응답 시간**: < 500ms
 
 ### 미리보기 렌더링
 
-| 최적화 기법 | 효과 |
-|------------|------|
-| CSS 변수 캐싱 | 30% 빠른 렌더링 |
+| 최적화 기법        | 효과            |
+| ------------------ | --------------- |
+| CSS 변수 캐싱      | 30% 빠른 렌더링 |
 | HTML 템플릿 재사용 | 40% 메모리 절감 |
-| 정적 파일 제공 | 2x 빠른 로딩 |
+| 정적 파일 제공     | 2x 빠른 로딩    |
 
 **평균 로딩 시간**: < 100ms
 
@@ -567,9 +579,9 @@ try {
 ```typescript
 // 블루프린트 캐시 (LRU)
 const blueprintCache = new LRUCache({
-  max: 100,              // 최대 100개 블루프린트
-  ttl: 1000 * 60 * 30,   // 30분 TTL
-  updateAgeOnGet: true
+  max: 100, // 최대 100개 블루프린트
+  ttl: 1000 * 60 * 30, // 30분 TTL
+  updateAgeOnGet: true,
 });
 
 // 테마 캐시 (영구)
@@ -587,11 +599,13 @@ const themeCache = new Map<string, Theme>();
 const customTheme: Theme = {
   id: 'custom-brand',
   name: 'Custom Brand',
-  colors: { /* ... */ }
+  colors: {
+    /* ... */
+  },
 };
 
 // 2. MCP 서버 자동 감지
-const themes = await loadAllThemes();  // @tekton/core
+const themes = await loadAllThemes(); // @tekton/core
 ```
 
 ### 커스텀 컴포넌트 추가
@@ -600,8 +614,12 @@ const themes = await loadAllThemes();  // @tekton/core
 // 1. @tekton/core에 컴포넌트 정의
 const customComponent: ComponentDefinition = {
   type: 'DataTable',
-  props: { /* ... */ },
-  render: (props) => { /* ... */ }
+  props: {
+    /* ... */
+  },
+  render: props => {
+    /* ... */
+  },
 };
 
 // 2. MCP 서버가 자동으로 사용 가능
@@ -615,10 +633,10 @@ const customComponent: ComponentDefinition = {
 
 ```typescript
 enum LogLevel {
-  ERROR = 'error',    // 치명적 오류
-  WARN = 'warn',      // 경고
-  INFO = 'info',      // 정보
-  DEBUG = 'debug'     // 디버그
+  ERROR = 'error', // 치명적 오류
+  WARN = 'warn', // 경고
+  INFO = 'info', // 정보
+  DEBUG = 'debug', // 디버그
 }
 ```
 
@@ -641,5 +659,6 @@ enum LogLevel {
 ---
 
 **참조**:
+
 - [SPEC-MCP-002](../../.moai/specs/SPEC-MCP-002/spec.md) - 완전한 명세
 - [@tekton/core](../../core/README.md) - 코어 패키지 문서

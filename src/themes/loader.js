@@ -19,21 +19,21 @@ import nextTailwindShadcnTheme from './defaults/next-tailwind-shadcn.json' with 
  * ```
  */
 export class ThemeValidationError extends Error {
-    /**
-     * Validation issues from Zod schema validation
-     */
-    issues;
-    /**
-     * Creates a new ThemeValidationError
-     *
-     * @param message - Error message summarizing validation failures
-     * @param issues - Array of Zod validation issues with field-level details
-     */
-    constructor(message, issues) {
-        super(message);
-        this.name = 'ThemeValidationError';
-        this.issues = issues;
-    }
+  /**
+   * Validation issues from Zod schema validation
+   */
+  issues;
+  /**
+   * Creates a new ThemeValidationError
+   *
+   * @param message - Error message summarizing validation failures
+   * @param issues - Array of Zod validation issues with field-level details
+   */
+  constructor(message, issues) {
+    super(message);
+    this.name = 'ThemeValidationError';
+    this.issues = issues;
+  }
 }
 /**
  * Load and validate a theme from unknown data
@@ -53,17 +53,20 @@ export class ThemeValidationError extends Error {
  * ```
  */
 export function loadTheme(themeData) {
-    const result = ThemeSchema.safeParse(themeData);
-    if (!result.success) {
-        const errorMessages = result.error.issues
-            .map((issue) => {
-            const path = issue.path.join('.');
-            return `${path}: ${issue.message}`;
-        })
-            .join(', ');
-        throw new ThemeValidationError(`Theme validation failed: ${errorMessages}`, result.error.issues);
-    }
-    return result.data;
+  const result = ThemeSchema.safeParse(themeData);
+  if (!result.success) {
+    const errorMessages = result.error.issues
+      .map(issue => {
+        const path = issue.path.join('.');
+        return `${path}: ${issue.message}`;
+      })
+      .join(', ');
+    throw new ThemeValidationError(
+      `Theme validation failed: ${errorMessages}`,
+      result.error.issues
+    );
+  }
+  return result.data;
 }
 /**
  * Load a default theme by ID
@@ -83,14 +86,14 @@ export function loadTheme(themeData) {
  * ```
  */
 export function loadDefaultTheme(themeId) {
-    // Map theme IDs to imported JSON data
-    const themeMap = {
-        'next-tailwind-shadcn': nextTailwindShadcnTheme,
-    };
-    const themeData = themeMap[themeId];
-    if (!themeData) {
-        throw new Error(`Unknown theme ID: ${themeId}`);
-    }
-    return loadTheme(themeData);
+  // Map theme IDs to imported JSON data
+  const themeMap = {
+    'next-tailwind-shadcn': nextTailwindShadcnTheme,
+  };
+  const themeData = themeMap[themeId];
+  if (!themeData) {
+    throw new Error(`Unknown theme ID: ${themeId}`);
+  }
+  return loadTheme(themeData);
 }
 //# sourceMappingURL=loader.js.map

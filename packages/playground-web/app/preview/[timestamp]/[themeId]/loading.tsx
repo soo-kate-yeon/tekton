@@ -40,9 +40,7 @@ export default function Loading() {
         <div className="mt-4 bg-blue-50 border border-blue-200 rounded-lg p-4">
           <div className="flex items-center gap-3">
             <div className="w-5 h-5 border-2 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
-            <p className="text-sm text-blue-700">
-              Blueprint를 불러오는 중...
-            </p>
+            <p className="text-sm text-blue-700">Blueprint를 불러오는 중...</p>
           </div>
         </div>
       </div>

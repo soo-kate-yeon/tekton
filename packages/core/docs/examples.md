@@ -31,18 +31,18 @@ const theme: ThemeWithTokens = {
     atomic: {
       color: {
         primary: { '500': '#3b82f6' },
-        neutral: { '50': '#f9fafb', '900': '#111827' }
+        neutral: { '50': '#f9fafb', '900': '#111827' },
       },
       spacing: { '4': '16px' },
-      radius: { 'md': '8px' },
+      radius: { md: '8px' },
       typography: {
         body: {
           fontSize: '16px',
           lineHeight: '24px',
-          fontWeight: '400'
-        }
+          fontWeight: '400',
+        },
       },
-      shadow: { 'md': '0 4px 6px -1px rgb(0 0 0 / 0.1)' }
+      shadow: { md: '0 4px 6px -1px rgb(0 0 0 / 0.1)' },
     },
     semantic: {
       background: {
@@ -50,27 +50,27 @@ const theme: ThemeWithTokens = {
         surface: '#ffffff',
         elevated: '#ffffff',
         muted: 'atomic.color.neutral.50',
-        inverse: 'atomic.color.neutral.900'
+        inverse: 'atomic.color.neutral.900',
       },
       foreground: {
         primary: 'atomic.color.neutral.900',
         secondary: '#6b7280',
         muted: '#9ca3af',
         inverse: '#ffffff',
-        accent: 'atomic.color.primary.500'
+        accent: 'atomic.color.primary.500',
       },
       border: {
         default: '#e5e7eb',
         muted: '#f3f4f6',
         focus: 'atomic.color.primary.500',
-        error: '#ef4444'
+        error: '#ef4444',
       },
       surface: {
         primary: '#ffffff',
         secondary: 'atomic.color.neutral.50',
         tertiary: '#f3f4f6',
-        inverse: 'atomic.color.neutral.900'
-      }
+        inverse: 'atomic.color.neutral.900',
+      },
     },
     component: {
       button: {
@@ -80,16 +80,16 @@ const theme: ThemeWithTokens = {
           border: 'semantic.foreground.accent',
           hover: {
             background: 'atomic.color.primary.600',
-            foreground: '#ffffff'
+            foreground: '#ffffff',
           },
           active: {
-            background: 'atomic.color.primary.700'
+            background: 'atomic.color.primary.700',
           },
           disabled: {
             background: 'semantic.background.muted',
-            foreground: 'semantic.foreground.muted'
-          }
-        }
+            foreground: 'semantic.foreground.muted',
+          },
+        },
       },
       input: {
         background: 'semantic.background.surface',
@@ -98,25 +98,25 @@ const theme: ThemeWithTokens = {
         placeholder: 'semantic.foreground.muted',
         focus: {
           border: 'semantic.border.focus',
-          ring: 'atomic.color.primary.500'
+          ring: 'atomic.color.primary.500',
         },
         error: {
           border: 'semantic.border.error',
-          ring: '#ef4444'
+          ring: '#ef4444',
         },
         disabled: {
           background: 'semantic.background.muted',
-          foreground: 'semantic.foreground.muted'
-        }
+          foreground: 'semantic.foreground.muted',
+        },
       },
       card: {
         background: 'semantic.background.surface',
         foreground: 'semantic.foreground.primary',
         border: 'semantic.border.default',
-        shadow: 'atomic.shadow.md'
-      }
-    }
-  }
+        shadow: 'atomic.shadow.md',
+      },
+    },
+  },
 };
 
 // Validate theme
@@ -158,11 +158,11 @@ const ecommerceTheme: ThemeWithTokens = {
           '200': '#bfdbfe',
           '300': '#93c5fd',
           '400': '#60a5fa',
-          '500': '#3b82f6',  // Primary brand color
+          '500': '#3b82f6', // Primary brand color
           '600': '#2563eb',
           '700': '#1d4ed8',
           '800': '#1e40af',
-          '900': '#1e3a8a'
+          '900': '#1e3a8a',
         },
         neutral: {
           '50': '#f9fafb',
@@ -174,22 +174,22 @@ const ecommerceTheme: ThemeWithTokens = {
           '600': '#4b5563',
           '700': '#374151',
           '800': '#1f2937',
-          '900': '#111827'
+          '900': '#111827',
         },
         success: {
           '500': '#10b981',
           '600': '#059669',
-          '700': '#047857'
+          '700': '#047857',
         },
         warning: {
           '500': '#f59e0b',
-          '600': '#d97706'
+          '600': '#d97706',
         },
         error: {
           '500': '#ef4444',
           '600': '#dc2626',
-          '700': '#b91c1c'
-        }
+          '700': '#b91c1c',
+        },
       },
       spacing: {
         '1': '4px',
@@ -201,64 +201,64 @@ const ecommerceTheme: ThemeWithTokens = {
         '8': '32px',
         '10': '40px',
         '12': '48px',
-        '16': '64px'
+        '16': '64px',
       },
       radius: {
-        'none': '0px',
-        'sm': '4px',
-        'md': '8px',
-        'lg': '12px',
-        'xl': '16px',
-        'full': '9999px'
+        none: '0px',
+        sm: '4px',
+        md: '8px',
+        lg: '12px',
+        xl: '16px',
+        full: '9999px',
       },
       typography: {
-        'xs': {
+        xs: {
           fontSize: '12px',
           lineHeight: '16px',
-          fontWeight: '400'
+          fontWeight: '400',
         },
-        'sm': {
+        sm: {
           fontSize: '14px',
           lineHeight: '20px',
-          fontWeight: '400'
+          fontWeight: '400',
         },
-        'base': {
+        base: {
           fontSize: '16px',
           lineHeight: '24px',
-          fontWeight: '400'
+          fontWeight: '400',
         },
-        'lg': {
+        lg: {
           fontSize: '18px',
           lineHeight: '28px',
-          fontWeight: '400'
+          fontWeight: '400',
         },
-        'xl': {
+        xl: {
           fontSize: '20px',
           lineHeight: '28px',
-          fontWeight: '500'
+          fontWeight: '500',
         },
         '2xl': {
           fontSize: '24px',
           lineHeight: '32px',
-          fontWeight: '600'
+          fontWeight: '600',
         },
         '3xl': {
           fontSize: '30px',
           lineHeight: '36px',
-          fontWeight: '700'
-        }
+          fontWeight: '700',
+        },
       },
       shadow: {
-        'sm': '0 1px 2px 0 rgb(0 0 0 / 0.05)',
-        'md': '0 4px 6px -1px rgb(0 0 0 / 0.1)',
-        'lg': '0 10px 15px -3px rgb(0 0 0 / 0.1)',
-        'xl': '0 20px 25px -5px rgb(0 0 0 / 0.1)'
+        sm: '0 1px 2px 0 rgb(0 0 0 / 0.05)',
+        md: '0 4px 6px -1px rgb(0 0 0 / 0.1)',
+        lg: '0 10px 15px -3px rgb(0 0 0 / 0.1)',
+        xl: '0 20px 25px -5px rgb(0 0 0 / 0.1)',
       },
       transition: {
-        'fast': '100ms cubic-bezier(0.4, 0, 0.2, 1)',
-        'base': '150ms cubic-bezier(0.4, 0, 0.2, 1)',
-        'slow': '300ms cubic-bezier(0.4, 0, 0.2, 1)'
-      }
+        fast: '100ms cubic-bezier(0.4, 0, 0.2, 1)',
+        base: '150ms cubic-bezier(0.4, 0, 0.2, 1)',
+        slow: '300ms cubic-bezier(0.4, 0, 0.2, 1)',
+      },
     },
 
     // Layer 2: Semantic Tokens
@@ -268,27 +268,27 @@ const ecommerceTheme: ThemeWithTokens = {
         surface: '#ffffff',
         elevated: '#ffffff',
         muted: 'atomic.color.neutral.100',
-        inverse: 'atomic.color.neutral.900'
+        inverse: 'atomic.color.neutral.900',
       },
       foreground: {
         primary: 'atomic.color.neutral.900',
         secondary: 'atomic.color.neutral.600',
         muted: 'atomic.color.neutral.400',
         inverse: '#ffffff',
-        accent: 'atomic.color.brand.500'
+        accent: 'atomic.color.brand.500',
       },
       border: {
         default: 'atomic.color.neutral.200',
         muted: 'atomic.color.neutral.100',
         focus: 'atomic.color.brand.500',
-        error: 'atomic.color.error.500'
+        error: 'atomic.color.error.500',
       },
       surface: {
         primary: '#ffffff',
         secondary: 'atomic.color.neutral.50',
         tertiary: 'atomic.color.neutral.100',
-        inverse: 'atomic.color.neutral.900'
-      }
+        inverse: 'atomic.color.neutral.900',
+      },
     },
 
     // Layer 3: Component Tokens
@@ -300,15 +300,15 @@ const ecommerceTheme: ThemeWithTokens = {
           border: 'semantic.foreground.accent',
           hover: {
             background: 'atomic.color.brand.600',
-            foreground: '#ffffff'
+            foreground: '#ffffff',
           },
           active: {
-            background: 'atomic.color.brand.700'
+            background: 'atomic.color.brand.700',
           },
           disabled: {
             background: 'semantic.background.muted',
-            foreground: 'semantic.foreground.muted'
-          }
+            foreground: 'semantic.foreground.muted',
+          },
         },
         secondary: {
           background: 'transparent',
@@ -316,15 +316,15 @@ const ecommerceTheme: ThemeWithTokens = {
           border: 'semantic.border.default',
           hover: {
             background: 'semantic.background.muted',
-            foreground: 'semantic.foreground.primary'
+            foreground: 'semantic.foreground.primary',
           },
           active: {
-            background: 'semantic.background.muted'
+            background: 'semantic.background.muted',
           },
           disabled: {
             background: 'transparent',
-            foreground: 'semantic.foreground.muted'
-          }
+            foreground: 'semantic.foreground.muted',
+          },
         },
         success: {
           background: 'atomic.color.success.500',
@@ -332,16 +332,16 @@ const ecommerceTheme: ThemeWithTokens = {
           border: 'atomic.color.success.500',
           hover: {
             background: 'atomic.color.success.600',
-            foreground: '#ffffff'
+            foreground: '#ffffff',
           },
           active: {
-            background: 'atomic.color.success.700'
+            background: 'atomic.color.success.700',
           },
           disabled: {
             background: 'semantic.background.muted',
-            foreground: 'semantic.foreground.muted'
-          }
-        }
+            foreground: 'semantic.foreground.muted',
+          },
+        },
       },
       input: {
         background: 'semantic.background.surface',
@@ -350,22 +350,22 @@ const ecommerceTheme: ThemeWithTokens = {
         placeholder: 'semantic.foreground.muted',
         focus: {
           border: 'semantic.border.focus',
-          ring: 'atomic.color.brand.500'
+          ring: 'atomic.color.brand.500',
         },
         error: {
           border: 'semantic.border.error',
-          ring: 'atomic.color.error.500'
+          ring: 'atomic.color.error.500',
         },
         disabled: {
           background: 'semantic.background.muted',
-          foreground: 'semantic.foreground.muted'
-        }
+          foreground: 'semantic.foreground.muted',
+        },
       },
       card: {
         background: 'semantic.background.surface',
         foreground: 'semantic.foreground.primary',
         border: 'semantic.border.default',
-        shadow: 'atomic.shadow.md'
+        shadow: 'atomic.shadow.md',
       },
       // Custom: Product Card
       productCard: {
@@ -374,8 +374,8 @@ const ecommerceTheme: ThemeWithTokens = {
         shadow: 'atomic.shadow.md',
         hover: {
           shadow: 'atomic.shadow.lg',
-          border: 'semantic.border.focus'
-        }
+          border: 'semantic.border.focus',
+        },
       },
       // Custom: Price Tag
       priceTag: {
@@ -383,11 +383,11 @@ const ecommerceTheme: ThemeWithTokens = {
         foreground: 'atomic.color.brand.700',
         discount: {
           background: 'atomic.color.error.500',
-          foreground: '#ffffff'
-        }
-      }
-    }
-  }
+          foreground: '#ffffff',
+        },
+      },
+    },
+  },
 };
 
 export default ecommerceTheme;
@@ -412,7 +412,7 @@ const darkModeTheme: ThemeWithTokens = {
         blue: {
           '400': '#60a5fa',
           '500': '#3b82f6',
-          '600': '#2563eb'
+          '600': '#2563eb',
         },
         neutral: {
           '50': '#f9fafb',
@@ -420,22 +420,22 @@ const darkModeTheme: ThemeWithTokens = {
           '200': '#e5e7eb',
           '700': '#374151',
           '800': '#1f2937',
-          '900': '#111827'
-        }
+          '900': '#111827',
+        },
       },
       spacing: { '4': '16px' },
-      radius: { 'md': '8px' },
+      radius: { md: '8px' },
       typography: {
         body: {
           fontSize: '16px',
           lineHeight: '24px',
-          fontWeight: '400'
-        }
+          fontWeight: '400',
+        },
       },
       shadow: {
-        'md': '0 4px 6px -1px rgb(0 0 0 / 0.3)',
-        'md-dark': '0 4px 6px -1px rgb(0 0 0 / 0.6)'
-      }
+        md: '0 4px 6px -1px rgb(0 0 0 / 0.3)',
+        'md-dark': '0 4px 6px -1px rgb(0 0 0 / 0.6)',
+      },
     },
     semantic: {
       background: {
@@ -443,27 +443,27 @@ const darkModeTheme: ThemeWithTokens = {
         surface: '#ffffff',
         elevated: '#ffffff',
         muted: 'atomic.color.neutral.100',
-        inverse: 'atomic.color.neutral.900'
+        inverse: 'atomic.color.neutral.900',
       },
       foreground: {
         primary: 'atomic.color.neutral.900',
         secondary: '#6b7280',
         muted: '#9ca3af',
         inverse: '#ffffff',
-        accent: 'atomic.color.blue.500'
+        accent: 'atomic.color.blue.500',
       },
       border: {
         default: 'atomic.color.neutral.200',
         muted: 'atomic.color.neutral.100',
         focus: 'atomic.color.blue.500',
-        error: '#ef4444'
+        error: '#ef4444',
       },
       surface: {
         primary: '#ffffff',
         secondary: 'atomic.color.neutral.50',
         tertiary: 'atomic.color.neutral.100',
-        inverse: 'atomic.color.neutral.900'
-      }
+        inverse: 'atomic.color.neutral.900',
+      },
     },
     component: {
       button: {
@@ -473,16 +473,16 @@ const darkModeTheme: ThemeWithTokens = {
           border: 'semantic.foreground.accent',
           hover: {
             background: 'atomic.color.blue.600',
-            foreground: '#ffffff'
+            foreground: '#ffffff',
           },
           active: {
-            background: 'atomic.color.blue.700'
+            background: 'atomic.color.blue.700',
           },
           disabled: {
             background: 'semantic.background.muted',
-            foreground: 'semantic.foreground.muted'
-          }
-        }
+            foreground: 'semantic.foreground.muted',
+          },
+        },
       },
       input: {
         background: 'semantic.background.surface',
@@ -491,24 +491,24 @@ const darkModeTheme: ThemeWithTokens = {
         placeholder: 'semantic.foreground.muted',
         focus: {
           border: 'semantic.border.focus',
-          ring: 'atomic.color.blue.500'
+          ring: 'atomic.color.blue.500',
         },
         error: {
           border: 'semantic.border.error',
-          ring: '#ef4444'
+          ring: '#ef4444',
         },
         disabled: {
           background: 'semantic.background.muted',
-          foreground: 'semantic.foreground.muted'
-        }
+          foreground: 'semantic.foreground.muted',
+        },
       },
       card: {
         background: 'semantic.background.surface',
         foreground: 'semantic.foreground.primary',
         border: 'semantic.border.default',
-        shadow: 'atomic.shadow.md'
-      }
-    }
+        shadow: 'atomic.shadow.md',
+      },
+    },
   },
 
   // Dark Mode Overrides
@@ -521,7 +521,7 @@ const darkModeTheme: ThemeWithTokens = {
           surface: 'atomic.color.neutral.800',
           elevated: 'atomic.color.neutral.700',
           muted: 'atomic.color.neutral.800',
-          inverse: 'atomic.color.neutral.50'
+          inverse: 'atomic.color.neutral.50',
         },
         // Invert foregrounds
         foreground: {
@@ -529,41 +529,41 @@ const darkModeTheme: ThemeWithTokens = {
           secondary: 'atomic.color.neutral.200',
           muted: '#9ca3af',
           inverse: 'atomic.color.neutral.900',
-          accent: 'atomic.color.blue.400'  // Lighter for dark mode
+          accent: 'atomic.color.blue.400', // Lighter for dark mode
         },
         // Adjust borders
         border: {
           default: '#374151',
           muted: '#1f2937',
           focus: 'atomic.color.blue.400',
-          error: '#ef4444'
+          error: '#ef4444',
         },
         // Invert surfaces
         surface: {
           primary: 'atomic.color.neutral.800',
           secondary: 'atomic.color.neutral.700',
           tertiary: '#374151',
-          inverse: 'atomic.color.neutral.50'
-        }
+          inverse: 'atomic.color.neutral.50',
+        },
       },
       component: {
         button: {
           primary: {
-            background: 'atomic.color.blue.400',  // Lighter for dark mode
+            background: 'atomic.color.blue.400', // Lighter for dark mode
             hover: {
-              background: 'atomic.color.blue.500'
+              background: 'atomic.color.blue.500',
             },
             active: {
-              background: 'atomic.color.blue.600'
-            }
-          }
+              background: 'atomic.color.blue.600',
+            },
+          },
         },
         card: {
-          shadow: 'atomic.shadow.md-dark'  // Stronger shadow for dark mode
-        }
-      }
-    }
-  }
+          shadow: 'atomic.shadow.md-dark', // Stronger shadow for dark mode
+        },
+      },
+    },
+  },
 };
 
 export default darkModeTheme;
@@ -603,9 +603,7 @@ function App() {
 
   return (
     <div className="app">
-      <button onClick={() => setIsDark(!isDark)}>
-        Toggle {isDark ? 'Light' : 'Dark'} Mode
-      </button>
+      <button onClick={() => setIsDark(!isDark)}>Toggle {isDark ? 'Light' : 'Dark'} Mode</button>
       <div className="card">
         <h1>Dark Mode Example</h1>
         <p>This card adapts to dark mode automatically.</p>
@@ -703,17 +701,17 @@ const customTheme: ThemeWithTokens = {
         green: { '50': '#f0fdf4', '500': '#10b981', '700': '#047857' },
         yellow: { '50': '#fefce8', '500': '#f59e0b', '700': '#d97706' },
         red: { '50': '#fef2f2', '500': '#ef4444', '700': '#b91c1c' },
-        neutral: { '50': '#f9fafb', '900': '#111827' }
+        neutral: { '50': '#f9fafb', '900': '#111827' },
       },
       spacing: { '4': '16px' },
-      radius: { 'md': '8px', 'full': '9999px' },
+      radius: { md: '8px', full: '9999px' },
       typography: {
-        body: { fontSize: '16px', lineHeight: '24px', fontWeight: '400' }
+        body: { fontSize: '16px', lineHeight: '24px', fontWeight: '400' },
       },
       shadow: {
-        'md': '0 4px 6px -1px rgb(0 0 0 / 0.1)',
-        'lg': '0 10px 15px -3px rgb(0 0 0 / 0.1)'
-      }
+        md: '0 4px 6px -1px rgb(0 0 0 / 0.1)',
+        lg: '0 10px 15px -3px rgb(0 0 0 / 0.1)',
+      },
     },
     semantic: {
       background: {
@@ -721,27 +719,27 @@ const customTheme: ThemeWithTokens = {
         surface: '#ffffff',
         elevated: '#ffffff',
         muted: 'atomic.color.neutral.50',
-        inverse: 'atomic.color.neutral.900'
+        inverse: 'atomic.color.neutral.900',
       },
       foreground: {
         primary: 'atomic.color.neutral.900',
         secondary: '#6b7280',
         muted: '#9ca3af',
         inverse: '#ffffff',
-        accent: 'atomic.color.blue.500'
+        accent: 'atomic.color.blue.500',
       },
       border: {
         default: '#e5e7eb',
         muted: '#f3f4f6',
         focus: 'atomic.color.blue.500',
-        error: 'atomic.color.red.500'
+        error: 'atomic.color.red.500',
       },
       surface: {
         primary: '#ffffff',
         secondary: 'atomic.color.neutral.50',
         tertiary: '#f3f4f6',
-        inverse: 'atomic.color.neutral.900'
-      }
+        inverse: 'atomic.color.neutral.900',
+      },
     },
     component: {
       button: {
@@ -753,9 +751,9 @@ const customTheme: ThemeWithTokens = {
           active: { background: 'atomic.color.blue.700' },
           disabled: {
             background: 'semantic.background.muted',
-            foreground: 'semantic.foreground.muted'
-          }
-        }
+            foreground: 'semantic.foreground.muted',
+          },
+        },
       },
       input: {
         background: 'semantic.background.surface',
@@ -764,22 +762,22 @@ const customTheme: ThemeWithTokens = {
         placeholder: 'semantic.foreground.muted',
         focus: {
           border: 'semantic.border.focus',
-          ring: 'atomic.color.blue.500'
+          ring: 'atomic.color.blue.500',
         },
         error: {
           border: 'semantic.border.error',
-          ring: 'atomic.color.red.500'
+          ring: 'atomic.color.red.500',
         },
         disabled: {
           background: 'semantic.background.muted',
-          foreground: 'semantic.foreground.muted'
-        }
+          foreground: 'semantic.foreground.muted',
+        },
       },
       card: {
         background: 'semantic.background.surface',
         foreground: 'semantic.foreground.primary',
         border: 'semantic.border.default',
-        shadow: 'atomic.shadow.md'
+        shadow: 'atomic.shadow.md',
       },
 
       // Custom Components
@@ -787,54 +785,54 @@ const customTheme: ThemeWithTokens = {
         default: {
           background: 'semantic.background.muted',
           foreground: 'semantic.foreground.secondary',
-          border: 'semantic.border.default'
+          border: 'semantic.border.default',
         },
         success: {
           background: 'atomic.color.green.50',
-          foreground: 'atomic.color.green.700'
+          foreground: 'atomic.color.green.700',
         },
         warning: {
           background: 'atomic.color.yellow.50',
-          foreground: 'atomic.color.yellow.700'
+          foreground: 'atomic.color.yellow.700',
         },
         error: {
           background: 'atomic.color.red.50',
-          foreground: 'atomic.color.red.700'
-        }
+          foreground: 'atomic.color.red.700',
+        },
       },
       tooltip: {
         background: 'atomic.color.neutral.900',
         foreground: '#ffffff',
-        shadow: 'atomic.shadow.lg'
+        shadow: 'atomic.shadow.lg',
       },
       alert: {
         info: {
           background: 'atomic.color.blue.50',
           foreground: 'atomic.color.blue.700',
           border: 'atomic.color.blue.500',
-          icon: 'atomic.color.blue.500'
+          icon: 'atomic.color.blue.500',
         },
         success: {
           background: 'atomic.color.green.50',
           foreground: 'atomic.color.green.700',
           border: 'atomic.color.green.500',
-          icon: 'atomic.color.green.500'
+          icon: 'atomic.color.green.500',
         },
         warning: {
           background: 'atomic.color.yellow.50',
           foreground: 'atomic.color.yellow.700',
           border: 'atomic.color.yellow.500',
-          icon: 'atomic.color.yellow.500'
+          icon: 'atomic.color.yellow.500',
         },
         error: {
           background: 'atomic.color.red.50',
           foreground: 'atomic.color.red.700',
           border: 'atomic.color.red.500',
-          icon: 'atomic.color.red.500'
-        }
-      }
-    } as CustomComponentTokens
-  }
+          icon: 'atomic.color.red.500',
+        },
+      },
+    } as CustomComponentTokens,
+  },
 };
 
 export default customTheme;
@@ -853,30 +851,30 @@ import { resolveToken } from '@tekton/core';
 const tokens = {
   atomic: {
     color: {
-      blue: { '500': '#3b82f6', '600': '#2563eb' }
-    }
+      blue: { '500': '#3b82f6', '600': '#2563eb' },
+    },
   },
   semantic: {
     foreground: {
-      accent: 'atomic.color.blue.500'  // References atomic
-    }
+      accent: 'atomic.color.blue.500', // References atomic
+    },
   },
   component: {
     button: {
       primary: {
-        background: 'semantic.foreground.accent'  // References semantic
-      }
-    }
-  }
+        background: 'semantic.foreground.accent', // References semantic
+      },
+    },
+  },
 };
 
 // Single-level resolution
 const blue500 = resolveToken('atomic.color.blue.500', tokens);
-console.log(blue500);  // → '#3b82f6'
+console.log(blue500); // → '#3b82f6'
 
 // Two-level resolution
 const accent = resolveToken('semantic.foreground.accent', tokens);
-console.log(accent);  // → '#3b82f6' (via atomic.color.blue.500)
+console.log(accent); // → '#3b82f6' (via atomic.color.blue.500)
 
 // Three-level resolution
 const buttonBg = resolveToken('component.button.primary.background', tokens);
@@ -892,17 +890,17 @@ import { resolveWithFallback } from '@tekton/core';
 // Use fallback for custom variants
 function getButtonColor(variant: string, tokens: any): string {
   return resolveWithFallback(
-    `component.button.${variant}.background`,  // Try custom variant
-    'semantic.foreground.accent',              // Fallback to accent
-    'atomic.color.blue.500',                   // Final fallback
+    `component.button.${variant}.background`, // Try custom variant
+    'semantic.foreground.accent', // Fallback to accent
+    'atomic.color.blue.500', // Final fallback
     tokens
   );
 }
 
 // Usage
-const primaryColor = getButtonColor('primary', tokens);    // → component token
-const customColor = getButtonColor('custom', tokens);      // → semantic fallback
-const unknownColor = getButtonColor('unknown', tokens);    // → atomic fallback
+const primaryColor = getButtonColor('primary', tokens); // → component token
+const customColor = getButtonColor('custom', tokens); // → semantic fallback
+const unknownColor = getButtonColor('unknown', tokens); // → atomic fallback
 ```
 
 ---
@@ -920,7 +918,7 @@ const ThemeContext = createContext<ThemeWithTokens | null>(null);
 
 export function ThemeProvider({
   theme,
-  children
+  children,
 }: {
   theme: ThemeWithTokens;
   children: React.ReactNode;
@@ -944,11 +942,7 @@ export function ThemeProvider({
     };
   }, [theme]);
 
-  return (
-    <ThemeContext.Provider value={theme}>
-      {children}
-    </ThemeContext.Provider>
-  );
+  return <ThemeContext.Provider value={theme}>{children}</ThemeContext.Provider>;
 }
 
 export function useTheme() {
@@ -966,11 +960,7 @@ export function useTheme() {
 import { useTheme } from './ThemeProvider';
 
 function Button({ variant = 'primary', children }: any) {
-  return (
-    <button className={`button-${variant}`}>
-      {children}
-    </button>
-  );
+  return <button className={`button-${variant}`}>{children}</button>;
 }
 
 function App() {
@@ -1025,17 +1015,23 @@ import type { ThemeWithTokens } from '@tekton/core';
 
 // Option 1: Keep using old themes (backward compatible)
 const theme = loadTheme('calm-wellness');
-const cssVars = generateCSSVariables(theme);  // Still works
+const cssVars = generateCSSVariables(theme); // Still works
 
 // Option 2: Extend with token system
 const themeWithTokens: ThemeWithTokens = {
   id: 'calm-wellness',
   name: 'Calm Wellness',
   tokens: {
-    atomic: { /* ... */ },
-    semantic: { /* ... */ },
-    component: { /* ... */ }
-  }
+    atomic: {
+      /* ... */
+    },
+    semantic: {
+      /* ... */
+    },
+    component: {
+      /* ... */
+    },
+  },
 };
 
 const css = generateThemeCSS(themeWithTokens);

@@ -7,6 +7,7 @@ Tekton MCP Server를 5분 안에 시작하세요.
 Tekton MCP Server는 Claude Code와 통합되어 자연어로 디자인 시스템 화면을 생성하는 MCP Protocol 서버입니다.
 
 **핵심 기능**:
+
 - 🤖 **Claude Code 통합**: MCP Protocol을 통한 AI 기반 블루프린트 생성
 - 🎨 **13개 내장 테마**: OKLCH 기반 색상 시스템으로 일관된 디자인
 - 📋 **타입 안전 블루프린트**: Zod 스키마 검증으로 오류 방지

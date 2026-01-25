@@ -9,7 +9,7 @@ import { exportScreenTool } from './tools/export-screen.js';
 import {
   GenerateBlueprintInputSchema,
   PreviewThemeInputSchema,
-  ExportScreenInputSchema
+  ExportScreenInputSchema,
 } from './schemas/mcp-schemas.js';
 
 const server = new Server(
@@ -30,7 +30,7 @@ const server = new Server(
 
 server.setRequestHandler(ListToolsRequestSchema, async () => {
   info('ListTools request received');
-  
+
   return {
     tools: [
       {
@@ -43,26 +43,33 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
               type: 'string',
               description: 'Natural language description of the screen (10-500 characters)',
               minLength: 10,
-              maxLength: 500
+              maxLength: 500,
             },
             layout: {
               type: 'string',
               description: 'Layout type for the screen',
-              enum: ['single-column', 'two-column', 'sidebar-left', 'sidebar-right', 'dashboard', 'landing']
+              enum: [
+                'single-column',
+                'two-column',
+                'sidebar-left',
+                'sidebar-right',
+                'dashboard',
+                'landing',
+              ],
             },
             themeId: {
               type: 'string',
               description: 'Theme ID (lowercase alphanumeric with hyphens)',
-              pattern: '^[a-z0-9-]+$'
+              pattern: '^[a-z0-9-]+$',
             },
             componentHints: {
               type: 'array',
               description: 'Optional component type hints',
-              items: { type: 'string' }
-            }
+              items: { type: 'string' },
+            },
           },
-          required: ['description', 'layout', 'themeId']
-        }
+          required: ['description', 'layout', 'themeId'],
+        },
       },
       {
         name: 'preview-theme',
@@ -73,11 +80,11 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
             themeId: {
               type: 'string',
               description: 'Theme ID to preview (lowercase alphanumeric with hyphens)',
-              pattern: '^[a-z0-9-]+$'
-            }
+              pattern: '^[a-z0-9-]+$',
+            },
           },
-          required: ['themeId']
-        }
+          required: ['themeId'],
+        },
       },
       {
         name: 'export-screen',
@@ -87,18 +94,18 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
           properties: {
             blueprint: {
               type: 'object',
-              description: 'Blueprint object to export'
+              description: 'Blueprint object to export',
             },
             format: {
               type: 'string',
               description: 'Export format',
-              enum: ['jsx', 'tsx', 'vue']
-            }
+              enum: ['jsx', 'tsx', 'vue'],
+            },
           },
-          required: ['blueprint', 'format']
-        }
-      }
-    ]
+          required: ['blueprint', 'format'],
+        },
+      },
+    ],
   };
 });
 
@@ -106,67 +113,79 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
 // Task #10: CallToolRequestSchema Handler
 // ============================================================================
 
-server.setRequestHandler(CallToolRequestSchema, async (request) => {
+server.setRequestHandler(CallToolRequestSchema, async request => {
   const { name, arguments: args } = request.params;
-  
+
   info(`CallTool request: ${name}`);
-  
+
   try {
     switch (name) {
       case 'generate-blueprint': {
         // Validate input
         const validatedInput = GenerateBlueprintInputSchema.parse(args);
         const result = await generateBlueprintTool(validatedInput);
-        
+
         return {
-          content: [{
-            type: 'text',
-            text: JSON.stringify(result, null, 2)
-          }]
+          content: [
+            {
+              type: 'text',
+              text: JSON.stringify(result, null, 2),
+            },
+          ],
         };
       }
-      
+
       case 'preview-theme': {
         // Validate input
         const validatedInput = PreviewThemeInputSchema.parse(args);
         const result = await previewThemeTool(validatedInput);
-        
+
         return {
-          content: [{
-            type: 'text',
-            text: JSON.stringify(result, null, 2)
-          }]
+          content: [
+            {
+              type: 'text',
+              text: JSON.stringify(result, null, 2),
+            },
+          ],
         };
       }
-      
+
       case 'export-screen': {
         // Validate input
         const validatedInput = ExportScreenInputSchema.parse(args);
         const result = await exportScreenTool(validatedInput);
-        
+
         return {
-          content: [{
-            type: 'text',
-            text: JSON.stringify(result, null, 2)
-          }]
+          content: [
+            {
+              type: 'text',
+              text: JSON.stringify(result, null, 2),
+            },
+          ],
         };
       }
-      
+
       default:
         throw new Error(`Unknown tool: ${name}`);
     }
   } catch (error) {
     logError(`Tool execution error: ${error}`);
-    
+
     return {
-      content: [{
-        type: 'text',
-        text: JSON.stringify({
-          success: false,
-          error: error instanceof Error ? error.message : String(error)
-        }, null, 2)
-      }],
-      isError: true
+      content: [
+        {
+          type: 'text',
+          text: JSON.stringify(
+            {
+              success: false,
+              error: error instanceof Error ? error.message : String(error),
+            },
+            null,
+            2
+          ),
+        },
+      ],
+      isError: true,
     };
   }
 });

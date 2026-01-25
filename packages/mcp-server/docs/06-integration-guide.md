@@ -51,36 +51,33 @@ MCP 서버가 제공하는 미리보기 페이지:
 ```html
 <!DOCTYPE html>
 <html>
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Tekton Preview - {themeId}</title>
-  <style>
-    :root {
-      /* 테마 CSS 변수 주입 */
-      --color-primary: oklch(0.45 0.15 220);
-      --color-secondary: oklch(0.60 0.12 280);
-      /* ... */
-    }
-  </style>
-</head>
-<body>
-  <div id="root"
-       data-timestamp="{timestamp}"
-       data-theme-id="{themeId}">
-  </div>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Tekton Preview - {themeId}</title>
+    <style>
+      :root {
+        /* 테마 CSS 변수 주입 */
+        --color-primary: oklch(0.45 0.15 220);
+        --color-secondary: oklch(0.6 0.12 280);
+        /* ... */
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-timestamp="{timestamp}" data-theme-id="{themeId}"></div>
 
-  <script>
-    window.__TEKTON_PREVIEW__ = {
-      timestamp: {timestamp},
-      themeId: "{themeId}",
-      blueprintUrl: "/api/blueprints/{timestamp}"
-    };
-  </script>
+    <script>
+      window.__TEKTON_PREVIEW__ = {
+        timestamp: { timestamp },
+        themeId: '{themeId}',
+        blueprintUrl: '/api/blueprints/{timestamp}',
+      };
+    </script>
 
-  <!-- Playground script -->
-  <script src="http://localhost:3001/playground.js"></script>
-</body>
+    <!-- Playground script -->
+    <script src="http://localhost:3001/playground.js"></script>
+  </body>
 </html>
 ```
 
@@ -328,6 +325,7 @@ Claude Code 프롬프트:
 ```
 
 Claude가 자동으로:
+
 1. `preview-theme` 호출
 2. `generate-blueprint` 호출
 3. `export-screen` 호출
@@ -354,7 +352,7 @@ async function generateBlueprintTool(input: GenerateBlueprintInput) {
   if (!theme) {
     return {
       success: false,
-      error: `Theme '${input.themeId}' not found`
+      error: `Theme '${input.themeId}' not found`,
     };
   }
 
@@ -375,7 +373,7 @@ async function generateBlueprintTool(input: GenerateBlueprintInput) {
     description: input.description,
     layout: input.layout,
     theme,
-    componentHints: input.componentHints
+    componentHints: input.componentHints,
   });
 
   // @tekton/core로 검증
@@ -384,14 +382,14 @@ async function generateBlueprintTool(input: GenerateBlueprintInput) {
   if (!validation.valid) {
     return {
       success: false,
-      error: validation.errors.join(', ')
+      error: validation.errors.join(', '),
     };
   }
 
   return {
     success: true,
     blueprint,
-    previewUrl: generatePreviewUrl(blueprint)
+    previewUrl: generatePreviewUrl(blueprint),
   };
 }
 ```
@@ -406,15 +404,15 @@ async function exportScreenTool(input: ExportScreenInput) {
 
   // @tekton/core로 코드 생성
   const code = render(blueprint, {
-    format: input.format,  // 'jsx', 'tsx', 'vue'
+    format: input.format, // 'jsx', 'tsx', 'vue'
     includeTypes: input.format === 'tsx',
-    importPath: '@/components'
+    importPath: '@/components',
   });
 
   return {
     success: true,
     code,
-    filePath: input.outputPath || `.tekton/exports/${blueprint.name}.${input.format}`
+    filePath: input.outputPath || `.tekton/exports/${blueprint.name}.${input.format}`,
   };
 }
 ```
@@ -425,25 +423,20 @@ async function exportScreenTool(input: ExportScreenInput) {
 
 ```typescript
 // MCP Server: schemas/mcp-schemas.ts
-import type {
-  Blueprint,
-  Theme,
-  ComponentNode,
-  LayoutType
-} from '@tekton/core';
+import type { Blueprint, Theme, ComponentNode, LayoutType } from '@tekton/core';
 
 // Zod 스키마는 런타임 검증용
 export const GenerateBlueprintOutputSchema = z.object({
   success: z.boolean(),
   blueprint: z.optional(z.any()), // Blueprint 타입과 호환
   previewUrl: z.string().optional(),
-  error: z.string().optional()
+  error: z.string().optional(),
 });
 
 // TypeScript 타입은 @tekton/core에서 가져오기
 export type GenerateBlueprintOutput = {
   success: boolean;
-  blueprint?: Blueprint;  // @tekton/core의 타입
+  blueprint?: Blueprint; // @tekton/core의 타입
   previewUrl?: string;
   error?: string;
 };
@@ -462,15 +455,11 @@ HTTP 엔드포인트를 직접 호출하는 커스텀 클라이언트:
 class TektonClient {
   constructor(private baseUrl: string = 'http://localhost:3000') {}
 
-  async generateBlueprint(params: {
-    description: string;
-    layout: string;
-    themeId: string;
-  }) {
+  async generateBlueprint(params: { description: string; layout: string; themeId: string }) {
     const response = await fetch(`${this.baseUrl}/tools/generate-blueprint`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(params)
+      body: JSON.stringify(params),
     });
 
     return response.json();
@@ -480,7 +469,7 @@ class TektonClient {
     const response = await fetch(`${this.baseUrl}/tools/preview-theme`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ themeId })
+      body: JSON.stringify({ themeId }),
     });
 
     return response.json();
@@ -490,7 +479,7 @@ class TektonClient {
     const response = await fetch(`${this.baseUrl}/tools/export-screen`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ blueprintId, format })
+      body: JSON.stringify({ blueprintId, format }),
     });
 
     return response.json();
@@ -513,7 +502,7 @@ const client = new TektonClient();
 const result = await client.generateBlueprint({
   description: 'User profile dashboard',
   layout: 'sidebar-left',
-  themeId: 'calm-wellness'
+  themeId: 'calm-wellness',
 });
 
 console.log('Preview URL:', result.previewUrl);
@@ -595,12 +584,12 @@ app.post('/webhook/figma-design-updated', async (req, res) => {
     const result = await tekton.generateBlueprint({
       description: `Figma design: ${designName}`,
       layout,
-      themeId: theme
+      themeId: theme,
     });
 
     // Slack 알림
     await notifySlack({
-      message: `New blueprint generated: ${result.previewUrl}`
+      message: `New blueprint generated: ${result.previewUrl}`,
     });
 
     res.json({ success: true, previewUrl: result.previewUrl });
@@ -683,24 +672,24 @@ spec:
         app: tekton-mcp-server
     spec:
       containers:
-      - name: mcp-server
-        image: tekton-mcp-server:latest
-        ports:
-        - containerPort: 3000
-        env:
-        - name: PORT
-          value: "3000"
-        - name: BASE_URL
-          value: "https://tekton.yourdomain.com"
-        - name: NODE_ENV
-          value: "production"
-        resources:
-          requests:
-            memory: "256Mi"
-            cpu: "250m"
-          limits:
-            memory: "512Mi"
-            cpu: "500m"
+        - name: mcp-server
+          image: tekton-mcp-server:latest
+          ports:
+            - containerPort: 3000
+          env:
+            - name: PORT
+              value: '3000'
+            - name: BASE_URL
+              value: 'https://tekton.yourdomain.com'
+            - name: NODE_ENV
+              value: 'production'
+          resources:
+            requests:
+              memory: '256Mi'
+              cpu: '250m'
+            limits:
+              memory: '512Mi'
+              cpu: '500m'
 ---
 apiVersion: v1
 kind: Service
@@ -709,8 +698,8 @@ metadata:
 spec:
   type: LoadBalancer
   ports:
-  - port: 80
-    targetPort: 3000
+    - port: 80
+      targetPort: 3000
   selector:
     app: tekton-mcp-server
 ```
@@ -737,7 +726,7 @@ app.get('/health', (req, res) => {
     status: 'healthy',
     version: '0.1.0',
     uptime: process.uptime(),
-    timestamp: Date.now()
+    timestamp: Date.now(),
   });
 });
 
@@ -767,13 +756,13 @@ const register = new promClient.Registry();
 const blueprintGenerations = new promClient.Counter({
   name: 'tekton_blueprint_generations_total',
   help: 'Total number of blueprint generations',
-  registers: [register]
+  registers: [register],
 });
 
 const generationDuration = new promClient.Histogram({
   name: 'tekton_blueprint_generation_duration_seconds',
   help: 'Duration of blueprint generation',
-  registers: [register]
+  registers: [register],
 });
 
 export { register, blueprintGenerations, generationDuration };
@@ -792,8 +781,8 @@ export { register, blueprintGenerations, generationDuration };
 ```typescript
 // src/server.ts
 const ALLOWED_ORIGINS = [
-  'http://localhost:3001',  // 개발
-  'https://playground.yourdomain.com'  // 프로덕션
+  'http://localhost:3001', // 개발
+  'https://playground.yourdomain.com', // 프로덕션
 ];
 
 app.use((req, res, next) => {
@@ -824,7 +813,7 @@ while (retries < MAX_RETRIES) {
   }
 
   retries++;
-  await sleep(10);  // 10ms 대기
+  await sleep(10); // 10ms 대기
 }
 ```
 

@@ -22,9 +22,7 @@ export const ComponentNodeSchema: z.ZodType<{
   z.object({
     type: z.string().min(1, 'Component type is required'),
     props: z.record(z.unknown()).optional(),
-    children: z
-      .array(z.union([ComponentNodeSchema, z.string()]))
-      .optional(),
+    children: z.array(z.union([ComponentNodeSchema, z.string()])).optional(),
     slot: z.string().optional(),
   })
 );

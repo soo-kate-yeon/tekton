@@ -56,14 +56,14 @@ Atomic tokens are the foundation - raw design values that never reference other 
 interface AtomicTokens {
   color: {
     [palette: string]: {
-      [shade: string]: string;  // "500": "#3b82f6"
+      [shade: string]: string; // "500": "#3b82f6"
     };
   };
   spacing: {
-    [size: string]: string;  // "4": "16px"
+    [size: string]: string; // "4": "16px"
   };
   radius: {
-    [size: string]: string;  // "md": "8px"
+    [size: string]: string; // "md": "8px"
   };
   typography: {
     [name: string]: {
@@ -90,49 +90,49 @@ const atomicTokens: AtomicTokens = {
       '400': '#60a5fa',
       '500': '#3b82f6',
       '600': '#2563eb',
-      '700': '#1d4ed8'
+      '700': '#1d4ed8',
     },
     neutral: {
       '50': '#f9fafb',
       '100': '#f3f4f6',
       '200': '#e5e7eb',
-      '900': '#111827'
-    }
+      '900': '#111827',
+    },
   },
   spacing: {
     '1': '4px',
     '2': '8px',
     '4': '16px',
     '8': '32px',
-    '16': '64px'
+    '16': '64px',
   },
   radius: {
-    'sm': '4px',
-    'md': '8px',
-    'lg': '12px',
-    'xl': '16px'
+    sm: '4px',
+    md: '8px',
+    lg: '12px',
+    xl: '16px',
   },
   typography: {
     body: {
       fontSize: '16px',
       lineHeight: '24px',
-      fontWeight: '400'
+      fontWeight: '400',
     },
     heading: {
       fontSize: '24px',
       lineHeight: '32px',
-      fontWeight: '700'
-    }
+      fontWeight: '700',
+    },
   },
   shadow: {
-    'sm': '0 1px 2px 0 rgb(0 0 0 / 0.05)',
-    'md': '0 4px 6px -1px rgb(0 0 0 / 0.1)',
-    'lg': '0 10px 15px -3px rgb(0 0 0 / 0.1)'
+    sm: '0 1px 2px 0 rgb(0 0 0 / 0.05)',
+    md: '0 4px 6px -1px rgb(0 0 0 / 0.1)',
+    lg: '0 10px 15px -3px rgb(0 0 0 / 0.1)',
   },
   transition: {
-    'default': '150ms cubic-bezier(0.4, 0, 0.2, 1)',
-    'fast': '100ms cubic-bezier(0.4, 0, 0.2, 1)'
-  }
+    default: '150ms cubic-bezier(0.4, 0, 0.2, 1)',
+    fast: '100ms cubic-bezier(0.4, 0, 0.2, 1)',
+  },
 };
 ```
 
@@ -176,30 +176,30 @@ Semantic tokens provide meaning-based mappings that reference atomic tokens.
 ```typescript
 interface SemanticTokens {
   background: {
-    page: string;      // Page background
-    surface: string;   // Surface/card background
-    elevated: string;  // Elevated surface (modals, popovers)
-    muted: string;     // Muted/subtle background
-    inverse: string;   // Inverse background (dark on light theme)
+    page: string; // Page background
+    surface: string; // Surface/card background
+    elevated: string; // Elevated surface (modals, popovers)
+    muted: string; // Muted/subtle background
+    inverse: string; // Inverse background (dark on light theme)
   };
   foreground: {
-    primary: string;   // Primary text color
+    primary: string; // Primary text color
     secondary: string; // Secondary text color
-    muted: string;     // Muted/subtle text
-    inverse: string;   // Inverse text (light on dark bg)
-    accent: string;    // Accent/brand color
+    muted: string; // Muted/subtle text
+    inverse: string; // Inverse text (light on dark bg)
+    accent: string; // Accent/brand color
   };
   border: {
-    default: string;   // Default border color
-    muted: string;     // Subtle border
-    focus: string;     // Focus ring color
-    error: string;     // Error state border
+    default: string; // Default border color
+    muted: string; // Subtle border
+    focus: string; // Focus ring color
+    error: string; // Error state border
   };
   surface: {
-    primary: string;   // Primary surface
+    primary: string; // Primary surface
     secondary: string; // Secondary surface
-    tertiary: string;  // Tertiary surface
-    inverse: string;   // Inverse surface
+    tertiary: string; // Tertiary surface
+    inverse: string; // Inverse surface
   };
 }
 ```
@@ -209,31 +209,31 @@ interface SemanticTokens {
 ```typescript
 const semanticTokens: SemanticTokens = {
   background: {
-    page: 'atomic.color.neutral.50',     // References atomic token
-    surface: '#ffffff',                   // Direct value
+    page: 'atomic.color.neutral.50', // References atomic token
+    surface: '#ffffff', // Direct value
     elevated: '#ffffff',
     muted: 'atomic.color.neutral.100',
-    inverse: 'atomic.color.neutral.900'
+    inverse: 'atomic.color.neutral.900',
   },
   foreground: {
     primary: 'atomic.color.neutral.900',
     secondary: '#6b7280',
     muted: '#9ca3af',
     inverse: '#ffffff',
-    accent: 'atomic.color.blue.500'
+    accent: 'atomic.color.blue.500',
   },
   border: {
     default: 'atomic.color.neutral.200',
     muted: 'atomic.color.neutral.100',
     focus: 'atomic.color.blue.500',
-    error: 'atomic.color.red.500'
+    error: 'atomic.color.red.500',
   },
   surface: {
     primary: '#ffffff',
     secondary: 'atomic.color.neutral.50',
     tertiary: 'atomic.color.neutral.100',
-    inverse: 'atomic.color.neutral.900'
-  }
+    inverse: 'atomic.color.neutral.900',
+  },
 };
 ```
 
@@ -242,7 +242,7 @@ const semanticTokens: SemanticTokens = {
 ```css
 :root {
   /* Background */
-  --background-page: #f9fafb;     /* Resolved from atomic.color.neutral.50 */
+  --background-page: #f9fafb; /* Resolved from atomic.color.neutral.50 */
   --background-surface: #ffffff;
   --background-muted: #f3f4f6;
 
@@ -315,20 +315,20 @@ interface ComponentTokens {
 const componentTokens: ComponentTokens = {
   button: {
     primary: {
-      background: 'semantic.foreground.accent',      // → atomic.color.blue.500
+      background: 'semantic.foreground.accent', // → atomic.color.blue.500
       foreground: '#ffffff',
       border: 'semantic.foreground.accent',
       hover: {
-        background: 'atomic.color.blue.600',         // Direct atomic reference
-        foreground: '#ffffff'
+        background: 'atomic.color.blue.600', // Direct atomic reference
+        foreground: '#ffffff',
       },
       active: {
-        background: 'atomic.color.blue.700'
+        background: 'atomic.color.blue.700',
       },
       disabled: {
         background: 'semantic.background.muted',
-        foreground: 'semantic.foreground.muted'
-      }
+        foreground: 'semantic.foreground.muted',
+      },
     },
     secondary: {
       background: 'transparent',
@@ -336,16 +336,16 @@ const componentTokens: ComponentTokens = {
       border: 'semantic.border.default',
       hover: {
         background: 'semantic.background.muted',
-        foreground: 'semantic.foreground.primary'
+        foreground: 'semantic.foreground.primary',
       },
       active: {
-        background: 'semantic.background.muted'
+        background: 'semantic.background.muted',
       },
       disabled: {
         background: 'transparent',
-        foreground: 'semantic.foreground.muted'
-      }
-    }
+        foreground: 'semantic.foreground.muted',
+      },
+    },
   },
   input: {
     background: 'semantic.background.surface',
@@ -354,23 +354,23 @@ const componentTokens: ComponentTokens = {
     placeholder: 'semantic.foreground.muted',
     focus: {
       border: 'semantic.border.focus',
-      ring: 'atomic.color.blue.500'
+      ring: 'atomic.color.blue.500',
     },
     error: {
       border: 'semantic.border.error',
-      ring: 'atomic.color.red.500'
+      ring: 'atomic.color.red.500',
     },
     disabled: {
       background: 'semantic.background.muted',
-      foreground: 'semantic.foreground.muted'
-    }
+      foreground: 'semantic.foreground.muted',
+    },
   },
   card: {
     background: 'semantic.background.surface',
     foreground: 'semantic.foreground.primary',
     border: 'semantic.border.default',
-    shadow: 'atomic.shadow.md'
-  }
+    shadow: 'atomic.shadow.md',
+  },
 };
 ```
 
@@ -462,15 +462,16 @@ For maximum flexibility, use `resolveWithFallback()`:
 import { resolveWithFallback } from '@tekton/core';
 
 const color = resolveWithFallback(
-  'component.button.custom.background',  // Try component first
-  'semantic.foreground.accent',          // Fallback to semantic
-  'atomic.color.blue.500',               // Final fallback to atomic
+  'component.button.custom.background', // Try component first
+  'semantic.foreground.accent', // Fallback to semantic
+  'atomic.color.blue.500', // Final fallback to atomic
   tokens
 );
 // Returns first successful resolution
 ```
 
 **Fallback Order:**
+
 1. Component token (most specific)
 2. Semantic token (medium specificity)
 3. Atomic token (least specific, guaranteed to exist)
@@ -486,8 +487,8 @@ interface ThemeWithTokens {
   // ... base theme
   darkMode?: {
     tokens: {
-      semantic: Partial<SemanticTokens>;    // Override semantic tokens
-      component: Partial<ComponentTokens>;  // Override component tokens
+      semantic: Partial<SemanticTokens>; // Override semantic tokens
+      component: Partial<ComponentTokens>; // Override component tokens
     };
   };
 }
@@ -500,7 +501,9 @@ const theme: ThemeWithTokens = {
   id: 'my-theme',
   name: 'My Theme',
   tokens: {
-    atomic: { /* ... */ },
+    atomic: {
+      /* ... */
+    },
     semantic: {
       background: {
         page: 'atomic.color.neutral.50',
@@ -509,7 +512,9 @@ const theme: ThemeWithTokens = {
       },
       // ...
     },
-    component: { /* ... */ }
+    component: {
+      /* ... */
+    },
   },
 
   // Dark mode overrides
@@ -517,27 +522,27 @@ const theme: ThemeWithTokens = {
     tokens: {
       semantic: {
         background: {
-          page: 'atomic.color.neutral.900',     // Override for dark mode
+          page: 'atomic.color.neutral.900', // Override for dark mode
           surface: 'atomic.color.neutral.800',
-          elevated: 'atomic.color.neutral.800'
+          elevated: 'atomic.color.neutral.800',
         },
         foreground: {
           primary: 'atomic.color.neutral.50',
-          secondary: 'atomic.color.neutral.300'
-        }
+          secondary: 'atomic.color.neutral.300',
+        },
       },
       component: {
         button: {
           primary: {
-            background: 'atomic.color.blue.400',  // Lighter blue for dark mode
+            background: 'atomic.color.blue.400', // Lighter blue for dark mode
             hover: {
-              background: 'atomic.color.blue.500'
-            }
-          }
-        }
-      }
-    }
-  }
+              background: 'atomic.color.blue.500',
+            },
+          },
+        },
+      },
+    },
+  },
 };
 ```
 
@@ -551,7 +556,7 @@ const theme: ThemeWithTokens = {
 }
 
 .dark {
-  --background-page: #111827;           /* Dark mode override */
+  --background-page: #111827; /* Dark mode override */
   --background-surface: #1f2937;
   --button-primary-background: #60a5fa; /* Lighter for dark mode */
 }
@@ -563,7 +568,9 @@ const theme: ThemeWithTokens = {
 // React component
 function MyComponent() {
   return (
-    <div className="dark">  {/* Apply dark mode */}
+    <div className="dark">
+      {' '}
+      {/* Apply dark mode */}
       <button className="button-primary">Click me</button>
     </div>
   );
@@ -592,7 +599,9 @@ import type { ThemeWithTokens } from '@tekton/core';
 const theme: ThemeWithTokens = {
   id: 'my-theme',
   name: 'My Theme',
-  tokens: { /* ... */ }
+  tokens: {
+    /* ... */
+  },
 };
 
 const css = generateThemeCSS(theme);
@@ -697,15 +706,18 @@ tokens.semantic.foreground.primary: Expected string, received undefined
 ### 1. Token Naming
 
 **Atomic Layer:**
+
 - Use descriptive palette names: `blue`, `neutral`, `red` (not `color1`, `color2`)
 - Use standard shade numbers: `50`, `100`, `500`, `900`
 - Use consistent spacing scale: `1`, `2`, `4`, `8`, `16`
 
 **Semantic Layer:**
+
 - Use semantic names: `page`, `surface`, `primary` (not `bg1`, `text1`)
 - Group by category: `background.*`, `foreground.*`, `border.*`
 
 **Component Layer:**
+
 - Use component names: `button`, `input`, `card`
 - Use variant names: `primary`, `secondary`, `outline`
 - Use state names: `hover`, `active`, `disabled`, `focus`, `error`
@@ -713,23 +725,25 @@ tokens.semantic.foreground.primary: Expected string, received undefined
 ### 2. Token References
 
 **Prefer semantic references in components:**
+
 ```typescript
 // ✅ Good - semantic reference
 button: {
   primary: {
-    background: 'semantic.foreground.accent'
+    background: 'semantic.foreground.accent';
   }
 }
 
 // ❌ Avoid - direct atomic reference in components
 button: {
   primary: {
-    background: 'atomic.color.blue.500'
+    background: 'atomic.color.blue.500';
   }
 }
 ```
 
 **Use atomic references for exceptions:**
+
 ```typescript
 // ✅ Good - atomic reference for hover state
 button: {
@@ -745,13 +759,14 @@ button: {
 ### 3. Dark Mode Strategy
 
 **Override semantic tokens, not atomic:**
+
 ```typescript
 // ✅ Good - override semantic tokens
 darkMode: {
   tokens: {
     semantic: {
       background: {
-        page: 'atomic.color.neutral.900'
+        page: 'atomic.color.neutral.900';
       }
     }
   }
@@ -761,7 +776,9 @@ darkMode: {
 darkMode: {
   tokens: {
     atomic: {
-      color: { /* ... */ }  // Don't override atomic layer
+      color: {
+        /* ... */
+      } // Don't override atomic layer
     }
   }
 }
@@ -770,10 +787,15 @@ darkMode: {
 ### 4. Extensibility
 
 **Make component tokens extensible:**
+
 ```typescript
 interface ComponentTokens {
-  button: { /* ... */ };
-  input: { /* ... */ };
+  button: {
+    /* ... */
+  };
+  input: {
+    /* ... */
+  };
   // Allow custom components
   [component: string]: unknown;
 }
@@ -782,6 +804,7 @@ interface ComponentTokens {
 ### 5. Performance
 
 **Cache resolved tokens:**
+
 ```typescript
 // ❌ Avoid - resolve on every render
 function Button() {
@@ -797,13 +820,14 @@ function Button() {
 
 ```css
 .button-primary {
-  background: var(--button-primary-background);  /* Resolved once */
+  background: var(--button-primary-background); /* Resolved once */
 }
 ```
 
 ### 6. Validation
 
 **Validate during build, not runtime:**
+
 ```typescript
 // Build script
 import { validateTheme } from '@tekton/core';

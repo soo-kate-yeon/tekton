@@ -217,8 +217,8 @@ describe('loadTheme', () => {
         expect.fail('Should have thrown');
       } catch (error) {
         if (error instanceof ThemeValidationError) {
-          const hasPathInfo = error.issues.some((issue) =>
-            issue.path.includes('questionnaire') || issue.path.includes('brandTone')
+          const hasPathInfo = error.issues.some(
+            issue => issue.path.includes('questionnaire') || issue.path.includes('brandTone')
           );
           expect(hasPathInfo).toBe(true);
         }

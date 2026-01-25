@@ -9,7 +9,7 @@ import {
   generateTimestampId,
   generateRandomSuffix,
   parseTimestampFromId,
-  isValidBlueprintId
+  isValidBlueprintId,
 } from '../../src/storage/timestamp-manager.js';
 
 describe('Timestamp Manager', () => {

@@ -68,6 +68,7 @@ pnpm start
 ```
 
 **권장 확장**:
+
 - ESLint
 - Prettier
 - TypeScript and JavaScript Language Features
@@ -155,23 +156,27 @@ packages/mcp-server/
 ### 모듈 책임
 
 #### server.ts
+
 - MCP Protocol 서버 초기화
 - Tool 등록 및 관리
 - HTTP 라우팅 설정
 - CORS 설정
 
-#### tools/*
+#### tools/\*
+
 - MCP Tool 비즈니스 로직
 - 입력 검증 (Zod)
 - @tekton/core 호출
 - 응답 포맷팅
 
-#### storage/*
+#### storage/\*
+
 - 블루프린트 영속성
 - 파일 시스템 관리
 - 타임스탬프 관리
 
-#### web/*
+#### web/\*
+
 - HTTP 요청/응답 처리
 - 미리보기 HTML 렌더링
 - API 엔드포인트
@@ -214,7 +219,7 @@ describe('generateBlueprintTool', () => {
     const input = {
       description: 'Simple login form with email and password',
       layout: 'single-column',
-      themeId: 'calm-wellness'
+      themeId: 'calm-wellness',
     };
 
     const result = await generateBlueprintTool(input);
@@ -230,7 +235,7 @@ describe('generateBlueprintTool', () => {
     const input = {
       description: 'Test description',
       layout: 'single-column',
-      themeId: 'invalid-theme'
+      themeId: 'invalid-theme',
     };
 
     const result = await generateBlueprintTool(input);
@@ -243,7 +248,7 @@ describe('generateBlueprintTool', () => {
     const input = {
       description: 'Short',
       layout: 'single-column',
-      themeId: 'calm-wellness'
+      themeId: 'calm-wellness',
     };
 
     const result = await generateBlueprintTool(input);
@@ -275,7 +280,7 @@ describe('Blueprint Generation Integration', () => {
     const result = await generateBlueprintTool({
       description: 'User profile dashboard with avatar',
       layout: 'sidebar-left',
-      themeId: 'korean-fintech'
+      themeId: 'korean-fintech',
     });
 
     expect(result.success).toBe(true);
@@ -316,9 +321,7 @@ describe('Preview Routes', () => {
   });
 
   it('should return 404 for non-existent blueprint', async () => {
-    const response = await request(server)
-      .get('/preview/9999999999999/calm-wellness')
-      .expect(404);
+    const response = await request(server).get('/preview/9999999999999/calm-wellness').expect(404);
 
     expect(response.body.success).toBe(false);
     expect(response.body.error).toContain('not found');
@@ -347,10 +350,14 @@ it('should validate theme ID format', () => {
 
 ```typescript
 // ❌ 나쁜 예
-it('test 1', () => { /* ... */ });
+it('test 1', () => {
+  /* ... */
+});
 
 // ✅ 좋은 예
-it('should reject theme ID with path traversal characters', () => { /* ... */ });
+it('should reject theme ID with path traversal characters', () => {
+  /* ... */
+});
 ```
 
 #### 3. 독립적인 테스트
@@ -423,6 +430,7 @@ describe('Timestamp collision handling', () => {
    - 없으면 새 이슈 생성 (기능 요청, 버그 리포트)
 
 2. **브랜치 생성**
+
    ```bash
    git checkout -b feature/SPEC-MCP-002-add-websocket-support
    ```
@@ -433,6 +441,7 @@ describe('Timestamp collision handling', () => {
    - 테스트 통과 확인
 
 4. **커밋**
+
    ```bash
    git add .
    git commit -m "feat(mcp-server): add WebSocket support for real-time theme switching
@@ -463,6 +472,7 @@ describe('Timestamp collision handling', () => {
 ### 커밋 메시지 규칙
 
 **형식**:
+
 ```
 <type>(<scope>): <subject>
 
@@ -474,6 +484,7 @@ describe('Timestamp collision handling', () => {
 ```
 
 **Type**:
+
 - `feat`: 새 기능
 - `fix`: 버그 수정
 - `docs`: 문서 변경
@@ -483,6 +494,7 @@ describe('Timestamp collision handling', () => {
 - `chore`: 빌드, 설정 변경
 
 **Scope**:
+
 - `mcp-server`: MCP 서버
 - `tools`: MCP Tools
 - `storage`: 저장소
@@ -635,6 +647,7 @@ Tekton은 **Semantic Versioning (SemVer)**를 따릅니다.
 ### 릴리스 체크리스트
 
 1. **테스트 통과 확인**
+
    ```bash
    pnpm test:coverage
    # 커버리지 ≥ 85% 확인
@@ -646,17 +659,20 @@ Tekton은 **Semantic Versioning (SemVer)**를 따릅니다.
    - API 문서
 
 3. **버전 업데이트**
+
    ```bash
    pnpm version minor  # 또는 major, patch
    ```
 
 4. **빌드 확인**
+
    ```bash
    pnpm build
    # dist/ 디렉토리 확인
    ```
 
 5. **태그 생성**
+
    ```bash
    git tag v0.2.0
    git push origin v0.2.0
@@ -701,6 +717,7 @@ pnpm test --reporter=verbose
 **문제**: MCP 서버와 @tekton/core 버전 불일치
 
 **해결**:
+
 ```bash
 # Workspace 버전 확인
 pnpm list @tekton/core
@@ -714,6 +731,7 @@ pnpm update @tekton/core
 **문제**: 3000번 포트가 이미 사용 중
 
 **해결**:
+
 ```bash
 # 사용 중인 프로세스 확인
 lsof -i :3000

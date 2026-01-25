@@ -165,15 +165,15 @@ Step 6: Knowledge Export
 
 ### Pipeline Performance
 
-| Step | Target | Actual | Status |
-|------|--------|--------|--------|
-| Input Loading | <50ms | 18ms | ✅ |
-| Validation | <100ms | 42ms | ✅ |
-| Knowledge Building | <150ms | 98ms | ✅ |
-| Schema Generation | <200ms | 135ms | ✅ |
-| Binding Generation | <300ms | 218ms | ✅ |
-| Export | <150ms | 89ms | ✅ |
-| **Total** | **<600ms** | **484ms** | ✅ |
+| Step               | Target     | Actual    | Status |
+| ------------------ | ---------- | --------- | ------ |
+| Input Loading      | <50ms      | 18ms      | ✅     |
+| Validation         | <100ms     | 42ms      | ✅     |
+| Knowledge Building | <150ms     | 98ms      | ✅     |
+| Schema Generation  | <200ms     | 135ms     | ✅     |
+| Binding Generation | <300ms     | 218ms     | ✅     |
+| Export             | <150ms     | 89ms      | ✅     |
+| **Total**          | **<600ms** | **484ms** | ✅     |
 
 ---
 
@@ -184,17 +184,17 @@ Step 6: Knowledge Export
 **Responsibility**: Build and manage ComponentKnowledge entries
 
 **Key Components**:
+
 - `component-knowledge.ts`: ComponentKnowledge interface and core types
 - `knowledge-builder.ts`: Build knowledge entries from definitions
 - `affinity-calculator.ts`: Calculate slot affinity scores
 - `constraint-validator.ts`: Validate placement constraints
 
 **Example**:
+
 ```typescript
 // knowledge-builder.ts
-export function buildComponentKnowledge(
-  definition: ComponentDefinition
-): ComponentKnowledge {
+export function buildComponentKnowledge(definition: ComponentDefinition): ComponentKnowledge {
   // Validate basic structure
   validateComponentName(definition.name);
 
@@ -214,7 +214,7 @@ export function buildComponentKnowledge(
     slotAffinity,
     semanticDescription,
     constraints,
-    tokenBindings: definition.tokenBindings
+    tokenBindings: definition.tokenBindings,
   };
 }
 ```
@@ -226,10 +226,12 @@ export function buildComponentKnowledge(
 **Responsibility**: Validate tokens, states, and constraints
 
 **Key Components**:
+
 - `token-validator.ts`: Validate token references against Layer 1
 - `state-completeness.ts`: Ensure all 5 states defined
 
 **Validation Flow**:
+
 ```
 Input: ComponentKnowledge + Layer1Tokens
   │
@@ -251,6 +253,7 @@ Input: ComponentKnowledge + Layer1Tokens
 ```
 
 **Example**:
+
 ```typescript
 // token-validator.ts
 export function validateTokenReferences(
@@ -272,7 +275,7 @@ export function validateTokenReferences(
   return {
     valid: errors.length === 0,
     errors,
-    warnings: []
+    warnings: [],
   };
 }
 ```
@@ -284,10 +287,12 @@ export function validateTokenReferences(
 **Responsibility**: Map design tokens to component properties
 
 **Key Components**:
+
 - `component-mapper.ts`: Core mapping logic
 - `mapping-registry.ts`: Central registry of all 20 component mappings
 
 **Mapping Structure**:
+
 ```typescript
 // mapping-registry.ts
 export const COMPONENT_MAPPINGS: Record<string, ComponentMapping> = {
@@ -297,32 +302,38 @@ export const COMPONENT_MAPPINGS: Record<string, ComponentMapping> = {
         backgroundColor: 'color-primary',
         color: 'color-text-on-primary',
         borderRadius: 'radius-md',
-        padding: 'spacing-2'
+        padding: 'spacing-2',
       },
       hover: {
         backgroundColor: 'color-primary-hover',
-        color: 'color-text-on-primary'
+        color: 'color-text-on-primary',
       },
       focus: {
         backgroundColor: 'color-primary',
         borderColor: 'color-focus-ring',
-        boxShadow: 'shadow-focus'
+        boxShadow: 'shadow-focus',
       },
       active: {
         backgroundColor: 'color-primary-active',
-        color: 'color-text-on-primary'
+        color: 'color-text-on-primary',
       },
       disabled: {
         backgroundColor: 'color-disabled',
         color: 'color-text-disabled',
-        opacity: 'opacity-disabled'
-      }
+        opacity: 'opacity-disabled',
+      },
     },
     variants: {
-      primary: { /* ... */ },
-      secondary: { /* ... */ },
-      ghost: { /* ... */ }
-    }
+      primary: {
+        /* ... */
+      },
+      secondary: {
+        /* ... */
+      },
+      ghost: {
+        /* ... */
+      },
+    },
   },
   // ... 19 more components
 };
@@ -335,10 +346,12 @@ export const COMPONENT_MAPPINGS: Record<string, ComponentMapping> = {
 **Responsibility**: Generate type-safe schemas and TypeScript types
 
 **Key Components**:
+
 - `zod-schema-generator.ts`: Generate Zod schemas
 - `typescript-types.ts`: Generate TypeScript type definitions
 
 **Schema Generation Flow**:
+
 ```
 ComponentKnowledge
   │
@@ -359,6 +372,7 @@ ComponentKnowledge
 ```
 
 **Example**:
+
 ```typescript
 // zod-schema-generator.ts
 export class ZodSchemaGenerator {
@@ -392,11 +406,13 @@ export class ZodSchemaGenerator {
 **Responsibility**: Generate CSS-in-JS bindings
 
 **Key Components**:
+
 - `vanilla-extract-gen.ts`: Vanilla Extract recipe generation (PRIMARY)
 - `stitches-generator.ts`: Stitches styled component generation (LEGACY)
 - `css-variable-refs.ts`: CSS variable reference utilities
 
 **Vanilla Extract Generation**:
+
 ```typescript
 // vanilla-extract-gen.ts
 export class VanillaExtractGenerator {
@@ -429,6 +445,7 @@ export const ${component.name.toLowerCase()}Styles = recipe({
 ```
 
 **CSS Variable Reference Pattern**:
+
 ```typescript
 // css-variable-refs.ts
 export function toCSSVariable(tokenName: string): string {
@@ -449,11 +466,13 @@ export function extractTokenName(cssVar: string): string {
 **Responsibility**: Export knowledge in multiple formats
 
 **Key Components**:
+
 - `json-exporter.ts`: JSON export for programmatic use
 - `markdown-exporter.ts`: Markdown export for AI context
 - `registry-builder.ts`: Build Layer 3 binding registry
 
 **JSON Export Format**:
+
 ```json
 {
   "schemaVersion": "2.0.0",
@@ -485,10 +504,12 @@ export function extractTokenName(cssVar: string): string {
 ```
 
 **Markdown Export Format**:
+
 ```markdown
 # Component Knowledge Catalog
 
 ## Button
+
 - **Type:** Atom
 - **Category:** Action
 - **Purpose:** Primary interactive element for user actions like submit, confirm, or navigate.
@@ -496,14 +517,16 @@ export function extractTokenName(cssVar: string): string {
 - **Complexity:** Low
 
 ### Slot Affinity
-| Slot | Affinity | Recommendation |
-|------|----------|----------------|
-| main | 0.6 | Suitable |
-| sidebar | 0.8 | Recommended |
-| header | 0.7 | Suitable |
-| footer | 0.9 | Highly Recommended |
+
+| Slot    | Affinity | Recommendation     |
+| ------- | -------- | ------------------ |
+| main    | 0.6      | Suitable           |
+| sidebar | 0.8      | Recommended        |
+| header  | 0.7      | Suitable           |
+| footer  | 0.9      | Highly Recommended |
 
 ### Constraints
+
 - **Excluded Slots:** None
 - **Conflicts With:** None
 ```
@@ -520,10 +543,10 @@ interface Layer1TokenMetadata {
   generatedAt: string;
   sourceArchetype: string;
   tokens: Array<{
-    name: string;              // e.g., "color-primary"
-    value: string;             // e.g., "oklch(0.5 0.15 220)"
-    rgbFallback: string;       // e.g., "#0066CC"
-    cssVariable: string;       // e.g., "--color-primary"
+    name: string; // e.g., "color-primary"
+    value: string; // e.g., "oklch(0.5 0.15 220)"
+    rgbFallback: string; // e.g., "#0066CC"
+    cssVariable: string; // e.g., "--color-primary"
     category: 'color' | 'typography' | 'spacing' | 'shadow' | 'border';
     role?: 'primary' | 'secondary' | 'surface' | 'text' | 'border' | 'shadow';
   }>;
@@ -601,9 +624,7 @@ export async function loadLayer1Tokens(): Promise<Layer1TokenMetadata> {
 
 ```typescript
 // Layer 2 → Layer 3 interface
-export function buildLayer3Registry(
-  components: ComponentKnowledge[]
-): Layer2Output {
+export function buildLayer3Registry(components: ComponentKnowledge[]): Layer2Output {
   const builder = new RegistryBuilder();
   return builder.buildRegistry(components);
 }
@@ -615,9 +636,7 @@ export function buildLayer3Registry(
 
 ```typescript
 // AI context injection
-export function generateAIContext(
-  components: ComponentKnowledge[]
-): string {
+export function generateAIContext(components: ComponentKnowledge[]): string {
   const exporter = new MarkdownExporter();
   const catalog = exporter.exportCatalog(components);
 
@@ -672,9 +691,7 @@ export async function batchValidateComponents(
   components: ComponentKnowledge[],
   layer1Tokens: Layer1TokenMetadata
 ): Promise<ValidationResult[]> {
-  return Promise.all(
-    components.map(component => validateTokenReferences(component, layer1Tokens))
-  );
+  return Promise.all(components.map(component => validateTokenReferences(component, layer1Tokens)));
 }
 ```
 
@@ -750,12 +767,14 @@ export const NewComponentKnowledge: ComponentKnowledge = {
   semanticDescription: {
     purpose: 'Purpose of new component',
     visualImpact: 'neutral',
-    complexity: 'medium'
+    complexity: 'medium',
   },
   constraints: {},
   tokenBindings: {
-    states: { /* ... */ }
-  }
+    states: {
+      /* ... */
+    },
+  },
 };
 ```
 
@@ -767,7 +786,7 @@ import { NewComponentKnowledge } from '../components/NewComponent.knowledge';
 
 export const ALL_COMPONENTS = [
   // ... existing 20 components
-  NewComponentKnowledge
+  NewComponentKnowledge,
 ];
 ```
 
@@ -800,12 +819,10 @@ interface ComponentKnowledge {
 **Step 2**: Update builders and validators
 
 ```typescript
-export function buildComponentKnowledge(
-  definition: ComponentDefinition
-): ComponentKnowledge {
+export function buildComponentKnowledge(definition: ComponentDefinition): ComponentKnowledge {
   return {
     // ... existing fields
-    accessibility: buildAccessibilityMetadata(definition)
+    accessibility: buildAccessibilityMetadata(definition),
   };
 }
 ```
@@ -847,7 +864,7 @@ export enum Layer2ErrorCode {
   // Warnings
   CUSTOM_STATE_WARNING = 'LAYER2-W001',
   HARDCODED_VALUE_WARNING = 'LAYER2-W002',
-  HIGH_AFFINITY_WARNING = 'LAYER2-W003'
+  HIGH_AFFINITY_WARNING = 'LAYER2-W003',
 }
 ```
 

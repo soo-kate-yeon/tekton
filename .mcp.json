@@ -2,9 +2,7 @@
   "mcpServers": {
     "tekton": {
       "command": "node",
-      "args": [
-        "/Users/asleep/Developer/tekton/packages/mcp-server/dist/index.js"
-      ],
+      "args": ["/Users/asleep/Developer/tekton/packages/mcp-server/dist/index.js"],
       "env": {
         "NODE_ENV": "production"
       }

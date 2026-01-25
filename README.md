@@ -43,6 +43,7 @@ Tekton implements a 3-layer design system architecture for generating determinis
 Generates deterministic design tokens from archetype JSON presets using OKLCH color spaces with WCAG AA compliance.
 
 **Key Features**:
+
 - **OKLCH Color Space**: Perceptually uniform color transformations using culori 3.3.0
 - **WCAG AA/AAA Validation**: Automatic contrast ratio validation (4.5:1 text, 3:1 UI)
 - **Auto-Adjustment**: Intelligent lightness modification to achieve WCAG compliance
@@ -50,12 +51,14 @@ Generates deterministic design tokens from archetype JSON presets using OKLCH co
 - **Performance Optimized**: LRU cache with 80%+ hit rate, <100ms generation time
 
 **Technology Stack**:
+
 - TypeScript 5.9+
 - culori ^3.3.0 (OKLCH support)
 - wcag-contrast ^3.0.0 (WCAG validation)
 - vitest ^2.0.0 (testing framework)
 
 **Usage Example**:
+
 ```typescript
 import { generateTokensFromArchetype } from '@tekton/token-generator';
 
@@ -65,7 +68,7 @@ const archetype = loadArchetypeJSON('premium-editorial.json');
 // Generate tokens with WCAG validation
 const tokens = await generateTokensFromArchetype(archetype, {
   wcagLevel: 'AA',
-  cacheEnabled: true
+  cacheEnabled: true,
 });
 
 // Export to desired format
@@ -79,6 +82,7 @@ const dtcg = exportToDTCG(tokens);
 Transforms raw design tokens into AI-understandable component knowledge with semantic metadata for intelligent component placement and generation.
 
 **Key Features**:
+
 - **ComponentKnowledge Catalog**: Complete metadata for 20 core components
 - **Slot Affinity Scoring**: 0.0-1.0 scores for intelligent placement recommendations
 - **Semantic Descriptions**: Purpose, visual impact, and complexity metadata for AI context
@@ -88,12 +92,14 @@ Transforms raw design tokens into AI-understandable component knowledge with sem
 - **Knowledge Export**: JSON and Markdown formats for programmatic and AI use
 
 **Technology Stack**:
+
 - TypeScript 5.9+
 - Zod ^3.23.0 (schema validation)
 - @vanilla-extract/css ^1.16.0 (CSS-in-JS primary)
 - @stitches/core ^1.2.8 (CSS-in-JS legacy)
 
 **Usage Example**:
+
 ```typescript
 import {
   getAllComponents,
@@ -124,6 +130,7 @@ const catalog = jsonExporter.exportCatalog(components);
 ```
 
 **Quality Metrics**:
+
 - Test Coverage: 95.81% (exceeds ≥85% target) ✅
 - Tests Passing: 79/79 (100% pass rate) ✅
 - TRUST 5 Compliance: PASS ✅
@@ -138,24 +145,28 @@ Generates production-ready React components through intelligent slot-based assem
 #### Completed Milestones
 
 **Milestone 1: Slot Semantic Registry** ✅ (99.75% coverage, 186 tests)
+
 - Global Slots: Application-level layout slots (header, sidebar, main, footer)
 - Local Slots: Component-specific slots (card_actions, table_toolbar, modal_footer)
 - Semantic Roles: Layout, action, and content categorization
 - Constraint Validation: maxChildren, allowedComponents, excludedComponents enforcement
 
 **Milestone 2: Semantic Scoring Algorithm** ✅ (100% coverage, 83 tests)
+
 - Weighted Scoring Formula: BaseAffinity (50%) + IntentMatch (30%) + ContextPenalty (20%)
 - Intent-Based Injection: Context-aware component selection (read-only, dashboard, data-entry modes)
 - Score Normalization: 0.0-1.0 range with deterministic results
 - Performance: <50ms for typical 4-6 slot layout
 
 **Milestone 3: Safety Protocols** ✅ (99.53% coverage, 79 tests)
+
 - Threshold Check: Minimum score 0.4 with automatic fallback for low-quality placements
 - Hallucination Check: Component existence validation with fuzzy matching suggestions
 - Constraint Validator: Enforces all slot constraints with LAYER3-E003 error codes
 - Fluid Fallback: Role-based fallback assignment (GenericContainer, NavPlaceholder, ButtonGroup)
 
 **Milestone 4: MCP Tools Integration** ✅ (100% coverage, 128 tests)
+
 - Knowledge Schema: Complete Blueprint JSON schema for LLM consumption
 - MCP Tool: `knowledge.getSchema` - Returns schema definition with usage examples
 - MCP Tool: `knowledge.getComponentList` - Query components by category or slot
@@ -166,6 +177,7 @@ Generates production-ready React components through intelligent slot-based assem
 - Error Handling: Structured error responses with actionable messages (LAYER3-E002, LAYER3-E005)
 
 **Milestone 5: Theme Token Binding System** ✅ (SPEC-THEME-BIND-001, 100% coverage, 293 tests)
+
 - **TokenResolver**: Theme loading with LRU caching and OKLCH color conversion
 - **Theme Priority**: Runtime override > Blueprint preference > Default theme (calm-wellness)
 - **CSS Variables**: Automatic injection of `var(--token-name)` syntax in generated components
@@ -176,6 +188,7 @@ Generates production-ready React components through intelligent slot-based assem
 - **OKLCH Color Space**: Perceptually uniform color transformations for consistent styling
 
 **Theme System Features**:
+
 - Centralized design token management eliminates hardcoded values
 - Runtime theme switching enables multi-theme applications
 - Semantic token naming ensures maintainability across design changes
@@ -183,6 +196,7 @@ Generates production-ready React components through intelligent slot-based assem
 - Comprehensive theme validation with descriptive error messages
 
 **Integration**:
+
 ```typescript
 import { renderScreen } from '@tekton/studio-mcp';
 
@@ -191,7 +205,7 @@ const result = await renderScreen(blueprint);
 
 // Custom theme override
 const themed = await renderScreen(blueprint, {
-  themeId: 'professional-dark'
+  themeId: 'professional-dark',
 });
 console.log(themed.themeApplied); // "professional-dark"
 ```
@@ -209,6 +223,7 @@ console.log(themed.themeApplied); // "professional-dark"
 #### Pending Milestones
 
 **Milestone 5: Advanced Blueprint Features** 🚧
+
 - Blueprint versioning and comparison system
 - AI-powered Blueprint refinement based on feedback
 - Visual Blueprint editor with real-time preview
@@ -216,6 +231,7 @@ console.log(themed.themeApplied); // "professional-dark"
 - Nested component composition with slot inheritance
 
 **Milestone 6: Production Optimization** 🚧
+
 - Bundle optimization with code splitting
 - Performance monitoring and telemetry
 - Caching strategies for frequent operations
@@ -245,6 +261,7 @@ console.log(themed.themeApplied); // "professional-dark"
 - **SPEC Compliance**: 100% acceptance criteria met for completed milestones
 
 **MCP Integration Workflow**:
+
 ```bash
 # Step 1: LLM gets Knowledge Schema
 curl -X POST http://localhost:3000/tools/knowledge.getSchema
@@ -274,6 +291,7 @@ curl -X POST http://localhost:3000/tools/knowledge.renderScreen \
 ```
 
 **Programmatic Usage Example**:
+
 ```typescript
 import { JSXGenerator, getAllComponents } from '@tekton/component-generator';
 
@@ -291,9 +309,9 @@ const blueprint = {
     props: { variant: 'elevated', padding: 'large' },
     slots: {
       header: { componentName: 'Badge', props: { text: 'New' } },
-      content: { componentName: 'DataTable', props: { columns: 5 } }
-    }
-  }
+      content: { componentName: 'DataTable', props: { columns: 5 } },
+    },
+  },
 };
 
 // Generate React component
@@ -573,6 +591,7 @@ Tekton provides a comprehensive Git worktree management system for parallel SPEC
 ### Why Use Worktrees?
 
 **Traditional branch workflow pain points**:
+
 - Frequent `git stash` operations when switching branches
 - Risk of losing uncommitted work
 - Context switching overhead
@@ -580,6 +599,7 @@ Tekton provides a comprehensive Git worktree management system for parallel SPEC
 - Single development environment
 
 **Worktree solution**:
+
 - Each SPEC has its own isolated directory
 - Independent Git state per worktree
 - Simultaneous development on multiple SPECs
@@ -640,6 +660,7 @@ git push origin feature/SPEC-AUTH-001
 ```
 
 **Benefits of MoAI + Worktree**:
+
 - **Parallel SPEC Development**: Work on multiple SPECs simultaneously without conflicts
 - **Isolated Testing**: Each SPEC has its own test environment
 - **Independent Dependencies**: Install SPEC-specific packages without affecting other work
@@ -647,6 +668,7 @@ git push origin feature/SPEC-AUTH-001
 - **Zero Context Switching**: Move between SPECs instantly (no `git stash` needed)
 
 **Recommended Workflow**:
+
 1. Create SPEC using `/moai:1-plan --worktree`
 2. Worktree is automatically created with proper branch naming
 3. Develop in isolated worktree using `/moai:2-run`
@@ -657,16 +679,16 @@ git push origin feature/SPEC-AUTH-001
 
 ### Core Commands
 
-| Command | Usage | Purpose |
-|---------|-------|---------|
-| `new` | `tekton worktree new SPEC-001 "Description"` | Create isolated worktree |
-| `list` | `tekton worktree list [--status active]` | List all worktrees |
-| `switch` | `tekton worktree switch SPEC-001` | Get path to worktree |
-| `status` | `tekton worktree status SPEC-001` | Check sync status |
-| `sync` | `tekton worktree sync SPEC-001` | Sync with base branch |
-| `remove` | `tekton worktree remove SPEC-001` | Remove worktree |
-| `clean` | `tekton worktree clean --merged-only` | Clean merged worktrees |
-| `config` | `tekton worktree config list` | View configuration |
+| Command  | Usage                                        | Purpose                  |
+| -------- | -------------------------------------------- | ------------------------ |
+| `new`    | `tekton worktree new SPEC-001 "Description"` | Create isolated worktree |
+| `list`   | `tekton worktree list [--status active]`     | List all worktrees       |
+| `switch` | `tekton worktree switch SPEC-001`            | Get path to worktree     |
+| `status` | `tekton worktree status SPEC-001`            | Check sync status        |
+| `sync`   | `tekton worktree sync SPEC-001`              | Sync with base branch    |
+| `remove` | `tekton worktree remove SPEC-001`            | Remove worktree          |
+| `clean`  | `tekton worktree clean --merged-only`        | Clean merged worktrees   |
+| `config` | `tekton worktree config list`                | View configuration       |
 
 ### Parallel Development Workflow
 
@@ -709,12 +731,14 @@ cd ~/.worktrees/SPEC-DASH-001  # Switch to dashboard
 ### Documentation
 
 For complete documentation, see:
+
 - [Worktree Workflow Guide](./docs/worktree-workflow-guide.md) - Complete integration with SPEC workflow
 - [MoAI Integration Analysis](./docs/worktree-moai-integration.md) - Integration points and implementation guide
 
 ### Implementation Status
 
 The Tekton Worktree Management System is fully implemented:
+
 - **Phase 1**: Foundation (types, registry, validation) - 127 tests ✅
 - **Phase 2**: Git Integration (worktree manager, git operations) - 79 tests ✅
 - **Phase 3**: Core CLI Commands (new, list, switch, remove) - 67 tests ✅
@@ -870,6 +894,7 @@ For detailed architecture documentation, see [Architecture Guide](./docs/archite
 - **`listAllContracts()`** - List all registered component contracts
 
 **Available Contracts** (8 MVP components):
+
 - **button** (15 constraints) - Icon-only accessibility, prop combinations, WCAG
 - **input** (12 constraints) - Label association, validation states, security
 - **dialog** (10 constraints) - Required structure (DialogTitle), focus management
@@ -880,6 +905,7 @@ For detailed architecture documentation, see [Architecture Guide](./docs/archite
 - **checkbox** (8 constraints) - Label association, aria-checked state
 
 **Contract Usage Example**:
+
 ```typescript
 import { getContract } from 'tekton/contracts';
 
@@ -908,6 +934,7 @@ buttonContract.constraints.forEach(constraint => {
 - **`ScreenIntent`** - Screen purpose enum (data-list, data-detail, form, dashboard, etc.)
 
 **Screen Contract Usage Example**:
+
 ```typescript
 import { createScreenContract, Environment, SkeletonPreset, ScreenIntent } from 'tekton/screen';
 
@@ -917,7 +944,7 @@ const contract = createScreenContract({
   environment: Environment.Responsive,
   skeleton: SkeletonPreset.WithHeader,
   intent: ScreenIntent.DataDetail,
-  components: ['card', 'section', 'button']
+  components: ['card', 'section', 'button'],
 });
 
 // Generate screen files
@@ -947,6 +974,7 @@ For complete API documentation with usage examples, see [API Reference](./docs/a
 **Completed Features** (SPEC-PHASEAB-001 + SPEC-PHASEB-002 + SPEC-PHASEC-003):
 
 **Phase A - Core Token System:**
+
 - ✅ OKLCH color space conversion with gamma correction
 - ✅ 10-step lightness scale generation
 - ✅ Deterministic token ID generation
@@ -968,6 +996,7 @@ For complete API documentation with usage examples, see [API Reference](./docs/a
 - ✅ 6 constraint rule types (accessibility, prop-combination, children, context, composition, state)
 
 **Phase B - CLI & VS Code Extension:**
+
 - ✅ M1: Monorepo structure with pnpm workspaces
 - ✅ M2: CLI with framework detection (Next.js, Vite, Remix, Nuxt, SvelteKit)
 - ✅ M2: Tailwind CSS detection
@@ -980,6 +1009,7 @@ For complete API documentation with usage examples, see [API Reference](./docs/a
 - ✅ M4: Comprehensive documentation (CLI, Extension, Root)
 
 **Phase C - Screen Contract Architecture:**
+
 - ✅ M1: 4-layer screen contract architecture (Environment, Skeleton, Intent, Composition)
 - ✅ M2: Environment layer with 6 device types and grid systems
 - ✅ M3: Skeleton presets with 6 layout patterns
@@ -992,6 +1022,7 @@ For complete API documentation with usage examples, see [API Reference](./docs/a
 - ✅ M10: VS Code extension integration
 
 **Phase D - Brand DNA MCP Integration:** ✨ NEW
+
 - ✅ M1: Brand DNA schema validation with Zod
 - ✅ M2: Axis Interpreter with 15 conversion mappings (5 axes × 3 ranges)
 - ✅ M3: File-based storage with Git-trackable structure
@@ -1001,6 +1032,7 @@ For complete API documentation with usage examples, see [API Reference](./docs/a
 - ✅ M7: Public API with complete documentation
 
 **Quality Gates** (Phase D):
+
 - ✅ Tests: 112 passing tests across 8 test suites (100% pass rate)
 - ✅ Coverage: 98.88% statement, 94.11% branch (exceeds ≥85% target)
 - ✅ Type Safety: Zero type errors with strict mode
@@ -1008,6 +1040,7 @@ For complete API documentation with usage examples, see [API Reference](./docs/a
 - ✅ Security: Zero vulnerabilities in production dependencies
 
 **Quality Gates** (Phase C):
+
 - ✅ Tests: 514 passing tests across 39 test suites (100% pass rate)
 - ⚠️ Coverage: 73.23% (below ≥85% CLI target, acceptable for MVP)
 - ✅ Type Safety: Zero type errors with strict mode
@@ -1015,6 +1048,7 @@ For complete API documentation with usage examples, see [API Reference](./docs/a
 - ⚠️ Security: 6 moderate dev dependency vulnerabilities (dev environment only)
 
 **Phase Status**:
+
 - ✅ Phase A (SPEC-PHASEAB-001): 100% complete (2026-01-11)
   - ✅ A1: Preset definition system
   - ✅ A2: Token generator
@@ -1044,6 +1078,7 @@ For complete API documentation with usage examples, see [API Reference](./docs/a
   - ⏳ Phase 3: Custom Image Flow (deferred to 1 month post-Phase 2)
 
 **Phase B Highlights**:
+
 - Monorepo architecture with pnpm workspaces
 - CLI with framework detection (Next.js, Vite, Remix, Nuxt, SvelteKit)
 - VS Code extension with real-time output streaming
@@ -1051,6 +1086,7 @@ For complete API documentation with usage examples, see [API Reference](./docs/a
 - Comprehensive documentation (CLI, Extension, Root)
 
 **Phase C Highlights**:
+
 - 4-layer screen contract architecture (Environment, Skeleton, Intent, Composition)
 - Interactive CLI screen generation with smart prompts
 - 6 environment types with adaptive grid systems (Desktop 12-col, Mobile 4-col, Tablet 8-col)
@@ -1061,11 +1097,13 @@ For complete API documentation with usage examples, see [API Reference](./docs/a
 - Contract validation preventing invalid screen compositions
 
 **Quality Exceptions** (Phase C):
+
 - Coverage: 73.23% (below 85% CLI target) - MVP acceptable, Phase D improvement planned
 - Security: 6 moderate dev dependencies - Limited to development environment
 - See [Quality Exceptions](/.moai/docs/quality-exceptions-phasec.md) for details
 
 For detailed implementation status, see:
+
 - [Phase A Implementation](/.moai/specs/SPEC-PHASEAB-001/implementation-status.md)
 - [Phase B Plan](/.moai/specs/SPEC-PHASEB-002/plan.md)
 - [Phase C Implementation](/.moai/specs/SPEC-PHASEC-003/implementation-status.md)
@@ -1073,6 +1111,7 @@ For detailed implementation status, see:
 ### Roadmap
 
 **Phase D (Upcoming) - Figma Integration:**
+
 - Figma token synchronization with Design Tokens Community Group (DTCG) format
 - Bidirectional sync (Figma ↔ Tekton)
 - Visual design token editor in Figma plugin
@@ -1080,6 +1119,7 @@ For detailed implementation status, see:
 - Design system governance with token validation
 
 **Phase E (Future) - AFDS Marketplace:**
+
 - Domain-specific screen contract packs (SaaS, E-commerce, Healthcare)
 - Community screen templates and presets
 - Component contract library marketplace
@@ -1107,6 +1147,7 @@ See [SPEC-PHASEAB-001](/.moai/specs/SPEC-PHASEAB-001/spec.md), [SPEC-PHASEB-002]
 4. **Future-Proof**: Supports P3 and Rec.2020 wide-gamut displays
 
 **Real-World Impact**:
+
 - **Design Systems**: Create accessible color scales that actually work
 - **Accessibility**: Meet WCAG requirements without manual tweaking
 - **Consistency**: Maintain visual harmony across brand colors

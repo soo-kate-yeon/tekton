@@ -21,10 +21,10 @@ Tekton MCP Server의 완전한 API 참조 문서입니다.
 
 ```typescript
 interface GenerateBlueprintInput {
-  description: string;        // 10-500자, 화면 설명
-  layout: LayoutType;         // 레이아웃 타입
-  themeId: string;            // 테마 ID (소문자, 숫자, 하이픈만)
-  componentHints?: string[];  // 선택적 컴포넌트 힌트
+  description: string; // 10-500자, 화면 설명
+  layout: LayoutType; // 레이아웃 타입
+  themeId: string; // 테마 ID (소문자, 숫자, 하이픈만)
+  componentHints?: string[]; // 선택적 컴포넌트 힌트
 }
 
 type LayoutType =
@@ -42,22 +42,22 @@ type LayoutType =
 interface GenerateBlueprintOutput {
   success: boolean;
   blueprint?: {
-    id: string;              // 타임스탬프 기반 ID (예: "1738123456789")
-    name: string;            // 블루프린트 이름
-    themeId: string;         // 적용된 테마 ID
-    layout: LayoutType;      // 레이아웃 타입
-    components: ComponentNode[];  // 컴포넌트 트리
-    timestamp: number;       // 생성 시각 (밀리초)
+    id: string; // 타임스탬프 기반 ID (예: "1738123456789")
+    name: string; // 블루프린트 이름
+    themeId: string; // 적용된 테마 ID
+    layout: LayoutType; // 레이아웃 타입
+    components: ComponentNode[]; // 컴포넌트 트리
+    timestamp: number; // 생성 시각 (밀리초)
   };
-  previewUrl?: string;       // 미리보기 URL
-  error?: string;            // 오류 메시지 (실패 시)
+  previewUrl?: string; // 미리보기 URL
+  error?: string; // 오류 메시지 (실패 시)
 }
 
 interface ComponentNode {
-  type: string;              // 컴포넌트 타입 (예: "Button", "Card")
-  props?: Record<string, any>;  // 컴포넌트 속성
-  children?: (ComponentNode | string)[];  // 자식 요소
-  slot?: string;             // 레이아웃 슬롯 (예: "main", "sidebar")
+  type: string; // 컴포넌트 타입 (예: "Button", "Card")
+  props?: Record<string, any>; // 컴포넌트 속성
+  children?: (ComponentNode | string)[]; // 자식 요소
+  slot?: string; // 레이아웃 슬롯 (예: "main", "sidebar")
 }
 ```
 
@@ -195,7 +195,7 @@ interface ComponentNode {
 
 ```typescript
 interface PreviewThemeInput {
-  themeId: string;  // 테마 ID (소문자, 숫자, 하이픈만)
+  themeId: string; // 테마 ID (소문자, 숫자, 하이픈만)
 }
 ```
 
@@ -205,13 +205,13 @@ interface PreviewThemeInput {
 interface PreviewThemeOutput {
   success: boolean;
   theme?: {
-    id: string;              // 테마 ID
-    name: string;            // 테마 표시 이름
-    description: string;     // 테마 설명
-    cssVariables: Record<string, string>;  // CSS 변수 맵
+    id: string; // 테마 ID
+    name: string; // 테마 표시 이름
+    description: string; // 테마 설명
+    cssVariables: Record<string, string>; // CSS 변수 맵
   };
-  previewUrl?: string;       // 미리보기 URL
-  error?: string;            // 오류 메시지 (실패 시)
+  previewUrl?: string; // 미리보기 URL
+  error?: string; // 오류 메시지 (실패 시)
 }
 ```
 
@@ -265,6 +265,7 @@ interface PreviewThemeOutput {
 #### CSS 변수 카테고리
 
 **색상 변수** (OKLCH 형식):
+
 - `--color-primary`: 주 색상
 - `--color-secondary`: 보조 색상
 - `--color-background`: 배경 색상
@@ -272,15 +273,18 @@ interface PreviewThemeOutput {
 - `--color-accent`: 강조 색상
 
 **타이포그래피**:
+
 - `--font-family`: 폰트 패밀리
 - `--font-size-base`: 기본 폰트 크기
 - `--line-height-base`: 기본 행간
 
 **간격**:
+
 - `--spacing-unit`: 기본 간격 단위 (8px)
 - `--border-radius`: 모서리 둥글기
 
 **그림자**:
+
 - `--shadow-sm`: 작은 그림자
 - `--shadow-md`: 중간 그림자
 - `--shadow-lg`: 큰 그림자
@@ -302,9 +306,9 @@ interface PreviewThemeOutput {
 
 ```typescript
 interface ExportScreenInput {
-  blueprintId: string;      // 블루프린트 ID (타임스탬프)
-  format: ExportFormat;     // 출력 형식
-  outputPath?: string;      // 선택적 저장 경로
+  blueprintId: string; // 블루프린트 ID (타임스탬프)
+  format: ExportFormat; // 출력 형식
+  outputPath?: string; // 선택적 저장 경로
 }
 
 type ExportFormat = 'jsx' | 'tsx' | 'vue';
@@ -315,9 +319,9 @@ type ExportFormat = 'jsx' | 'tsx' | 'vue';
 ```typescript
 interface ExportScreenOutput {
   success: boolean;
-  code?: string;            // 생성된 코드
-  filePath?: string;        // 저장된 파일 경로
-  error?: string;           // 오류 메시지 (실패 시)
+  code?: string; // 생성된 코드
+  filePath?: string; // 저장된 파일 경로
+  error?: string; // 오류 메시지 (실패 시)
 }
 ```
 
@@ -387,17 +391,20 @@ interface ExportScreenOutput {
 #### 형식별 특징
 
 **TSX (TypeScript React)**:
+
 - TypeScript 타입 어노테이션 포함
 - React 함수형 컴포넌트
 - ESM import 구문
 - Props 인터페이스 자동 생성
 
 **JSX (JavaScript React)**:
+
 - 일반 JavaScript
 - React 함수형 컴포넌트
 - JSDoc 주석 (타입 힌트)
 
 **Vue**:
+
 - Vue 3 Composition API
 - `<script setup>` 구문
 - TypeScript 지원
@@ -708,10 +715,10 @@ Access-Control-Allow-Origin: *
 
 ```typescript
 interface ComponentNode {
-  type: string;                              // 컴포넌트 타입
-  props?: Record<string, any>;               // 컴포넌트 속성
-  children?: (ComponentNode | string)[];     // 자식 요소
-  slot?: string;                             // 레이아웃 슬롯
+  type: string; // 컴포넌트 타입
+  props?: Record<string, any>; // 컴포넌트 속성
+  children?: (ComponentNode | string)[]; // 자식 요소
+  slot?: string; // 레이아웃 슬롯
 }
 ```
 
@@ -736,13 +743,14 @@ interface ComponentNode {
 
 ```typescript
 interface Blueprint {
-  id: string;                    // 고유 ID (타임스탬프)
-  name: string;                  // 블루프린트 이름
-  themeId: string;               // 테마 ID
-  layout: LayoutType;            // 레이아웃 타입
-  components: ComponentNode[];   // 컴포넌트 트리
-  timestamp: number;             // 생성 시각 (밀리초)
-  metadata?: {                   // 선택적 메타데이터
+  id: string; // 고유 ID (타임스탬프)
+  name: string; // 블루프린트 이름
+  themeId: string; // 테마 ID
+  layout: LayoutType; // 레이아웃 타입
+  components: ComponentNode[]; // 컴포넌트 트리
+  timestamp: number; // 생성 시각 (밀리초)
+  metadata?: {
+    // 선택적 메타데이터
     author?: string;
     version?: string;
     tags?: string[];
@@ -756,10 +764,10 @@ interface Blueprint {
 
 ```typescript
 interface Theme {
-  id: string;                              // 테마 ID
-  name: string;                            // 표시 이름
-  description: string;                     // 설명
-  cssVariables: Record<string, string>;    // CSS 변수 맵
+  id: string; // 테마 ID
+  name: string; // 표시 이름
+  description: string; // 설명
+  cssVariables: Record<string, string>; // CSS 변수 맵
 }
 ```
 
@@ -769,18 +777,18 @@ interface Theme {
 
 ### 클라이언트 오류 (4xx)
 
-| 코드 | 이름 | 설명 | 해결 방법 |
-|------|------|------|----------|
-| 400 | Bad Request | 잘못된 요청 형식 | 요청 스키마 확인 |
-| 404 | Not Found | 리소스를 찾을 수 없음 | URL 및 ID 확인 |
-| 422 | Unprocessable Entity | 검증 실패 | 입력 데이터 검증 |
+| 코드 | 이름                 | 설명                  | 해결 방법        |
+| ---- | -------------------- | --------------------- | ---------------- |
+| 400  | Bad Request          | 잘못된 요청 형식      | 요청 스키마 확인 |
+| 404  | Not Found            | 리소스를 찾을 수 없음 | URL 및 ID 확인   |
+| 422  | Unprocessable Entity | 검증 실패             | 입력 데이터 검증 |
 
 ### 서버 오류 (5xx)
 
-| 코드 | 이름 | 설명 | 해결 방법 |
-|------|------|------|----------|
-| 500 | Internal Server Error | 서버 내부 오류 | 서버 로그 확인 |
-| 503 | Service Unavailable | 서비스 이용 불가 | 서버 재시작 |
+| 코드 | 이름                  | 설명             | 해결 방법      |
+| ---- | --------------------- | ---------------- | -------------- |
+| 500  | Internal Server Error | 서버 내부 오류   | 서버 로그 확인 |
+| 503  | Service Unavailable   | 서비스 이용 불가 | 서버 재시작    |
 
 ### 응용 수준 오류
 
@@ -836,6 +844,7 @@ interface Theme {
 현재 MVP에서는 레이트 리밋이 적용되지 않습니다. 향후 버전에서 추가될 예정입니다.
 
 **권장 사항**:
+
 - 블루프린트 생성: 초당 최대 10회
 - 테마 미리보기: 초당 최대 20회
 - 코드 내보내기: 초당 최대 5회

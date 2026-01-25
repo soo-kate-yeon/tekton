@@ -31,18 +31,14 @@ describe('logger utility', () => {
       info(message);
 
       expect(consoleErrorSpy).toHaveBeenCalled();
-      expect(consoleErrorSpy).toHaveBeenCalledWith(
-        expect.stringContaining(message)
-      );
+      expect(consoleErrorSpy).toHaveBeenCalledWith(expect.stringContaining(message));
     });
 
     it('should include [INFO] prefix', () => {
       const message = 'Information message';
       info(message);
 
-      expect(consoleErrorSpy).toHaveBeenCalledWith(
-        expect.stringContaining('[INFO]')
-      );
+      expect(consoleErrorSpy).toHaveBeenCalledWith(expect.stringContaining('[INFO]'));
     });
 
     it('should handle additional arguments', () => {
@@ -52,11 +48,7 @@ describe('logger utility', () => {
 
       info(message, arg1, arg2);
 
-      expect(consoleErrorSpy).toHaveBeenCalledWith(
-        expect.stringContaining('[INFO]'),
-        arg1,
-        arg2
-      );
+      expect(consoleErrorSpy).toHaveBeenCalledWith(expect.stringContaining('[INFO]'), arg1, arg2);
     });
 
     it('should format message correctly', () => {
@@ -74,18 +66,14 @@ describe('logger utility', () => {
       error(message);
 
       expect(consoleErrorSpy).toHaveBeenCalled();
-      expect(consoleErrorSpy).toHaveBeenCalledWith(
-        expect.stringContaining(message)
-      );
+      expect(consoleErrorSpy).toHaveBeenCalledWith(expect.stringContaining(message));
     });
 
     it('should include [ERROR] prefix', () => {
       const message = 'Error occurred';
       error(message);
 
-      expect(consoleErrorSpy).toHaveBeenCalledWith(
-        expect.stringContaining('[ERROR]')
-      );
+      expect(consoleErrorSpy).toHaveBeenCalledWith(expect.stringContaining('[ERROR]'));
     });
 
     it('should handle error objects', () => {
@@ -94,10 +82,7 @@ describe('logger utility', () => {
 
       error(message, errorObj);
 
-      expect(consoleErrorSpy).toHaveBeenCalledWith(
-        expect.stringContaining('[ERROR]'),
-        errorObj
-      );
+      expect(consoleErrorSpy).toHaveBeenCalledWith(expect.stringContaining('[ERROR]'), errorObj);
     });
 
     it('should format message correctly', () => {
@@ -115,33 +100,26 @@ describe('logger utility', () => {
       debug(message);
 
       expect(consoleErrorSpy).toHaveBeenCalled();
-      expect(consoleErrorSpy).toHaveBeenCalledWith(
-        expect.stringContaining(message)
-      );
+      expect(consoleErrorSpy).toHaveBeenCalledWith(expect.stringContaining(message));
     });
 
     it('should include [DEBUG] prefix', () => {
       const message = 'Debug information';
       debug(message);
 
-      expect(consoleErrorSpy).toHaveBeenCalledWith(
-        expect.stringContaining('[DEBUG]')
-      );
+      expect(consoleErrorSpy).toHaveBeenCalledWith(expect.stringContaining('[DEBUG]'));
     });
 
     it('should handle complex debug data', () => {
       const message = 'Debug data';
       const debugData = {
         request: { id: 1, method: 'tools/list' },
-        timestamp: Date.now()
+        timestamp: Date.now(),
       };
 
       debug(message, debugData);
 
-      expect(consoleErrorSpy).toHaveBeenCalledWith(
-        expect.stringContaining('[DEBUG]'),
-        debugData
-      );
+      expect(consoleErrorSpy).toHaveBeenCalledWith(expect.stringContaining('[DEBUG]'), debugData);
     });
 
     it('should format message correctly', () => {
@@ -217,12 +195,7 @@ describe('logger utility', () => {
 
       info(message, arg1, arg2, arg3);
 
-      expect(consoleErrorSpy).toHaveBeenCalledWith(
-        `[INFO] ${message}`,
-        arg1,
-        arg2,
-        arg3
-      );
+      expect(consoleErrorSpy).toHaveBeenCalledWith(`[INFO] ${message}`, arg1, arg2, arg3);
     });
 
     it('should handle variadic arguments for all log levels', () => {

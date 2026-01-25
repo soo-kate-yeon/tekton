@@ -147,7 +147,10 @@ export function generateThemeCSS(theme: ThemeWithTokens): string {
                 semantic: {
                   ...tokens.semantic,
                   [category]: {
-                    ...(tokens.semantic[category as keyof typeof tokens.semantic] as Record<string, string>),
+                    ...(tokens.semantic[category as keyof typeof tokens.semantic] as Record<
+                      string,
+                      string
+                    >),
                     ...(values as Record<string, string>),
                   },
                 },
@@ -161,8 +164,13 @@ export function generateThemeCSS(theme: ThemeWithTokens): string {
     }
 
     // Dark mode component tokens
-    if (theme.darkMode.tokens.component && Object.keys(theme.darkMode.tokens.component).length > 0) {
-      lines.push(...generateComponentCSS(theme.darkMode.tokens.component as ComponentTokens, tokens));
+    if (
+      theme.darkMode.tokens.component &&
+      Object.keys(theme.darkMode.tokens.component).length > 0
+    ) {
+      lines.push(
+        ...generateComponentCSS(theme.darkMode.tokens.component as ComponentTokens, tokens)
+      );
     }
 
     lines.push('}');

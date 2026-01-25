@@ -40,15 +40,12 @@ export default function NotFound() {
           {/* Content */}
           <div className="p-6">
             <p className="text-gray-700 mb-6">
-              요청하신 Blueprint를 찾을 수 없습니다. Timestamp가 올바른지
-              확인해주세요.
+              요청하신 Blueprint를 찾을 수 없습니다. Timestamp가 올바른지 확인해주세요.
             </p>
 
             {/* Troubleshooting */}
             <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
-              <h3 className="text-sm font-medium text-blue-800 mb-2">
-                가능한 원인
-              </h3>
+              <h3 className="text-sm font-medium text-blue-800 mb-2">가능한 원인</h3>
               <ul className="text-sm text-blue-700 space-y-1">
                 <li>• Blueprint가 아직 생성되지 않았습니다</li>
                 <li>• Timestamp가 잘못되었습니다</li>

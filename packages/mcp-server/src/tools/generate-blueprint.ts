@@ -8,12 +8,16 @@ import {
   validateBlueprint,
   loadTheme,
   listThemes,
-  COMPONENT_CATALOG
+  COMPONENT_CATALOG,
 } from '@tekton/core';
 import type { ComponentNode } from '@tekton/core';
 import type { GenerateBlueprintInput, GenerateBlueprintOutput } from '../schemas/mcp-schemas.js';
 import { getDefaultStorage } from '../storage/blueprint-storage.js';
-import { createThemeNotFoundError, createValidationError, extractErrorMessage } from '../utils/error-handler.js';
+import {
+  createThemeNotFoundError,
+  createValidationError,
+  extractErrorMessage,
+} from '../utils/error-handler.js';
 
 type ComponentType = (typeof COMPONENT_CATALOG)[number];
 
@@ -36,7 +40,7 @@ function parseDescriptionToComponents(
         components.push({
           type: hint,
           slot: 'main',
-          children: []
+          children: [],
         });
       }
     }
@@ -45,21 +49,21 @@ function parseDescriptionToComponents(
   // Keyword-based component detection (fallback)
   if (components.length === 0) {
     const componentKeywords: Record<string, string[]> = {
-      'Card': ['card', 'panel', 'container'],
-      'Button': ['button', 'cta', 'action'],
-      'Avatar': ['avatar', 'profile picture', 'user icon'],
-      'Text': ['text', 'paragraph', 'description', 'bio'],
-      'Heading': ['title', 'heading', 'header'],
-      'Input': ['input', 'field', 'textbox'],
-      'Form': ['form', 'signup', 'login'],
-      'Image': ['image', 'photo', 'picture'],
-      'Link': ['link', 'anchor'],
-      'List': ['list', 'items'],
-      'Table': ['table', 'grid', 'data'],
-      'Modal': ['modal', 'dialog', 'popup'],
-      'Tabs': ['tabs', 'tabbed'],
-      'Badge': ['badge', 'tag', 'label'],
-      'Dropdown': ['dropdown', 'select', 'menu']
+      Card: ['card', 'panel', 'container'],
+      Button: ['button', 'cta', 'action'],
+      Avatar: ['avatar', 'profile picture', 'user icon'],
+      Text: ['text', 'paragraph', 'description', 'bio'],
+      Heading: ['title', 'heading', 'header'],
+      Input: ['input', 'field', 'textbox'],
+      Form: ['form', 'signup', 'login'],
+      Image: ['image', 'photo', 'picture'],
+      Link: ['link', 'anchor'],
+      List: ['list', 'items'],
+      Table: ['table', 'grid', 'data'],
+      Modal: ['modal', 'dialog', 'popup'],
+      Tabs: ['tabs', 'tabbed'],
+      Badge: ['badge', 'tag', 'label'],
+      Dropdown: ['dropdown', 'select', 'menu'],
     };
 
     for (const [componentType, keywords] of Object.entries(componentKeywords)) {
@@ -67,7 +71,7 @@ function parseDescriptionToComponents(
         components.push({
           type: componentType,
           slot: 'main',
-          children: []
+          children: [],
         });
       }
     }
@@ -81,9 +85,9 @@ function parseDescriptionToComponents(
       children: [
         {
           type: 'Text',
-          children: ['Generated content']
-        }
-      ]
+          children: ['Generated content'],
+        },
+      ],
     });
   }
 
@@ -131,13 +135,13 @@ export async function generateBlueprintTool(
       name,
       themeId: input.themeId,
       layout: input.layout,
-      components
+      components,
     });
 
     // Add timestamp to blueprint
     const blueprintWithTimestamp = {
       ...blueprint,
-      timestamp
+      timestamp,
     };
 
     // SPEC: U-003 @tekton/core Integration - Use validateBlueprint from @tekton/core
@@ -161,13 +165,13 @@ export async function generateBlueprintTool(
         themeId: blueprint.themeId,
         layout: blueprint.layout,
         components: blueprint.components,
-        timestamp
-      }
+        timestamp,
+      },
     };
   } catch (error) {
     return {
       success: false,
-      error: extractErrorMessage(error)
+      error: extractErrorMessage(error),
     };
   }
 }

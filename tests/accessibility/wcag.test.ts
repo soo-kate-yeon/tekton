@@ -117,7 +117,7 @@ test.describe('WCAG 2.1 AA 준수 검증', () => {
 
     // 색상 대비 위반 사항 검사
     const contrastViolations = results.violations.filter(
-      (violation) => violation.id === 'color-contrast'
+      violation => violation.id === 'color-contrast'
     );
 
     expect(contrastViolations).toHaveLength(0);
@@ -145,9 +145,7 @@ test.describe('WCAG 2.1 AA 준수 검증', () => {
     `);
 
     // 포커스 가능한 요소들이 올바른 순서로 접근 가능한지 확인
-    const results = await new AxeBuilder({ page })
-      .withTags(['wcag2a', 'wcag21a'])
-      .analyze();
+    const results = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag21a']).analyze();
 
     expect(results.violations).toEqual([]);
   });
@@ -184,9 +182,7 @@ test.describe('WCAG 2.1 AA 준수 검증', () => {
       </html>
     `);
 
-    const results = await new AxeBuilder({ page })
-      .withTags(['wcag2a', 'wcag2aa'])
-      .analyze();
+    const results = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa']).analyze();
 
     expect(results.violations).toEqual([]);
   });
@@ -240,9 +236,7 @@ test.describe('WCAG 2.1 AA 준수 검증', () => {
       </html>
     `);
 
-    const results = await new AxeBuilder({ page })
-      .withTags(['wcag2a', 'wcag2aa'])
-      .analyze();
+    const results = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa']).analyze();
 
     expect(results.violations).toEqual([]);
   });
@@ -323,9 +317,7 @@ test.describe('WCAG 2.1 AA 준수 검증', () => {
       </html>
     `);
 
-    const results = await new AxeBuilder({ page })
-      .withTags(['wcag2a', 'wcag2aa'])
-      .analyze();
+    const results = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa']).analyze();
 
     expect(results.violations).toEqual([]);
   });

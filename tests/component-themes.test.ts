@@ -27,7 +27,7 @@ describe('Component Themes - TASK-018 & TASK-019', () => {
 
       expect(theme.accessibility).toBeDefined();
       expect(theme.accessibility!.length).toBeGreaterThan(0);
-      theme.accessibility!.forEach((check) => {
+      theme.accessibility!.forEach(check => {
         expect(check.wcagLevel).toBe('AA');
       });
     });
@@ -144,23 +144,23 @@ describe('Component Themes - TASK-018 & TASK-019', () => {
       const themes = generateComponentThemes({ l: 0.5, c: 0.15, h: 220 });
 
       expect(themes).toHaveLength(8);
-      expect(themes.map((p) => p.name)).toContain('button');
-      expect(themes.map((p) => p.name)).toContain('input');
-      expect(themes.map((p) => p.name)).toContain('card');
-      expect(themes.map((p) => p.name)).toContain('badge');
-      expect(themes.map((p) => p.name)).toContain('alert');
-      expect(themes.map((p) => p.name)).toContain('link');
-      expect(themes.map((p) => p.name)).toContain('checkbox');
-      expect(themes.map((p) => p.name)).toContain('radio');
+      expect(themes.map(p => p.name)).toContain('button');
+      expect(themes.map(p => p.name)).toContain('input');
+      expect(themes.map(p => p.name)).toContain('card');
+      expect(themes.map(p => p.name)).toContain('badge');
+      expect(themes.map(p => p.name)).toContain('alert');
+      expect(themes.map(p => p.name)).toContain('link');
+      expect(themes.map(p => p.name)).toContain('checkbox');
+      expect(themes.map(p => p.name)).toContain('radio');
     });
 
     it('should validate WCAG AA for all themes', () => {
       const themes = generateComponentThemes({ l: 0.5, c: 0.15, h: 220 });
 
-      themes.forEach((theme) => {
+      themes.forEach(theme => {
         expect(theme.accessibility).toBeDefined();
         if (theme.accessibility && theme.accessibility.length > 0) {
-          theme.accessibility.forEach((check) => {
+          theme.accessibility.forEach(check => {
             expect(check.wcagLevel).toBe('AA');
           });
         }
@@ -172,7 +172,7 @@ describe('Component Themes - TASK-018 & TASK-019', () => {
     it('should ensure all button states pass WCAG AA', () => {
       const theme = buttonTheme({ l: 0.5, c: 0.15, h: 220 });
 
-      theme.accessibility?.forEach((check) => {
+      theme.accessibility?.forEach(check => {
         expect(check.passed).toBe(true);
       });
     });
@@ -180,7 +180,7 @@ describe('Component Themes - TASK-018 & TASK-019', () => {
     it('should ensure all input states pass WCAG AA', () => {
       const theme = inputTheme({ l: 0.5, c: 0.15, h: 220 });
 
-      theme.accessibility?.forEach((check) => {
+      theme.accessibility?.forEach(check => {
         expect(check.passed).toBe(true);
       });
     });

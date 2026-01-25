@@ -11,6 +11,7 @@
 This document analyzes integration points between the Tekton Worktree Management System (Phases 1-4 complete, 314 tests passing) and the MoAI workflow commands (`/moai:1-plan`, `/moai:2-run`, `/moai:3-sync`). The worktree system is fully implemented with CLI commands, but the MoAI commands need updates to suggest and utilize worktrees during SPEC development.
 
 **Current State**:
+
 - Worktree System: 100% complete (314 tests passing)
 - MoAI Integration: Partially complete (worktree creation exists in `/moai:1-plan`)
 - CLI Commands: Fully functional (`tekton worktree new|list|switch|remove|sync|status|config|clean`)
@@ -28,6 +29,7 @@ This document analyzes integration points between the Tekton Worktree Management
 **Current Worktree Support**: IMPLEMENTED (lines 884-1152)
 
 The `/moai:1-plan` command already supports worktree creation through:
+
 - `--worktree` flag parsing (line 885)
 - WorktreeManager integration (lines 896-917)
 - Success output with navigation guidance (lines 907-911)
@@ -36,6 +38,7 @@ The `/moai:1-plan` command already supports worktree creation through:
 **Integration Status**: ✅ Complete
 
 **Existing Implementation**:
+
 ```markdown
 #### Step 2.5: Worktree Creation (NEW - When --worktree flag provided)
 
@@ -44,10 +47,12 @@ CONDITION: `--worktree` flag is provided in user command
 ACTION: Create Git worktree using WorktreeManager
 
 Step 2.5A - Parse Command Arguments:
+
 - Parse the command arguments from ARGUMENTS variable
 - Check if --worktree flag is present in the arguments
 
 Step 2.5B - Worktree Creation (when --worktree flag is present):
+
 - Determine project root as the current working directory
 - Set worktree root to the user home directory under worktrees/MoAI-ADK
 - Initialize the WorktreeManager with project root and worktree root paths
@@ -58,11 +63,13 @@ Step 2.5B - Worktree Creation (when --worktree flag is present):
 ```
 
 **Recommendation**: Working as designed. Consider adding to status output:
+
 - Suggest `tekton worktree new` if user doesn't use `--worktree` flag
 - Show worktree list at completion to remind users of parallel dev capability
 
 **Example Enhancement** (Optional):
 After SPEC creation, when no `--worktree` flag is provided, show:
+
 ```
 SPEC created successfully: SPEC-AUTH-001
 
@@ -101,25 +108,31 @@ Before analyzing SPEC, detect if running in worktree:
    - Alternative: Check worktree registry at `~/.worktrees/.moai-worktree-registry.json`
 
 2. Display Environment Context:
-   ```
-   Development Environment: Worktree (SPEC-AUTH-001)
-   Path: ~/.worktrees/SPEC-AUTH-001
-   Branch: feature/SPEC-AUTH-001
-   Base: master
-   Sync Status: Up to date (0 commits behind)
-   ```
+```
+
+Development Environment: Worktree (SPEC-AUTH-001)
+Path: ~/.worktrees/SPEC-AUTH-001
+Branch: feature/SPEC-AUTH-001
+Base: master
+Sync Status: Up to date (0 commits behind)
+
+```
 
 3. If NOT in worktree:
-   ```
-   Development Environment: Main Repository
-   Current Branch: feature/SPEC-AUTH-001
+```
 
-   Tip: Consider using worktrees for parallel development:
-     tekton worktree new SPEC-AUTH-001 "Description"
-   ```
+Development Environment: Main Repository
+Current Branch: feature/SPEC-AUTH-001
+
+Tip: Consider using worktrees for parallel development:
+tekton worktree new SPEC-AUTH-001 "Description"
+
+```
+
 ```
 
 **Integration Point Code**:
+
 ```typescript
 // Before Phase 1 execution
 async function detectWorktreeEnvironment(): Promise<WorktreeContext | null> {
@@ -158,11 +171,13 @@ async function detectWorktreeEnvironment(): Promise<WorktreeContext | null> {
 **Current Worktree Support**: PARTIALLY IMPLEMENTED (lines 337-350, 1142-1182)
 
 **Existing Features**:
+
 1. Worktree detection logic (lines 337-350)
 2. Worktree-specific next steps (lines 1144-1182)
 3. `--worktree` flag support (line 91)
 
 **Current Implementation**:
+
 ```markdown
 4. [SOFT] Handle Worktree Detection:
 
@@ -173,8 +188,8 @@ async function detectWorktreeEnvironment(): Promise<WorktreeContext | null> {
    - If in worktree: Extract SPEC ID from current path (format: SPEC-{DOMAIN}-{NUMBER})
    - Alternative: Check worktree registry at `~/worktrees/{PROJECT_NAME}/.moai-worktree-registry.json`
    - Store: `$WORKTREE_MODE=true` and `$CURRENT_SPEC_ID` for later use
-   WHY: Worktree context enables specialized cleanup and workflow options
-   IMPACT: Missing worktree detection prevents proper exit handling but does not block sync
+     WHY: Worktree context enables specialized cleanup and workflow options
+     IMPACT: Missing worktree detection prevents proper exit handling but does not block sync
 ```
 
 **Recommended Enhancement**:
@@ -192,29 +207,33 @@ If executing in worktree context:
    - If behind > 0: Suggest sync before documentation sync
 
 2. Prompt User for Worktree Sync:
-   ```
-   Worktree Status: SPEC-AUTH-001
-   Commits ahead: 5
-   Commits behind: 2  ← Your worktree is behind the base branch
+```
 
-   Options:
-   1. Sync Worktree First (recommended)
-      - Ensures base branch changes are included
-      - Prevents conflicts during documentation sync
-   2. Skip Worktree Sync
-      - Continue with current state
-      - May cause sync conflicts if base changed
-   3. Abort
-      - Exit and sync manually
-   ```
+Worktree Status: SPEC-AUTH-001
+Commits ahead: 5
+Commits behind: 2 ← Your worktree is behind the base branch
+
+Options:
+
+1.  Sync Worktree First (recommended)
+    - Ensures base branch changes are included
+    - Prevents conflicts during documentation sync
+2.  Skip Worktree Sync
+    - Continue with current state
+    - May cause sync conflicts if base changed
+3.  Abort
+    - Exit and sync manually
+
+```
 
 3. If user chooses "Sync Worktree First":
-   - Execute: `tekton worktree sync $CURRENT_SPEC_ID`
-   - Wait for sync completion
-   - Proceed to documentation sync
+- Execute: `tekton worktree sync $CURRENT_SPEC_ID`
+- Wait for sync completion
+- Proceed to documentation sync
 ```
 
 **Integration Point Code**:
+
 ```typescript
 // Before Phase 2 execution
 async function validateWorktreeSync(specId: string): Promise<boolean> {
@@ -224,11 +243,7 @@ async function validateWorktreeSync(specId: string): Promise<boolean> {
   if (parsed.behind > 0) {
     const choice = await askUser({
       question: `Worktree is ${parsed.behind} commits behind. Sync before doc sync?`,
-      options: [
-        'Sync Worktree First (recommended)',
-        'Skip Worktree Sync',
-        'Abort'
-      ]
+      options: ['Sync Worktree First (recommended)', 'Skip Worktree Sync', 'Abort'],
     });
 
     if (choice === 0) {
@@ -254,16 +269,16 @@ For MoAI command integration, these worktree commands are available:
 
 ### Core Commands
 
-| Command | Usage | Purpose |
-|---------|-------|---------|
-| `new` | `tekton worktree new SPEC-001 "Description"` | Create isolated worktree |
-| `list` | `tekton worktree list [--status active]` | List all worktrees |
-| `switch` | `tekton worktree switch SPEC-001` | Get path to worktree |
-| `status` | `tekton worktree status SPEC-001` | Check sync status |
-| `sync` | `tekton worktree sync SPEC-001` | Sync with base branch |
-| `remove` | `tekton worktree remove SPEC-001` | Remove worktree |
-| `clean` | `tekton worktree clean --merged-only` | Clean merged worktrees |
-| `config` | `tekton worktree config list` | View configuration |
+| Command  | Usage                                        | Purpose                  |
+| -------- | -------------------------------------------- | ------------------------ |
+| `new`    | `tekton worktree new SPEC-001 "Description"` | Create isolated worktree |
+| `list`   | `tekton worktree list [--status active]`     | List all worktrees       |
+| `switch` | `tekton worktree switch SPEC-001`            | Get path to worktree     |
+| `status` | `tekton worktree status SPEC-001`            | Check sync status        |
+| `sync`   | `tekton worktree sync SPEC-001`              | Sync with base branch    |
+| `remove` | `tekton worktree remove SPEC-001`            | Remove worktree          |
+| `clean`  | `tekton worktree clean --merged-only`        | Clean merged worktrees   |
+| `config` | `tekton worktree config list`                | View configuration       |
 
 ### JSON Output Support
 
@@ -288,11 +303,13 @@ Based on impact and effort analysis:
 ### Priority 1: CRITICAL (Must Have)
 
 **1. `/moai:3-sync` - Pre-Sync Worktree Validation**
+
 - **Impact**: HIGH (prevents sync conflicts)
 - **Effort**: LOW (simple status check + user prompt)
 - **Implementation**: Add Step 2.0 validation before Phase 2
 
 **Benefits**:
+
 - Prevents documentation sync conflicts
 - Ensures base branch changes are included
 - Improves workflow reliability
@@ -300,21 +317,25 @@ Based on impact and effort analysis:
 ### Priority 2: HIGH (Should Have)
 
 **2. `/moai:2-run` - Worktree Context Display**
+
 - **Impact**: MEDIUM (improves developer awareness)
 - **Effort**: LOW (detection + display logic)
 - **Implementation**: Add Step 1.1 environment detection before Phase 1
 
 **Benefits**:
+
 - Clear context for developers
 - Prevents confusion about current SPEC
 - Shows sync status at start
 
 **3. `/moai:1-plan` - Worktree Suggestion (Enhancement)**
+
 - **Impact**: MEDIUM (improves discoverability)
 - **Effort**: LOW (add suggestion to output)
 - **Implementation**: Add tip to success message when `--worktree` not used
 
 **Benefits**:
+
 - Educates users about worktree benefits
 - Increases worktree adoption
 - Improves parallel development
@@ -322,11 +343,13 @@ Based on impact and effort analysis:
 ### Priority 3: NICE TO HAVE (Optional)
 
 **4. Automated Worktree Cleanup**
+
 - **Impact**: LOW (convenience feature)
 - **Effort**: MEDIUM (add cleanup logic to `/moai:3-sync`)
 - **Implementation**: After PR merge, suggest `tekton worktree clean --merged-only`
 
 **5. Worktree Health Dashboard**
+
 - **Impact**: LOW (informational only)
 - **Effort**: HIGH (new command implementation)
 - **Implementation**: New `tekton worktree dashboard` command showing all active worktrees
@@ -459,6 +482,7 @@ echo "Test 2: PASSED"
 5. Update README with worktree section
 
 **Deliverables**:
+
 - Updated command documentation
 - Integration analysis document ✅ (this file)
 - README updates
@@ -472,6 +496,7 @@ echo "Test 2: PASSED"
 4. Update command help text
 
 **Deliverables**:
+
 - Working validation logic
 - Test coverage ≥85%
 - Updated command files
@@ -484,6 +509,7 @@ echo "Test 2: PASSED"
 4. Update examples in documentation
 
 **Deliverables**:
+
 - Working context display
 - Enhanced suggestions
 - Updated examples
@@ -496,6 +522,7 @@ echo "Test 2: PASSED"
 4. Gather user feedback
 
 **Deliverables**:
+
 - Validated integration
 - Complete documentation
 - User feedback collected
@@ -537,6 +564,7 @@ The Tekton Worktree Management System is fully implemented (314 tests passing) a
 3. **`/moai:3-sync`**: Needs pre-sync validation (Priority 1)
 
 **Recommended Next Steps**:
+
 1. Implement Priority 1: `/moai:3-sync` pre-sync validation
 2. Implement Priority 2: `/moai:2-run` context display
 3. Enhance `/moai:1-plan` with worktree suggestions

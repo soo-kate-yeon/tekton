@@ -36,7 +36,7 @@ describe('stdio transport', () => {
         reject(new Error('Request timeout'));
       }, 5000);
 
-      server.stdout?.on('data', (data) => {
+      server.stdout?.on('data', data => {
         stdoutData += data.toString();
 
         // Try to parse complete JSON-RPC response
@@ -53,11 +53,11 @@ describe('stdio transport', () => {
         }
       });
 
-      server.stderr?.on('data', (data) => {
+      server.stderr?.on('data', data => {
         stderrData += data.toString();
       });
 
-      server.on('error', (error) => {
+      server.on('error', error => {
         clearTimeout(timeout);
         reject(error);
       });
@@ -73,7 +73,7 @@ describe('stdio transport', () => {
       jsonrpc: '2.0',
       id: 1,
       method: 'tools/list',
-      params: {}
+      params: {},
     };
 
     const response = await sendRequest(request);
@@ -103,9 +103,9 @@ describe('stdio transport', () => {
       params: {
         name: 'preview-theme',
         arguments: {
-          themeId: 'calm-wellness'
-        }
-      }
+          themeId: 'calm-wellness',
+        },
+      },
     };
 
     const response = await sendRequest(request);
@@ -135,8 +135,8 @@ describe('stdio transport', () => {
       method: 'tools/call',
       params: {
         name: 'non-existent-tool',
-        arguments: {}
-      }
+        arguments: {},
+      },
     };
 
     const response = await sendRequest(request);
@@ -161,8 +161,8 @@ describe('stdio transport', () => {
       method: 'tools/call',
       params: {
         name: 'preview-theme',
-        arguments: {}
-      }
+        arguments: {},
+      },
     };
 
     const response = await sendRequest(request);
@@ -202,8 +202,11 @@ describe('stdio transport', () => {
         resolve(undefined);
       }, 3000);
 
-      server.stdout?.on('data', (data) => {
-        const lines = data.toString().split('\n').filter((l: string) => l.trim());
+      server.stdout?.on('data', data => {
+        const lines = data
+          .toString()
+          .split('\n')
+          .filter((l: string) => l.trim());
         stdoutLines.push(...lines);
 
         if (!receivedResponse && lines.length > 0) {
@@ -211,12 +214,15 @@ describe('stdio transport', () => {
         }
       });
 
-      server.stderr?.on('data', (data) => {
-        const lines = data.toString().split('\n').filter((l: string) => l.trim());
+      server.stderr?.on('data', data => {
+        const lines = data
+          .toString()
+          .split('\n')
+          .filter((l: string) => l.trim());
         stderrLines.push(...lines);
       });
 
-      server.on('error', (error) => {
+      server.on('error', error => {
         clearTimeout(timeout);
         reject(error);
       });
@@ -226,7 +232,7 @@ describe('stdio transport', () => {
         jsonrpc: '2.0',
         id: 1,
         method: 'tools/list',
-        params: {}
+        params: {},
       };
 
       server.stdin?.write(JSON.stringify(request) + '\n');

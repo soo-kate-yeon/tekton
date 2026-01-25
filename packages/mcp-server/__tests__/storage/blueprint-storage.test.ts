@@ -37,7 +37,7 @@ describe('BlueprintStorage', () => {
         name: 'Test Blueprint',
         themeId: 'calm-wellness',
         layout: 'single-column',
-        components: []
+        components: [],
       };
 
       const blueprintId = await storage.saveBlueprint(blueprint);
@@ -56,7 +56,7 @@ describe('BlueprintStorage', () => {
         name: 'Test Blueprint',
         themeId: 'calm-wellness',
         layout: 'single-column',
-        components: []
+        components: [],
       };
 
       // Save first blueprint
@@ -84,7 +84,7 @@ describe('BlueprintStorage', () => {
         name: 'Test Blueprint',
         themeId: 'calm-wellness',
         layout: 'single-column',
-        components: []
+        components: [],
       };
 
       const blueprintId = await storage.saveBlueprint(blueprint);
@@ -113,7 +113,7 @@ describe('BlueprintStorage', () => {
         name: 'Test Blueprint',
         themeId: 'calm-wellness',
         layout: 'single-column',
-        components: []
+        components: [],
       };
 
       const blueprintId = await storage.saveBlueprint(blueprint);
@@ -139,7 +139,7 @@ describe('BlueprintStorage', () => {
         name: 'Test Blueprint',
         themeId: 'calm-wellness',
         layout: 'single-column',
-        components: []
+        components: [],
       };
 
       const blueprintId = await storage.saveBlueprint(blueprint);
@@ -164,7 +164,7 @@ describe('BlueprintStorage', () => {
     it('should accept custom TTL days', async () => {
       const customStorage = new BlueprintStorage({
         baseDir: testStorageDir,
-        ttlDays: 60
+        ttlDays: 60,
       });
 
       const blueprint: Blueprint = {
@@ -172,7 +172,7 @@ describe('BlueprintStorage', () => {
         name: 'Test Blueprint',
         themeId: 'calm-wellness',
         layout: 'single-column',
-        components: []
+        components: [],
       };
 
       const blueprintId = await customStorage.saveBlueprint(blueprint);

@@ -37,9 +37,7 @@ export default function Error({
                 </svg>
               </div>
               <div>
-                <h2 className="text-xl font-bold text-red-800">
-                  Failed to load preview
-                </h2>
+                <h2 className="text-xl font-bold text-red-800">Failed to load preview</h2>
                 <p className="text-sm text-red-600 mt-1">
                   Blueprint를 불러오는 중 오류가 발생했습니다
                 </p>
@@ -50,21 +48,15 @@ export default function Error({
           {/* Error Details */}
           <div className="p-6">
             <div className="mb-4">
-              <h3 className="text-sm font-medium text-gray-700 mb-2">
-                오류 메시지
-              </h3>
+              <h3 className="text-sm font-medium text-gray-700 mb-2">오류 메시지</h3>
               <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
-                <code className="text-sm text-red-600 break-all">
-                  {error.message}
-                </code>
+                <code className="text-sm text-red-600 break-all">{error.message}</code>
               </div>
             </div>
 
             {error.digest && (
               <div className="mb-4">
-                <h3 className="text-sm font-medium text-gray-700 mb-2">
-                  Error ID
-                </h3>
+                <h3 className="text-sm font-medium text-gray-700 mb-2">Error ID</h3>
                 <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
                   <code className="text-sm text-gray-600">{error.digest}</code>
                 </div>
@@ -73,9 +65,7 @@ export default function Error({
 
             {/* Troubleshooting */}
             <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
-              <h3 className="text-sm font-medium text-blue-800 mb-2">
-                문제 해결 방법
-              </h3>
+              <h3 className="text-sm font-medium text-blue-800 mb-2">문제 해결 방법</h3>
               <ul className="text-sm text-blue-700 space-y-1">
                 <li>• MCP 서버가 실행 중인지 확인하세요 (localhost:3000)</li>
                 <li>• Timestamp가 올바른지 확인하세요</li>

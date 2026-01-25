@@ -56,7 +56,8 @@ export function resolveToken(
   }
 
   // Check if it's a token reference (starts with atomic, semantic, or component)
-  const startsWithLayer = ref.startsWith('atomic.') || ref.startsWith('semantic.') || ref.startsWith('component.');
+  const startsWithLayer =
+    ref.startsWith('atomic.') || ref.startsWith('semantic.') || ref.startsWith('component.');
   if (!startsWithLayer) {
     return ref; // Return direct value like "#3b82f6"
   }
@@ -76,7 +77,10 @@ export function resolveToken(
   }
 
   // If value is another reference, resolve recursively
-  if (typeof value === 'string' && (value.startsWith('atomic.') || value.startsWith('semantic.') || value.startsWith('component.'))) {
+  if (
+    typeof value === 'string' &&
+    (value.startsWith('atomic.') || value.startsWith('semantic.') || value.startsWith('component.'))
+  ) {
     return resolveToken(value, tokens, visited);
   }
 

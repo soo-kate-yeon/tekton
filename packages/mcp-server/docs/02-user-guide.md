@@ -21,12 +21,12 @@ Tekton MCP Server의 모든 기능을 활용하는 방법을 배웁니다.
 
 #### 입력 파라미터
 
-| 파라미터 | 타입 | 필수 | 설명 | 제약 조건 |
-|---------|------|------|------|-----------|
-| `description` | string | ✓ | 화면에 대한 자연어 설명 | 10-500자 |
-| `layout` | string | ✓ | 레이아웃 타입 | 6가지 중 선택 |
-| `themeId` | string | ✓ | 테마 ID | 소문자, 숫자, 하이픈만 |
-| `componentHints` | string[] | ✗ | 사용할 컴포넌트 힌트 | 선택적 |
+| 파라미터         | 타입     | 필수 | 설명                    | 제약 조건              |
+| ---------------- | -------- | ---- | ----------------------- | ---------------------- |
+| `description`    | string   | ✓    | 화면에 대한 자연어 설명 | 10-500자               |
+| `layout`         | string   | ✓    | 레이아웃 타입           | 6가지 중 선택          |
+| `themeId`        | string   | ✓    | 테마 ID                 | 소문자, 숫자, 하이픈만 |
+| `componentHints` | string[] | ✗    | 사용할 컴포넌트 힌트    | 선택적                 |
 
 #### 출력 형식
 
@@ -80,12 +80,12 @@ Use generate-blueprint with:
 
 #### 오류 처리
 
-| 오류 코드 | 원인 | 해결 방법 |
-|----------|------|----------|
-| `INVALID_DESCRIPTION` | 설명이 10자 미만 또는 500자 초과 | 적절한 길이로 조정 |
-| `INVALID_THEME_ID` | 존재하지 않는 테마 | `/api/themes`에서 사용 가능한 테마 확인 |
-| `INVALID_LAYOUT` | 지원되지 않는 레이아웃 | 6가지 레이아웃 중 선택 |
-| `VALIDATION_FAILED` | 블루프린트 검증 실패 | 컴포넌트 구조 확인 |
+| 오류 코드             | 원인                             | 해결 방법                               |
+| --------------------- | -------------------------------- | --------------------------------------- |
+| `INVALID_DESCRIPTION` | 설명이 10자 미만 또는 500자 초과 | 적절한 길이로 조정                      |
+| `INVALID_THEME_ID`    | 존재하지 않는 테마               | `/api/themes`에서 사용 가능한 테마 확인 |
+| `INVALID_LAYOUT`      | 지원되지 않는 레이아웃           | 6가지 레이아웃 중 선택                  |
+| `VALIDATION_FAILED`   | 블루프린트 검증 실패             | 컴포넌트 구조 확인                      |
 
 ---
 
@@ -95,9 +95,9 @@ Use generate-blueprint with:
 
 #### 입력 파라미터
 
-| 파라미터 | 타입 | 필수 | 설명 | 제약 조건 |
-|---------|------|------|------|-----------|
-| `themeId` | string | ✓ | 미리보기할 테마 ID | 소문자, 숫자, 하이픈만 |
+| 파라미터  | 타입   | 필수 | 설명               | 제약 조건              |
+| --------- | ------ | ---- | ------------------ | ---------------------- |
+| `themeId` | string | ✓    | 미리보기할 테마 ID | 소문자, 숫자, 하이픈만 |
 
 #### 출력 형식
 
@@ -139,9 +139,9 @@ Use preview-theme with themeId: premium-editorial
 :root {
   /* 색상 변수 (OKLCH 형식) */
   --color-primary: oklch(0.45 0.15 220);
-  --color-secondary: oklch(0.60 0.12 280);
+  --color-secondary: oklch(0.6 0.12 280);
   --color-background: oklch(0.98 0.02 220);
-  --color-text: oklch(0.20 0.05 220);
+  --color-text: oklch(0.2 0.05 220);
 
   /* 타이포그래피 */
   --font-family: 'Inter', sans-serif;
@@ -153,8 +153,8 @@ Use preview-theme with themeId: premium-editorial
   --border-radius: 8px;
 
   /* 그림자 */
-  --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
-  --shadow-md: 0 4px 6px rgba(0,0,0,0.1);
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 ```
 
@@ -166,11 +166,11 @@ Use preview-theme with themeId: premium-editorial
 
 #### 입력 파라미터
 
-| 파라미터 | 타입 | 필수 | 설명 | 제약 조건 |
-|---------|------|------|------|-----------|
-| `blueprintId` | string | ✓ | 내보낼 블루프린트 ID | 타임스탬프 형식 |
-| `format` | string | ✓ | 출력 형식 | jsx, tsx, vue |
-| `outputPath` | string | ✗ | 저장 경로 | 선택적 |
+| 파라미터      | 타입   | 필수 | 설명                 | 제약 조건       |
+| ------------- | ------ | ---- | -------------------- | --------------- |
+| `blueprintId` | string | ✓    | 내보낼 블루프린트 ID | 타임스탬프 형식 |
+| `format`      | string | ✓    | 출력 형식            | jsx, tsx, vue   |
+| `outputPath`  | string | ✗    | 저장 경로            | 선택적          |
 
 #### 출력 형식
 
@@ -245,32 +245,34 @@ Tekton은 13개의 내장 테마를 제공하며, 각 테마는 OKLCH 색상 공
 
 ### 13개 내장 테마
 
-| 테마 ID | 테마 이름 | 용도 | 특징 |
-|---------|----------|------|------|
-| `calm-wellness` | Calm Wellness | 웰니스/명상 앱 | 부드러운 파란색, 평온함 |
-| `dynamic-fitness` | Dynamic Fitness | 피트니스 트래킹 | 활기찬 빨간색, 에너지 |
-| `korean-fintech` | Korean Fintech | 금융 서비스 | 전문적인 파란색, 신뢰감 |
-| `premium-editorial` | Premium Editorial | 콘텐츠 플랫폼 | 세리프 폰트, 높은 대비 |
-| `playful-kids` | Playful Kids | 어린이 앱 | 밝은 색상, 큰 요소 |
-| `corporate-blue` | Corporate Blue | 기업 소프트웨어 | 전통적인 파란색 |
-| `nature-green` | Nature Green | 환경/지속가능성 | 녹색 기반 |
-| `sunset-warm` | Sunset Warm | 따뜻한 경험 | 주황색/노란색 |
-| `ocean-cool` | Ocean Cool | 신선하고 전문적 | 청록색 |
-| `monochrome-elegant` | Monochrome Elegant | 미니멀리즘 럭셔리 | 흑백 |
-| `vibrant-creative` | Vibrant Creative | 크리에이티브 툴 | 생동감 있는 색상 |
-| `accessibility-high-contrast` | High Contrast | 접근성 우선 | WCAG AAA 준수 |
-| `dark-mode-default` | Dark Mode | 다크 테마 | 현대적인 어두운 UI |
+| 테마 ID                       | 테마 이름          | 용도              | 특징                    |
+| ----------------------------- | ------------------ | ----------------- | ----------------------- |
+| `calm-wellness`               | Calm Wellness      | 웰니스/명상 앱    | 부드러운 파란색, 평온함 |
+| `dynamic-fitness`             | Dynamic Fitness    | 피트니스 트래킹   | 활기찬 빨간색, 에너지   |
+| `korean-fintech`              | Korean Fintech     | 금융 서비스       | 전문적인 파란색, 신뢰감 |
+| `premium-editorial`           | Premium Editorial  | 콘텐츠 플랫폼     | 세리프 폰트, 높은 대비  |
+| `playful-kids`                | Playful Kids       | 어린이 앱         | 밝은 색상, 큰 요소      |
+| `corporate-blue`              | Corporate Blue     | 기업 소프트웨어   | 전통적인 파란색         |
+| `nature-green`                | Nature Green       | 환경/지속가능성   | 녹색 기반               |
+| `sunset-warm`                 | Sunset Warm        | 따뜻한 경험       | 주황색/노란색           |
+| `ocean-cool`                  | Ocean Cool         | 신선하고 전문적   | 청록색                  |
+| `monochrome-elegant`          | Monochrome Elegant | 미니멀리즘 럭셔리 | 흑백                    |
+| `vibrant-creative`            | Vibrant Creative   | 크리에이티브 툴   | 생동감 있는 색상        |
+| `accessibility-high-contrast` | High Contrast      | 접근성 우선       | WCAG AAA 준수           |
+| `dark-mode-default`           | Dark Mode          | 다크 테마         | 현대적인 어두운 UI      |
 
 ### OKLCH 색상 시스템
 
 OKLCH는 지각적으로 균일한 색상 공간으로, RGB보다 우수한 색상 변환을 제공합니다.
 
 **OKLCH 구조**:
+
 - **L (Lightness)**: 0-1, 밝기
 - **C (Chroma)**: 0-0.5, 채도
 - **H (Hue)**: 0-360, 색상 각도
 
 **장점**:
+
 - ✅ 지각적으로 균일한 색상 변환
 - ✅ 일관된 명도 유지
 - ✅ 더 넓은 색상 범위
@@ -515,6 +517,7 @@ Use export-screen with:
 **원인**: 존재하지 않는 테마 ID
 
 **해결**:
+
 ```bash
 # 사용 가능한 테마 목록 확인
 curl http://localhost:3000/api/themes
@@ -525,6 +528,7 @@ curl http://localhost:3000/api/themes
 **원인**: 지원되지 않는 레이아웃
 
 **해결**: 다음 중 하나 사용
+
 - single-column
 - two-column
 - sidebar-left
@@ -537,6 +541,7 @@ curl http://localhost:3000/api/themes
 **원인**: 타임스탬프가 만료되었거나 잘못됨
 
 **해결**:
+
 ```bash
 # 저장된 블루프린트 확인
 ls -la .tekton/blueprints/
@@ -547,6 +552,7 @@ ls -la .tekton/blueprints/
 **원인**: 서버가 실행 중이 아니거나 CORS 설정 문제
 
 **해결**:
+
 ```bash
 # 서버 상태 확인
 curl http://localhost:3000/tools

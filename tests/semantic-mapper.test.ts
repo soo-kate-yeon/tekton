@@ -1,7 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import {
-  mapSemanticTokens,
-} from '../src/generator/semantic-mapper';
+import { mapSemanticTokens } from '../src/generator/semantic-mapper';
 import type { OKLCHColor } from '../src/schemas';
 
 describe('Semantic Token Mapper - TASK-004 (EDR-002)', () => {
@@ -51,7 +49,7 @@ describe('Semantic Token Mapper - TASK-004 (EDR-002)', () => {
       });
 
       // Foreground should be very dark
-      expect(tokens.foreground.l).toBeLessThanOrEqual(0.20);
+      expect(tokens.foreground.l).toBeLessThanOrEqual(0.2);
     });
 
     it('should map primary to primary-500', () => {
@@ -72,7 +70,7 @@ describe('Semantic Token Mapper - TASK-004 (EDR-002)', () => {
         neutral: mockNeutral,
       });
 
-      expect(tokens.muted.l).toBeGreaterThanOrEqual(0.90);
+      expect(tokens.muted.l).toBeGreaterThanOrEqual(0.9);
     });
 
     it('should map accent to primary-400', () => {

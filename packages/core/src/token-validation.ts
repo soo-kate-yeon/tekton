@@ -165,7 +165,7 @@ export function validateTheme(theme: unknown): ValidationResult {
   if (!result.success) {
     return {
       valid: false,
-      errors: result.error.errors.map((e) => {
+      errors: result.error.errors.map(e => {
         const path = e.path.join('.');
         return `${path}: ${e.message}`;
       }),

@@ -52,7 +52,7 @@ describe('Performance Benchmarks - TASK-022', () => {
     // Create 20 colors
     for (let i = 0; i < 20; i++) {
       largePalette[`color${i}`] = {
-        l: 0.5 + (i * 0.02),
+        l: 0.5 + i * 0.02,
         c: 0.15,
         h: (i * 18) % 360,
       };

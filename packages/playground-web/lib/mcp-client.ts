@@ -23,9 +23,7 @@ export interface McpResponse<T = unknown> {
 /**
  * MCP 서버로 요청을 전송합니다
  */
-export async function sendMcpRequest<T>(
-  request: McpRequest
-): Promise<McpResponse<T>> {
+export async function sendMcpRequest<T>(request: McpRequest): Promise<McpResponse<T>> {
   try {
     const response = await fetch(`${MCP_SERVER_URL}/mcp`, {
       method: 'POST',
@@ -68,16 +66,11 @@ export async function generateBlueprint(params: {
  * Timestamp로 Blueprint를 가져옵니다
  * Next.js 캐싱: 1시간 재검증
  */
-export async function fetchBlueprint(
-  timestamp: string
-): Promise<Blueprint | null> {
+export async function fetchBlueprint(timestamp: string): Promise<Blueprint | null> {
   try {
-    const response = await fetch(
-      `${MCP_SERVER_URL}/api/blueprints/${timestamp}`,
-      {
-        next: { revalidate: 3600 }, // 1시간 캐시
-      }
-    );
+    const response = await fetch(`${MCP_SERVER_URL}/api/blueprints/${timestamp}`, {
+      next: { revalidate: 3600 }, // 1시간 캐시
+    });
 
     if (!response.ok) {
       if (response.status === 404) {
@@ -92,9 +85,7 @@ export async function fetchBlueprint(
     const validated = BlueprintSchema.safeParse(data);
     if (!validated.success) {
       console.error('Blueprint validation failed:', validated.error);
-      throw new Error(
-        `Invalid blueprint data: ${validated.error.message}`
-      );
+      throw new Error(`Invalid blueprint data: ${validated.error.message}`);
     }
 
     return validated.data;

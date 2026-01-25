@@ -86,30 +86,30 @@ const atomic: AtomicTokens = {
   color: {
     blue: {
       '500': '#3b82f6',
-      '600': '#2563eb'
+      '600': '#2563eb',
     },
     neutral: {
       '50': '#f9fafb',
-      '900': '#111827'
-    }
+      '900': '#111827',
+    },
   },
   spacing: {
     '4': '16px',
-    '8': '32px'
+    '8': '32px',
   },
   radius: {
-    'md': '8px'
+    md: '8px',
   },
   typography: {
     body: {
       fontSize: '16px',
       lineHeight: '24px',
-      fontWeight: '400'
-    }
+      fontWeight: '400',
+    },
   },
   shadow: {
-    'md': '0 4px 6px -1px rgb(0 0 0 / 0.1)'
-  }
+    md: '0 4px 6px -1px rgb(0 0 0 / 0.1)',
+  },
 };
 ```
 
@@ -183,31 +183,31 @@ interface SemanticTokens {
 ```typescript
 const semantic: SemanticTokens = {
   background: {
-    page: 'atomic.color.neutral.50',     // Token reference
-    surface: '#ffffff',                   // Direct value
+    page: 'atomic.color.neutral.50', // Token reference
+    surface: '#ffffff', // Direct value
     elevated: '#ffffff',
     muted: 'atomic.color.neutral.100',
-    inverse: 'atomic.color.neutral.900'
+    inverse: 'atomic.color.neutral.900',
   },
   foreground: {
     primary: 'atomic.color.neutral.900',
     secondary: '#6b7280',
     muted: '#9ca3af',
     inverse: '#ffffff',
-    accent: 'atomic.color.blue.500'
+    accent: 'atomic.color.blue.500',
   },
   border: {
     default: 'atomic.color.neutral.200',
     muted: 'atomic.color.neutral.100',
     focus: 'atomic.color.blue.500',
-    error: 'atomic.color.red.500'
+    error: 'atomic.color.red.500',
   },
   surface: {
     primary: '#ffffff',
     secondary: 'atomic.color.neutral.50',
     tertiary: 'atomic.color.neutral.100',
-    inverse: 'atomic.color.neutral.900'
-  }
+    inverse: 'atomic.color.neutral.900',
+  },
 };
 ```
 
@@ -261,7 +261,7 @@ interface ComponentTokens {
     border: string;
     shadow: string;
   };
-  [component: string]: unknown;  // Extensible
+  [component: string]: unknown; // Extensible
 }
 ```
 
@@ -283,13 +283,17 @@ The interface allows custom components via index signature:
 
 ```typescript
 const tokens: ComponentTokens = {
-  button: { /* ... */ },
-  input: { /* ... */ },
+  button: {
+    /* ... */
+  },
+  input: {
+    /* ... */
+  },
   // Custom component
   customWidget: {
     background: 'semantic.background.surface',
-    foreground: 'semantic.foreground.primary'
-  }
+    foreground: 'semantic.foreground.primary',
+  },
 };
 ```
 
@@ -304,16 +308,16 @@ const component: ComponentTokens = {
       border: 'semantic.foreground.accent',
       hover: {
         background: 'atomic.color.blue.600',
-        foreground: '#ffffff'
+        foreground: '#ffffff',
       },
       active: {
-        background: 'atomic.color.blue.700'
+        background: 'atomic.color.blue.700',
       },
       disabled: {
         background: 'semantic.background.muted',
-        foreground: 'semantic.foreground.muted'
-      }
-    }
+        foreground: 'semantic.foreground.muted',
+      },
+    },
   },
   input: {
     background: 'semantic.background.surface',
@@ -322,23 +326,23 @@ const component: ComponentTokens = {
     placeholder: 'semantic.foreground.muted',
     focus: {
       border: 'semantic.border.focus',
-      ring: 'atomic.color.blue.500'
+      ring: 'atomic.color.blue.500',
     },
     error: {
       border: 'semantic.border.error',
-      ring: 'atomic.color.red.500'
+      ring: 'atomic.color.red.500',
     },
     disabled: {
       background: 'semantic.background.muted',
-      foreground: 'semantic.foreground.muted'
-    }
+      foreground: 'semantic.foreground.muted',
+    },
   },
   card: {
     background: 'semantic.background.surface',
     foreground: 'semantic.foreground.primary',
     border: 'semantic.border.default',
-    shadow: 'atomic.shadow.md'
-  }
+    shadow: 'atomic.shadow.md',
+  },
 };
 ```
 
@@ -383,41 +387,65 @@ const theme: ThemeWithTokens = {
   name: 'My Theme',
   tokens: {
     atomic: {
-      color: { /* ... */ },
-      spacing: { /* ... */ },
-      radius: { /* ... */ },
-      typography: { /* ... */ },
-      shadow: { /* ... */ }
+      color: {
+        /* ... */
+      },
+      spacing: {
+        /* ... */
+      },
+      radius: {
+        /* ... */
+      },
+      typography: {
+        /* ... */
+      },
+      shadow: {
+        /* ... */
+      },
     },
     semantic: {
-      background: { /* ... */ },
-      foreground: { /* ... */ },
-      border: { /* ... */ },
-      surface: { /* ... */ }
+      background: {
+        /* ... */
+      },
+      foreground: {
+        /* ... */
+      },
+      border: {
+        /* ... */
+      },
+      surface: {
+        /* ... */
+      },
     },
     component: {
-      button: { /* ... */ },
-      input: { /* ... */ },
-      card: { /* ... */ }
-    }
+      button: {
+        /* ... */
+      },
+      input: {
+        /* ... */
+      },
+      card: {
+        /* ... */
+      },
+    },
   },
   darkMode: {
     tokens: {
       semantic: {
         background: {
           page: 'atomic.color.neutral.900',
-          surface: 'atomic.color.neutral.800'
-        }
+          surface: 'atomic.color.neutral.800',
+        },
       },
       component: {
         button: {
           primary: {
-            background: 'atomic.color.blue.400'
-          }
-        }
-      }
-    }
-  }
+            background: 'atomic.color.blue.400',
+          },
+        },
+      },
+    },
+  },
 };
 ```
 
@@ -453,8 +481,8 @@ const result: ValidationResult = {
   errors: [
     'tokens.atomic.color: Required',
     'tokens.semantic.background.page: Required',
-    'tokens.semantic.foreground.primary: Expected string, received undefined'
-  ]
+    'tokens.semantic.foreground.primary: Expected string, received undefined',
+  ],
 };
 ```
 
@@ -471,7 +499,7 @@ function resolveToken(
   ref: TokenReference,
   tokens: ThemeWithTokens['tokens'],
   visited?: Set<string>
-): string
+): string;
 ```
 
 **Parameters:**
@@ -541,9 +569,9 @@ const circularTokens = {
   semantic: {
     background: {
       page: 'semantic.background.surface',
-      surface: 'semantic.background.page'  // Circular!
-    }
-  }
+      surface: 'semantic.background.page', // Circular!
+    },
+  },
 };
 
 try {
@@ -572,7 +600,7 @@ function resolveWithFallback(
   semanticRef: string,
   atomicRef: string,
   tokens: ThemeWithTokens['tokens']
-): string
+): string;
 ```
 
 **Parameters:**
@@ -609,7 +637,7 @@ import { resolveWithFallback } from '@tekton/core';
 
 // Component token exists
 resolveWithFallback(
-  'component.button.primary.background',  // Exists → returns this
+  'component.button.primary.background', // Exists → returns this
   'semantic.foreground.accent',
   'atomic.color.blue.500',
   tokens
@@ -618,8 +646,8 @@ resolveWithFallback(
 
 // Component missing, semantic exists
 resolveWithFallback(
-  'component.button.custom.background',  // Missing
-  'semantic.foreground.accent',          // Exists → returns this
+  'component.button.custom.background', // Missing
+  'semantic.foreground.accent', // Exists → returns this
   'atomic.color.blue.500',
   tokens
 );
@@ -627,9 +655,9 @@ resolveWithFallback(
 
 // Component and semantic missing, atomic exists
 resolveWithFallback(
-  'component.button.nonexistent.background',  // Missing
-  'semantic.nonexistent.color',               // Missing
-  'atomic.color.blue.500',                    // Exists → returns this
+  'component.button.nonexistent.background', // Missing
+  'semantic.nonexistent.color', // Missing
+  'atomic.color.blue.500', // Exists → returns this
   tokens
 );
 // → '#3b82f6' (from atomic token)
@@ -664,7 +692,7 @@ try {
 Generates complete CSS with CSS Variables from theme tokens.
 
 ```typescript
-function generateThemeCSS(theme: ThemeWithTokens): string
+function generateThemeCSS(theme: ThemeWithTokens): string;
 ```
 
 **Parameters:**
@@ -700,14 +728,14 @@ const theme: ThemeWithTokens = {
     atomic: {
       color: {
         blue: { '500': '#3b82f6' },
-        neutral: { '50': '#f9fafb', '900': '#111827' }
+        neutral: { '50': '#f9fafb', '900': '#111827' },
       },
       spacing: { '4': '16px' },
-      radius: { 'md': '8px' },
+      radius: { md: '8px' },
       typography: {
-        body: { fontSize: '16px', lineHeight: '24px', fontWeight: '400' }
+        body: { fontSize: '16px', lineHeight: '24px', fontWeight: '400' },
       },
-      shadow: { 'md': '0 4px 6px -1px rgb(0 0 0 / 0.1)' }
+      shadow: { md: '0 4px 6px -1px rgb(0 0 0 / 0.1)' },
     },
     semantic: {
       background: {
@@ -715,27 +743,27 @@ const theme: ThemeWithTokens = {
         surface: '#ffffff',
         elevated: '#ffffff',
         muted: 'atomic.color.neutral.100',
-        inverse: 'atomic.color.neutral.900'
+        inverse: 'atomic.color.neutral.900',
       },
       foreground: {
         primary: 'atomic.color.neutral.900',
         secondary: '#6b7280',
         muted: '#9ca3af',
         inverse: '#ffffff',
-        accent: 'atomic.color.blue.500'
+        accent: 'atomic.color.blue.500',
       },
       border: {
         default: 'atomic.color.neutral.200',
         muted: 'atomic.color.neutral.100',
         focus: 'atomic.color.blue.500',
-        error: 'atomic.color.red.500'
+        error: 'atomic.color.red.500',
       },
       surface: {
         primary: '#ffffff',
         secondary: 'atomic.color.neutral.50',
         tertiary: 'atomic.color.neutral.100',
-        inverse: 'atomic.color.neutral.900'
-      }
+        inverse: 'atomic.color.neutral.900',
+      },
     },
     component: {
       button: {
@@ -745,28 +773,28 @@ const theme: ThemeWithTokens = {
           border: 'semantic.foreground.accent',
           hover: {
             background: 'atomic.color.blue.600',
-            foreground: '#ffffff'
+            foreground: '#ffffff',
           },
           active: {
-            background: 'atomic.color.blue.700'
+            background: 'atomic.color.blue.700',
           },
           disabled: {
             background: 'semantic.background.muted',
-            foreground: 'semantic.foreground.muted'
-          }
-        }
-      }
-    }
+            foreground: 'semantic.foreground.muted',
+          },
+        },
+      },
+    },
   },
   darkMode: {
     tokens: {
       semantic: {
         background: {
-          page: 'atomic.color.neutral.900'
-        }
-      }
-    }
-  }
+          page: 'atomic.color.neutral.900',
+        },
+      },
+    },
+  },
 };
 
 const css = generateThemeCSS(theme);
@@ -839,7 +867,7 @@ document.head.appendChild(style);
 Validates theme with token structure using Zod schemas.
 
 ```typescript
-function validateTheme(theme: unknown): ValidationResult
+function validateTheme(theme: unknown): ValidationResult;
 ```
 
 **Parameters:**
@@ -870,11 +898,11 @@ const theme = {
     atomic: {
       color: { blue: { '500': '#3b82f6' } },
       spacing: { '4': '16px' },
-      radius: { 'md': '8px' },
+      radius: { md: '8px' },
       typography: {
-        body: { fontSize: '16px', lineHeight: '24px', fontWeight: '400' }
+        body: { fontSize: '16px', lineHeight: '24px', fontWeight: '400' },
       },
-      shadow: { 'md': '0 4px 6px -1px rgb(0 0 0 / 0.1)' }
+      shadow: { md: '0 4px 6px -1px rgb(0 0 0 / 0.1)' },
     },
     semantic: {
       background: {
@@ -882,27 +910,27 @@ const theme = {
         surface: '#ffffff',
         elevated: '#ffffff',
         muted: 'atomic.color.neutral.100',
-        inverse: 'atomic.color.neutral.900'
+        inverse: 'atomic.color.neutral.900',
       },
       foreground: {
         primary: 'atomic.color.neutral.900',
         secondary: '#6b7280',
         muted: '#9ca3af',
         inverse: '#ffffff',
-        accent: 'atomic.color.blue.500'
+        accent: 'atomic.color.blue.500',
       },
       border: {
         default: 'atomic.color.neutral.200',
         muted: 'atomic.color.neutral.100',
         focus: 'atomic.color.blue.500',
-        error: 'atomic.color.red.500'
+        error: 'atomic.color.red.500',
       },
       surface: {
         primary: '#ffffff',
         secondary: 'atomic.color.neutral.50',
         tertiary: 'atomic.color.neutral.100',
-        inverse: 'atomic.color.neutral.900'
-      }
+        inverse: 'atomic.color.neutral.900',
+      },
     },
     component: {
       button: {
@@ -912,19 +940,19 @@ const theme = {
           border: 'semantic.foreground.accent',
           hover: {
             background: 'atomic.color.blue.600',
-            foreground: '#ffffff'
+            foreground: '#ffffff',
           },
           active: {
-            background: 'atomic.color.blue.700'
+            background: 'atomic.color.blue.700',
           },
           disabled: {
             background: 'semantic.background.muted',
-            foreground: 'semantic.foreground.muted'
-          }
-        }
-      }
-    }
-  }
+            foreground: 'semantic.foreground.muted',
+          },
+        },
+      },
+    },
+  },
 };
 
 const result = validateTheme(theme);
@@ -948,9 +976,9 @@ const invalidTheme = {
   tokens: {
     atomic: {
       // Missing 'color' property
-      spacing: { '4': '16px' }
-    }
-  }
+      spacing: { '4': '16px' },
+    },
+  },
 };
 
 const result = validateTheme(invalidTheme);
@@ -965,12 +993,14 @@ const result = validateTheme(invalidTheme);
 **Common Validation Errors:**
 
 1. Missing required properties:
+
    ```
    tokens.atomic.color: Required
    tokens.semantic.background.page: Required
    ```
 
 2. Type mismatches:
+
    ```
    tokens.semantic.foreground.primary: Expected string, received undefined
    tokens.atomic.spacing: Expected object, received string
@@ -990,6 +1020,7 @@ const result = validateTheme(invalidTheme);
 **Best Practices:**
 
 1. **Validate During Build:**
+
    ```typescript
    // build.ts
    const result = validateTheme(theme);
@@ -999,6 +1030,7 @@ const result = validateTheme(invalidTheme);
    ```
 
 2. **Type Assertion After Validation:**
+
    ```typescript
    const result = validateTheme(theme);
    if (result.valid) {

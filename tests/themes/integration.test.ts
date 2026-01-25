@@ -26,7 +26,6 @@ describe('Theme Integration', () => {
   };
 
   describe('generateTokensFromTheme', () => {
-
     it('generates CSS from theme', () => {
       const css = generateTokensFromTheme(validTheme, { format: 'css' });
 
@@ -67,9 +66,9 @@ describe('Theme Integration', () => {
     });
 
     it('throws for unsupported format', () => {
-      expect(() =>
-        generateTokensFromTheme(validTheme, { format: 'invalid' as any })
-      ).toThrow('Unsupported format');
+      expect(() => generateTokensFromTheme(validTheme, { format: 'invalid' as any })).toThrow(
+        'Unsupported format'
+      );
     });
   });
 

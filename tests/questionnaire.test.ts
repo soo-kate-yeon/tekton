@@ -25,7 +25,7 @@ describe('Questionnaire Schema - TASK-008 (EDR-002)', () => {
     it('should validate brandTone options', () => {
       const validTones = ['professional', 'playful', 'elegant', 'bold', 'minimal'];
 
-      validTones.forEach((tone) => {
+      validTones.forEach(tone => {
         const result = QuestionnaireSchema.safeParse({
           ...DEFAULT_QUESTIONNAIRE,
           brandTone: tone,
@@ -45,7 +45,7 @@ describe('Questionnaire Schema - TASK-008 (EDR-002)', () => {
     it('should validate contrast options', () => {
       const validContrasts = ['low', 'medium', 'high', 'maximum'];
 
-      validContrasts.forEach((contrast) => {
+      validContrasts.forEach(contrast => {
         const result = QuestionnaireSchema.safeParse({
           ...DEFAULT_QUESTIONNAIRE,
           contrast,
@@ -57,7 +57,7 @@ describe('Questionnaire Schema - TASK-008 (EDR-002)', () => {
     it('should validate density options', () => {
       const validDensities = ['compact', 'comfortable', 'spacious'];
 
-      validDensities.forEach((density) => {
+      validDensities.forEach(density => {
         const result = QuestionnaireSchema.safeParse({
           ...DEFAULT_QUESTIONNAIRE,
           density,
@@ -69,7 +69,7 @@ describe('Questionnaire Schema - TASK-008 (EDR-002)', () => {
     it('should validate borderRadius options', () => {
       const validRadius = ['none', 'small', 'medium', 'large', 'full'];
 
-      validRadius.forEach((borderRadius) => {
+      validRadius.forEach(borderRadius => {
         const result = QuestionnaireSchema.safeParse({
           ...DEFAULT_QUESTIONNAIRE,
           borderRadius,
@@ -97,7 +97,7 @@ describe('Questionnaire Schema - TASK-008 (EDR-002)', () => {
     it('should validate neutralTone options', () => {
       const validTones = ['pure', 'warm', 'cool'];
 
-      validTones.forEach((neutralTone) => {
+      validTones.forEach(neutralTone => {
         const result = QuestionnaireSchema.safeParse({
           ...DEFAULT_QUESTIONNAIRE,
           neutralTone,
@@ -109,7 +109,7 @@ describe('Questionnaire Schema - TASK-008 (EDR-002)', () => {
     it('should validate fontScale options', () => {
       const validScales = ['small', 'medium', 'large'];
 
-      validScales.forEach((fontScale) => {
+      validScales.forEach(fontScale => {
         const result = QuestionnaireSchema.safeParse({
           ...DEFAULT_QUESTIONNAIRE,
           fontScale,
@@ -184,7 +184,7 @@ describe('Questionnaire Schema - TASK-008 (EDR-002)', () => {
     });
 
     it('should handle all hue values (0-360)', () => {
-      [0, 90, 180, 270, 360].forEach((hue) => {
+      [0, 90, 180, 270, 360].forEach(hue => {
         const result = QuestionnaireSchema.safeParse({
           ...DEFAULT_QUESTIONNAIRE,
           primaryColor: { l: 0.5, c: 0.15, h: hue },
@@ -199,7 +199,8 @@ describe('Questionnaire Schema - TASK-008 (EDR-002)', () => {
       const questionnaire: Questionnaire = DEFAULT_QUESTIONNAIRE;
 
       // Type assertions to verify proper typing
-      const brandTone: 'professional' | 'playful' | 'elegant' | 'bold' | 'minimal' = questionnaire.brandTone;
+      const brandTone: 'professional' | 'playful' | 'elegant' | 'bold' | 'minimal' =
+        questionnaire.brandTone;
       const contrast: 'low' | 'medium' | 'high' | 'maximum' = questionnaire.contrast;
       const density: 'compact' | 'comfortable' | 'spacious' = questionnaire.density;
 
