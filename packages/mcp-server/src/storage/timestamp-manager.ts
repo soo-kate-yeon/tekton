@@ -9,23 +9,28 @@ import { existsSync } from 'fs';
 /**
  * Generate timestamp-based ID with collision detection
  * SPEC: S-001 Timestamp Collision Handling
+ * Format: bp-{timestamp}-{suffix}
  *
  * @param baseDir - Base directory to check for collisions
- * @returns Unique timestamp-based ID
+ * @returns Unique timestamp-based ID in format bp-{timestamp}-{suffix}
  */
 export function generateTimestampId(baseDir: string): string {
   const timestamp = Date.now();
   const timestampStr = timestamp.toString();
-  const candidatePath = `${baseDir}/${timestampStr}`;
 
-  // Check for collision (same millisecond)
+  // Always generate suffix for consistent ID format
+  const suffix = generateRandomSuffix(6);
+  const blueprintId = `bp-${timestampStr}-${suffix}`;
+  const candidatePath = `${baseDir}/${blueprintId}`;
+
+  // Check for collision (same millisecond + same suffix - extremely rare)
   if (existsSync(candidatePath)) {
-    // Append random 6-character suffix
-    const suffix = generateRandomSuffix(6);
-    return `${timestampStr}-${suffix}`;
+    // Generate new suffix if collision occurs
+    const newSuffix = generateRandomSuffix(6);
+    return `bp-${timestampStr}-${newSuffix}`;
   }
 
-  return timestampStr;
+  return blueprintId;
 }
 
 /**
@@ -42,10 +47,10 @@ export function generateRandomSuffix(length: number = 6): string {
 
 /**
  * Parse timestamp from blueprint ID
- * Handles both formats: "1738123456789" and "1738123456789-abc123"
+ * Format: bp-{timestamp}-{suffix}
  */
 export function parseTimestampFromId(blueprintId: string): number | null {
-  const match = blueprintId.match(/^(\d+)(-[a-z0-9]+)?$/);
+  const match = blueprintId.match(/^bp-(\d+)-[a-z0-9]+$/);
   if (!match || !match[1]) {
     return null;
   }
@@ -54,7 +59,8 @@ export function parseTimestampFromId(blueprintId: string): number | null {
 
 /**
  * Check if blueprint ID is valid format
+ * Format: bp-{timestamp}-{suffix}
  */
 export function isValidBlueprintId(blueprintId: string): boolean {
-  return /^(\d+)(-[a-z0-9]+)?$/.test(blueprintId);
+  return /^bp-\d+-[a-z0-9]+$/.test(blueprintId);
 }

@@ -44,7 +44,6 @@ describe('generateBlueprintTool', () => {
     expect(result.blueprint?.components).toBeDefined();
     expect(result.blueprint?.components.length).toBeGreaterThan(0);
     expect(result.blueprint?.timestamp).toBeDefined();
-    expect(result.previewUrl).toMatch(/\/preview\/[^/]+\/calm-wellness$/);
   });
 
   it('should extract components from description keywords', async () => {

@@ -9,40 +9,44 @@ import type { ExportScreenInput, ExportScreenOutput } from '../schemas/mcp-schem
 import { createErrorResponse, extractErrorMessage } from '../utils/error-handler.js';
 
 /**
- * Generate JSX code from blueprint
- * SPEC: S-004 Export Format Compatibility - JSX format
+ * Convert JSX code to TSX format with TypeScript annotations
+ * SPEC: S-004 Export Format Compatibility - TSX format
  */
-function generateJSX(componentCode: string, componentName: string): string {
-  return `export default function ${componentName}() {
-  return (
-${componentCode.split('\n').map(line => '    ' + line).join('\n')}
-  );
-}
-`;
+function convertToTSX(jsxCode: string): string {
+  // Add React import and type annotation to function signature
+  const lines = jsxCode.split('\n');
+  const result: string[] = [];
+
+  // Add React import at the beginning
+  result.push("import React from 'react';");
+
+  for (const line of lines) {
+    // Convert function signature to include React.ReactElement return type
+    if (line.match(/^export default function \w+\(\)/)) {
+      result.push(line.replace('()', '(): React.ReactElement'));
+    } else {
+      result.push(line);
+    }
+  }
+
+  return result.join('\n');
 }
 
 /**
- * Generate TSX code from blueprint
- * SPEC: S-004 Export Format Compatibility - TSX format with TypeScript annotations
- */
-function generateTSX(componentCode: string, componentName: string): string {
-  return `import React from 'react';
-
-export default function ${componentName}(): React.ReactElement {
-  return (
-${componentCode.split('\n').map(line => '    ' + line).join('\n')}
-  );
-}
-`;
-}
-
-/**
- * Generate Vue 3 Composition API code from blueprint
+ * Convert JSX code to Vue 3 SFC format
  * SPEC: S-004 Export Format Compatibility - Vue format
  */
-function generateVue(componentCode: string, componentName: string): string {
+function convertToVue(jsxCode: string, componentName: string): string {
+  // Extract the JSX content from the return statement
+  const returnMatch = jsxCode.match(/return \(([\s\S]*?)\);/);
+  if (!returnMatch || !returnMatch[1]) {
+    return jsxCode; // Fallback to original if pattern doesn't match
+  }
+
+  const jsxContent = returnMatch[1].trim();
+
   // Convert React-style JSX to Vue template syntax
-  const vueTemplate = componentCode
+  const vueTemplate = jsxContent
     .replace(/className=/g, 'class=')
     .replace(/{([^}]+)}/g, '{{ $1 }}'); // Convert interpolation
 
@@ -93,27 +97,30 @@ export async function exportScreenTool(
     }
 
     // SPEC: U-003 @tekton/core Integration - Use render from @tekton/core
+    // Note: render() returns complete JSX component code with imports and function wrapper
     const renderResult = render(blueprint);
 
     if (!renderResult.success) {
       return createErrorResponse(`Render failed: ${renderResult.error || 'Unknown error'}`);
     }
 
-    const componentCode = renderResult.code || '';
-    const componentName = extractComponentName(blueprint.name);
+    const jsxCode = renderResult.code || '';
 
-    // SPEC: S-004 Export Format Compatibility - Generate format-specific code
+    // SPEC: S-004 Export Format Compatibility - Convert JSX to requested format
     let finalCode: string;
 
     switch (input.format) {
       case 'jsx':
-        finalCode = generateJSX(componentCode, componentName);
+        // render() already returns JSX format
+        finalCode = jsxCode;
         break;
       case 'tsx':
-        finalCode = generateTSX(componentCode, componentName);
+        // Convert JSX imports to TypeScript format
+        finalCode = jsxCode ? convertToTSX(jsxCode) : '';
         break;
       case 'vue':
-        finalCode = generateVue(componentCode, componentName);
+        // Convert JSX to Vue SFC format
+        finalCode = convertToVue(jsxCode, extractComponentName(blueprint.name || 'Component'));
         break;
       default:
         return createErrorResponse(`Unsupported format: ${input.format}`);
