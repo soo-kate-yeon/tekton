@@ -20,3 +20,11 @@ coverage/
 # OS
 .DS_Store
 Thumbs.db
+
+# TypeScript build artifacts in src/
+src/**/*.js
+src/**/*.d.ts
+src/**/*.js.map
+src/**/*.d.ts.map
+!src/**/*.tsx
+!src/**/*.ts
