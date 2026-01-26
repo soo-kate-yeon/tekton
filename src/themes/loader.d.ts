@@ -19,17 +19,17 @@ import type { Theme } from './types';
  * ```
  */
 export declare class ThemeValidationError extends Error {
-  /**
-   * Validation issues from Zod schema validation
-   */
-  readonly issues: z.ZodIssue[];
-  /**
-   * Creates a new ThemeValidationError
-   *
-   * @param message - Error message summarizing validation failures
-   * @param issues - Array of Zod validation issues with field-level details
-   */
-  constructor(message: string, issues: z.ZodIssue[]);
+    /**
+     * Validation issues from Zod schema validation
+     */
+    readonly issues: z.ZodIssue[];
+    /**
+     * Creates a new ThemeValidationError
+     *
+     * @param message - Error message summarizing validation failures
+     * @param issues - Array of Zod validation issues with field-level details
+     */
+    constructor(message: string, issues: z.ZodIssue[]);
 }
 /**
  * Load and validate a theme from unknown data

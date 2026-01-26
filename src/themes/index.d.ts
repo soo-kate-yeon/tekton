@@ -15,11 +15,11 @@ export type TokenFormat = 'css' | 'dtcg' | 'tailwind';
  * Options for token generation from theme
  */
 export interface GenerateTokensOptions {
-  /**
-   * Output format for generated tokens
-   * @default 'css'
-   */
-  format?: TokenFormat;
+    /**
+     * Output format for generated tokens
+     * @default 'css'
+     */
+    format?: TokenFormat;
 }
 /**
  * Generate design tokens from a theme configuration
@@ -46,8 +46,5 @@ export interface GenerateTokensOptions {
  * const tailwind = generateTokensFromTheme(theme, { format: 'tailwind' });
  * ```
  */
-export declare function generateTokensFromTheme(
-  theme: Theme,
-  options?: GenerateTokensOptions
-): string;
+export declare function generateTokensFromTheme(theme: Theme, options?: GenerateTokensOptions): string;
 //# sourceMappingURL=index.d.ts.map

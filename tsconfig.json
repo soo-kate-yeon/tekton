@@ -20,5 +20,8 @@
     "isolatedModules": true
   },
   "exclude": ["node_modules", "dist", "coverage", "packages/playground-web"],
-  "references": [{ "path": "./packages/core" }]
+  "references": [
+    { "path": "./packages/core" },
+    { "path": "./packages/ui" }
+  ]
 }

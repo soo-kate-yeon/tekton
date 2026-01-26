@@ -35,46 +35,46 @@ import { exportToCSS, exportToDTCG, exportToTailwind } from '../generator/output
  * ```
  */
 export function generateTokensFromTheme(theme, options = {}) {
-  const { format = 'css' } = options;
-  const { questionnaire } = theme;
-  // Extract and validate primaryColor (required by Zod schema)
-  const primaryColor = questionnaire.primaryColor || {
-    l: 0.5,
-    c: 0.15,
-    h: 220,
-  };
-  // Generate neutral palette based on questionnaire settings
-  const neutralPalette = generateNeutralPalette({
-    mode: 'light',
-    tinting: questionnaire.neutralTone === 'pure' ? 'pure' : 'tinted',
-    primaryHue: primaryColor.h,
-  });
-  // Extract neutral base color (500 step is always generated)
-  const neutralBase = neutralPalette['500'] || {
-    l: 0.5,
-    c: 0,
-    h: 0,
-  };
-  // Map to semantic tokens
-  const semanticTokens = mapSemanticTokens({
-    mode: 'light',
-    primary: primaryColor,
-    neutral: neutralBase,
-  });
-  // Prepare export configuration
-  const exportConfig = {
-    semanticTokens,
-  };
-  // Export based on format
-  switch (format) {
-    case 'css':
-      return exportToCSS(exportConfig);
-    case 'dtcg':
-      return exportToDTCG(exportConfig);
-    case 'tailwind':
-      return exportToTailwind({ ...exportConfig, format: 'js' });
-    default:
-      throw new Error(`Unsupported format: ${format}`);
-  }
+    const { format = 'css' } = options;
+    const { questionnaire } = theme;
+    // Extract and validate primaryColor (required by Zod schema)
+    const primaryColor = questionnaire.primaryColor || {
+        l: 0.5,
+        c: 0.15,
+        h: 220,
+    };
+    // Generate neutral palette based on questionnaire settings
+    const neutralPalette = generateNeutralPalette({
+        mode: 'light',
+        tinting: questionnaire.neutralTone === 'pure' ? 'pure' : 'tinted',
+        primaryHue: primaryColor.h,
+    });
+    // Extract neutral base color (500 step is always generated)
+    const neutralBase = neutralPalette['500'] || {
+        l: 0.5,
+        c: 0,
+        h: 0,
+    };
+    // Map to semantic tokens
+    const semanticTokens = mapSemanticTokens({
+        mode: 'light',
+        primary: primaryColor,
+        neutral: neutralBase,
+    });
+    // Prepare export configuration
+    const exportConfig = {
+        semanticTokens,
+    };
+    // Export based on format
+    switch (format) {
+        case 'css':
+            return exportToCSS(exportConfig);
+        case 'dtcg':
+            return exportToDTCG(exportConfig);
+        case 'tailwind':
+            return exportToTailwind({ ...exportConfig, format: 'js' });
+        default:
+            throw new Error(`Unsupported format: ${format}`);
+    }
 }
 //# sourceMappingURL=index.js.map

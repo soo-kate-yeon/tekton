@@ -47,14 +47,14 @@ export declare function generateComponentThemes(baseColor: OKLCHColor): Componen
  * Export all themes
  */
 export declare const COMPONENT_THEMES: {
-  button: typeof buttonTheme;
-  input: typeof inputTheme;
-  card: typeof cardTheme;
-  badge: typeof badgeTheme;
-  alert: typeof alertTheme;
-  link: typeof linkTheme;
-  checkbox: typeof checkboxTheme;
-  radio: typeof radioTheme;
+    button: typeof buttonTheme;
+    input: typeof inputTheme;
+    card: typeof cardTheme;
+    badge: typeof badgeTheme;
+    alert: typeof alertTheme;
+    link: typeof linkTheme;
+    checkbox: typeof checkboxTheme;
+    radio: typeof radioTheme;
 };
 /**
  * Backward compatibility alias for generateComponentThemes
