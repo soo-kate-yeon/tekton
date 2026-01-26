@@ -5,3 +5,34 @@ coverage
 .moai
 .claude
 pnpm-lock.yaml
+
+# TypeScript build artifacts (root level)
+src/**/*.js
+src/**/*.d.ts
+src/**/*.js.map
+src/**/*.d.ts.map
+tests/**/*.js
+tests/**/*.d.ts
+tests/**/*.js.map
+tests/**/*.d.ts.map
+examples/**/*.js
+examples/**/*.d.ts
+examples/**/*.js.map
+examples/**/*.d.ts.map
+
+# Root config build artifacts
+*.config.js
+*.config.d.ts
+*.config.base.js
+*.config.base.d.ts
+*.setup.js
+*.setup.d.ts
+
+# Next.js generated files
+packages/*/next-env.d.ts
+
+# Generator build artifacts
+src/generator/**/*.js
+src/generator/**/*.d.ts
+src/themes/**/*.js
+src/themes/**/*.d.ts

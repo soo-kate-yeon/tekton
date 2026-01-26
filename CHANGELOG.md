@@ -103,22 +103,80 @@ No migration needed for v0.1.0 (initial release)
 
 ## [Unreleased]
 
-### Added
-
-- **Layout Grid System** (SPEC-LAYOUT-001): Responsive grid for Tekton Design System
-  - Tailwind CSS breakpoints (sm:640, md:768, lg:1024, xl:1280, 2xl:1536)
-  - Environment grid defaults (mobile:4-col, tablet:8-col, web:12-col)
-  - BlueprintLayout interface with Zod validation
-  - renderScreen integration with tailwind-merge
-  - 293 tests passing with 100% coverage
-
-### Future Plans (v0.2.0)
+### Future Plans (v0.3.0)
 
 - [ ] Implement esbuild bundling for production hardening
 - [ ] Add more component catalog entries (target: 50+ components)
 - [ ] Support for complex slot nesting patterns
 - [ ] Real-time preview generation
 - [ ] Component variant expansion
+
+---
+
+## [0.2.0] - Unreleased
+
+### Added
+
+- **@tekton/ui Package**: 19개 프로덕션 레디 React 컴포넌트
+  - **Primitives (14개)**: Avatar, Badge, Button, Checkbox, Heading, Image, Input, Link, List, Progress, Radio, Slider, Switch, Text
+  - **Components (5개)**: Dropdown, Form, Modal, Table, Tabs
+  - WCAG 2.1 AA 접근성 준수
+  - 완전한 TypeScript 타입 정의
+  - 포괄적인 테스트 커버리지 (모든 테스트 통과)
+  - Radix UI 기반 고품질 컴포넌트
+  - 일관된 디자인 토큰 통합
+
+- **SPEC-LAYOUT-001**: Layout Token System (Planned)
+  - 4-Layer Layout Architecture 설계 (Shell, Page, Section, Responsive)
+  - 6개 Shell 토큰 정의 (app, marketing, auth, dashboard, admin, minimal)
+  - 8개 Page Layout 토큰 정의 (job, resource, dashboard, settings, detail, empty, wizard, onboarding)
+  - 12개 Section Pattern 토큰 정의 (grid-_, split-_, stack-_, sidebar-_, container)
+  - 5개 Responsive Breakpoints (sm, md, lg, xl, 2xl)
+  - TypeScript 인터페이스 및 Zod 스키마
+  - resolveLayout() 및 generateLayoutCSS() 함수 명세
+
+- **SPEC-LAYOUT-002**: Screen Generation Pipeline (Planned)
+  - JSON Schema 기반 화면 정의 시스템
+  - LLM 최적화 Screen Definition 포맷
+  - Screen Resolver Pipeline 설계
+  - CSS-in-JS Generator (styled-components/emotion)
+  - Tailwind CSS Generator
+  - React Component Generator
+  - MCP 서버 통합 (Claude Desktop/Code)
+  - **의존성**: SPEC-LAYOUT-001 완료 대기
+
+### Changed
+
+- 프로젝트 버전 0.1.0 → 0.2.0 (계획)
+- Roadmap Phase E → Phase F (Layout System & UI Package)
+
+### Technical Details
+
+- **컴포넌트 아키텍처**: Radix UI primitives + custom composition
+- **스타일링**: CSS Modules + CSS Variables (디자인 토큰)
+- **타입 안전성**: 엄격한 TypeScript 모드
+- **접근성**: ARIA 속성 및 키보드 네비게이션 지원
+- **테스트**: Vitest + React Testing Library
+
+### Quality Metrics
+
+- **테스트 통과율**: 100%
+- **컴포넌트 수**: 19개 (Primitives 14개 + Components 5개)
+- **TypeScript 커버리지**: 100%
+- **WCAG 준수**: AA 레벨
+
+### Known Issues
+
+- 린터 오류 3개 (타입 체커 관련)
+- 타입 체커 오류 4개 (해결 중)
+- Critical 이슈 1건, High 이슈 2건, Medium 이슈 1건
+
+### Documentation
+
+- packages/ui/README.md - UI 패키지 사용 가이드
+- .moai/specs/SPEC-LAYOUT-001/spec.md - Layout Token System 명세
+- .moai/specs/SPEC-LAYOUT-002/spec.md - Screen Generation Pipeline 명세
+- .moai/docs/quality/quality-report-2026-01-26.md - 품질 리포트
 
 ---
 

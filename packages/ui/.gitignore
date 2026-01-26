@@ -1,0 +1,38 @@
+# Dependencies
+node_modules/
+.pnpm-debug.log
+
+# Build outputs
+dist/
+*.tsbuildinfo
+
+# Testing
+coverage/
+.vitest/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# TypeScript build artifacts in src/
+src/**/*.js
+src/**/*.d.ts
+src/**/*.js.map
+src/**/*.d.ts.map
+!src/**/*.tsx
+!src/**/*.ts
+
+# TypeScript build artifacts in __tests__/
+__tests__/**/*.js
+__tests__/**/*.d.ts
+__tests__/**/*.js.map
+__tests__/**/*.d.ts.map
+!__tests__/**/*.tsx
+!__tests__/**/*.ts

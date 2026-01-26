@@ -949,10 +949,6 @@ describe('Pipeline Performance', () => {
 ## See Also
 
 - [API Reference](../api/component-knowledge.md)
-- [SPEC-LAYER2-001](../../.moai/specs/SPEC-LAYER2-001/spec.md)
-- [Implementation Status](../../.moai/specs/SPEC-LAYER2-001/implementation-status.md)
-- [Layer 1 Architecture](./layer1-token-generator.md)
-- [Layer 3 Architecture](./layer3-framework-adapter.md)
 
 ---
 

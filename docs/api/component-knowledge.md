@@ -1040,9 +1040,6 @@ const buttonKnowledge: ComponentKnowledge = {
 ## See Also
 
 - [Architecture Guide](../architecture/layer2-component-knowledge.md)
-- [SPEC-LAYER2-001](../../.moai/specs/SPEC-LAYER2-001/spec.md)
-- [Layer 1 API Reference](./token-generator.md)
-- [Layer 3 Integration Guide](./framework-adapter.md)
 
 ---
 

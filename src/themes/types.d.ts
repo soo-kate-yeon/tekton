@@ -2,7 +2,7 @@ import { z } from 'zod';
 /**
  * Supported frontend frameworks for themes
  */
-export declare const SUPPORTED_FRAMEWORKS: readonly ['nextjs', 'vite', 'remix'];
+export declare const SUPPORTED_FRAMEWORKS: readonly ["nextjs", "vite", "remix"];
 /**
  * Stack configuration schema
  * Defines the technology stack for the theme
@@ -11,25 +11,19 @@ export declare const SUPPORTED_FRAMEWORKS: readonly ['nextjs', 'vite', 'remix'];
  * @property styling - Styling solution (currently only Tailwind CSS)
  * @property components - Component library (currently only shadcn/ui)
  */
-export declare const StackSchema: z.ZodObject<
-  {
-    framework: z.ZodEnum<['nextjs', 'vite', 'remix']>;
-    styling: z.ZodLiteral<'tailwindcss'>;
-    components: z.ZodLiteral<'shadcn-ui'>;
-  },
-  'strip',
-  z.ZodTypeAny,
-  {
-    components: 'shadcn-ui';
-    framework: 'nextjs' | 'vite' | 'remix';
-    styling: 'tailwindcss';
-  },
-  {
-    components: 'shadcn-ui';
-    framework: 'nextjs' | 'vite' | 'remix';
-    styling: 'tailwindcss';
-  }
->;
+export declare const StackSchema: z.ZodObject<{
+    framework: z.ZodEnum<["nextjs", "vite", "remix"]>;
+    styling: z.ZodLiteral<"tailwindcss">;
+    components: z.ZodLiteral<"shadcn-ui">;
+}, "strip", z.ZodTypeAny, {
+    components: "shadcn-ui";
+    framework: "nextjs" | "vite" | "remix";
+    styling: "tailwindcss";
+}, {
+    components: "shadcn-ui";
+    framework: "nextjs" | "vite" | "remix";
+    styling: "tailwindcss";
+}>;
 /**
  * Theme metadata schema
  * Optional metadata for theme discoverability and attribution
@@ -38,25 +32,19 @@ export declare const StackSchema: z.ZodObject<
  * @property author - Optional author name or organization
  * @property homepage - Optional URL to theme documentation or homepage
  */
-export declare const ThemeMetadataSchema: z.ZodObject<
-  {
-    tags: z.ZodOptional<z.ZodArray<z.ZodString, 'many'>>;
+export declare const ThemeMetadataSchema: z.ZodObject<{
+    tags: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
     author: z.ZodOptional<z.ZodString>;
     homepage: z.ZodOptional<z.ZodString>;
-  },
-  'strip',
-  z.ZodTypeAny,
-  {
+}, "strip", z.ZodTypeAny, {
     tags?: string[] | undefined;
     author?: string | undefined;
     homepage?: string | undefined;
-  },
-  {
+}, {
     tags?: string[] | undefined;
     author?: string | undefined;
     homepage?: string | undefined;
-  }
->;
+}>;
 /**
  * Complete theme schema
  * Validates theme configuration files against SPEC EDR-001 requirements
@@ -89,175 +77,139 @@ export declare const ThemeMetadataSchema: z.ZodObject<
  * };
  * ```
  */
-export declare const ThemeSchema: z.ZodObject<
-  {
+export declare const ThemeSchema: z.ZodObject<{
     id: z.ZodString;
     version: z.ZodString;
     name: z.ZodString;
     description: z.ZodString;
-    stack: z.ZodObject<
-      {
-        framework: z.ZodEnum<['nextjs', 'vite', 'remix']>;
-        styling: z.ZodLiteral<'tailwindcss'>;
-        components: z.ZodLiteral<'shadcn-ui'>;
-      },
-      'strip',
-      z.ZodTypeAny,
-      {
-        components: 'shadcn-ui';
-        framework: 'nextjs' | 'vite' | 'remix';
-        styling: 'tailwindcss';
-      },
-      {
-        components: 'shadcn-ui';
-        framework: 'nextjs' | 'vite' | 'remix';
-        styling: 'tailwindcss';
-      }
-    >;
-    questionnaire: z.ZodObject<
-      {
-        brandTone: z.ZodEnum<['professional', 'playful', 'elegant', 'bold', 'minimal']>;
-        contrast: z.ZodEnum<['low', 'medium', 'high', 'maximum']>;
-        density: z.ZodEnum<['compact', 'comfortable', 'spacious']>;
-        borderRadius: z.ZodEnum<['none', 'small', 'medium', 'large', 'full']>;
-        primaryColor: z.ZodObject<
-          {
+    stack: z.ZodObject<{
+        framework: z.ZodEnum<["nextjs", "vite", "remix"]>;
+        styling: z.ZodLiteral<"tailwindcss">;
+        components: z.ZodLiteral<"shadcn-ui">;
+    }, "strip", z.ZodTypeAny, {
+        components: "shadcn-ui";
+        framework: "nextjs" | "vite" | "remix";
+        styling: "tailwindcss";
+    }, {
+        components: "shadcn-ui";
+        framework: "nextjs" | "vite" | "remix";
+        styling: "tailwindcss";
+    }>;
+    questionnaire: z.ZodObject<{
+        brandTone: z.ZodEnum<["professional", "playful", "elegant", "bold", "minimal"]>;
+        contrast: z.ZodEnum<["low", "medium", "high", "maximum"]>;
+        density: z.ZodEnum<["compact", "comfortable", "spacious"]>;
+        borderRadius: z.ZodEnum<["none", "small", "medium", "large", "full"]>;
+        primaryColor: z.ZodObject<{
             l: z.ZodNumber;
             c: z.ZodNumber;
             h: z.ZodNumber;
-          },
-          'strip',
-          z.ZodTypeAny,
-          {
+        }, "strip", z.ZodTypeAny, {
             l: number;
             c: number;
             h: number;
-          },
-          {
+        }, {
             l: number;
             c: number;
             h: number;
-          }
-        >;
-        neutralTone: z.ZodEnum<['pure', 'warm', 'cool']>;
-        fontScale: z.ZodEnum<['small', 'medium', 'large']>;
-      },
-      'strip',
-      z.ZodTypeAny,
-      {
-        brandTone: 'professional' | 'playful' | 'elegant' | 'bold' | 'minimal';
-        contrast: 'maximum' | 'low' | 'medium' | 'high';
-        density: 'compact' | 'comfortable' | 'spacious';
-        borderRadius: 'none' | 'medium' | 'small' | 'large' | 'full';
+        }>;
+        neutralTone: z.ZodEnum<["pure", "warm", "cool"]>;
+        fontScale: z.ZodEnum<["small", "medium", "large"]>;
+    }, "strip", z.ZodTypeAny, {
+        brandTone: "professional" | "playful" | "elegant" | "bold" | "minimal";
+        contrast: "maximum" | "low" | "medium" | "high";
+        density: "compact" | "comfortable" | "spacious";
+        borderRadius: "none" | "medium" | "small" | "large" | "full";
         primaryColor: {
-          l: number;
-          c: number;
-          h: number;
+            l: number;
+            c: number;
+            h: number;
         };
-        neutralTone: 'pure' | 'warm' | 'cool';
-        fontScale: 'medium' | 'small' | 'large';
-      },
-      {
-        brandTone: 'professional' | 'playful' | 'elegant' | 'bold' | 'minimal';
-        contrast: 'maximum' | 'low' | 'medium' | 'high';
-        density: 'compact' | 'comfortable' | 'spacious';
-        borderRadius: 'none' | 'medium' | 'small' | 'large' | 'full';
+        neutralTone: "pure" | "warm" | "cool";
+        fontScale: "medium" | "small" | "large";
+    }, {
+        brandTone: "professional" | "playful" | "elegant" | "bold" | "minimal";
+        contrast: "maximum" | "low" | "medium" | "high";
+        density: "compact" | "comfortable" | "spacious";
+        borderRadius: "none" | "medium" | "small" | "large" | "full";
         primaryColor: {
-          l: number;
-          c: number;
-          h: number;
+            l: number;
+            c: number;
+            h: number;
         };
-        neutralTone: 'pure' | 'warm' | 'cool';
-        fontScale: 'medium' | 'small' | 'large';
-      }
-    >;
-    metadata: z.ZodOptional<
-      z.ZodObject<
-        {
-          tags: z.ZodOptional<z.ZodArray<z.ZodString, 'many'>>;
-          author: z.ZodOptional<z.ZodString>;
-          homepage: z.ZodOptional<z.ZodString>;
-        },
-        'strip',
-        z.ZodTypeAny,
-        {
-          tags?: string[] | undefined;
-          author?: string | undefined;
-          homepage?: string | undefined;
-        },
-        {
-          tags?: string[] | undefined;
-          author?: string | undefined;
-          homepage?: string | undefined;
-        }
-      >
-    >;
-  },
-  'strip',
-  z.ZodTypeAny,
-  {
+        neutralTone: "pure" | "warm" | "cool";
+        fontScale: "medium" | "small" | "large";
+    }>;
+    metadata: z.ZodOptional<z.ZodObject<{
+        tags: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
+        author: z.ZodOptional<z.ZodString>;
+        homepage: z.ZodOptional<z.ZodString>;
+    }, "strip", z.ZodTypeAny, {
+        tags?: string[] | undefined;
+        author?: string | undefined;
+        homepage?: string | undefined;
+    }, {
+        tags?: string[] | undefined;
+        author?: string | undefined;
+        homepage?: string | undefined;
+    }>>;
+}, "strip", z.ZodTypeAny, {
     id: string;
     name: string;
     description: string;
     version: string;
     stack: {
-      components: 'shadcn-ui';
-      framework: 'nextjs' | 'vite' | 'remix';
-      styling: 'tailwindcss';
+        components: "shadcn-ui";
+        framework: "nextjs" | "vite" | "remix";
+        styling: "tailwindcss";
     };
     questionnaire: {
-      brandTone: 'professional' | 'playful' | 'elegant' | 'bold' | 'minimal';
-      contrast: 'maximum' | 'low' | 'medium' | 'high';
-      density: 'compact' | 'comfortable' | 'spacious';
-      borderRadius: 'none' | 'medium' | 'small' | 'large' | 'full';
-      primaryColor: {
-        l: number;
-        c: number;
-        h: number;
-      };
-      neutralTone: 'pure' | 'warm' | 'cool';
-      fontScale: 'medium' | 'small' | 'large';
+        brandTone: "professional" | "playful" | "elegant" | "bold" | "minimal";
+        contrast: "maximum" | "low" | "medium" | "high";
+        density: "compact" | "comfortable" | "spacious";
+        borderRadius: "none" | "medium" | "small" | "large" | "full";
+        primaryColor: {
+            l: number;
+            c: number;
+            h: number;
+        };
+        neutralTone: "pure" | "warm" | "cool";
+        fontScale: "medium" | "small" | "large";
     };
-    metadata?:
-      | {
-          tags?: string[] | undefined;
-          author?: string | undefined;
-          homepage?: string | undefined;
-        }
-      | undefined;
-  },
-  {
+    metadata?: {
+        tags?: string[] | undefined;
+        author?: string | undefined;
+        homepage?: string | undefined;
+    } | undefined;
+}, {
     id: string;
     name: string;
     description: string;
     version: string;
     stack: {
-      components: 'shadcn-ui';
-      framework: 'nextjs' | 'vite' | 'remix';
-      styling: 'tailwindcss';
+        components: "shadcn-ui";
+        framework: "nextjs" | "vite" | "remix";
+        styling: "tailwindcss";
     };
     questionnaire: {
-      brandTone: 'professional' | 'playful' | 'elegant' | 'bold' | 'minimal';
-      contrast: 'maximum' | 'low' | 'medium' | 'high';
-      density: 'compact' | 'comfortable' | 'spacious';
-      borderRadius: 'none' | 'medium' | 'small' | 'large' | 'full';
-      primaryColor: {
-        l: number;
-        c: number;
-        h: number;
-      };
-      neutralTone: 'pure' | 'warm' | 'cool';
-      fontScale: 'medium' | 'small' | 'large';
+        brandTone: "professional" | "playful" | "elegant" | "bold" | "minimal";
+        contrast: "maximum" | "low" | "medium" | "high";
+        density: "compact" | "comfortable" | "spacious";
+        borderRadius: "none" | "medium" | "small" | "large" | "full";
+        primaryColor: {
+            l: number;
+            c: number;
+            h: number;
+        };
+        neutralTone: "pure" | "warm" | "cool";
+        fontScale: "medium" | "small" | "large";
     };
-    metadata?:
-      | {
-          tags?: string[] | undefined;
-          author?: string | undefined;
-          homepage?: string | undefined;
-        }
-      | undefined;
-  }
->;
+    metadata?: {
+        tags?: string[] | undefined;
+        author?: string | undefined;
+        homepage?: string | undefined;
+    } | undefined;
+}>;
 /**
  * Theme type
  * Represents a complete design system theme configuration

@@ -6,7 +6,20 @@ import globals from 'globals';
 export default [
   js.configs.recommended,
   {
-    ignores: ['**/*.d.ts', '**/dist/**', '**/build/**', '**/.next/**', '**/node_modules/**'],
+    ignores: [
+      '**/*.d.ts',
+      '**/dist/**',
+      '**/build/**',
+      '**/.next/**',
+      '**/node_modules/**',
+      // Root level build artifacts
+      'src/**/*.js',
+      'tests/**/*.js',
+      'examples/**/*.js',
+      'src/**/*.js.map',
+      'tests/**/*.js.map',
+      'examples/**/*.js.map',
+    ],
   },
   {
     files: ['**/*.ts', '**/*.tsx'],

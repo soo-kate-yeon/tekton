@@ -29,28 +29,28 @@ export const FontScaleSchema = z.enum(['small', 'medium', 'large']);
  * TASK-008: Q&A Schema Implementation (EDR-002)
  */
 export const QuestionnaireSchema = z.object({
-  brandTone: BrandToneSchema,
-  contrast: ContrastSchema,
-  density: DensitySchema,
-  borderRadius: BorderRadiusSchema,
-  primaryColor: OKLCHColorSchema,
-  neutralTone: NeutralToneSchema,
-  fontScale: FontScaleSchema,
+    brandTone: BrandToneSchema,
+    contrast: ContrastSchema,
+    density: DensitySchema,
+    borderRadius: BorderRadiusSchema,
+    primaryColor: OKLCHColorSchema,
+    neutralTone: NeutralToneSchema,
+    fontScale: FontScaleSchema,
 });
 /**
  * Default questionnaire configuration
  */
 export const DEFAULT_QUESTIONNAIRE = {
-  brandTone: 'professional',
-  contrast: 'high',
-  density: 'comfortable',
-  borderRadius: 'medium',
-  primaryColor: {
-    l: 0.5,
-    c: 0.15,
-    h: 220,
-  },
-  neutralTone: 'pure',
-  fontScale: 'medium',
+    brandTone: 'professional',
+    contrast: 'high',
+    density: 'comfortable',
+    borderRadius: 'medium',
+    primaryColor: {
+        l: 0.5,
+        c: 0.15,
+        h: 220,
+    },
+    neutralTone: 'pure',
+    fontScale: 'medium',
 };
 //# sourceMappingURL=questionnaire.js.map

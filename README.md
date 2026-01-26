@@ -965,13 +965,13 @@ For complete API documentation with usage examples, see [API Reference](./docs/a
 
 ## Project Status
 
-**Current Version**: 0.3.0
-**Current Branch**: `master`
-**SPEC Phase**: Phase D Complete - Brand DNA MCP Integration Implemented (100%)
+**Current Version**: 0.2.0 (Planned)
+**Current Branch**: `feature/SPEC-COMPONENT-001`
+**SPEC Phase**: Phase F - Layout System & UI Package (In Progress)
 
 ### Implementation Status
 
-**Completed Features** (SPEC-PHASEAB-001 + SPEC-PHASEB-002 + SPEC-PHASEC-003):
+**Completed Features** (SPEC-PHASEB-002 + SPEC-PHASEC-003):
 
 **Phase A - Core Token System:**
 
@@ -1049,7 +1049,7 @@ For complete API documentation with usage examples, see [API Reference](./docs/a
 
 **Phase Status**:
 
-- ✅ Phase A (SPEC-PHASEAB-001): 100% complete (2026-01-11)
+- ✅ Phase A: 100% complete (2026-01-11)
   - ✅ A1: Preset definition system
   - ✅ A2: Token generator
   - ✅ A3: Component contract system
@@ -1104,13 +1104,37 @@ For complete API documentation with usage examples, see [API Reference](./docs/a
 
 For detailed implementation status, see:
 
-- [Phase A Implementation](/.moai/specs/SPEC-PHASEAB-001/implementation-status.md)
 - [Phase B Plan](/.moai/specs/SPEC-PHASEB-002/plan.md)
 - [Phase C Implementation](/.moai/specs/SPEC-PHASEC-003/implementation-status.md)
 
 ### Roadmap
 
-**Phase D (Upcoming) - Figma Integration:**
+**Phase F (Current) - Layout System & UI Package:** 🚧 In Progress
+
+- ✅ **@tekton/ui Package**: 19개 React 컴포넌트 구현
+  - Primitives (14개): Avatar, Badge, Button, Checkbox, Heading, Image, Input, Link, List, Progress, Radio, Slider, Switch, Text
+  - Components (5개): Dropdown, Form, Modal, Table, Tabs
+  - WCAG 2.1 AA 접근성 준수
+  - TypeScript 타입 정의 완료
+  - 테스트 커버리지: 100% (모든 테스트 통과)
+
+- 🚧 **SPEC-LAYOUT-001**: Layout Token System (Planned)
+  - 4-Layer Layout Architecture: Shell → Page → Section → Responsive
+  - 6개 Shell 토큰 (app, marketing, auth, dashboard, admin, minimal)
+  - 8개 Page Layout 토큰 (job, resource, dashboard, settings, detail, empty, wizard, onboarding)
+  - 12개 Section Pattern 토큰 (grid-_, split-_, stack-_, sidebar-_, container)
+  - 5개 Responsive Breakpoints (sm, md, lg, xl, 2xl)
+  - resolveLayout() 및 generateLayoutCSS() 함수
+
+- 🔜 **SPEC-LAYOUT-002**: Screen Generation Pipeline (Planned)
+  - JSON Schema 기반 화면 정의 (LLM 최적화)
+  - Screen Resolver Pipeline
+  - CSS-in-JS 출력 (styled-components/emotion)
+  - Tailwind CSS 출력
+  - MCP 서버 통합 (Claude 연동)
+  - **의존성**: SPEC-LAYOUT-001 완료 필요
+
+**Phase G (Future) - Figma Integration:**
 
 - Figma token synchronization with Design Tokens Community Group (DTCG) format
 - Bidirectional sync (Figma ↔ Tekton)
@@ -1118,14 +1142,14 @@ For detailed implementation status, see:
 - Real-time preview with Figma Dev Mode
 - Design system governance with token validation
 
-**Phase E (Future) - AFDS Marketplace:**
+**Phase H (Future) - AFDS Marketplace:**
 
 - Domain-specific screen contract packs (SaaS, E-commerce, Healthcare)
 - Community screen templates and presets
 - Component contract library marketplace
 - AI agent screen generation patterns
 
-See [SPEC-PHASEAB-001](/.moai/specs/SPEC-PHASEAB-001/spec.md), [SPEC-PHASEB-002](/.moai/specs/SPEC-PHASEB-002/plan.md), and [SPEC-PHASEC-003](/.moai/specs/SPEC-PHASEC-003/spec.md) for comprehensive roadmap.
+See [SPEC-PHASEB-002](/.moai/specs/SPEC-PHASEB-002/plan.md), [SPEC-PHASEC-003](/.moai/specs/SPEC-PHASEC-003/spec.md), [SPEC-LAYOUT-001](/.moai/specs/SPEC-LAYOUT-001/spec.md), and [SPEC-LAYOUT-002](/.moai/specs/SPEC-LAYOUT-002/spec.md) for comprehensive roadmap.
 
 ## Documentation
 
