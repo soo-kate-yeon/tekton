@@ -16,7 +16,9 @@ describe('Image', () => {
     });
 
     it('renders with src and alt attributes', () => {
-      render(<Image src="https://example.com/photo.jpg" alt="Photo description" data-testid="image" />);
+      render(
+        <Image src="https://example.com/photo.jpg" alt="Photo description" data-testid="image" />
+      );
       const img = screen.getByTestId('image');
       expect(img).toHaveAttribute('src', 'https://example.com/photo.jpg');
       expect(img).toHaveAttribute('alt', 'Photo description');
@@ -36,7 +38,9 @@ describe('Image', () => {
     });
 
     it('supports eager loading', () => {
-      render(<Image src="https://example.com/image.jpg" alt="Test" loading="eager" data-testid="image" />);
+      render(
+        <Image src="https://example.com/image.jpg" alt="Test" loading="eager" data-testid="image" />
+      );
       expect(screen.getByTestId('image')).toHaveAttribute('loading', 'eager');
     });
   });
@@ -88,7 +92,10 @@ describe('Image', () => {
           data-testid="image"
         />
       );
-      expect(screen.getByTestId('image')).toHaveAttribute('sizes', '(max-width: 600px) 100vw, 50vw');
+      expect(screen.getByTestId('image')).toHaveAttribute(
+        'sizes',
+        '(max-width: 600px) 100vw, 50vw'
+      );
     });
   });
 
@@ -105,7 +112,9 @@ describe('Image', () => {
     });
 
     it('requires alt attribute', () => {
-      render(<Image src="https://example.com/image.jpg" alt="Required alt text" data-testid="image" />);
+      render(
+        <Image src="https://example.com/image.jpg" alt="Required alt text" data-testid="image" />
+      );
       expect(screen.getByTestId('image')).toHaveAttribute('alt', 'Required alt text');
     });
 
@@ -127,7 +136,14 @@ describe('Image', () => {
     });
 
     it('supports custom object-fit with className', () => {
-      render(<Image src="https://example.com/image.jpg" alt="Test" className="object-cover" data-testid="image" />);
+      render(
+        <Image
+          src="https://example.com/image.jpg"
+          alt="Test"
+          className="object-cover"
+          data-testid="image"
+        />
+      );
       expect(screen.getByTestId('image')).toHaveClass('object-cover');
     });
   });

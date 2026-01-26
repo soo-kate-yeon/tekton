@@ -106,7 +106,9 @@ describe('Card', () => {
       expect(screen.getByTestId('card')).toHaveClass('bg-[var(--card-background)]');
       expect(screen.getByTestId('card')).toHaveClass('text-[var(--card-foreground)]');
       expect(screen.getByTestId('title')).toHaveClass('text-[var(--card-title-foreground)]');
-      expect(screen.getByTestId('description')).toHaveClass('text-[var(--card-description-foreground)]');
+      expect(screen.getByTestId('description')).toHaveClass(
+        'text-[var(--card-description-foreground)]'
+      );
     });
   });
 
@@ -131,7 +133,11 @@ describe('Card', () => {
     });
 
     it('supports custom className', () => {
-      render(<Card className="custom-class" data-testid="card">Content</Card>);
+      render(
+        <Card className="custom-class" data-testid="card">
+          Content
+        </Card>
+      );
       expect(screen.getByTestId('card')).toHaveClass('custom-class');
     });
 

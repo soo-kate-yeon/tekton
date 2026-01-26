@@ -22,12 +22,20 @@ describe('List', () => {
     });
 
     it('renders as <ul> by default', () => {
-      render(<List data-testid="list"><ListItem>Item</ListItem></List>);
+      render(
+        <List data-testid="list">
+          <ListItem>Item</ListItem>
+        </List>
+      );
       expect(screen.getByTestId('list').tagName).toBe('UL');
     });
 
     it('renders as <ol> when ordered=true', () => {
-      render(<List ordered data-testid="list"><ListItem>Item</ListItem></List>);
+      render(
+        <List ordered data-testid="list">
+          <ListItem>Item</ListItem>
+        </List>
+      );
       expect(screen.getByTestId('list').tagName).toBe('OL');
     });
 
@@ -124,14 +132,20 @@ describe('List', () => {
     });
 
     it('supports custom className on List', () => {
-      render(<List className="custom-class" data-testid="list"><ListItem>Item</ListItem></List>);
+      render(
+        <List className="custom-class" data-testid="list">
+          <ListItem>Item</ListItem>
+        </List>
+      );
       expect(screen.getByTestId('list')).toHaveClass('custom-class');
     });
 
     it('supports custom className on ListItem', () => {
       render(
         <List>
-          <ListItem className="custom-item" data-testid="item">Item</ListItem>
+          <ListItem className="custom-item" data-testid="item">
+            Item
+          </ListItem>
         </List>
       );
       expect(screen.getByTestId('item')).toHaveClass('custom-item');

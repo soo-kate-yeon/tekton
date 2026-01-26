@@ -34,13 +34,7 @@ import {
   CardContent,
   CardFooter,
 } from '../src/components/card';
-import {
-  Form,
-  FormField,
-  FormLabel,
-  FormControl,
-  FormMessage,
-} from '../src/components/form';
+import { Form, FormField, FormLabel, FormControl, FormMessage } from '../src/components/form';
 import {
   Modal,
   ModalTrigger,
@@ -143,8 +137,16 @@ describe('Accessibility Compliance (WCAG 2.1 AA)', () => {
     it('Slider: has no accessibility violations', async () => {
       const { container } = render(
         <div>
-          <label htmlFor="slider-1" id="slider-label">Volume</label>
-          <Slider id="slider-1" defaultValue={[50]} min={0} max={100} aria-labelledby="slider-label" />
+          <label htmlFor="slider-1" id="slider-label">
+            Volume
+          </label>
+          <Slider
+            id="slider-1"
+            defaultValue={[50]}
+            min={0}
+            max={100}
+            aria-labelledby="slider-label"
+          />
         </div>
       );
       const results = await axe(container, {
@@ -295,7 +297,9 @@ describe('Accessibility Compliance (WCAG 2.1 AA)', () => {
             <FormControl>
               <Input id="email" type="email" error aria-describedby="email-error" />
             </FormControl>
-            <FormMessage name="email" id="email-error">Invalid email address</FormMessage>
+            <FormMessage name="email" id="email-error">
+              Invalid email address
+            </FormMessage>
           </FormField>
         </Form>
       );
@@ -437,9 +441,15 @@ describe('Accessibility Compliance (WCAG 2.1 AA)', () => {
           </FormField>
 
           <FormField name="slider">
-            <FormLabel htmlFor="slider-input" id="slider-label-complex">Volume</FormLabel>
+            <FormLabel htmlFor="slider-input" id="slider-label-complex">
+              Volume
+            </FormLabel>
             <FormControl>
-              <Slider id="slider-input" defaultValue={[50]} aria-labelledby="slider-label-complex" />
+              <Slider
+                id="slider-input"
+                defaultValue={[50]}
+                aria-labelledby="slider-label-complex"
+              />
             </FormControl>
           </FormField>
         </Form>

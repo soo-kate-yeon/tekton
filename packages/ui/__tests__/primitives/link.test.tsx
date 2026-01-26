@@ -17,33 +17,53 @@ describe('Link', () => {
     });
 
     it('renders as <a> by default', () => {
-      render(<Link href="/test" data-testid="link">Link</Link>);
+      render(
+        <Link href="/test" data-testid="link">
+          Link
+        </Link>
+      );
       expect(screen.getByTestId('link').tagName).toBe('A');
     });
 
     it('renders with href attribute', () => {
-      render(<Link href="/test" data-testid="link">Link</Link>);
+      render(
+        <Link href="/test" data-testid="link">
+          Link
+        </Link>
+      );
       expect(screen.getByTestId('link')).toHaveAttribute('href', '/test');
     });
   });
 
   describe('Variants', () => {
     it('applies default variant', () => {
-      render(<Link href="/test" variant="default" data-testid="link">Link</Link>);
+      render(
+        <Link href="/test" variant="default" data-testid="link">
+          Link
+        </Link>
+      );
       const link = screen.getByTestId('link');
       expect(link).toHaveClass('text-[var(--link-foreground)]');
       expect(link).toHaveClass('hover:underline');
     });
 
     it('applies muted variant', () => {
-      render(<Link href="/test" variant="muted" data-testid="link">Link</Link>);
+      render(
+        <Link href="/test" variant="muted" data-testid="link">
+          Link
+        </Link>
+      );
       const link = screen.getByTestId('link');
       expect(link).toHaveClass('text-[var(--link-muted-foreground)]');
       expect(link).toHaveClass('hover:underline');
     });
 
     it('applies subtle variant', () => {
-      render(<Link href="/test" variant="subtle" data-testid="link">Link</Link>);
+      render(
+        <Link href="/test" variant="subtle" data-testid="link">
+          Link
+        </Link>
+      );
       const link = screen.getByTestId('link');
       expect(link).toHaveClass('text-[var(--link-subtle-foreground)]');
     });
@@ -52,8 +72,12 @@ describe('Link', () => {
   describe('User Interaction', () => {
     it('handles click events', async () => {
       const user = userEvent.setup();
-      const handleClick = vi.fn((e) => e.preventDefault());
-      render(<Link href="/test" onClick={handleClick} data-testid="link">Link</Link>);
+      const handleClick = vi.fn(e => e.preventDefault());
+      render(
+        <Link href="/test" onClick={handleClick} data-testid="link">
+          Link
+        </Link>
+      );
 
       await user.click(screen.getByTestId('link'));
       expect(handleClick).toHaveBeenCalledTimes(1);
@@ -61,8 +85,12 @@ describe('Link', () => {
 
     it('supports keyboard navigation (Enter)', async () => {
       const user = userEvent.setup();
-      const handleClick = vi.fn((e) => e.preventDefault());
-      render(<Link href="/test" onClick={handleClick} data-testid="link">Link</Link>);
+      const handleClick = vi.fn(e => e.preventDefault());
+      render(
+        <Link href="/test" onClick={handleClick} data-testid="link">
+          Link
+        </Link>
+      );
 
       screen.getByTestId('link').focus();
       await user.keyboard('{Enter}');
@@ -73,7 +101,12 @@ describe('Link', () => {
   describe('External Links', () => {
     it('supports target="_blank" for external links', () => {
       render(
-        <Link href="https://example.com" target="_blank" rel="noopener noreferrer" data-testid="link">
+        <Link
+          href="https://example.com"
+          target="_blank"
+          rel="noopener noreferrer"
+          data-testid="link"
+        >
           External
         </Link>
       );
@@ -85,7 +118,11 @@ describe('Link', () => {
 
   describe('CSS Variables', () => {
     it('uses CSS Variables for theming', () => {
-      render(<Link href="/test" variant="default" data-testid="link">Link</Link>);
+      render(
+        <Link href="/test" variant="default" data-testid="link">
+          Link
+        </Link>
+      );
       expect(screen.getByTestId('link')).toHaveClass('text-[var(--link-foreground)]');
     });
   });
@@ -103,19 +140,31 @@ describe('Link', () => {
     });
 
     it('is keyboard focusable', () => {
-      render(<Link href="/test" data-testid="link">Link</Link>);
+      render(
+        <Link href="/test" data-testid="link">
+          Link
+        </Link>
+      );
       const link = screen.getByTestId('link');
       link.focus();
       expect(link).toHaveFocus();
     });
 
     it('supports aria-label for icon links', () => {
-      render(<Link href="/home" aria-label="Go to home" data-testid="link">🏠</Link>);
+      render(
+        <Link href="/home" aria-label="Go to home" data-testid="link">
+          🏠
+        </Link>
+      );
       expect(screen.getByTestId('link')).toHaveAttribute('aria-label', 'Go to home');
     });
 
     it('supports custom className', () => {
-      render(<Link href="/test" className="custom-class" data-testid="link">Link</Link>);
+      render(
+        <Link href="/test" className="custom-class" data-testid="link">
+          Link
+        </Link>
+      );
       expect(screen.getByTestId('link')).toHaveClass('custom-class');
     });
   });

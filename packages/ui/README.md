@@ -133,6 +133,7 @@ import { Button } from '@tekton/ui';
 ```
 
 **Props:**
+
 - `variant`: `"default" | "primary" | "secondary" | "destructive" | "outline" | "ghost" | "link"`
 - `size`: `"sm" | "md" | "lg"`
 - `loading`: `boolean`
@@ -158,6 +159,7 @@ import { Input } from '@tekton/ui';
 ```
 
 **Props:**
+
 - `type`: `"text" | "email" | "password" | "number" | "search" | "tel" | "url"`
 - All native `<input>` props
 
@@ -166,14 +168,7 @@ import { Input } from '@tekton/ui';
 ### Card
 
 ```tsx
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardContent,
-  CardFooter
-} from '@tekton/ui';
+import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@tekton/ui';
 
 <Card>
   <CardHeader>
@@ -186,7 +181,7 @@ import {
   <CardFooter>
     <Button>Action</Button>
   </CardFooter>
-</Card>
+</Card>;
 ```
 
 ---
@@ -194,17 +189,14 @@ import {
 ### Form
 
 ```tsx
-import {
-  Form,
-  FormField,
-  FormLabel,
-  FormControl,
-  FormDescription,
-  FormMessage
-} from '@tekton/ui';
+import { Form, FormField, FormLabel, FormControl, FormDescription, FormMessage } from '@tekton/ui';
 import { Input } from '@tekton/ui';
 
-<Form onSubmit={(e) => { e.preventDefault(); /* handle submit */ }}>
+<Form
+  onSubmit={e => {
+    e.preventDefault(); /* handle submit */
+  }}
+>
   <FormField name="email">
     <FormLabel htmlFor="email">Email</FormLabel>
     <FormControl>
@@ -213,7 +205,7 @@ import { Input } from '@tekton/ui';
     <FormDescription>We'll never share your email.</FormDescription>
     <FormMessage name="email">Invalid email address</FormMessage>
   </FormField>
-</Form>
+</Form>;
 ```
 
 ---
@@ -229,7 +221,7 @@ import {
   ModalTitle,
   ModalDescription,
   ModalFooter,
-  ModalClose
+  ModalClose,
 } from '@tekton/ui';
 import { Button } from '@tekton/ui';
 
@@ -250,7 +242,7 @@ import { Button } from '@tekton/ui';
       <Button variant="primary">Confirm</Button>
     </ModalFooter>
   </ModalContent>
-</Modal>
+</Modal>;
 ```
 
 ---
@@ -263,7 +255,7 @@ import {
   DropdownTrigger,
   DropdownContent,
   DropdownItem,
-  DropdownSeparator
+  DropdownSeparator,
 } from '@tekton/ui';
 import { Button } from '@tekton/ui';
 
@@ -278,7 +270,7 @@ import { Button } from '@tekton/ui';
     <DropdownItem disabled>Disabled Item</DropdownItem>
     <DropdownItem onClick={() => console.log('Delete')}>Delete</DropdownItem>
   </DropdownContent>
-</Dropdown>
+</Dropdown>;
 ```
 
 ---
@@ -303,7 +295,7 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from '@tekton/ui';
   <TabsContent value="tab3">
     <p>Content for Tab 3</p>
   </TabsContent>
-</Tabs>
+</Tabs>;
 ```
 
 ---
@@ -327,6 +319,7 @@ import { Checkbox } from '@tekton/ui';
 ```
 
 **Props:**
+
 - `checked`: `boolean | "indeterminate"`
 - `onCheckedChange`: `(checked: boolean | "indeterminate") => void`
 - All Radix UI Checkbox props
@@ -351,7 +344,7 @@ import { RadioGroup, RadioGroupItem } from '@tekton/ui';
     <RadioGroupItem value="option3" id="opt3" />
     <label htmlFor="opt3">Option 3</label>
   </div>
-</RadioGroup>
+</RadioGroup>;
 ```
 
 ---
@@ -370,6 +363,7 @@ import { Switch } from '@tekton/ui';
 ```
 
 **Props:**
+
 - `checked`: `boolean`
 - `onCheckedChange`: `(checked: boolean) => void`
 - All Radix UI Switch props
@@ -397,6 +391,7 @@ import { Slider } from '@tekton/ui';
 ```
 
 **Props:**
+
 - `defaultValue`: `number[]`
 - `min`: `number`
 - `max`: `number`
@@ -416,6 +411,7 @@ import { Progress } from '@tekton/ui';
 ```
 
 **Props:**
+
 - `value`: `number` (0-100)
 - All Radix UI Progress props
 
@@ -429,7 +425,7 @@ import { Avatar, AvatarImage, AvatarFallback } from '@tekton/ui';
 <Avatar>
   <AvatarImage src="https://example.com/avatar.jpg" alt="John Doe" />
   <AvatarFallback>JD</AvatarFallback>
-</Avatar>
+</Avatar>;
 ```
 
 ---
@@ -447,6 +443,7 @@ import { Badge } from '@tekton/ui';
 ```
 
 **Props:**
+
 - `variant`: `"default" | "primary" | "secondary" | "destructive" | "outline"`
 
 ---
@@ -469,6 +466,7 @@ import { Text } from '@tekton/ui';
 ```
 
 **Props:**
+
 - `as`: `"p" | "span" | "div" | "label"`
 - `size`: `"xs" | "sm" | "md" | "lg"`
 - `variant`: `"default" | "muted"`
@@ -493,6 +491,7 @@ import { Heading } from '@tekton/ui';
 ```
 
 **Props:**
+
 - `level`: `1 | 2 | 3 | 4 | 5 | 6`
 - `size`: `"sm" | "md" | "lg"`
 
@@ -509,6 +508,7 @@ import { Link } from '@tekton/ui';
 ```
 
 **Props:**
+
 - `href`: `string`
 - `variant`: `"default" | "muted" | "underline"`
 - All native `<a>` props
@@ -536,6 +536,7 @@ import { List, ListItem } from '@tekton/ui';
 ```
 
 **Props:**
+
 - `as`: `"ul" | "ol"`
 
 ---
@@ -558,6 +559,7 @@ import { Image } from '@tekton/ui';
 ```
 
 **Props:**
+
 - `src`: `string`
 - `alt`: `string` (required for accessibility)
 - All native `<img>` props
@@ -575,7 +577,7 @@ import {
   TableRow,
   TableHead,
   TableCell,
-  TableCaption
+  TableCaption,
 } from '@tekton/ui';
 
 <Table>
@@ -604,7 +606,7 @@ import {
       <TableCell colSpan={3}>Total: 2 users</TableCell>
     </TableRow>
   </TableFooter>
-</Table>
+</Table>;
 ```
 
 ---
@@ -626,11 +628,7 @@ All themeable properties use CSS Variables:
 Powered by class-variance-authority:
 
 ```tsx
-<Button
-  variant="secondary"
-  size="lg"
-  loading
->
+<Button variant="secondary" size="lg" loading>
   Click me
 </Button>
 ```
@@ -649,7 +647,7 @@ Works out of the box with sensible defaults:
 ```tsx
 import { Button } from '@tekton/ui';
 
-<Button>Just works</Button>
+<Button>Just works</Button>;
 ```
 
 ---
@@ -659,6 +657,7 @@ import { Button } from '@tekton/ui';
 @tekton/ui uses a 3-layer CSS Variables architecture:
 
 ### Layer 1: Atomic Tokens
+
 ```css
 --color-primary: #3b82f6;
 --color-destructive: #ef4444;
@@ -667,6 +666,7 @@ import { Button } from '@tekton/ui';
 ```
 
 ### Layer 2: Semantic Tokens
+
 ```css
 --text-primary: var(--color-primary);
 --bg-destructive: var(--color-destructive);
@@ -675,6 +675,7 @@ import { Button } from '@tekton/ui';
 ### Layer 3: Component Tokens
 
 **Button Tokens:**
+
 ```css
 --button-default-background
 --button-default-foreground
@@ -693,6 +694,7 @@ import { Button } from '@tekton/ui';
 ```
 
 **Input Tokens:**
+
 ```css
 --input-background
 --input-foreground
@@ -704,6 +706,7 @@ import { Button } from '@tekton/ui';
 ```
 
 **Card Tokens:**
+
 ```css
 --card-background
 --card-foreground
@@ -711,6 +714,7 @@ import { Button } from '@tekton/ui';
 ```
 
 **Modal Tokens:**
+
 ```css
 --modal-background
 --modal-border
@@ -720,6 +724,7 @@ import { Button } from '@tekton/ui';
 ```
 
 **Form Tokens:**
+
 ```css
 --form-label-foreground
 --form-message-destructive
@@ -727,6 +732,7 @@ import { Button } from '@tekton/ui';
 ```
 
 **Other Component Tokens:**
+
 - Badge: `--badge-*-background`, `--badge-*-foreground`, `--badge-*-border`
 - Dropdown: `--dropdown-*-background`, `--dropdown-item-*`
 - Tabs: `--tabs-*-background`, `--tabs-trigger-*`
@@ -849,6 +855,7 @@ All 20 components include comprehensive test coverage:
 ### Test Categories
 
 **Unit Tests (Vitest + Testing Library)**
+
 - Component rendering
 - Props validation
 - Variant behavior
@@ -856,18 +863,21 @@ All 20 components include comprehensive test coverage:
 - Event handling
 
 **Accessibility Tests (vitest-axe)**
+
 - WCAG 2.1 AA compliance
 - ARIA attributes
 - Semantic HTML
 - Color contrast (disabled in jsdom)
 
 **Keyboard Navigation Tests**
+
 - Tab navigation
 - Arrow key navigation (RadioGroup, Tabs, Slider)
 - Enter/Space activation
 - Escape key handling (Modal, Dropdown)
 
 **User Interaction Tests (userEvent)**
+
 - Click events
 - Form submissions
 - Input changes
@@ -910,19 +920,20 @@ All components are fully typed with TypeScript 5.7+:
 import { Button, ButtonProps } from '@tekton/ui';
 
 // Type-safe props
-const MyButton: React.FC<ButtonProps> = (props) => {
+const MyButton: React.FC<ButtonProps> = props => {
   return <Button {...props} />;
 };
 
 // Type inference
 <Button
-  variant="primary"  // ✓ Valid
-  variant="invalid"  // ✗ TypeScript error
-  size="lg"          // ✓ Valid
-  onClick={(e) => {  // e is typed as MouseEvent<HTMLButtonElement>
+  variant="primary" // ✓ Valid
+  variant="invalid" // ✗ TypeScript error
+  size="lg" // ✓ Valid
+  onClick={e => {
+    // e is typed as MouseEvent<HTMLButtonElement>
     console.log(e.currentTarget);
   }}
-/>
+/>;
 ```
 
 ---
@@ -972,6 +983,7 @@ MIT License - see [LICENSE](./LICENSE) for details
 ## Acknowledgments
 
 Built with:
+
 - [React 19](https://react.dev/) - UI library
 - [Radix UI](https://www.radix-ui.com/) - Accessible primitives
 - [class-variance-authority](https://cva.style/docs) - Variant management

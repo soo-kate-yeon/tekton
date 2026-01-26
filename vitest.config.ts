@@ -7,9 +7,7 @@ export default defineConfig({
     coverage: {
       provider: 'v8',
       reporter: ['text', 'json', 'html', 'lcov'],
-      include: [
-        'tests/**/*.ts',
-      ],
+      include: ['tests/**/*.ts'],
       exclude: [
         'node_modules/**',
         'dist/**',
@@ -36,9 +34,7 @@ export default defineConfig({
         statements: 85,
       },
     },
-    include: [
-      'tests/**/*.test.ts',
-    ],
+    include: ['tests/**/*.test.ts'],
     exclude: [
       'node_modules/**',
       'dist/**',

@@ -15,8 +15,8 @@ import { cn } from '../lib/utils';
 const buttonVariants = cva(
   // Base styles (layout, transitions, accessibility)
   'inline-flex items-center justify-center whitespace-nowrap font-medium ' +
-  'transition-colors focus-visible:outline-none focus-visible:ring-2 ' +
-  'focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50',
+    'transition-colors focus-visible:outline-none focus-visible:ring-2 ' +
+    'focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50',
   {
     variants: {
       variant: {
@@ -42,9 +42,7 @@ const buttonVariants = cva(
           'bg-transparent ' +
           'hover:bg-[var(--button-outline-hover-background)] ' +
           'hover:text-[var(--button-outline-hover-foreground)]',
-        link:
-          'text-[var(--button-link-foreground)] ' +
-          'underline-offset-4 hover:underline',
+        link: 'text-[var(--button-link-foreground)] ' + 'underline-offset-4 hover:underline',
       },
       size: {
         default: 'h-10 px-4 py-2 rounded-[var(--radius-md)]',
@@ -61,8 +59,7 @@ const buttonVariants = cva(
 );
 
 export interface ButtonProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement>,
-    VariantProps<typeof buttonVariants> {
+  extends React.ButtonHTMLAttributes<HTMLButtonElement>, VariantProps<typeof buttonVariants> {
   /**
    * Merge props with child element (Radix Slot pattern)
    */
@@ -82,16 +79,7 @@ export interface ButtonProps
  */
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   (
-    {
-      className,
-      variant,
-      size,
-      asChild = false,
-      loading = false,
-      children,
-      disabled,
-      ...props
-    },
+    { className, variant, size, asChild = false, loading = false, children, disabled, ...props },
     ref
   ) => {
     const Comp = asChild ? Slot : 'button';

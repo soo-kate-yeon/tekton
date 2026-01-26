@@ -23,28 +23,44 @@ describe('Badge', () => {
 
   describe('Variants', () => {
     it('applies default variant', () => {
-      render(<Badge variant="default" data-testid="badge">Default</Badge>);
+      render(
+        <Badge variant="default" data-testid="badge">
+          Default
+        </Badge>
+      );
       const badge = screen.getByTestId('badge');
       expect(badge).toHaveClass('bg-[var(--badge-default-background)]');
       expect(badge).toHaveClass('text-[var(--badge-default-foreground)]');
     });
 
     it('applies secondary variant', () => {
-      render(<Badge variant="secondary" data-testid="badge">Secondary</Badge>);
+      render(
+        <Badge variant="secondary" data-testid="badge">
+          Secondary
+        </Badge>
+      );
       const badge = screen.getByTestId('badge');
       expect(badge).toHaveClass('bg-[var(--badge-secondary-background)]');
       expect(badge).toHaveClass('text-[var(--badge-secondary-foreground)]');
     });
 
     it('applies destructive variant', () => {
-      render(<Badge variant="destructive" data-testid="badge">Error</Badge>);
+      render(
+        <Badge variant="destructive" data-testid="badge">
+          Error
+        </Badge>
+      );
       const badge = screen.getByTestId('badge');
       expect(badge).toHaveClass('bg-[var(--badge-destructive-background)]');
       expect(badge).toHaveClass('text-[var(--badge-destructive-foreground)]');
     });
 
     it('applies outline variant', () => {
-      render(<Badge variant="outline" data-testid="badge">Outline</Badge>);
+      render(
+        <Badge variant="outline" data-testid="badge">
+          Outline
+        </Badge>
+      );
       const badge = screen.getByTestId('badge');
       expect(badge).toHaveClass('border-[var(--badge-outline-border)]');
       expect(badge).toHaveClass('text-[var(--badge-outline-foreground)]');
@@ -53,7 +69,11 @@ describe('Badge', () => {
 
   describe('CSS Variables', () => {
     it('uses CSS Variables for theming', () => {
-      render(<Badge variant="default" data-testid="badge">Badge</Badge>);
+      render(
+        <Badge variant="default" data-testid="badge">
+          Badge
+        </Badge>
+      );
       const badge = screen.getByTestId('badge');
       expect(badge).toHaveClass('bg-[var(--badge-default-background)]');
       expect(badge).toHaveClass('text-[var(--badge-default-foreground)]');
@@ -73,12 +93,20 @@ describe('Badge', () => {
     });
 
     it('supports custom className', () => {
-      render(<Badge className="custom-class" data-testid="badge">Badge</Badge>);
+      render(
+        <Badge className="custom-class" data-testid="badge">
+          Badge
+        </Badge>
+      );
       expect(screen.getByTestId('badge')).toHaveClass('custom-class');
     });
 
     it('supports aria-label for non-text badges', () => {
-      render(<Badge aria-label="Status: Active" data-testid="badge">●</Badge>);
+      render(
+        <Badge aria-label="Status: Active" data-testid="badge">
+          ●
+        </Badge>
+      );
       expect(screen.getByTestId('badge')).toHaveAttribute('aria-label', 'Status: Active');
     });
   });

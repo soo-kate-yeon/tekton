@@ -24,8 +24,7 @@ const headingVariants = cva('font-semibold tracking-tight', {
 });
 
 export interface HeadingProps
-  extends React.HTMLAttributes<HTMLHeadingElement>,
-    VariantProps<typeof headingVariants> {
+  extends React.HTMLAttributes<HTMLHeadingElement>, VariantProps<typeof headingVariants> {
   level?: 1 | 2 | 3 | 4 | 5 | 6;
 }
 
@@ -35,10 +34,7 @@ const Heading = React.forwardRef<HTMLHeadingElement, HeadingProps>(
 
     return (
       <Comp
-        className={cn(
-          headingVariants({ level, className }),
-          'text-[var(--heading-foreground)]'
-        )}
+        className={cn(headingVariants({ level, className }), 'text-[var(--heading-foreground)]')}
         ref={ref}
         {...props}
       />

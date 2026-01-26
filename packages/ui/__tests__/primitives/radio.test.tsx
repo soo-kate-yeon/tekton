@@ -144,12 +144,20 @@ describe('RadioGroup', () => {
     });
 
     it('has role="radiogroup" on RadioGroup', () => {
-      render(<RadioGroup data-testid="group"><RadioGroupItem value="1" /></RadioGroup>);
+      render(
+        <RadioGroup data-testid="group">
+          <RadioGroupItem value="1" />
+        </RadioGroup>
+      );
       expect(screen.getByTestId('group')).toHaveAttribute('role', 'radiogroup');
     });
 
     it('has role="radio" on RadioGroupItem', () => {
-      render(<RadioGroup><RadioGroupItem value="1" data-testid="radio" /></RadioGroup>);
+      render(
+        <RadioGroup>
+          <RadioGroupItem value="1" data-testid="radio" />
+        </RadioGroup>
+      );
       expect(screen.getByTestId('radio')).toHaveAttribute('role', 'radio');
     });
   });

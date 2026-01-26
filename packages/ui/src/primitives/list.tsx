@@ -29,18 +29,13 @@ const List = React.forwardRef<
 });
 List.displayName = 'List';
 
-const ListItem = React.forwardRef<
-  HTMLLIElement,
-  React.HTMLAttributes<HTMLLIElement>
->(({ className, ...props }, ref) => {
-  return (
-    <li
-      ref={ref}
-      className={cn('text-[var(--list-item-foreground)]', className)}
-      {...props}
-    />
-  );
-});
+const ListItem = React.forwardRef<HTMLLIElement, React.HTMLAttributes<HTMLLIElement>>(
+  ({ className, ...props }, ref) => {
+    return (
+      <li ref={ref} className={cn('text-[var(--list-item-foreground)]', className)} {...props} />
+    );
+  }
+);
 ListItem.displayName = 'ListItem';
 
 export { List, ListItem };

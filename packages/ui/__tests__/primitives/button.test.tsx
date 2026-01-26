@@ -52,7 +52,11 @@ describe('Button', () => {
 
   it('does not call onClick when disabled', async () => {
     const handleClick = vi.fn();
-    render(<Button onClick={handleClick} disabled>Disabled</Button>);
+    render(
+      <Button onClick={handleClick} disabled>
+        Disabled
+      </Button>
+    );
 
     await userEvent.click(screen.getByRole('button'));
     expect(handleClick).not.toHaveBeenCalled();
@@ -60,7 +64,11 @@ describe('Button', () => {
 
   it('does not call onClick when loading', async () => {
     const handleClick = vi.fn();
-    render(<Button onClick={handleClick} loading>Loading</Button>);
+    render(
+      <Button onClick={handleClick} loading>
+        Loading
+      </Button>
+    );
 
     await userEvent.click(screen.getByRole('button'));
     expect(handleClick).not.toHaveBeenCalled();
@@ -92,7 +100,7 @@ describe('Button', () => {
   it('renders all variant options', () => {
     const variants = ['default', 'secondary', 'ghost', 'destructive', 'outline', 'link'] as const;
 
-    variants.forEach((variant) => {
+    variants.forEach(variant => {
       const { container } = render(<Button variant={variant}>Test</Button>);
       const button = container.querySelector('button');
       expect(button).toBeInTheDocument();
@@ -102,7 +110,7 @@ describe('Button', () => {
   it('renders all size options', () => {
     const sizes = ['default', 'sm', 'lg', 'icon'] as const;
 
-    sizes.forEach((size) => {
+    sizes.forEach(size => {
       const { container } = render(<Button size={size}>Test</Button>);
       const button = container.querySelector('button');
       expect(button).toBeInTheDocument();

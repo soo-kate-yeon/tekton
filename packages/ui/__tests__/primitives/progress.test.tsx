@@ -69,7 +69,9 @@ describe('Progress', () => {
     it('applies indicator background color', () => {
       const { container } = render(<Progress value={50} />);
       // Check for element with progress indicator background class
-      const indicator = container.querySelector('.bg-\\[var\\(--progress-indicator-background\\)\\]');
+      const indicator = container.querySelector(
+        '.bg-\\[var\\(--progress-indicator-background\\)\\]'
+      );
       expect(indicator).toBeInTheDocument();
     });
   });

@@ -28,8 +28,7 @@ const textVariants = cva('', {
 });
 
 export interface TextProps
-  extends React.HTMLAttributes<HTMLSpanElement>,
-    VariantProps<typeof textVariants> {
+  extends React.HTMLAttributes<HTMLSpanElement>, VariantProps<typeof textVariants> {
   as?: 'span' | 'p' | 'div';
 }
 

@@ -7,13 +7,7 @@ import { describe, it, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { axe } from 'vitest-axe';
-import {
-  Form,
-  FormField,
-  FormLabel,
-  FormControl,
-  FormMessage,
-} from '../../src/components/form';
+import { Form, FormField, FormLabel, FormControl, FormMessage } from '../../src/components/form';
 import { Input } from '../../src/primitives/input';
 
 describe('Form', () => {
@@ -40,7 +34,9 @@ describe('Form', () => {
             <FormControl data-testid="control">
               <Input type="email" />
             </FormControl>
-            <FormMessage name="email" data-testid="message">Error message</FormMessage>
+            <FormMessage name="email" data-testid="message">
+              Error message
+            </FormMessage>
           </FormField>
         </Form>
       );
@@ -110,7 +106,7 @@ describe('Form', () => {
   describe('Form Submission', () => {
     it('handles form submit event', async () => {
       const user = userEvent.setup();
-      const handleSubmit = vi.fn((e) => e.preventDefault());
+      const handleSubmit = vi.fn(e => e.preventDefault());
 
       render(
         <Form onSubmit={handleSubmit} data-testid="form">
@@ -138,13 +134,17 @@ describe('Form', () => {
             <FormControl>
               <Input />
             </FormControl>
-            <FormMessage name="test" data-testid="message">Message</FormMessage>
+            <FormMessage name="test" data-testid="message">
+              Message
+            </FormMessage>
           </FormField>
         </Form>
       );
 
       expect(screen.getByTestId('label')).toHaveClass('text-[var(--form-label-foreground)]');
-      expect(screen.getByTestId('message')).toHaveClass('text-[var(--form-message-error-foreground)]');
+      expect(screen.getByTestId('message')).toHaveClass(
+        'text-[var(--form-message-error-foreground)]'
+      );
     });
   });
 
@@ -178,7 +178,9 @@ describe('Form', () => {
             <FormControl>
               <Input id="email-input" error aria-describedby="email-error" />
             </FormControl>
-            <FormMessage name="email" id="email-error">Invalid email</FormMessage>
+            <FormMessage name="email" id="email-error">
+              Invalid email
+            </FormMessage>
           </FormField>
         </Form>
       );

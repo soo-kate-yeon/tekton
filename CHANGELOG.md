@@ -130,7 +130,7 @@ No migration needed for v0.1.0 (initial release)
   - 4-Layer Layout Architecture 설계 (Shell, Page, Section, Responsive)
   - 6개 Shell 토큰 정의 (app, marketing, auth, dashboard, admin, minimal)
   - 8개 Page Layout 토큰 정의 (job, resource, dashboard, settings, detail, empty, wizard, onboarding)
-  - 12개 Section Pattern 토큰 정의 (grid-*, split-*, stack-*, sidebar-*, container)
+  - 12개 Section Pattern 토큰 정의 (grid-_, split-_, stack-_, sidebar-_, container)
   - 5개 Responsive Breakpoints (sm, md, lg, xl, 2xl)
   - TypeScript 인터페이스 및 Zod 스키마
   - resolveLayout() 및 generateLayoutCSS() 함수 명세

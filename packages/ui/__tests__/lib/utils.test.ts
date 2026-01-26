@@ -32,9 +32,9 @@ describe('cn (className utility)', () => {
   it('handles objects with conditional classes', () => {
     expect(
       cn({
-        'class1': true,
-        'class2': false,
-        'class3': true,
+        class1: true,
+        class2: false,
+        class3: true,
       })
     ).toBe('class1 class3');
   });
@@ -48,22 +48,13 @@ describe('cn (className utility)', () => {
   });
 
   it('handles complex Tailwind class merging', () => {
-    expect(
-      cn(
-        'bg-red-500 text-white p-4',
-        'bg-blue-500 m-2'
-      )
-    ).toBe('text-white p-4 bg-blue-500 m-2');
+    expect(cn('bg-red-500 text-white p-4', 'bg-blue-500 m-2')).toBe(
+      'text-white p-4 bg-blue-500 m-2'
+    );
   });
 
   it('merges multiple sets of conflicting classes', () => {
-    expect(
-      cn(
-        'px-2 py-1',
-        'px-4',
-        'py-2'
-      )
-    ).toBe('px-4 py-2');
+    expect(cn('px-2 py-1', 'px-4', 'py-2')).toBe('px-4 py-2');
   });
 
   it('handles arbitrary values', () => {
@@ -71,11 +62,8 @@ describe('cn (className utility)', () => {
   });
 
   it('preserves non-conflicting classes', () => {
-    expect(
-      cn(
-        'flex items-center justify-between',
-        'gap-2 rounded-md'
-      )
-    ).toBe('flex items-center justify-between gap-2 rounded-md');
+    expect(cn('flex items-center justify-between', 'gap-2 rounded-md')).toBe(
+      'flex items-center justify-between gap-2 rounded-md'
+    );
   });
 });

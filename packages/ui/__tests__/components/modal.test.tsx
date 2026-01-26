@@ -165,7 +165,9 @@ describe('Modal', () => {
 
       expect(screen.getByTestId('content')).toHaveClass('bg-[var(--modal-background)]');
       expect(screen.getByTestId('title')).toHaveClass('text-[var(--modal-title-foreground)]');
-      expect(screen.getByTestId('description')).toHaveClass('text-[var(--modal-description-foreground)]');
+      expect(screen.getByTestId('description')).toHaveClass(
+        'text-[var(--modal-description-foreground)]'
+      );
     });
   });
 

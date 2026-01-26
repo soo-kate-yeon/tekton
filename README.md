@@ -1122,7 +1122,7 @@ For detailed implementation status, see:
   - 4-Layer Layout Architecture: Shell → Page → Section → Responsive
   - 6개 Shell 토큰 (app, marketing, auth, dashboard, admin, minimal)
   - 8개 Page Layout 토큰 (job, resource, dashboard, settings, detail, empty, wizard, onboarding)
-  - 12개 Section Pattern 토큰 (grid-*, split-*, stack-*, sidebar-*, container)
+  - 12개 Section Pattern 토큰 (grid-_, split-_, stack-_, sidebar-_, container)
   - 5개 Responsive Breakpoints (sm, md, lg, xl, 2xl)
   - resolveLayout() 및 generateLayoutCSS() 함수
 
