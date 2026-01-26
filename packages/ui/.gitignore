@@ -28,3 +28,11 @@ src/**/*.js.map
 src/**/*.d.ts.map
 !src/**/*.tsx
 !src/**/*.ts
+
+# TypeScript build artifacts in __tests__/
+__tests__/**/*.js
+__tests__/**/*.d.ts
+__tests__/**/*.js.map
+__tests__/**/*.d.ts.map
+!__tests__/**/*.tsx
+!__tests__/**/*.ts

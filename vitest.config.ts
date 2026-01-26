@@ -7,6 +7,9 @@ export default defineConfig({
     coverage: {
       provider: 'v8',
       reporter: ['text', 'json', 'html', 'lcov'],
+      include: [
+        'tests/**/*.ts',
+      ],
       exclude: [
         'node_modules/**',
         'dist/**',
@@ -14,6 +17,7 @@ export default defineConfig({
         'coverage/**',
         'tests/**',
         '**/*.test.ts',
+        '**/*.test.tsx',
         '**/*.test.js',
         '**/*.config.ts',
         '**/*.config.js',
@@ -21,9 +25,7 @@ export default defineConfig({
         'examples/**',
         'eslint.config.js',
         'src/**', // Legacy code (moved to packages/core)
-        'packages/.archived/**', // Archived packages
-        'packages/playground-web/**', // WIP: Next.js 16 playground
-        'packages/mcp-server/**', // Separate test suite
+        'packages/**', // Packages have their own coverage
         '**/__tests__/**', // Test files
         '**/coverage/**', // Coverage reports
       ],
@@ -34,7 +36,9 @@ export default defineConfig({
         statements: 85,
       },
     },
-    include: ['tests/**/*.test.ts', 'packages/core/__tests__/**/*.test.ts'],
+    include: [
+      'tests/**/*.test.ts',
+    ],
     exclude: [
       'node_modules/**',
       'dist/**',

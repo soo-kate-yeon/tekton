@@ -92,12 +92,31 @@ out/
 packages/*/src/**/*.js
 packages/*/src/**/*.d.ts
 packages/*/src/**/*.js.map
+packages/*/src/**/*.d.ts.map
 packages/*/__tests__/**/*.js
 packages/*/__tests__/**/*.d.ts
 packages/*/__tests__/**/*.js.map
+packages/*/__tests__/**/*.d.ts.map
 packages/*/*.config.js
 packages/*/*.config.d.ts
 packages/*/*.config.js.map
+packages/*/*.config.d.ts.map
+packages/*/*.setup.js
+packages/*/*.setup.d.ts
+packages/*/*.setup.js.map
+packages/*/*.setup.d.ts.map
+
+# Root level config build artifacts
+playwright.config.js
+playwright.config.d.ts
+playwright.config.js.map
+playwright.config.d.ts.map
+
+# Accessibility test build artifacts
+tests/accessibility/**/*.js
+tests/accessibility/**/*.d.ts
+tests/accessibility/**/*.js.map
+tests/accessibility/**/*.d.ts.map
 
 # ---------------------------------------------
 # Logs & Temporary Files

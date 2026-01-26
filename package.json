@@ -13,7 +13,7 @@
     "test:a11y:ui": "playwright test --ui",
     "test:a11y:debug": "playwright test --debug",
     "test:a11y:report": "playwright show-report playwright-report",
-    "ci:test": "vitest run --coverage --reporter=verbose",
+    "ci:test": "pnpm --filter \"./packages/core\" --filter \"./packages/ui\" test",
     "build": "tsc",
     "build:all": "pnpm --filter \"./packages/*\" build",
     "dev": "tsc --watch",

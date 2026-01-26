@@ -13,7 +13,8 @@
   },
   "scripts": {
     "build": "tsup src/index.ts --format esm --dts",
-    "test": "vitest",
+    "test": "vitest run",
+    "test:watch": "vitest",
     "test:a11y": "vitest accessibility",
     "test:coverage": "vitest --coverage",
     "lint": "eslint src --ext .ts,.tsx",
