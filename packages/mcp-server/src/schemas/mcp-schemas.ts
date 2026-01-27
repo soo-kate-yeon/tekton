@@ -181,7 +181,8 @@ export const HybridExportInputSchema = z.object({
   themeId: ThemeIdSchema.optional(),
 });
 
-export type HybridExportInput = z.infer<typeof HybridExportInputSchema>;
+// z.input을 사용하여 optional 필드가 실제로 optional로 인식되도록 함
+export type HybridExportInput = z.input<typeof HybridExportInputSchema>;
 
 /**
  * Component resolution result
