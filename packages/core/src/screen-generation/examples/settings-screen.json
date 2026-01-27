@@ -1,0 +1,212 @@
+{
+  "id": "settings-screen",
+  "name": "User Settings",
+  "description": "Application settings page with form components",
+  "shell": "shell.web.dashboard",
+  "page": "page.settings",
+  "themeId": "default",
+  "sections": [
+    {
+      "id": "settings-header",
+      "pattern": "section.container",
+      "components": [
+        {
+          "type": "Heading",
+          "props": {
+            "level": 1,
+            "size": "2xl"
+          },
+          "children": ["Settings"]
+        },
+        {
+          "type": "Text",
+          "props": {
+            "variant": "body",
+            "color": "secondary"
+          },
+          "children": ["Manage your account settings and preferences"]
+        }
+      ]
+    },
+    {
+      "id": "settings-tabs",
+      "pattern": "section.stack",
+      "components": [
+        {
+          "type": "Tabs",
+          "props": {
+            "defaultTab": "profile",
+            "tabs": [
+              { "id": "profile", "label": "Profile" },
+              { "id": "security", "label": "Security" },
+              { "id": "notifications", "label": "Notifications" }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "profile-form",
+      "pattern": "section.stack",
+      "components": [
+        {
+          "type": "Card",
+          "props": {
+            "variant": "outlined"
+          },
+          "children": [
+            {
+              "type": "Form",
+              "props": {
+                "onSubmit": "handleProfileUpdate"
+              },
+              "children": [
+                {
+                  "type": "Heading",
+                  "props": {
+                    "level": 3,
+                    "size": "lg"
+                  },
+                  "children": ["Profile Information"]
+                },
+                {
+                  "type": "Input",
+                  "props": {
+                    "type": "text",
+                    "placeholder": "Full Name",
+                    "size": "medium"
+                  }
+                },
+                {
+                  "type": "Input",
+                  "props": {
+                    "type": "email",
+                    "placeholder": "Email Address",
+                    "size": "medium"
+                  }
+                },
+                {
+                  "type": "Input",
+                  "props": {
+                    "type": "tel",
+                    "placeholder": "Phone Number",
+                    "size": "medium"
+                  }
+                },
+                {
+                  "type": "Avatar",
+                  "props": {
+                    "src": "/avatar.jpg",
+                    "alt": "User Avatar",
+                    "size": "large",
+                    "fallback": "UN"
+                  }
+                },
+                {
+                  "type": "Button",
+                  "props": {
+                    "variant": "primary",
+                    "size": "medium"
+                  },
+                  "children": ["Save Changes"]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "Card",
+          "props": {
+            "variant": "outlined"
+          },
+          "children": [
+            {
+              "type": "Heading",
+              "props": {
+                "level": 3,
+                "size": "lg"
+              },
+              "children": ["Preferences"]
+            },
+            {
+              "type": "Checkbox",
+              "props": {
+                "label": "Enable email notifications",
+                "checked": true
+              }
+            },
+            {
+              "type": "Checkbox",
+              "props": {
+                "label": "Enable push notifications",
+                "checked": false
+              }
+            },
+            {
+              "type": "Switch",
+              "props": {
+                "label": "Dark mode",
+                "checked": false
+              }
+            },
+            {
+              "type": "Radio",
+              "props": {
+                "name": "language",
+                "label": "English",
+                "checked": true
+              }
+            },
+            {
+              "type": "Radio",
+              "props": {
+                "name": "language",
+                "label": "한국어",
+                "checked": false
+              }
+            }
+          ]
+        },
+        {
+          "type": "Card",
+          "props": {
+            "variant": "outlined"
+          },
+          "children": [
+            {
+              "type": "Heading",
+              "props": {
+                "level": 3,
+                "size": "lg"
+              },
+              "children": ["Notification Volume"]
+            },
+            {
+              "type": "Slider",
+              "props": {
+                "value": 75,
+                "min": 0,
+                "max": 100,
+                "step": 5
+              }
+            },
+            {
+              "type": "Text",
+              "props": {
+                "variant": "caption",
+                "color": "muted"
+              },
+              "children": ["Adjust notification sound volume"]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "meta": {
+    "author": "Tekton Team",
+    "createdAt": "2026-01-28T10:30:00Z",
+    "version": "1.0.0",
+    "tags": ["settings", "form", "preferences"]
+  }
+}

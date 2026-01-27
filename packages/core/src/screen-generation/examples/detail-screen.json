@@ -1,0 +1,351 @@
+{
+  "id": "user-detail-screen",
+  "name": "User Detail",
+  "description": "Detailed view of a user profile with activity and statistics",
+  "shell": "shell.web.dashboard",
+  "page": "page.detail",
+  "themeId": "default",
+  "sections": [
+    {
+      "id": "user-header",
+      "pattern": "section.flex",
+      "components": [
+        {
+          "type": "Card",
+          "props": {
+            "variant": "elevated"
+          },
+          "children": [
+            {
+              "type": "Avatar",
+              "props": {
+                "src": "/users/john-doe.jpg",
+                "alt": "John Doe",
+                "size": "xl",
+                "fallback": "JD"
+              }
+            },
+            {
+              "type": "Heading",
+              "props": {
+                "level": 1,
+                "size": "2xl"
+              },
+              "children": ["John Doe"]
+            },
+            {
+              "type": "Text",
+              "props": {
+                "variant": "body",
+                "color": "secondary"
+              },
+              "children": ["Software Engineer"]
+            },
+            {
+              "type": "Badge",
+              "props": {
+                "variant": "success",
+                "size": "medium"
+              },
+              "children": ["Active"]
+            },
+            {
+              "type": "Link",
+              "props": {
+                "href": "mailto:john.doe@example.com",
+                "external": true
+              },
+              "children": ["john.doe@example.com"]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "user-stats",
+      "pattern": "section.grid-3",
+      "components": [
+        {
+          "type": "Card",
+          "props": {
+            "variant": "default"
+          },
+          "slot": "stat-1",
+          "children": [
+            {
+              "type": "Text",
+              "props": {
+                "variant": "caption",
+                "color": "muted"
+              },
+              "children": ["Projects"]
+            },
+            {
+              "type": "Heading",
+              "props": {
+                "level": 2,
+                "size": "xl"
+              },
+              "children": ["24"]
+            }
+          ]
+        },
+        {
+          "type": "Card",
+          "props": {
+            "variant": "default"
+          },
+          "slot": "stat-2",
+          "children": [
+            {
+              "type": "Text",
+              "props": {
+                "variant": "caption",
+                "color": "muted"
+              },
+              "children": ["Tasks Completed"]
+            },
+            {
+              "type": "Heading",
+              "props": {
+                "level": 2,
+                "size": "xl"
+              },
+              "children": ["156"]
+            }
+          ]
+        },
+        {
+          "type": "Card",
+          "props": {
+            "variant": "default"
+          },
+          "slot": "stat-3",
+          "children": [
+            {
+              "type": "Text",
+              "props": {
+                "variant": "caption",
+                "color": "muted"
+              },
+              "children": ["Team Members"]
+            },
+            {
+              "type": "Heading",
+              "props": {
+                "level": 2,
+                "size": "xl"
+              },
+              "children": ["8"]
+            }
+          ]
+        }
+      ],
+      "responsive": {
+        "sm": {
+          "gridColumns": 1
+        },
+        "md": {
+          "gridColumns": 3
+        }
+      }
+    },
+    {
+      "id": "user-content",
+      "pattern": "section.split",
+      "components": [
+        {
+          "type": "Card",
+          "props": {
+            "variant": "outlined"
+          },
+          "slot": "main",
+          "children": [
+            {
+              "type": "Heading",
+              "props": {
+                "level": 2,
+                "size": "lg"
+              },
+              "children": ["Recent Activity"]
+            },
+            {
+              "type": "Table",
+              "props": {
+                "striped": true,
+                "columns": [
+                  { "id": "date", "label": "Date" },
+                  { "id": "action", "label": "Action" },
+                  { "id": "status", "label": "Status" }
+                ],
+                "data": [
+                  {
+                    "date": "2026-01-28",
+                    "action": "Completed Project Alpha",
+                    "status": "success"
+                  },
+                  {
+                    "date": "2026-01-27",
+                    "action": "Updated documentation",
+                    "status": "info"
+                  },
+                  {
+                    "date": "2026-01-26",
+                    "action": "Code review",
+                    "status": "success"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "type": "Card",
+          "props": {
+            "variant": "outlined"
+          },
+          "slot": "sidebar",
+          "children": [
+            {
+              "type": "Heading",
+              "props": {
+                "level": 3,
+                "size": "md"
+              },
+              "children": ["Skills"]
+            },
+            {
+              "type": "Badge",
+              "props": {
+                "variant": "default",
+                "size": "medium"
+              },
+              "children": ["TypeScript"]
+            },
+            {
+              "type": "Badge",
+              "props": {
+                "variant": "default",
+                "size": "medium"
+              },
+              "children": ["React"]
+            },
+            {
+              "type": "Badge",
+              "props": {
+                "variant": "default",
+                "size": "medium"
+              },
+              "children": ["Node.js"]
+            },
+            {
+              "type": "Heading",
+              "props": {
+                "level": 3,
+                "size": "md"
+              },
+              "children": ["Task Progress"]
+            },
+            {
+              "type": "Progress",
+              "props": {
+                "value": 78,
+                "size": "medium"
+              }
+            },
+            {
+              "type": "Text",
+              "props": {
+                "variant": "caption",
+                "color": "muted"
+              },
+              "children": ["78% of quarterly goals completed"]
+            },
+            {
+              "type": "Heading",
+              "props": {
+                "level": 3,
+                "size": "md"
+              },
+              "children": ["Actions"]
+            },
+            {
+              "type": "Dropdown",
+              "props": {
+                "trigger": "More Options",
+                "placement": "bottom-start",
+                "items": [
+                  { "id": "edit", "label": "Edit Profile" },
+                  { "id": "message", "label": "Send Message" },
+                  { "id": "assign", "label": "Assign Task" }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "user-modal-trigger",
+      "pattern": "section.container",
+      "components": [
+        {
+          "type": "Button",
+          "props": {
+            "variant": "primary",
+            "size": "large"
+          },
+          "children": ["Edit Profile"]
+        },
+        {
+          "type": "Modal",
+          "props": {
+            "open": false,
+            "title": "Edit User Profile",
+            "onClose": "handleModalClose"
+          },
+          "children": [
+            {
+              "type": "Form",
+              "props": {
+                "onSubmit": "handleProfileSubmit"
+              },
+              "children": [
+                {
+                  "type": "Input",
+                  "props": {
+                    "type": "text",
+                    "placeholder": "Name",
+                    "value": "John Doe"
+                  }
+                },
+                {
+                  "type": "Input",
+                  "props": {
+                    "type": "email",
+                    "placeholder": "Email",
+                    "value": "john.doe@example.com"
+                  }
+                },
+                {
+                  "type": "Button",
+                  "props": {
+                    "variant": "primary",
+                    "size": "medium"
+                  },
+                  "children": ["Save"]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "meta": {
+    "author": "Tekton Team",
+    "createdAt": "2026-01-28T11:00:00Z",
+    "version": "1.0.0",
+    "tags": ["detail", "user", "profile"]
+  }
+}
