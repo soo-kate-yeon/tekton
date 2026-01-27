@@ -2,12 +2,12 @@
   "name": "@tekton/ui",
   "version": "0.1.0",
   "description": "Tekton UI Reference Component Library",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "dist/index.mjs",
+  "types": "dist/index.d.mts",
   "exports": {
     ".": {
-      "import": "./dist/index.js",
-      "types": "./dist/index.d.ts"
+      "import": "./dist/index.mjs",
+      "types": "./dist/index.d.mts"
     },
     "./styles": "./styles/tokens.css"
   },
