@@ -42,7 +42,8 @@ describe('BlueprintStorage', () => {
 
       const blueprintId = await storage.saveBlueprint(blueprint);
       expect(blueprintId).toBeDefined();
-      expect(blueprintId).toMatch(/^\d+(-[a-z0-9]+)?$/);
+      // Format: bp-{timestamp}-{suffix}
+      expect(blueprintId).toMatch(/^bp-\d+-[a-f0-9]+$/);
 
       // Verify blueprint file exists
       const blueprintDir = storage.getBlueprintDir(blueprintId);
