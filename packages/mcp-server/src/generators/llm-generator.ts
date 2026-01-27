@@ -243,8 +243,7 @@ export async function generateWithLLM(
 
   for (let attempt = 1; attempt <= finalConfig.maxRetries; attempt++) {
     try {
-      // Anthropic SDK 동적 import - SDK가 설치되지 않으면 에러 발생
-      // @ts-expect-error - Dynamic import of optional dependency
+      // Anthropic SDK 동적 import
       const anthropicModule = await import('@anthropic-ai/sdk');
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const Anthropic = (anthropicModule as any).default || (anthropicModule as any).Anthropic;
