@@ -5,6 +5,7 @@
  */
 
 import type { Blueprint, ComponentNode, LayoutType } from './types.js';
+import { resolveLayout } from './layout-resolver.js';
 
 // ============================================================================
 // Layout Definitions
@@ -92,14 +93,46 @@ export interface CreateBlueprintInput {
   description?: string;
   themeId: string;
   layout: LayoutType;
+  layoutToken?: string; // NEW: Optional layout token ID
   components: ComponentNode[];
 }
 
 /**
+ * Validate layout token ID format
+ * Must match: "shell.*.*" OR "page.*" OR "section.*"
+ */
+function validateLayoutToken(layoutToken: string): void {
+  const shellPattern = /^shell\.[a-z0-9-]+\.[a-z0-9-]+$/;
+  const pagePattern = /^page\.[a-z0-9-]+$/;
+  const sectionPattern = /^section\.[a-z0-9-]+$/;
+
+  if (!shellPattern.test(layoutToken) && !pagePattern.test(layoutToken) && !sectionPattern.test(layoutToken)) {
+    throw new Error(
+      `Invalid layoutToken format: "${layoutToken}". Must match "shell.*.*", "page.*", or "section.*"`
+    );
+  }
+}
+
+/**
  * Create a new blueprint with validation
+ * Supports optional layoutToken for advanced layout configuration
  */
 export function createBlueprint(input: CreateBlueprintInput): Blueprint {
   const id = `bp-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+
+  // Handle layoutToken if provided
+  let layoutConfig;
+  if (input.layoutToken) {
+    // Validate layoutToken format
+    validateLayoutToken(input.layoutToken);
+
+    // Resolve layoutToken to get layoutConfig
+    try {
+      layoutConfig = resolveLayout(input.layoutToken);
+    } catch (error) {
+      throw new Error(`Failed to resolve layoutToken "${input.layoutToken}": ${error instanceof Error ? error.message : String(error)}`);
+    }
+  }
 
   return {
     id,
@@ -107,6 +140,8 @@ export function createBlueprint(input: CreateBlueprintInput): Blueprint {
     description: input.description,
     themeId: input.themeId,
     layout: input.layout,
+    layoutToken: input.layoutToken,
+    layoutConfig,
     components: input.components,
   };
 }

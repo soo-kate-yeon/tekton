@@ -21,7 +21,7 @@ export async function previewThemeTool(input: PreviewThemeInput): Promise<Previe
 
     if (!theme) {
       // SPEC: S-002 Theme Availability Check - Provide helpful error with available themes
-      const availableThemes = listThemes().map(t => t.id);
+      const availableThemes = listThemes().map((t: { id: string }) => t.id);
       return createThemeNotFoundError(input.themeId, availableThemes);
     }
 

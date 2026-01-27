@@ -4,6 +4,8 @@
  * Target: 80 LOC
  */
 
+import type { ResolvedLayout } from './layout-resolver.js';
+
 // ============================================================================
 // Color Types
 // ============================================================================
@@ -65,7 +67,9 @@ export interface Blueprint {
   name: string;
   description?: string;
   themeId: string;
-  layout: LayoutType;
+  layout: LayoutType; // Keep for backward compatibility
+  layoutToken?: string; // NEW: Optional layout token ID
+  layoutConfig?: ResolvedLayout; // NEW: Resolved layout configuration
   components: ComponentNode[];
 }
 

@@ -117,7 +117,7 @@ export async function generateBlueprintTool(
     // SPEC: U-005 Theme Validation - Validate theme ID exists
     const theme = loadTheme(input.themeId);
     if (!theme) {
-      const availableThemes = listThemes().map(t => t.id);
+      const availableThemes = listThemes().map((t: { id: string }) => t.id);
       return createThemeNotFoundError(input.themeId, availableThemes);
     }
 
