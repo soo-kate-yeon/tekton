@@ -11,9 +11,10 @@
 // CSS Generator
 export {
   generateCSS,
+  generateCSSFromThemeId,
   extractCSSVariables,
   type CSSGenerationResult,
-  type ThemeWithTokens,
+  type ThemeV2,
 } from './css-generator.js';
 
 // Core Resolver (Tier 1)

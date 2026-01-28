@@ -1,0 +1,201 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://tekton.dev/schemas/screen-definition.json",
+  "title": "Screen Definition",
+  "description": "Declarative screen specification using layout tokens and component definitions [SPEC-LAYOUT-002]",
+  "type": "object",
+  "required": ["id", "name", "shell", "page", "sections"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$",
+      "description": "Unique screen identifier in kebab-case (e.g., 'user-dashboard')",
+      "errorMessage": "Screen ID must be kebab-case (lowercase letters, numbers, hyphens)"
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Human-readable screen name",
+      "errorMessage": "Screen name is required and cannot be empty"
+    },
+    "description": {
+      "type": "string",
+      "description": "Optional screen description"
+    },
+    "shell": {
+      "type": "string",
+      "pattern": "^shell\\.[a-z]+\\.[a-z-]+$",
+      "description": "Shell token ID (e.g., 'shell.web.dashboard')",
+      "errorMessage": "Shell token must match pattern: shell.{platform}.{name} (e.g., 'shell.web.dashboard')"
+    },
+    "page": {
+      "type": "string",
+      "pattern": "^page\\.[a-z-]+$",
+      "description": "Page layout token ID (e.g., 'page.dashboard')",
+      "errorMessage": "Page token must match pattern: page.{name} (e.g., 'page.dashboard')"
+    },
+    "themeId": {
+      "type": "string",
+      "default": "default",
+      "description": "Theme ID for token resolution",
+      "errorMessage": "Theme ID must be a non-empty string"
+    },
+    "sections": {
+      "type": "array",
+      "minItems": 1,
+      "description": "Section definitions that make up the screen",
+      "items": {
+        "$ref": "#/$defs/SectionDefinition"
+      },
+      "errorMessage": "Screen must have at least one section definition"
+    },
+    "meta": {
+      "$ref": "#/$defs/ScreenMeta"
+    }
+  },
+  "$defs": {
+    "SectionDefinition": {
+      "type": "object",
+      "required": ["id", "pattern", "components"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Section identifier (unique within screen)",
+          "errorMessage": "Section ID is required and cannot be empty"
+        },
+        "pattern": {
+          "type": "string",
+          "pattern": "^section\\.[a-z]+(-[0-9]+)?$",
+          "description": "Section pattern token ID (e.g., 'section.grid-4')",
+          "errorMessage": "Section pattern must match: section.{name} or section.{name}-{number} (e.g., 'section.grid-4')"
+        },
+        "components": {
+          "type": "array",
+          "minItems": 1,
+          "description": "Components within this section",
+          "items": {
+            "$ref": "#/$defs/ComponentDefinition"
+          },
+          "errorMessage": "Section must have at least one component"
+        },
+        "responsive": {
+          "$ref": "#/$defs/ResponsiveOverrides"
+        }
+      }
+    },
+    "ComponentDefinition": {
+      "type": "object",
+      "required": ["type", "props"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "Button",
+            "Input",
+            "Card",
+            "Text",
+            "Heading",
+            "Image",
+            "Link",
+            "List",
+            "Form",
+            "Modal",
+            "Tabs",
+            "Table",
+            "Badge",
+            "Avatar",
+            "Dropdown",
+            "Checkbox",
+            "Radio",
+            "Switch",
+            "Slider",
+            "Progress"
+          ],
+          "description": "Component type from the 20 available components",
+          "errorMessage": "Component type must be one of the 20 predefined component types (e.g., 'Button', 'Card', 'Input')"
+        },
+        "props": {
+          "type": "object",
+          "description": "Component props as key-value pairs",
+          "errorMessage": "Component props must be an object"
+        },
+        "children": {
+          "type": "array",
+          "description": "Child components or text content",
+          "items": {
+            "oneOf": [
+              {
+                "$ref": "#/$defs/ComponentDefinition"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          }
+        },
+        "slot": {
+          "type": "string",
+          "description": "Layout slot assignment for positioning",
+          "errorMessage": "Slot must be a string identifier"
+        }
+      }
+    },
+    "ResponsiveOverrides": {
+      "type": "object",
+      "description": "Responsive overrides for different breakpoints",
+      "properties": {
+        "sm": {
+          "type": "object",
+          "description": "Small devices (640px+)"
+        },
+        "md": {
+          "type": "object",
+          "description": "Medium devices (768px+)"
+        },
+        "lg": {
+          "type": "object",
+          "description": "Large devices (1024px+)"
+        },
+        "xl": {
+          "type": "object",
+          "description": "Extra large devices (1280px+)"
+        },
+        "2xl": {
+          "type": "object",
+          "description": "2X large devices (1536px+)"
+        }
+      },
+      "additionalProperties": false
+    },
+    "ScreenMeta": {
+      "type": "object",
+      "description": "Optional metadata for screen definition",
+      "properties": {
+        "author": {
+          "type": "string",
+          "description": "Screen author"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Creation timestamp (ISO 8601)",
+          "errorMessage": "createdAt must be a valid ISO 8601 date-time string"
+        },
+        "version": {
+          "type": "string",
+          "pattern": "^\\d+\\.\\d+\\.\\d+$",
+          "description": "Screen version (semver)",
+          "errorMessage": "version must follow semantic versioning (e.g., '1.0.0')"
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Categorization tags"
+        }
+      }
+    }
+  }
+}

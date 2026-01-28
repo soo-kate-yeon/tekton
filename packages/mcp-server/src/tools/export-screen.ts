@@ -5,7 +5,7 @@
  */
 
 import { render, loadTheme } from '@tekton/core';
-import type { Blueprint, ThemeWithTokens } from '@tekton/core';
+import type { Blueprint } from '@tekton/core';
 import type {
   ExportScreenInput,
   ExportScreenOutput,
@@ -291,8 +291,8 @@ export async function hybridExportTool(input: HybridExportInput): Promise<Hybrid
     // CSS 생성 (요청된 경우)
     if (includeCSS && themeId) {
       try {
-        const theme = loadTheme(themeId) as ThemeWithTokens;
-        if (theme && 'tokens' in theme) {
+        const theme = loadTheme(themeId);
+        if (theme) {
           const cssResult = generateCSS(theme);
           if (cssResult.success && cssResult.css) {
             result.css = cssResult.css;

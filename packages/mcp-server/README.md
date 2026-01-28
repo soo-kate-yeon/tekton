@@ -10,11 +10,14 @@ MCP (Model Context Protocol) server enabling AI-driven blueprint generation, the
 
 ## Features
 
-- **🤖 stdio MCP Protocol**: Claude Code native tool registration via JSON-RPC 2.0
+- **🤖 stdio MCP Protocol**: Claude Code native tool registration via JSON-RPC 2.0 (7 tools)
 - **🎨 Theme Preview**: 13 built-in OKLCH-based themes with CSS variable generation
 - **📋 Blueprint Generation**: Natural language → Blueprint JSON with validation
 - **💾 Data-Only Output**: No file system writes, Claude Code handles file operations
 - **🚀 Production Export**: JSX, TSX, Vue code generation
+- **🏗️ Screen Generation** (SPEC-LAYOUT-002): JSON screen definition → Production code
+- **✅ Screen Validation**: Validate screen definitions with helpful error suggestions
+- **🏷️ Layout Tokens**: List shell, page, and section tokens from SPEC-LAYOUT-001
 - **🔒 Secure Design**: No previewUrl/filePath exposure, input validation, path traversal protection
 
 ## Installation
@@ -162,6 +165,169 @@ See [Claude Code Integration Guide](../../.moai/specs/SPEC-MCP-002/CLAUDE-CODE-I
 
 **Note**: `filePath` field removed in v2.0.0. Claude Code handles file writes.
 
+### 4. List Themes
+
+**Tool**: `list-themes`
+
+**Description**: List all available themes from `.moai/themes/generated/`
+
+**Input**:
+
+```json
+{}
+```
+
+**Output**:
+
+```json
+{
+  "success": true,
+  "themes": [
+    {
+      "id": "calm-wellness",
+      "name": "Calm Wellness",
+      "description": "Serene wellness applications",
+      "brandTone": "calm",
+      "schemaVersion": "2.1"
+    }
+  ],
+  "count": 13
+}
+```
+
+## Screen Generation Tools (SPEC-LAYOUT-002 Phase 4)
+
+### 5. Generate Screen
+
+**Tool**: `generate_screen`
+
+**Description**: Generate production-ready code from JSON screen definition
+
+**Input**:
+
+```json
+{
+  "screenDefinition": {
+    "id": "user-dashboard",
+    "shell": "shell.web.dashboard",
+    "page": "page.dashboard",
+    "sections": [
+      {
+        "id": "header",
+        "token": "section.container",
+        "components": [
+          {
+            "type": "Heading",
+            "props": { "level": 1, "children": "Dashboard" }
+          }
+        ]
+      }
+    ]
+  },
+  "outputFormat": "react",
+  "options": {
+    "typescript": true,
+    "cssFramework": "styled-components"
+  }
+}
+```
+
+**Output**:
+
+```json
+{
+  "success": true,
+  "code": "import React from 'react';\nimport styled from 'styled-components';\n\n...",
+  "cssVariables": ":root { --shell-header-height: 64px; ... }"
+}
+```
+
+**Output Formats**:
+
+- `css-in-js`: Styled-components or Emotion
+- `tailwind`: Tailwind CSS classes
+- `react`: Pure React component with CSS variables
+
+### 6. Validate Screen
+
+**Tool**: `validate_screen`
+
+**Description**: Validate JSON screen definition with helpful feedback
+
+**Input**:
+
+```json
+{
+  "screenDefinition": {
+    "id": "test-screen",
+    "shell": "shell.web.app",
+    "page": "page.detail",
+    "sections": []
+  },
+  "strictMode": false
+}
+```
+
+**Output**:
+
+```json
+{
+  "success": true,
+  "valid": true,
+  "errors": [],
+  "warnings": ["Optional field 'meta' not provided"],
+  "suggestions": [
+    {
+      "field": "shell",
+      "message": "Shell token must match pattern",
+      "suggestion": "Use format: shell.{platform}.{name}"
+    }
+  ]
+}
+```
+
+### 7. List Tokens
+
+**Tool**: `list_tokens`
+
+**Description**: List available layout tokens from SPEC-LAYOUT-001
+
+**Input**:
+
+```json
+{
+  "tokenType": "shell",
+  "filter": "dashboard"
+}
+```
+
+**Output**:
+
+```json
+{
+  "success": true,
+  "shells": [
+    {
+      "id": "shell.web.dashboard",
+      "name": "Web Dashboard Shell",
+      "description": "Dashboard application shell with header and sidebar",
+      "platform": "web"
+    }
+  ],
+  "metadata": {
+    "total": 1,
+    "filtered": 1
+  }
+}
+```
+
+**Token Types**:
+
+- `shell`: Shell layout tokens (shell.web._, shell.mobile._)
+- `page`: Page layout tokens (page.dashboard, page.detail, etc.)
+- `section`: Section pattern tokens (section.grid-4, section.hero, etc.)
+- `all`: All token types
+
 ## Usage Examples
 
 ### From Claude Code
@@ -178,6 +344,14 @@ User: "Show me the premium-editorial theme"
 User: "Export that dashboard as TypeScript React"
 → Claude Code calls export-screen
 → TSX code returned (ready to copy/paste)
+
+User: "Generate a dashboard screen using shell.web.dashboard and page.dashboard"
+→ Claude Code calls generate_screen
+→ Production-ready React code with CSS variables returned
+
+User: "What layout tokens are available for sections?"
+→ Claude Code calls list_tokens with tokenType='section'
+→ List of section tokens (grid-2, grid-3, hero, etc.) returned
 ```
 
 See [Claude Code Integration Guide](../../.moai/specs/SPEC-MCP-002/CLAUDE-CODE-INTEGRATION.md) for complete examples.
@@ -187,11 +361,15 @@ See [Claude Code Integration Guide](../../.moai/specs/SPEC-MCP-002/CLAUDE-CODE-I
 ```
 packages/mcp-server/
 ├── src/
-│   ├── index.ts               # stdio MCP server entry point
+│   ├── index.ts               # stdio MCP server entry point (7 tools)
 │   ├── tools/                 # MCP tool implementations
-│   │   ├── generate-blueprint.ts
-│   │   ├── preview-theme.ts
-│   │   └── export-screen.ts
+│   │   ├── generate-blueprint.ts    # Blueprint generation
+│   │   ├── preview-theme.ts         # Theme preview
+│   │   ├── list-themes.ts           # Theme listing
+│   │   ├── export-screen.ts         # Blueprint export
+│   │   ├── generate-screen.ts       # Screen code generation (SPEC-LAYOUT-002)
+│   │   ├── validate-screen.ts       # Screen validation (SPEC-LAYOUT-002)
+│   │   └── list-tokens.ts           # Layout token listing (SPEC-LAYOUT-002)
 │   ├── storage/               # Blueprint storage
 │   │   ├── blueprint-storage.ts
 │   │   └── timestamp-manager.ts
@@ -202,6 +380,10 @@ packages/mcp-server/
 │       └── logger.ts          # stderr-only logging
 └── __tests__/                 # Test suites
     ├── tools/                 # Tool tests
+    │   ├── generate-blueprint.test.ts
+    │   ├── preview-theme.test.ts
+    │   ├── export-screen.test.ts
+    │   └── screen-tools.test.ts      # SPEC-LAYOUT-002 Phase 4 tests
     ├── mcp-protocol/          # JSON-RPC validation
     ├── storage/               # Storage tests
     └── utils/                 # Utility tests
@@ -254,11 +436,25 @@ packages/mcp-server/
 
 All MCP tools reuse `@tekton/core` functions:
 
+**Blueprint & Theme Tools**:
+
 - `loadTheme()` - Theme loading
+- `listThemes()` - Theme enumeration
 - `createBlueprint()` - Blueprint creation
 - `validateBlueprint()` - Schema validation
 - `generateCSSVariables()` - CSS variable extraction
 - `render()` - Code generation
+
+**Screen Generation Tools** (SPEC-LAYOUT-002):
+
+- `validateScreenDefinition()` - Screen validation
+- `resolveScreen()` - Layout and component resolution
+- `generateStyledComponents()` - CSS-in-JS generation
+- `generateTailwindClasses()` - Tailwind CSS generation
+- `generateReactComponent()` - React component generation
+- `getAllShellTokens()` - Shell token listing
+- `getAllPageLayoutTokens()` - Page token listing
+- `getAllSectionPatternTokens()` - Section token listing
 
 **Zero code duplication** - Single source of truth maintained.
 
@@ -354,6 +550,6 @@ MIT
 
 ---
 
-**Version**: 2.0.0 (stdio-based MCP standard)
-**Last Updated**: 2026-01-25
-**SPEC**: SPEC-MCP-002 v2.0.0
+**Version**: 2.1.0 (stdio-based MCP standard + SPEC-LAYOUT-002 Phase 4)
+**Last Updated**: 2026-01-28
+**SPEC**: SPEC-MCP-002 v2.0.0, SPEC-LAYOUT-002 Phase 4

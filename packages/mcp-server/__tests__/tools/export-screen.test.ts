@@ -35,7 +35,7 @@ describe('exportScreenTool', () => {
     const genResult = await generateBlueprintTool({
       description: 'Test screen for export',
       layout: 'single-column',
-      themeId: 'calm-wellness',
+      themeId: 'atlantic-magazine-v1',
     });
 
     expect(genResult.success).toBe(true);
@@ -58,7 +58,7 @@ describe('exportScreenTool', () => {
     const genResult = await generateBlueprintTool({
       description: 'Test dashboard',
       layout: 'single-column',
-      themeId: 'dynamic-fitness',
+      themeId: 'atlantic-magazine-v1',
     });
 
     expect(genResult.success).toBe(true);
@@ -80,7 +80,7 @@ describe('exportScreenTool', () => {
     const genResult = await generateBlueprintTool({
       description: 'Vue test screen',
       layout: 'single-column',
-      themeId: 'calm-wellness',
+      themeId: 'atlantic-magazine-v1',
     });
 
     expect(genResult.success).toBe(true);
@@ -124,7 +124,7 @@ describe('exportScreenTool', () => {
     const genResult = await generateBlueprintTool({
       description: 'Multi-format test',
       layout: 'single-column',
-      themeId: 'calm-wellness',
+      themeId: 'atlantic-magazine-v1',
     });
 
     expect(genResult.success).toBe(true);
@@ -149,7 +149,7 @@ describe('exportScreenTool', () => {
     const genResult = await generateBlueprintTool({
       description: 'JSX structure test',
       layout: 'single-column',
-      themeId: 'calm-wellness',
+      themeId: 'atlantic-magazine-v1',
     });
 
     const result = await exportScreenTool({
@@ -171,7 +171,7 @@ describe('exportScreenTool', () => {
     const genResult = await generateBlueprintTool({
       description: 'TSX structure test',
       layout: 'single-column',
-      themeId: 'calm-wellness',
+      themeId: 'atlantic-magazine-v1',
     });
 
     const result = await exportScreenTool({
@@ -191,7 +191,7 @@ describe('exportScreenTool', () => {
     const genResult = await generateBlueprintTool({
       description: 'Vue structure test',
       layout: 'single-column',
-      themeId: 'calm-wellness',
+      themeId: 'atlantic-magazine-v1',
     });
 
     const result = await exportScreenTool({
@@ -216,7 +216,7 @@ describe('exportScreenTool', () => {
     const mockBlueprint: Blueprint = {
       id: 'bp-test-123',
       name: 'Test Blueprint',
-      themeId: 'calm-wellness',
+      themeId: 'atlantic-magazine-v1',
       layout: 'single-column',
       components: [
         {
@@ -256,7 +256,7 @@ describe('exportScreenTool', () => {
     const genResult = await generateBlueprintTool({
       description: 'MCP format test',
       layout: 'single-column',
-      themeId: 'calm-wellness',
+      themeId: 'atlantic-magazine-v1',
     });
 
     const result = await exportScreenTool({
@@ -275,7 +275,7 @@ describe('exportScreenTool', () => {
     const genResult = await generateBlueprintTool({
       description: 'Dashboard with cards, buttons, and text components',
       layout: 'dashboard',
-      themeId: 'dynamic-fitness',
+      themeId: 'atlantic-magazine-v1',
       componentHints: ['Card', 'Button', 'Text', 'Avatar'],
     });
 
@@ -295,7 +295,7 @@ describe('exportScreenTool', () => {
     const genResult = await generateBlueprintTool({
       description: 'Data preservation test',
       layout: 'single-column',
-      themeId: 'premium-editorial',
+      themeId: 'hims-v1',
     });
 
     const originalBlueprint = genResult.blueprint!;

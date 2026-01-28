@@ -8,6 +8,40 @@ import type { ThemeWithTokens, ComponentTokens } from './tokens.js';
 import { resolveToken } from './token-resolver.js';
 
 // ============================================================================
+// OKLCH Color Utilities (for v2.1 theme support)
+// ============================================================================
+
+interface OKLCHColor {
+  l: number;
+  c: number;
+  h: number;
+}
+
+/**
+ * Check if value is an OKLCH color object
+ */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function isOKLCHColor(value: any): value is OKLCHColor {
+  return (
+    value &&
+    typeof value === 'object' &&
+    typeof value.l === 'number' &&
+    typeof value.c === 'number' &&
+    typeof value.h === 'number'
+  );
+}
+
+/**
+ * Convert OKLCH color object to CSS string
+ */
+function oklchToCSS(color: OKLCHColor): string {
+  const l = Math.max(0, Math.min(1, color.l));
+  const c = Math.max(0, Math.min(0.5, color.c));
+  const h = ((color.h % 360) + 360) % 360;
+  return `oklch(${l} ${c} ${h})`;
+}
+
+// ============================================================================
 // CSS Generation Functions
 // ============================================================================
 
@@ -60,44 +94,60 @@ export function generateThemeCSS(theme: ThemeWithTokens): string {
 
   lines.push('  /* === Layer 1: Atomic Tokens === */');
 
-  // Colors
-  for (const [palette, shades] of Object.entries(tokens.atomic.color)) {
-    for (const [shade, value] of Object.entries(shades)) {
-      lines.push(`  --color-${palette}-${shade}: ${value};`);
+  // Colors (v2.1 uses OKLCH objects, convert to CSS)
+  if (tokens.atomic.color) {
+    for (const [palette, shades] of Object.entries(tokens.atomic.color)) {
+      if (shades && typeof shades === 'object') {
+        for (const [shade, value] of Object.entries(shades)) {
+          // Handle OKLCH color objects (v2.1) and string values (legacy)
+          const cssValue = isOKLCHColor(value) ? oklchToCSS(value) : value;
+          lines.push(`  --atomic-color-${palette}-${shade}: ${cssValue};`);
+        }
+      }
     }
   }
 
   // Spacing
-  lines.push('');
-  for (const [size, value] of Object.entries(tokens.atomic.spacing)) {
-    lines.push(`  --spacing-${size}: ${value};`);
+  if (tokens.atomic.spacing) {
+    lines.push('');
+    for (const [size, value] of Object.entries(tokens.atomic.spacing)) {
+      lines.push(`  --atomic-spacing-${size}: ${value};`);
+    }
   }
 
   // Radius
-  lines.push('');
-  for (const [size, value] of Object.entries(tokens.atomic.radius)) {
-    lines.push(`  --radius-${size}: ${value};`);
+  if (tokens.atomic.radius) {
+    lines.push('');
+    for (const [size, value] of Object.entries(tokens.atomic.radius)) {
+      lines.push(`  --atomic-radius-${size}: ${value};`);
+    }
   }
 
-  // Typography
-  lines.push('');
-  for (const [name, props] of Object.entries(tokens.atomic.typography)) {
-    lines.push(`  --typography-${name}-size: ${props.fontSize};`);
-    lines.push(`  --typography-${name}-line-height: ${props.lineHeight};`);
-    lines.push(`  --typography-${name}-weight: ${props.fontWeight};`);
+  // Typography (only if exists - not in v2.1 atomic tokens)
+  if (tokens.atomic.typography) {
+    lines.push('');
+    for (const [name, props] of Object.entries(tokens.atomic.typography)) {
+      if (props && typeof props === 'object') {
+        lines.push(`  --atomic-typography-${name}-size: ${props.fontSize};`);
+        lines.push(`  --atomic-typography-${name}-line-height: ${props.lineHeight};`);
+        lines.push(`  --atomic-typography-${name}-weight: ${props.fontWeight};`);
+      }
+    }
   }
 
-  // Shadow
-  lines.push('');
-  for (const [name, value] of Object.entries(tokens.atomic.shadow)) {
-    lines.push(`  --shadow-${name}: ${value};`);
+  // Shadow (only if exists - not in v2.1 atomic tokens)
+  if (tokens.atomic.shadow) {
+    lines.push('');
+    for (const [name, value] of Object.entries(tokens.atomic.shadow)) {
+      lines.push(`  --atomic-shadow-${name}: ${value};`);
+    }
   }
 
   // Transition (optional)
   if (tokens.atomic.transition) {
     lines.push('');
     for (const [name, value] of Object.entries(tokens.atomic.transition)) {
-      lines.push(`  --transition-${name}: ${value};`);
+      lines.push(`  --atomic-transition-${name}: ${value};`);
     }
   }
 
@@ -108,10 +158,11 @@ export function generateThemeCSS(theme: ThemeWithTokens): string {
   lines.push('');
   lines.push('  /* === Layer 2: Semantic Tokens === */');
 
-  for (const [category, values] of Object.entries(tokens.semantic)) {
-    for (const [name, ref] of Object.entries(values as Record<string, string>)) {
-      const resolved = resolveToken(ref, tokens);
-      lines.push(`  --${category}-${name}: ${resolved};`);
+  if (tokens.semantic) {
+    for (const [category, values] of Object.entries(tokens.semantic)) {
+      if (values && typeof values === 'object') {
+        generateSemanticTokens(category, values, tokens, lines);
+      }
     }
   }
 
@@ -122,7 +173,10 @@ export function generateThemeCSS(theme: ThemeWithTokens): string {
   lines.push('');
   lines.push('  /* === Layer 3: Component Tokens === */');
 
-  lines.push(...generateComponentCSS(tokens.component, tokens));
+  // Component tokens are optional in v2.1
+  if (tokens.component) {
+    lines.push(...generateComponentCSS(tokens.component, tokens));
+  }
 
   lines.push('}');
 
@@ -177,6 +231,78 @@ export function generateThemeCSS(theme: ThemeWithTokens): string {
   }
 
   return lines.join('\n');
+}
+
+/**
+ * Recursively generates CSS variables for semantic tokens
+ * Handles nested structures like background.surface.subtle
+ *
+ * @internal
+ */
+function generateSemanticTokens(
+  prefix: string,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  values: any,
+  tokens: ThemeWithTokens['tokens'],
+  lines: string[]
+): void {
+  for (const [key, value] of Object.entries(values)) {
+    const varName = `--atomic-semantic-${prefix}-${key}`;
+
+    if (typeof value === 'string') {
+      // Resolve token reference (e.g., "atomic.color.neutral.50")
+      const resolved = resolveTokenWithFallback(value, tokens);
+      lines.push(`  ${varName}: ${resolved};`);
+    } else if (value && typeof value === 'object') {
+      // Recursively handle nested objects
+      generateSemanticTokens(`${prefix}-${key}`, value, tokens, lines);
+    }
+  }
+}
+
+/**
+ * Resolve token reference with fallback for v2.1 references
+ * v2.1 uses "atomic.color.neutral.50" format
+ * Returns CSS variable fallback if token not found (graceful degradation)
+ *
+ * @internal
+ */
+function resolveTokenWithFallback(ref: string, tokens: ThemeWithTokens['tokens']): string {
+  // Check for direct CSS values first (not token references)
+  // Direct values: hex colors (#fff, #ffffff), CSS units (10px, 1rem), rgb/hsl functions
+  if (
+    ref.startsWith('#') ||
+    ref.startsWith('rgb') ||
+    ref.startsWith('hsl') ||
+    ref.startsWith('oklch') ||
+    /^\d+(\.\d+)?(px|rem|em|%|vh|vw|ms|s)$/.test(ref)
+  ) {
+    return ref;
+  }
+
+  // First try standard resolution (with error handling)
+  try {
+    const resolved = resolveToken(ref, tokens);
+    if (resolved !== ref) {
+      return resolved;
+    }
+  } catch {
+    // Ignore errors from resolveToken, we'll handle fallback below
+  }
+
+  // For v2.1 references like "atomic.color.neutral.50", resolve manually
+  const parts = ref.split('.');
+  if (parts[0] === 'atomic' && parts[1] === 'color' && parts.length >= 4) {
+    const palette = parts[2];
+    const shade = parts.slice(3).join('.');
+    const colorValue = tokens.atomic?.color?.[palette]?.[shade];
+    if (colorValue) {
+      return isOKLCHColor(colorValue) ? oklchToCSS(colorValue) : colorValue;
+    }
+  }
+
+  // Return original ref as CSS var reference (graceful fallback)
+  return `var(--atomic-${ref.replace(/\./g, '-')})`;
 }
 
 /**

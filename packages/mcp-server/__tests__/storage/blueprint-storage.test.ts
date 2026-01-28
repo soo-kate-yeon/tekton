@@ -35,7 +35,7 @@ describe('BlueprintStorage', () => {
       const blueprint: Blueprint = {
         id: 'test-bp',
         name: 'Test Blueprint',
-        themeId: 'calm-wellness',
+        themeId: 'atlantic-magazine-v1',
         layout: 'single-column',
         components: [],
       };
@@ -55,7 +55,7 @@ describe('BlueprintStorage', () => {
       const blueprint: Blueprint = {
         id: 'test-bp',
         name: 'Test Blueprint',
-        themeId: 'calm-wellness',
+        themeId: 'atlantic-magazine-v1',
         layout: 'single-column',
         components: [],
       };
@@ -83,7 +83,7 @@ describe('BlueprintStorage', () => {
       const blueprint: Blueprint = {
         id: 'test-bp',
         name: 'Test Blueprint',
-        themeId: 'calm-wellness',
+        themeId: 'atlantic-magazine-v1',
         layout: 'single-column',
         components: [],
       };
@@ -93,7 +93,7 @@ describe('BlueprintStorage', () => {
 
       expect(loaded).toBeDefined();
       expect(loaded?.name).toBe('Test Blueprint');
-      expect(loaded?.themeId).toBe('calm-wellness');
+      expect(loaded?.themeId).toBe('atlantic-magazine-v1');
     });
 
     it('should return null for non-existent blueprint', async () => {
@@ -112,7 +112,7 @@ describe('BlueprintStorage', () => {
       const blueprint: Blueprint = {
         id: 'test-bp',
         name: 'Test Blueprint',
-        themeId: 'calm-wellness',
+        themeId: 'atlantic-magazine-v1',
         layout: 'single-column',
         components: [],
       };
@@ -122,7 +122,7 @@ describe('BlueprintStorage', () => {
 
       expect(metadata).toBeDefined();
       expect(metadata?.timestamp).toBe(blueprintId);
-      expect(metadata?.themeId).toBe('calm-wellness');
+      expect(metadata?.themeId).toBe('atlantic-magazine-v1');
       expect(metadata?.createdAt).toBeDefined();
       expect(metadata?.ttl).toBeDefined();
     });
@@ -138,7 +138,7 @@ describe('BlueprintStorage', () => {
       const blueprint: Blueprint = {
         id: 'test-bp',
         name: 'Test Blueprint',
-        themeId: 'calm-wellness',
+        themeId: 'atlantic-magazine-v1',
         layout: 'single-column',
         components: [],
       };
@@ -171,7 +171,7 @@ describe('BlueprintStorage', () => {
       const blueprint: Blueprint = {
         id: 'test-bp',
         name: 'Test Blueprint',
-        themeId: 'calm-wellness',
+        themeId: 'atlantic-magazine-v1',
         layout: 'single-column',
         components: [],
       };

@@ -5,11 +5,19 @@ import { ListToolsRequestSchema, CallToolRequestSchema } from '@modelcontextprot
 import { info, error as logError } from './utils/logger.js';
 import { generateBlueprintTool } from './tools/generate-blueprint.js';
 import { previewThemeTool } from './tools/preview-theme.js';
+import { listThemesTool } from './tools/list-themes.js';
 import { exportScreenTool } from './tools/export-screen.js';
+import { generateScreenTool } from './tools/generate-screen.js';
+import { validateScreenTool } from './tools/validate-screen.js';
+import { listTokensTool } from './tools/list-tokens.js';
 import {
   GenerateBlueprintInputSchema,
   PreviewThemeInputSchema,
+  ListThemesInputSchema,
   ExportScreenInputSchema,
+  GenerateScreenInputSchema,
+  ValidateScreenInputSchema,
+  ListTokensInputSchema,
 } from './schemas/mcp-schemas.js';
 
 const server = new Server(
@@ -72,8 +80,17 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
         },
       },
       {
+        name: 'list-themes',
+        description: 'List all available themes from .moai/themes/generated/',
+        inputSchema: {
+          type: 'object',
+          properties: {},
+          required: [],
+        },
+      },
+      {
         name: 'preview-theme',
-        description: 'Preview a theme and retrieve its CSS variables',
+        description: 'Preview a theme and retrieve its full v2.1 theme data including tokens',
         inputSchema: {
           type: 'object',
           properties: {
@@ -103,6 +120,73 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
             },
           },
           required: ['blueprint', 'format'],
+        },
+      },
+      {
+        name: 'generate_screen',
+        description: 'Generate production-ready code from JSON screen definition',
+        inputSchema: {
+          type: 'object',
+          properties: {
+            screenDefinition: {
+              type: 'object',
+              description: 'JSON screen definition with id, shell, page, sections',
+            },
+            outputFormat: {
+              type: 'string',
+              description: 'Code output format',
+              enum: ['css-in-js', 'tailwind', 'react'],
+            },
+            options: {
+              type: 'object',
+              description: 'Optional generation options',
+              properties: {
+                cssFramework: {
+                  type: 'string',
+                  enum: ['styled-components', 'emotion'],
+                },
+                typescript: { type: 'boolean' },
+                prettier: { type: 'boolean' },
+              },
+            },
+          },
+          required: ['screenDefinition', 'outputFormat'],
+        },
+      },
+      {
+        name: 'validate_screen',
+        description: 'Validate JSON screen definition with helpful feedback',
+        inputSchema: {
+          type: 'object',
+          properties: {
+            screenDefinition: {
+              type: 'object',
+              description: 'JSON screen definition to validate',
+            },
+            strictMode: {
+              type: 'boolean',
+              description: 'Enable strict validation (default: false)',
+            },
+          },
+          required: ['screenDefinition'],
+        },
+      },
+      {
+        name: 'list_tokens',
+        description: 'List available layout tokens from SPEC-LAYOUT-001',
+        inputSchema: {
+          type: 'object',
+          properties: {
+            tokenType: {
+              type: 'string',
+              description: 'Filter by token type',
+              enum: ['shell', 'page', 'section', 'all'],
+            },
+            filter: {
+              type: 'string',
+              description: 'Optional pattern filter (case-insensitive substring match)',
+            },
+          },
         },
       },
     ],
@@ -135,6 +219,21 @@ server.setRequestHandler(CallToolRequestSchema, async request => {
         };
       }
 
+      case 'list-themes': {
+        // Validate input (no required fields)
+        ListThemesInputSchema.parse(args);
+        const result = await listThemesTool();
+
+        return {
+          content: [
+            {
+              type: 'text',
+              text: JSON.stringify(result, null, 2),
+            },
+          ],
+        };
+      }
+
       case 'preview-theme': {
         // Validate input
         const validatedInput = PreviewThemeInputSchema.parse(args);
@@ -154,6 +253,51 @@ server.setRequestHandler(CallToolRequestSchema, async request => {
         // Validate input
         const validatedInput = ExportScreenInputSchema.parse(args);
         const result = await exportScreenTool(validatedInput);
+
+        return {
+          content: [
+            {
+              type: 'text',
+              text: JSON.stringify(result, null, 2),
+            },
+          ],
+        };
+      }
+
+      case 'generate_screen': {
+        // Validate input
+        const validatedInput = GenerateScreenInputSchema.parse(args);
+        const result = await generateScreenTool(validatedInput);
+
+        return {
+          content: [
+            {
+              type: 'text',
+              text: JSON.stringify(result, null, 2),
+            },
+          ],
+        };
+      }
+
+      case 'validate_screen': {
+        // Validate input
+        const validatedInput = ValidateScreenInputSchema.parse(args);
+        const result = await validateScreenTool(validatedInput);
+
+        return {
+          content: [
+            {
+              type: 'text',
+              text: JSON.stringify(result, null, 2),
+            },
+          ],
+        };
+      }
+
+      case 'list_tokens': {
+        // Validate input
+        const validatedInput = ListTokensInputSchema.parse(args);
+        const result = await listTokensTool(validatedInput);
 
         return {
           content: [
@@ -202,4 +346,6 @@ info('Starting Tekton MCP Server v2.0.0...');
 await server.connect(transport);
 
 info('Tekton MCP Server connected via stdio transport');
-info('3 MCP tools registered: generate-blueprint, preview-theme, export-screen');
+info(
+  '7 MCP tools registered: generate-blueprint, list-themes, preview-theme, export-screen, generate_screen, validate_screen, list_tokens'
+);

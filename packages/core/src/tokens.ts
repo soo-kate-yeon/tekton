@@ -2,9 +2,12 @@
  * @tekton/core - Token Type Definitions
  * 3-Layer Token Architecture: Atomic → Semantic → Component
  * [SPEC-COMPONENT-001-A] [TOKEN-TYPES]
+ *
+ * NOTE: This module defines the CSS generator token types.
+ * For v2.1 theme types, see theme-v2.ts
  */
 
-import type { Theme } from './types.js';
+import type { ThemeLegacy } from './types.js';
 
 // ============================================================================
 // Layer 1: Atomic Tokens - Raw Design Values
@@ -163,9 +166,11 @@ export interface ComponentTokens {
 
 /**
  * Extended Theme with 3-Layer Token Architecture
- * Extends the base Theme interface with token system
+ * Extends the legacy Theme interface with token system
+ *
+ * @deprecated Consider using ThemeV2 from theme-v2.ts for new themes
  */
-export interface ThemeWithTokens extends Theme {
+export interface ThemeWithTokens extends ThemeLegacy {
   /** 3-Layer token structure */
   tokens: {
     atomic: AtomicTokens;
@@ -186,4 +191,5 @@ export interface ThemeWithTokens extends Theme {
 // Type Exports
 // ============================================================================
 
-export type { Theme } from './types.js';
+/** @deprecated Use Theme from theme.ts (ThemeV2) for new code */
+export type { ThemeLegacy as Theme } from './types.js';

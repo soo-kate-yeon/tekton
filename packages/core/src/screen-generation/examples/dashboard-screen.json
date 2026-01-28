@@ -1,0 +1,232 @@
+{
+  "id": "dashboard-screen",
+  "name": "Dashboard Overview",
+  "description": "Main dashboard screen with metrics grid and summary cards",
+  "shell": "shell.web.dashboard",
+  "page": "page.dashboard",
+  "themeId": "default",
+  "sections": [
+    {
+      "id": "metrics-section",
+      "pattern": "section.grid-4",
+      "components": [
+        {
+          "type": "Card",
+          "props": {
+            "variant": "elevated"
+          },
+          "slot": "metric-1",
+          "children": [
+            {
+              "type": "Heading",
+              "props": {
+                "level": 3,
+                "size": "md"
+              },
+              "children": ["Total Users"]
+            },
+            {
+              "type": "Text",
+              "props": {
+                "variant": "body",
+                "size": "large"
+              },
+              "children": ["12,453"]
+            },
+            {
+              "type": "Badge",
+              "props": {
+                "variant": "success",
+                "size": "small"
+              },
+              "children": ["+12.5%"]
+            }
+          ]
+        },
+        {
+          "type": "Card",
+          "props": {
+            "variant": "elevated"
+          },
+          "slot": "metric-2",
+          "children": [
+            {
+              "type": "Heading",
+              "props": {
+                "level": 3,
+                "size": "md"
+              },
+              "children": ["Revenue"]
+            },
+            {
+              "type": "Text",
+              "props": {
+                "variant": "body",
+                "size": "large"
+              },
+              "children": ["$45,230"]
+            },
+            {
+              "type": "Badge",
+              "props": {
+                "variant": "success",
+                "size": "small"
+              },
+              "children": ["+8.2%"]
+            }
+          ]
+        },
+        {
+          "type": "Card",
+          "props": {
+            "variant": "elevated"
+          },
+          "slot": "metric-3",
+          "children": [
+            {
+              "type": "Heading",
+              "props": {
+                "level": 3,
+                "size": "md"
+              },
+              "children": ["Active Sessions"]
+            },
+            {
+              "type": "Text",
+              "props": {
+                "variant": "body",
+                "size": "large"
+              },
+              "children": ["892"]
+            },
+            {
+              "type": "Badge",
+              "props": {
+                "variant": "info",
+                "size": "small"
+              },
+              "children": ["Live"]
+            }
+          ]
+        },
+        {
+          "type": "Card",
+          "props": {
+            "variant": "elevated"
+          },
+          "slot": "metric-4",
+          "children": [
+            {
+              "type": "Heading",
+              "props": {
+                "level": 3,
+                "size": "md"
+              },
+              "children": ["Conversion Rate"]
+            },
+            {
+              "type": "Text",
+              "props": {
+                "variant": "body",
+                "size": "large"
+              },
+              "children": ["3.24%"]
+            },
+            {
+              "type": "Badge",
+              "props": {
+                "variant": "warning",
+                "size": "small"
+              },
+              "children": ["-2.1%"]
+            }
+          ]
+        }
+      ],
+      "responsive": {
+        "sm": {
+          "gridColumns": 1
+        },
+        "md": {
+          "gridColumns": 2
+        },
+        "lg": {
+          "gridColumns": 4
+        }
+      }
+    },
+    {
+      "id": "activity-section",
+      "pattern": "section.split",
+      "components": [
+        {
+          "type": "Card",
+          "props": {
+            "variant": "default"
+          },
+          "slot": "left",
+          "children": [
+            {
+              "type": "Heading",
+              "props": {
+                "level": 2,
+                "size": "lg"
+              },
+              "children": ["Recent Activity"]
+            },
+            {
+              "type": "List",
+              "props": {
+                "ordered": false,
+                "items": [
+                  "User john@example.com signed up",
+                  "Payment processed: $129.99",
+                  "New feature deployed"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "type": "Card",
+          "props": {
+            "variant": "default"
+          },
+          "slot": "right",
+          "children": [
+            {
+              "type": "Heading",
+              "props": {
+                "level": 2,
+                "size": "lg"
+              },
+              "children": ["Quick Actions"]
+            },
+            {
+              "type": "Button",
+              "props": {
+                "variant": "primary",
+                "size": "medium"
+              },
+              "children": ["Create Report"]
+            },
+            {
+              "type": "Button",
+              "props": {
+                "variant": "secondary",
+                "size": "medium"
+              },
+              "children": ["Export Data"]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "meta": {
+    "author": "Tekton Team",
+    "createdAt": "2026-01-28T10:00:00Z",
+    "version": "1.0.0",
+    "tags": ["dashboard", "analytics", "metrics"]
+  }
+}

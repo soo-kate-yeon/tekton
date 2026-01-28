@@ -86,9 +86,10 @@ describe('stdio transport', () => {
     // Verify tools list
     expect(response.result).toHaveProperty('tools');
     expect(Array.isArray(response.result.tools)).toBe(true);
-    expect(response.result.tools).toHaveLength(3);
+    // MCP server now has more tools - check for at least the core 3
+    expect(response.result.tools.length).toBeGreaterThanOrEqual(3);
 
-    // Verify tool names
+    // Verify core tool names are present
     const toolNames = response.result.tools.map((t: any) => t.name);
     expect(toolNames).toContain('generate-blueprint');
     expect(toolNames).toContain('preview-theme');
@@ -103,7 +104,7 @@ describe('stdio transport', () => {
       params: {
         name: 'preview-theme',
         arguments: {
-          themeId: 'calm-wellness',
+          themeId: 'atlantic-magazine-v1',
         },
       },
     };
@@ -125,7 +126,7 @@ describe('stdio transport', () => {
     const toolResult = JSON.parse(response.result.content[0].text);
     expect(toolResult).toHaveProperty('success', true);
     expect(toolResult).toHaveProperty('theme');
-    expect(toolResult.theme).toHaveProperty('id', 'calm-wellness');
+    expect(toolResult.theme).toHaveProperty('id', 'atlantic-magazine-v1');
   });
 
   it('should handle tools/call request with invalid tool name', async () => {

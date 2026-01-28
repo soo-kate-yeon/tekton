@@ -5,43 +5,51 @@
  * Test Coverage:
  * - Theme selection UI rendering
  * - Theme change callback
- * - BUILTIN_THEMES integration
+ * - Empty themes handling
  */
 
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { ThemeSwitch } from '@/components/theme/theme-switch';
-import { BUILTIN_THEMES } from '@tekton/core';
+
+// Mock theme list for testing
+const MOCK_THEMES = [
+  'atlantic-magazine-v1',
+  'saas-dashboard',
+  'tech-startup',
+  'korean-fintech',
+  'warm-humanist',
+];
 
 describe('ThemeSwitch', () => {
   it('should render theme selector', () => {
-    render(<ThemeSwitch />);
+    render(<ThemeSwitch themes={MOCK_THEMES} />);
 
     const select = screen.getByLabelText('Theme:');
     expect(select).toBeDefined();
   });
 
-  it('should render all built-in themes', () => {
-    render(<ThemeSwitch />);
+  it('should render all provided themes', () => {
+    render(<ThemeSwitch themes={MOCK_THEMES} />);
 
     const select = screen.getByLabelText('Theme:') as HTMLSelectElement;
     const options = Array.from(select.options).map((opt) => opt.value);
 
-    BUILTIN_THEMES.forEach((themeId) => {
+    MOCK_THEMES.forEach((themeId) => {
       expect(options).toContain(themeId);
     });
   });
 
   it('should default to first theme if no currentTheme provided', () => {
-    render(<ThemeSwitch />);
+    render(<ThemeSwitch themes={MOCK_THEMES} />);
 
     const select = screen.getByLabelText('Theme:') as HTMLSelectElement;
-    expect(select.value).toBe(BUILTIN_THEMES[0]);
+    expect(select.value).toBe(MOCK_THEMES[0]);
   });
 
   it('should use provided currentTheme', () => {
     const currentTheme = 'saas-dashboard';
-    render(<ThemeSwitch currentTheme={currentTheme} />);
+    render(<ThemeSwitch themes={MOCK_THEMES} currentTheme={currentTheme} />);
 
     const select = screen.getByLabelText('Theme:') as HTMLSelectElement;
     expect(select.value).toBe(currentTheme);
@@ -49,7 +57,7 @@ describe('ThemeSwitch', () => {
 
   it('should call onThemeChange when selection changes', () => {
     const onThemeChange = vi.fn();
-    render(<ThemeSwitch onThemeChange={onThemeChange} />);
+    render(<ThemeSwitch themes={MOCK_THEMES} onThemeChange={onThemeChange} />);
 
     const select = screen.getByLabelText('Theme:') as HTMLSelectElement;
     const newTheme = 'tech-startup';
@@ -60,7 +68,7 @@ describe('ThemeSwitch', () => {
   });
 
   it('should update internal state when selection changes', () => {
-    render(<ThemeSwitch />);
+    render(<ThemeSwitch themes={MOCK_THEMES} />);
 
     const select = screen.getByLabelText('Theme:') as HTMLSelectElement;
     const newTheme = 'korean-fintech';
@@ -71,7 +79,7 @@ describe('ThemeSwitch', () => {
   });
 
   it('should handle theme change without onThemeChange callback', () => {
-    render(<ThemeSwitch />);
+    render(<ThemeSwitch themes={MOCK_THEMES} />);
 
     const select = screen.getByLabelText('Theme:') as HTMLSelectElement;
     const newTheme = 'warm-humanist';
@@ -85,7 +93,7 @@ describe('ThemeSwitch', () => {
   });
 
   it('should render with correct CSS classes', () => {
-    const { container } = render(<ThemeSwitch />);
+    const { container } = render(<ThemeSwitch themes={MOCK_THEMES} />);
 
     const wrapper = container.querySelector('div');
     expect(wrapper?.className).toContain('flex');
@@ -94,7 +102,7 @@ describe('ThemeSwitch', () => {
   });
 
   it('should have accessible label', () => {
-    render(<ThemeSwitch />);
+    render(<ThemeSwitch themes={MOCK_THEMES} />);
 
     const label = screen.getByText('Theme:');
     expect(label).toBeDefined();
@@ -102,19 +110,33 @@ describe('ThemeSwitch', () => {
   });
 
   it('should have select with proper id', () => {
-    render(<ThemeSwitch />);
+    render(<ThemeSwitch themes={MOCK_THEMES} />);
 
     const select = screen.getByRole('combobox');
     expect(select.id).toBe('theme-select');
   });
 
   it('should render options in correct order', () => {
-    render(<ThemeSwitch />);
+    render(<ThemeSwitch themes={MOCK_THEMES} />);
 
     const select = screen.getByLabelText('Theme:') as HTMLSelectElement;
     const options = Array.from(select.options).map((opt) => opt.value);
 
-    // Should match BUILTIN_THEMES order
-    expect(options).toEqual(expect.arrayContaining([...BUILTIN_THEMES]));
+    // Should match provided themes order
+    expect(options).toEqual(MOCK_THEMES);
+  });
+
+  it('should handle empty themes array', () => {
+    render(<ThemeSwitch themes={[]} />);
+
+    const message = screen.getByText('No themes available');
+    expect(message).toBeDefined();
+  });
+
+  it('should not render select when themes is empty', () => {
+    render(<ThemeSwitch themes={[]} />);
+
+    const select = screen.queryByRole('combobox');
+    expect(select).toBeNull();
   });
 });

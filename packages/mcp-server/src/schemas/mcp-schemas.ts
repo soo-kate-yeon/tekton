@@ -83,7 +83,44 @@ export const GenerateBlueprintOutputSchema = z.object({
 export type GenerateBlueprintOutput = z.infer<typeof GenerateBlueprintOutputSchema>;
 
 // ============================================================================
-// Preview Theme Tool Schemas
+// List Themes Tool Schemas (v2.1)
+// ============================================================================
+
+/**
+ * List Themes Input Schema
+ * No input required - lists all available themes
+ */
+export const ListThemesInputSchema = z.object({});
+
+export type ListThemesInput = z.infer<typeof ListThemesInputSchema>;
+
+/**
+ * Theme metadata schema for v2.1 themes
+ */
+export const ThemeMetaSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  description: z.string().optional(),
+  brandTone: z.string(),
+  schemaVersion: z.string(),
+});
+
+export type ThemeMeta = z.infer<typeof ThemeMetaSchema>;
+
+/**
+ * List Themes Output Schema
+ */
+export const ListThemesOutputSchema = z.object({
+  success: z.boolean(),
+  themes: z.array(ThemeMetaSchema).optional(),
+  count: z.number().optional(),
+  error: z.string().optional(),
+});
+
+export type ListThemesOutput = z.infer<typeof ListThemesOutputSchema>;
+
+// ============================================================================
+// Preview Theme Tool Schemas (v2.1 Updated)
 // ============================================================================
 
 /**
@@ -97,7 +134,7 @@ export const PreviewThemeInputSchema = z.object({
 export type PreviewThemeInput = z.infer<typeof PreviewThemeInputSchema>;
 
 /**
- * Preview Theme Output Schema (MCP JSON-RPC format - no previewUrl)
+ * Preview Theme Output Schema (v2.1 - includes full theme data)
  */
 export const PreviewThemeOutputSchema = z.object({
   success: z.boolean(),
@@ -105,8 +142,25 @@ export const PreviewThemeOutputSchema = z.object({
     z.object({
       id: z.string(),
       name: z.string(),
-      description: z.string(),
-      cssVariables: z.record(z.string(), z.string()),
+      description: z.string().optional(),
+      brandTone: z.string(),
+      schemaVersion: z.string(),
+      designDNA: z
+        .object({
+          moodKeywords: z.array(z.string()),
+          targetEmotion: z.string(),
+          visualAtmosphere: z.string(),
+        })
+        .optional(),
+      tokens: z.object({
+        atomic: z.unknown(),
+        semantic: z.unknown(),
+        component: z.unknown().optional(),
+      }),
+      stateLayer: z.unknown().optional(),
+      motion: z.unknown().optional(),
+      elevation: z.unknown().optional(),
+      typography: z.unknown().optional(),
     })
   ),
   error: z.string().optional(),
@@ -230,3 +284,150 @@ export const ErrorResponseSchema = z.object({
 });
 
 export type ErrorResponse = z.infer<typeof ErrorResponseSchema>;
+
+// ============================================================================
+// Generate Screen Tool Schemas (SPEC-LAYOUT-002 Phase 4)
+// ============================================================================
+
+/**
+ * Output format for code generation
+ */
+export const OutputFormatSchema = z.enum(['css-in-js', 'tailwind', 'react']);
+
+export type OutputFormat = z.infer<typeof OutputFormatSchema>;
+
+/**
+ * CSS Framework options for CSS-in-JS format
+ */
+export const CSSFrameworkSchema = z.enum(['styled-components', 'emotion']);
+
+export type CSSFramework = z.infer<typeof CSSFrameworkSchema>;
+
+/**
+ * Generation options for generate_screen tool
+ */
+export const GenerationOptionsSchema = z.object({
+  cssFramework: CSSFrameworkSchema.optional(),
+  typescript: z.boolean().optional().default(true),
+  prettier: z.boolean().optional().default(false),
+});
+
+export type GenerationOptions = z.infer<typeof GenerationOptionsSchema>;
+
+/**
+ * Generate Screen Input Schema
+ * SPEC-LAYOUT-002: Generate production code from screen definition
+ */
+export const GenerateScreenInputSchema = z.object({
+  screenDefinition: z.unknown(), // Accept any object - will be validated by @tekton/core
+  outputFormat: OutputFormatSchema,
+  options: GenerationOptionsSchema.optional(),
+});
+
+export type GenerateScreenInput = z.infer<typeof GenerateScreenInputSchema>;
+
+/**
+ * Generate Screen Output Schema
+ */
+export const GenerateScreenOutputSchema = z.object({
+  success: z.boolean(),
+  code: z.string().optional(),
+  cssVariables: z.string().optional(),
+  errors: z.array(z.string()).optional(),
+  error: z.string().optional(),
+});
+
+export type GenerateScreenOutput = z.infer<typeof GenerateScreenOutputSchema>;
+
+// ============================================================================
+// Validate Screen Tool Schemas (SPEC-LAYOUT-002 Phase 4)
+// ============================================================================
+
+/**
+ * Validate Screen Input Schema
+ */
+export const ValidateScreenInputSchema = z.object({
+  screenDefinition: z.unknown(), // Accept any object for validation
+  strictMode: z.boolean().optional().default(false),
+});
+
+export type ValidateScreenInput = z.infer<typeof ValidateScreenInputSchema>;
+
+/**
+ * Validation suggestion
+ */
+export const ValidationSuggestionSchema = z.object({
+  field: z.string(),
+  message: z.string(),
+  suggestion: z.string().optional(),
+});
+
+export type ValidationSuggestion = z.infer<typeof ValidationSuggestionSchema>;
+
+/**
+ * Validate Screen Output Schema
+ */
+export const ValidateScreenOutputSchema = z.object({
+  success: z.boolean(),
+  valid: z.boolean().optional(),
+  errors: z.array(z.string()).optional(),
+  warnings: z.array(z.string()).optional(),
+  suggestions: z.array(ValidationSuggestionSchema).optional(),
+  error: z.string().optional(),
+});
+
+export type ValidateScreenOutput = z.infer<typeof ValidateScreenOutputSchema>;
+
+// ============================================================================
+// List Tokens Tool Schemas (SPEC-LAYOUT-002 Phase 4)
+// ============================================================================
+
+/**
+ * Token type filter
+ */
+export const TokenTypeSchema = z.enum(['shell', 'page', 'section', 'all']);
+
+export type TokenType = z.infer<typeof TokenTypeSchema>;
+
+/**
+ * List Tokens Input Schema
+ */
+export const ListTokensInputSchema = z.object({
+  tokenType: TokenTypeSchema.optional().default('all'),
+  filter: z.string().optional(),
+});
+
+export type ListTokensInput = z.infer<typeof ListTokensInputSchema>;
+
+/**
+ * Token metadata
+ */
+export const TokenMetadataSchema = z.object({
+  id: z.string(),
+  name: z.string().optional(),
+  description: z.string().optional(),
+  platform: z.string().optional(),
+  purpose: z.string().optional(),
+  type: z.string().optional(),
+});
+
+export type TokenMetadata = z.infer<typeof TokenMetadataSchema>;
+
+/**
+ * List Tokens Output Schema
+ */
+export const ListTokensOutputSchema = z.object({
+  success: z.boolean(),
+  shells: z.array(TokenMetadataSchema).optional(),
+  pages: z.array(TokenMetadataSchema).optional(),
+  sections: z.array(TokenMetadataSchema).optional(),
+  metadata: z
+    .object({
+      total: z.number(),
+      filtered: z.number().optional(),
+    })
+    .optional(),
+  error: z.string().optional(),
+});
+
+export type ListTokensOutput = z.infer<typeof ListTokensOutputSchema>;
