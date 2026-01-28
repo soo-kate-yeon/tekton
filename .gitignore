@@ -220,7 +220,7 @@ secret-*.*
 # ---------------------------------------------
 # MoAI Directory Management
 # ---------------------------------------------
-# Tracked in git: config/, memory/, scripts/, specs/
+# Tracked in git: config/, memory/, scripts/, specs/, themes/
 # User-generated content: logs/, cache/, reports/, etc.
 
 .moai/*
@@ -232,6 +232,8 @@ secret-*.*
 !.moai/scripts/**
 !.moai/specs/
 !.moai/specs/**
+!.moai/themes/
+!.moai/themes/**
 
 # Legacy config format (migrated to YAML in v0.32.0)
 .moai/config/config.json
