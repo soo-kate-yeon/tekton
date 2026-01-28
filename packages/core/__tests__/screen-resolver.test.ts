@@ -6,7 +6,7 @@
 
 import { describe, it, expect, beforeEach } from 'vitest';
 import { resolveScreen, clearScreenCache, getScreenStats } from '../src/screen-generation/resolver/index.js';
-import type { ScreenDefinition } from '../src/screen-generation/types.js';
+import type { ScreenDefinition, ComponentType } from '../src/screen-generation/types.js';
 
 // ============================================================================
 // Test Setup
@@ -161,7 +161,7 @@ describe('Screen Resolver', () => {
               pattern: 'section.grid-4',
               components: [
                 {
-                  type,
+                  type: type as ComponentType,
                   props,
                 },
               ],
@@ -186,7 +186,7 @@ describe('Screen Resolver', () => {
             pattern: 'section.grid-4',
             components: [
               {
-                type: 'UnknownComponent',
+                type: 'UnknownComponent' as ComponentType, // Intentionally invalid for error testing
                 props: {},
               },
             ],
@@ -485,7 +485,7 @@ describe('Screen Resolver', () => {
             pattern: 'section.grid-4',
             components: [
               {
-                type: 'NonExistentComponent',
+                type: 'NonExistentComponent' as ComponentType, // Intentionally invalid for error testing
                 props: {},
               },
             ],

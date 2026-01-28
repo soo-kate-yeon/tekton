@@ -32,10 +32,11 @@ import {
 describe('Theme Module', () => {
   describe('loadTheme', () => {
     it('should load built-in theme', () => {
-      const theme = loadTheme('calm-wellness');
+      const theme = loadTheme('atlantic-magazine-v1');
       expect(theme).not.toBeNull();
-      expect(theme?.id).toBe('calm-wellness');
-      expect(theme?.colorPalette.primary).toBeDefined();
+      expect(theme?.id).toBe('atlantic-magazine-v1');
+      // v2.1 schema uses tokens.atomic.color instead of colorPalette
+      expect(theme?.tokens?.atomic?.color).toBeDefined();
     });
 
     it('should return null for non-existent theme', () => {
@@ -61,7 +62,7 @@ describe('Theme Module', () => {
 
     it('should accept valid theme ID format', () => {
       // Valid: lowercase alphanumeric + hyphens
-      const theme = loadTheme('calm-wellness');
+      const theme = loadTheme('atlantic-magazine-v1');
       expect(theme).not.toBeNull();
     });
   });
@@ -77,9 +78,12 @@ describe('Theme Module', () => {
   });
 
   describe('isBuiltinTheme', () => {
-    it('should return true for built-in themes', () => {
-      expect(isBuiltinTheme('calm-wellness')).toBe(true);
-      expect(isBuiltinTheme('tech-startup')).toBe(true);
+    // v2.1: All themes are loaded dynamically from external files
+    // BUILTIN_THEMES is empty in v2.1 - themes are in .moai/themes/generated/
+    it('should return false for all themes in v2.1 (dynamic loading)', () => {
+      // v2.1 does not have built-in themes - all themes are external
+      expect(isBuiltinTheme('atlantic-magazine-v1')).toBe(false);
+      expect(isBuiltinTheme('hims-v1')).toBe(false);
     });
 
     it('should return false for custom themes', () => {
@@ -123,41 +127,34 @@ describe('Theme Module', () => {
   });
 
   describe('generateCSSVariables', () => {
-    it('should generate CSS variables from theme', () => {
-      const theme = loadTheme('calm-wellness');
+    // v2.1: generateCSSVariables() is deprecated and returns empty object
+    // Use generateThemeCSS() from css-generator.ts for v2.1 themes
+    it('should be deprecated in v2.1 and return empty object', () => {
+      const theme = loadTheme('atlantic-magazine-v1');
       expect(theme).not.toBeNull();
 
       const vars = generateCSSVariables(theme!);
-      expect(vars['--color-primary']).toBeDefined();
-      expect(vars['--font-family']).toBeDefined();
-      expect(vars['--border-radius']).toBeDefined();
+      // v2.1 deprecated function returns empty object
+      expect(vars).toEqual({});
     });
 
-    it('should handle theme with all optional colors', () => {
-      const theme = loadTheme('tech-startup');
+    it('should return empty object for any theme in v2.1', () => {
+      const theme = loadTheme('hims-v1');
       expect(theme).not.toBeNull();
 
       const vars = generateCSSVariables(theme!);
-      expect(vars['--color-primary']).toBeDefined();
-
-      // Check optional colors if present
-      if (theme!.colorPalette.secondary) {
-        expect(vars['--color-secondary']).toBeDefined();
-      }
-      if (theme!.colorPalette.accent) {
-        expect(vars['--color-accent']).toBeDefined();
-      }
-      if (theme!.colorPalette.neutral) {
-        expect(vars['--color-neutral']).toBeDefined();
-      }
+      // v2.1: Deprecated, always returns empty object
+      expect(Object.keys(vars).length).toBe(0);
     });
   });
 
   describe('BUILTIN_THEMES', () => {
-    it('should export builtin theme IDs', () => {
+    // v2.1: Themes are loaded dynamically from .moai/themes/generated/
+    // BUILTIN_THEMES array is empty - all themes are external files
+    it('should be an empty array in v2.1 (dynamic theme loading)', () => {
       expect(BUILTIN_THEMES).toBeDefined();
-      expect(BUILTIN_THEMES.length).toBeGreaterThan(0);
-      expect(BUILTIN_THEMES).toContain('calm-wellness');
+      expect(Array.isArray(BUILTIN_THEMES)).toBe(true);
+      expect(BUILTIN_THEMES.length).toBe(0);
     });
   });
 });
@@ -171,14 +168,14 @@ describe('Blueprint Module', () => {
     it('should create blueprint with unique id', () => {
       const bp = createBlueprint({
         name: 'Test Page',
-        themeId: 'calm-wellness',
+        themeId: 'atlantic-magazine-v1',
         layout: 'single-column',
         components: [],
       });
 
       expect(bp.id).toMatch(/^bp-/);
       expect(bp.name).toBe('Test Page');
-      expect(bp.themeId).toBe('calm-wellness');
+      expect(bp.themeId).toBe('atlantic-magazine-v1');
     });
   });
 
@@ -186,7 +183,7 @@ describe('Blueprint Module', () => {
     it('should validate correct blueprint', () => {
       const bp = createBlueprint({
         name: 'Test',
-        themeId: 'calm-wellness',
+        themeId: 'atlantic-magazine-v1',
         layout: 'single-column',
         components: [{ type: 'Button' }],
       });
@@ -240,7 +237,7 @@ describe('Blueprint Module', () => {
     it('should detect invalid layout type', () => {
       const bp = createBlueprint({
         name: 'Test',
-        themeId: 'calm-wellness',
+        themeId: 'atlantic-magazine-v1',
         layout: 'single-column',
         components: [],
       });
@@ -257,7 +254,7 @@ describe('Blueprint Module', () => {
       const result = validateBlueprint({
         id: 'test-id',
         name: 'Test',
-        themeId: 'calm-wellness',
+        themeId: 'atlantic-magazine-v1',
         layout: 'single-column',
         components: 'not-an-array' as any,
       });
@@ -269,7 +266,7 @@ describe('Blueprint Module', () => {
     it('should detect component without type', () => {
       const bp = createBlueprint({
         name: 'Test',
-        themeId: 'calm-wellness',
+        themeId: 'atlantic-magazine-v1',
         layout: 'single-column',
         components: [{ type: '' } as any],
       });
@@ -328,7 +325,7 @@ describe('Render Module', () => {
     it('should render simple blueprint to JSX', () => {
       const bp = createBlueprint({
         name: 'Hello Page',
-        themeId: 'calm-wellness',
+        themeId: 'atlantic-magazine-v1',
         layout: 'single-column',
         components: [
           { type: 'Heading', props: { level: 1 }, children: ['Hello World'] },
@@ -348,7 +345,7 @@ describe('Render Module', () => {
     it('should handle nested components', () => {
       const bp = createBlueprint({
         name: 'Card Demo',
-        themeId: 'calm-wellness',
+        themeId: 'atlantic-magazine-v1',
         layout: 'single-column',
         components: [
           {
@@ -372,7 +369,7 @@ describe('Render Module', () => {
     it('should generate correct imports', () => {
       const bp = createBlueprint({
         name: 'Multi Component',
-        themeId: 'calm-wellness',
+        themeId: 'atlantic-magazine-v1',
         layout: 'single-column',
         components: [{ type: 'Button' }, { type: 'Input' }, { type: 'Card' }],
       });
@@ -385,10 +382,10 @@ describe('Render Module', () => {
   });
 
   describe('renderWithTheme', () => {
-    it('should include theme CSS variables', () => {
+    it('should include theme header comment', () => {
       const bp = createBlueprint({
         name: 'Themed Page',
-        themeId: 'calm-wellness',
+        themeId: 'atlantic-magazine-v1',
         layout: 'single-column',
         components: [{ type: 'Button' }],
       });
@@ -396,8 +393,10 @@ describe('Render Module', () => {
       const result = renderWithTheme(bp);
 
       expect(result.success).toBe(true);
-      expect(result.code).toContain('/* Theme: Calm Wellness */');
-      expect(result.code).toContain('--color-primary');
+      expect(result.code).toContain('/* Theme: Atlantic Magazine v1 */');
+      // Note: In v2.1, generateCSSVariables is deprecated and returns empty object
+      // CSS variables are generated via generateThemeCSS() from css-generator.ts
+      expect(result.code).toContain('/* CSS Variables:');
     });
 
     it('should fail for non-existent theme', () => {
@@ -419,7 +418,7 @@ describe('Render Module', () => {
     it('should render dashboard layout', () => {
       const bp = createBlueprint({
         name: 'Dashboard',
-        themeId: 'calm-wellness',
+        themeId: 'atlantic-magazine-v1',
         layout: 'dashboard',
         components: [{ type: 'Text', children: ['Content'] }],
       });
@@ -435,7 +434,7 @@ describe('Render Module', () => {
     it('should render sidebar-left layout', () => {
       const bp = createBlueprint({
         name: 'Sidebar Page',
-        themeId: 'calm-wellness',
+        themeId: 'atlantic-magazine-v1',
         layout: 'sidebar-left',
         components: [],
       });
@@ -450,7 +449,7 @@ describe('Render Module', () => {
     it('should render two-column layout', () => {
       const bp = createBlueprint({
         name: 'Two Column',
-        themeId: 'calm-wellness',
+        themeId: 'atlantic-magazine-v1',
         layout: 'two-column',
         components: [],
       });
@@ -464,7 +463,7 @@ describe('Render Module', () => {
     it('should render sidebar-right layout', () => {
       const bp = createBlueprint({
         name: 'Sidebar Right',
-        themeId: 'calm-wellness',
+        themeId: 'atlantic-magazine-v1',
         layout: 'sidebar-right',
         components: [],
       });
@@ -479,7 +478,7 @@ describe('Render Module', () => {
     it('should render landing layout', () => {
       const bp = createBlueprint({
         name: 'Landing',
-        themeId: 'calm-wellness',
+        themeId: 'atlantic-magazine-v1',
         layout: 'landing',
         components: [],
       });
@@ -495,7 +494,7 @@ describe('Render Module', () => {
     it('should render Input component', () => {
       const bp = createBlueprint({
         name: 'Form Page',
-        themeId: 'calm-wellness',
+        themeId: 'atlantic-magazine-v1',
         layout: 'single-column',
         components: [{ type: 'Input', props: { type: 'email', placeholder: 'Enter email' } }],
       });
@@ -511,7 +510,7 @@ describe('Render Module', () => {
     it('should render Image component', () => {
       const bp = createBlueprint({
         name: 'Gallery',
-        themeId: 'calm-wellness',
+        themeId: 'atlantic-magazine-v1',
         layout: 'single-column',
         components: [{ type: 'Image', props: { src: '/photo.jpg', alt: 'Photo' } }],
       });
@@ -527,7 +526,7 @@ describe('Render Module', () => {
     it('should render Link component', () => {
       const bp = createBlueprint({
         name: 'Nav Page',
-        themeId: 'calm-wellness',
+        themeId: 'atlantic-magazine-v1',
         layout: 'single-column',
         components: [{ type: 'Link', props: { href: '/about' }, children: ['About Us'] }],
       });
@@ -543,7 +542,7 @@ describe('Render Module', () => {
     it('should render List component', () => {
       const bp = createBlueprint({
         name: 'List Page',
-        themeId: 'calm-wellness',
+        themeId: 'atlantic-magazine-v1',
         layout: 'single-column',
         components: [{ type: 'List', children: [{ type: 'Text', children: ['Item 1'] }] }],
       });
@@ -558,7 +557,7 @@ describe('Render Module', () => {
     it('should render Form component', () => {
       const bp = createBlueprint({
         name: 'Form Page',
-        themeId: 'calm-wellness',
+        themeId: 'atlantic-magazine-v1',
         layout: 'single-column',
         components: [{ type: 'Form', children: [{ type: 'Input' }] }],
       });
@@ -573,7 +572,7 @@ describe('Render Module', () => {
     it('should render Modal component', () => {
       const bp = createBlueprint({
         name: 'Modal Page',
-        themeId: 'calm-wellness',
+        themeId: 'atlantic-magazine-v1',
         layout: 'single-column',
         components: [{ type: 'Modal', props: { title: 'Confirm' }, children: ['Are you sure?'] }],
       });
@@ -589,7 +588,7 @@ describe('Render Module', () => {
     it('should handle component with number props', () => {
       const bp = createBlueprint({
         name: 'Number Props',
-        themeId: 'calm-wellness',
+        themeId: 'atlantic-magazine-v1',
         layout: 'single-column',
         components: [{ type: 'Heading', props: { level: 3 }, children: ['Title'] }],
       });
@@ -603,7 +602,7 @@ describe('Render Module', () => {
     it('should handle component with boolean props', () => {
       const bp = createBlueprint({
         name: 'Bool Props',
-        themeId: 'calm-wellness',
+        themeId: 'atlantic-magazine-v1',
         layout: 'single-column',
         components: [
           {
@@ -624,7 +623,7 @@ describe('Render Module', () => {
     it('should handle unknown component with Default renderer', () => {
       const bp = createBlueprint({
         name: 'Unknown Component',
-        themeId: 'calm-wellness',
+        themeId: 'atlantic-magazine-v1',
         layout: 'single-column',
         components: [{ type: 'UnknownWidget', props: { custom: 'value' }, children: ['Content'] }],
       });
@@ -639,7 +638,7 @@ describe('Render Module', () => {
     it('should handle component with object props', () => {
       const bp = createBlueprint({
         name: 'Object Props',
-        themeId: 'calm-wellness',
+        themeId: 'atlantic-magazine-v1',
         layout: 'single-column',
         components: [{ type: 'CustomComponent', props: { config: { foo: 'bar' } } }],
       });
@@ -653,7 +652,7 @@ describe('Render Module', () => {
     it('should handle component with null and undefined props', () => {
       const bp = createBlueprint({
         name: 'Null Props',
-        themeId: 'calm-wellness',
+        themeId: 'atlantic-magazine-v1',
         layout: 'single-column',
         components: [{ type: 'Button', props: { value: null, other: undefined } }],
       });
@@ -668,7 +667,7 @@ describe('Render Module', () => {
     it('should render component without children using self-closing tag', () => {
       const bp = createBlueprint({
         name: 'No Children',
-        themeId: 'calm-wellness',
+        themeId: 'atlantic-magazine-v1',
         layout: 'single-column',
         components: [{ type: 'Divider' }],
       });
@@ -684,7 +683,7 @@ describe('Render Module', () => {
     it('should respect typescript option', () => {
       const bp = createBlueprint({
         name: 'JS File',
-        themeId: 'calm-wellness',
+        themeId: 'atlantic-magazine-v1',
         layout: 'single-column',
         components: [{ type: 'Button' }],
       });
@@ -698,7 +697,7 @@ describe('Render Module', () => {
     it('should respect semicolons option', () => {
       const bp = createBlueprint({
         name: 'No Semicolons',
-        themeId: 'calm-wellness',
+        themeId: 'atlantic-magazine-v1',
         layout: 'single-column',
         components: [],
       });
@@ -713,7 +712,7 @@ describe('Render Module', () => {
     it('should respect indent option', () => {
       const bp = createBlueprint({
         name: 'Custom Indent',
-        themeId: 'calm-wellness',
+        themeId: 'atlantic-magazine-v1',
         layout: 'single-column',
         components: [{ type: 'Button' }],
       });
@@ -733,7 +732,7 @@ describe('Render Module', () => {
 describe('Full Pipeline', () => {
   it('should complete Theme -> Blueprint -> Render flow', () => {
     // 1. Load theme
-    const theme = loadTheme('tech-startup');
+    const theme = loadTheme('hims-v1');
     expect(theme).not.toBeNull();
 
     // 2. Create blueprint
@@ -769,7 +768,7 @@ describe('Full Pipeline', () => {
     expect(result.success).toBe(true);
 
     // 5. Verify output
-    expect(result.code).toContain('Tech Startup');
+    expect(result.code).toContain('Hims Design System v1');
     expect(result.code).toContain('StartupLanding');
     expect(result.code).toContain('Build the Future');
     expect(result.code).toContain('Get Started');

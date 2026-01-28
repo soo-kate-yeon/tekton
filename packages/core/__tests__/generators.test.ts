@@ -4,7 +4,7 @@
  * [SPEC-LAYOUT-002] [PHASE-3]
  */
 
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import type { ResolvedScreen, ResolvedComponent } from '../src/screen-generation/resolver/index.js';
 import {
   // CSS-in-JS
@@ -94,33 +94,46 @@ const mockResolvedScreen: ResolvedScreen = {
   name: 'Test Screen',
   description: 'A test screen',
   shell: {
-    tokenId: 'shell.web.dashboard',
     shell: {
-      name: 'Dashboard Shell',
+      id: 'shell.web.dashboard',
       description: 'Standard dashboard shell',
+      platform: 'web',
+      regions: [],
+      responsive: { default: {} },
       tokenBindings: {},
     },
+    sections: [],
+    responsive: { default: {} },
     cssVariables: {},
   },
   page: {
-    tokenId: 'page.dashboard',
     page: {
-      name: 'Dashboard Page',
+      id: 'page.dashboard',
       description: 'Dashboard page layout',
+      purpose: 'dashboard',
+      sections: [],
+      responsive: { default: {} },
       tokenBindings: {},
     },
+    sections: [],
+    responsive: { default: {} },
     cssVariables: {},
   },
   sections: [
     {
       id: 'hero',
       layout: {
-        tokenId: 'section.hero',
-        section: {
-          name: 'Hero Section',
-          description: 'Hero section layout',
-          tokenBindings: {},
-        },
+        sections: [
+          {
+            id: 'section.hero',
+            type: 'flex',
+            description: 'Hero section layout',
+            css: { display: 'flex' },
+            responsive: { default: { display: 'flex' } },
+            tokenBindings: {},
+          },
+        ],
+        responsive: { default: {} },
         cssVariables: {},
       },
       components: [mockResolvedComponent],

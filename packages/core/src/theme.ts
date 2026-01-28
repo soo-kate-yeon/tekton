@@ -1,141 +1,127 @@
 /**
  * @tekton/core - Theme Module
- * Load and manage theme definitions
- * Target: 120 LOC
+ * v2.1 Theme System - Load themes from .moai/themes/generated/
+ *
+ * MIGRATION NOTICE:
+ * - v1 themes (packages/core/themes/) have been removed
+ * - All themes now use v2.1 schema from .moai/themes/generated/
+ * - Use loadThemeV2() and ThemeV2 type for new code
  */
 
-import { readFileSync, readdirSync, existsSync } from 'node:fs';
-import { join, dirname } from 'node:path';
-import { fileURLToPath } from 'node:url';
-import type { Theme, ThemeMeta, OKLCHColor } from './types.js';
+// Re-export all v2.1 theme functionality
+export {
+  // Types
+  type ThemeV2,
+  type ThemeMetaV2,
+  type DesignDNA,
+  type AtomicTokensV2,
+  type SemanticTokensV2,
+  type ComponentTokensV2,
+  type StateLayerTokens,
+  type MotionTokens,
+  type ElevationTokens,
+  type BorderTokens,
+  type TypographyTokens,
+  type DensityTokens,
+  type EffectsTokens,
+  type AIContext,
+  type DarkModeOverrides,
+  type OKLCHColorV2,
+
+  // Functions
+  loadThemeV2,
+  listThemesV2,
+  themeExistsV2,
+  oklchToCSSV2,
+  resolveTokenRef,
+} from './theme-v2.js';
 
 // ============================================================================
-// Theme Directory Resolution
+// Convenience Aliases (Primary API)
 // ============================================================================
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-const THEMES_DIR = join(__dirname, '..', 'themes');
-
-// ============================================================================
-// Built-in Theme IDs
-// ============================================================================
-
-export const BUILTIN_THEMES = [
-  'calm-wellness',
-  'dynamic-fitness',
-  'korean-fintech',
-  'media-streaming',
-  'premium-editorial',
-  'saas-dashboard',
-  'saas-modern',
-  'tech-startup',
-  'warm-humanist',
-] as const;
-
-export type BuiltinThemeId = (typeof BUILTIN_THEMES)[number];
-
-// ============================================================================
-// Theme Loading Functions
-// ============================================================================
+import {
+  loadThemeV2,
+  listThemesV2,
+  themeExistsV2,
+  oklchToCSSV2,
+  type ThemeV2,
+  type ThemeMetaV2,
+  type OKLCHColorV2,
+} from './theme-v2.js';
 
 /**
- * Load theme from JSON file
+ * Load a theme by ID
+ * @param themeId - Theme identifier (e.g., "atlantic-magazine-v1")
+ * @returns Theme object or null if not found
+ *
+ * @example
+ * ```typescript
+ * const theme = loadTheme('atlantic-magazine-v1');
+ * if (theme) {
+ *   console.log(theme.brandTone); // "professional"
+ * }
+ * ```
  */
-export function loadTheme(themeId: string): Theme | null {
-  // Security: Prevent path traversal attacks
-  // Only allow alphanumeric characters and hyphens
-  if (!themeId || !/^[a-z0-9-]+$/.test(themeId)) {
-    return null;
-  }
-
-  const themePath = join(THEMES_DIR, `${themeId}.json`);
-
-  if (!existsSync(themePath)) {
-    return null;
-  }
-
-  try {
-    const content = readFileSync(themePath, 'utf-8');
-    return JSON.parse(content) as Theme;
-  } catch {
-    return null;
-  }
+export function loadTheme(themeId: string): ThemeV2 | null {
+  return loadThemeV2(themeId);
 }
 
 /**
- * Get all available theme metadata
+ * List all available themes
+ * @returns Array of theme metadata
  */
-export function listThemes(): ThemeMeta[] {
-  if (!existsSync(THEMES_DIR)) {
-    return [];
-  }
-
-  const files = readdirSync(THEMES_DIR).filter(f => f.endsWith('.json'));
-  const themes: ThemeMeta[] = [];
-
-  for (const file of files) {
-    const theme = loadTheme(file.replace('.json', ''));
-    if (theme) {
-      themes.push({
-        id: theme.id,
-        name: theme.name,
-        description: theme.description,
-      });
-    }
-  }
-
-  return themes;
+export function listThemes(): ThemeMetaV2[] {
+  return listThemesV2();
 }
 
 /**
- * Check if theme ID is valid built-in theme
+ * Check if a theme exists
+ * @param themeId - Theme identifier
  */
-export function isBuiltinTheme(themeId: string): themeId is BuiltinThemeId {
-  return BUILTIN_THEMES.includes(themeId as BuiltinThemeId);
+export function themeExists(themeId: string): boolean {
+  return themeExistsV2(themeId);
 }
 
+/**
+ * Convert OKLCH color to CSS string
+ */
+export function oklchToCSS(color: OKLCHColorV2): string {
+  return oklchToCSSV2(color);
+}
+
+// Type aliases for convenience
+export type Theme = ThemeV2;
+export type ThemeMeta = ThemeMetaV2;
+export type OKLCHColor = OKLCHColorV2;
+
 // ============================================================================
-// Color Utilities
+// Deprecated - Remove in next major version
 // ============================================================================
 
 /**
- * Convert OKLCH to CSS string
- * Clamps values to valid ranges: l (0-1), c (0-0.5), h (0-360)
+ * @deprecated v1 built-in themes have been removed. Use themes from .moai/themes/generated/
  */
-export function oklchToCSS(color: OKLCHColor): string {
-  const l = Math.max(0, Math.min(1, color.l));
-  const c = Math.max(0, Math.min(0.5, color.c));
-  const h = ((color.h % 360) + 360) % 360; // Normalize to 0-360
-  return `oklch(${l} ${c} ${h})`;
+export const BUILTIN_THEMES: readonly string[] = [];
+
+/**
+ * @deprecated v1 built-in themes have been removed
+ */
+export type BuiltinThemeId = never;
+
+/**
+ * @deprecated v1 built-in themes have been removed
+ */
+export function isBuiltinTheme(_themeId: string): _themeId is BuiltinThemeId {
+  console.warn('isBuiltinTheme() is deprecated. All themes now come from .moai/themes/generated/');
+  return false;
 }
 
 /**
- * Generate CSS variables from theme
+ * @deprecated Use theme tokens directly. This function provided minimal v1 CSS output.
+ * For v2.1, use generateThemeCSS() from css-generator.ts with proper token resolution.
  */
-export function generateCSSVariables(theme: Theme): Record<string, string> {
-  const vars: Record<string, string> = {};
-  const { colorPalette, typography, componentDefaults } = theme;
-
-  // Colors
-  vars['--color-primary'] = oklchToCSS(colorPalette.primary);
-  if (colorPalette.secondary) {
-    vars['--color-secondary'] = oklchToCSS(colorPalette.secondary);
-  }
-  if (colorPalette.accent) {
-    vars['--color-accent'] = oklchToCSS(colorPalette.accent);
-  }
-  if (colorPalette.neutral) {
-    vars['--color-neutral'] = oklchToCSS(colorPalette.neutral);
-  }
-
-  // Typography
-  vars['--font-family'] = typography.fontFamily;
-  vars['--font-scale'] = typography.fontScale;
-
-  // Component defaults
-  const radiusMap = { none: '0', small: '4px', medium: '8px', large: '16px', full: '9999px' };
-  vars['--border-radius'] = radiusMap[componentDefaults.borderRadius];
-
-  return vars;
+export function generateCSSVariables(_theme: ThemeV2): Record<string, string> {
+  console.warn('generateCSSVariables() is deprecated. Use generateThemeCSS() for v2.1 themes.');
+  return {};
 }

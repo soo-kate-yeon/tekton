@@ -215,7 +215,7 @@ export function WrongName() {
       const genResult = await generateBlueprintTool({
         description: 'Test screen for hybrid export',
         layout: 'single-column',
-        themeId: 'calm-wellness',
+        themeId: 'atlantic-magazine-v1',
       });
 
       expect(genResult.success).toBe(true);
@@ -234,7 +234,7 @@ export function WrongName() {
       const genResult = await generateBlueprintTool({
         description: 'TSX test blueprint',
         layout: 'dashboard',
-        themeId: 'dynamic-fitness',
+        themeId: 'atlantic-magazine-v1',
       });
 
       const result = await hybridExportTool({
@@ -264,7 +264,7 @@ export function WrongName() {
         componentName: 'Button',
         format: 'jsx',
         includeCSS: true,
-        themeId: 'calm-wellness',
+        themeId: 'atlantic-magazine-v1',
       });
 
       expect(result.success).toBe(true);

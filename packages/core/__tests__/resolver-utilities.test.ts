@@ -24,7 +24,7 @@ import {
   tokenRefToCSSVar,
   substituteTemplateVariables,
 } from '../src/screen-generation/resolver/token-resolver.js';
-import type { ComponentDefinition } from '../src/screen-generation/types.js';
+import type { ComponentDefinition, ComponentType } from '../src/screen-generation/types.js';
 
 // ============================================================================
 // 1. Component Definition Validation (5 tests)
@@ -124,26 +124,27 @@ describe('Component Type Extraction', () => {
   });
 
   it('should handle deeply nested components (5+ levels)', () => {
+    // Using type assertions for test-only component types to verify deep traversal
     const deepComponent: ComponentDefinition = {
-      type: 'Level1',
+      type: 'Card' as ComponentType,
       props: {},
       children: [
         {
-          type: 'Level2',
+          type: 'Text' as ComponentType,
           props: {},
           children: [
             {
-              type: 'Level3',
+              type: 'Badge' as ComponentType,
               props: {},
               children: [
                 {
-                  type: 'Level4',
+                  type: 'Avatar' as ComponentType,
                   props: {},
                   children: [
                     {
-                      type: 'Level5',
+                      type: 'Button' as ComponentType,
                       props: {},
-                      children: [{ type: 'Level6', props: {} }],
+                      children: [{ type: 'Input' as ComponentType, props: {} }],
                     },
                   ],
                 },
@@ -156,7 +157,7 @@ describe('Component Type Extraction', () => {
 
     const types = extractComponentTypes(deepComponent);
 
-    expect(types).toEqual(new Set(['Level1', 'Level2', 'Level3', 'Level4', 'Level5', 'Level6']));
+    expect(types).toEqual(new Set(['Card', 'Text', 'Badge', 'Avatar', 'Button', 'Input']));
     expect(types.size).toBe(6);
   });
 

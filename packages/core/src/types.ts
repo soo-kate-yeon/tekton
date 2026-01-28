@@ -18,10 +18,21 @@ export interface OKLCHColor {
 }
 
 // ============================================================================
-// Theme Types
+// Theme Types (v2.1 - from theme-v2.ts)
 // ============================================================================
 
-export interface Theme {
+// Re-export v2.1 Theme types as primary
+export type { ThemeV2 as Theme, ThemeMetaV2 as ThemeMeta } from './theme-v2.js';
+
+// ============================================================================
+// Legacy Theme Types (v1 - DEPRECATED)
+// ============================================================================
+
+/**
+ * @deprecated Use Theme (ThemeV2) from theme.ts instead.
+ * v1 themes have been removed. This interface is kept for migration purposes only.
+ */
+export interface ThemeLegacy {
   id: string;
   name: string;
   description: string;
@@ -45,7 +56,10 @@ export interface Theme {
   };
 }
 
-export interface ThemeMeta {
+/**
+ * @deprecated Use ThemeMeta (ThemeMetaV2) from theme.ts instead.
+ */
+export interface ThemeMetaLegacy {
   id: string;
   name: string;
   description: string;

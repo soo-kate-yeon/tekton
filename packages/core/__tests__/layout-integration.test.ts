@@ -16,7 +16,6 @@ import {
   generateSectionClasses,
   generateMediaQueries,
   validateCSS,
-  formatCSS,
 } from '../src/layout-css-generator.js';
 import {
   getShellToken,

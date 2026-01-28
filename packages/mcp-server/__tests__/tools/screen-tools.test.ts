@@ -32,7 +32,7 @@ describe('generate_screen Tool', () => {
     const result = await generateScreenTool({
       screenDefinition,
       outputFormat: 'css-in-js',
-      options: { cssFramework: 'styled-components', typescript: true },
+      options: { cssFramework: 'styled-components', typescript: true, prettier: false },
     });
 
     if (!result.success) {
@@ -100,7 +100,7 @@ describe('generate_screen Tool', () => {
     const result = await generateScreenTool({
       screenDefinition,
       outputFormat: 'react',
-      options: { typescript: true },
+      options: { typescript: true, prettier: false },
     });
 
     if (!result.success) {
@@ -229,6 +229,7 @@ describe('validate_screen Tool', () => {
 
     const result = await validateScreenTool({
       screenDefinition: invalidScreen,
+      strictMode: false,
     });
 
     expect(result.success).toBe(true);

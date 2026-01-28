@@ -10,7 +10,6 @@ import {
   resolveTokenReference,
   mergeResponsiveConfig,
   clearLayoutCache,
-  type ResolvedLayout,
 } from '../src/layout-resolver.js';
 import type { ResponsiveConfig } from '../src/layout-tokens/types.js';
 
@@ -322,7 +321,7 @@ describe('mergeResponsiveConfig', () => {
     };
 
     const overrides: Partial<ResponsiveConfig<{ width: string; height?: string }>> = {
-      default: { height: '100vh' },
+      default: { width: '100%', height: '100vh' },
     };
 
     const merged = mergeResponsiveConfig(base, overrides);

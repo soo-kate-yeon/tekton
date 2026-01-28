@@ -37,12 +37,12 @@ export declare const ThemeMetadataSchema: z.ZodObject<{
     author: z.ZodOptional<z.ZodString>;
     homepage: z.ZodOptional<z.ZodString>;
 }, "strip", z.ZodTypeAny, {
-    tags?: string[] | undefined;
     author?: string | undefined;
+    tags?: string[] | undefined;
     homepage?: string | undefined;
 }, {
-    tags?: string[] | undefined;
     author?: string | undefined;
+    tags?: string[] | undefined;
     homepage?: string | undefined;
 }>;
 /**
@@ -145,24 +145,24 @@ export declare const ThemeSchema: z.ZodObject<{
         author: z.ZodOptional<z.ZodString>;
         homepage: z.ZodOptional<z.ZodString>;
     }, "strip", z.ZodTypeAny, {
-        tags?: string[] | undefined;
         author?: string | undefined;
+        tags?: string[] | undefined;
         homepage?: string | undefined;
     }, {
-        tags?: string[] | undefined;
         author?: string | undefined;
+        tags?: string[] | undefined;
         homepage?: string | undefined;
     }>>;
 }, "strip", z.ZodTypeAny, {
     id: string;
     name: string;
-    description: string;
-    version: string;
     stack: {
         components: "shadcn-ui";
         framework: "nextjs" | "vite" | "remix";
         styling: "tailwindcss";
     };
+    description: string;
+    version: string;
     questionnaire: {
         brandTone: "professional" | "playful" | "elegant" | "bold" | "minimal";
         contrast: "maximum" | "low" | "medium" | "high";
@@ -177,20 +177,20 @@ export declare const ThemeSchema: z.ZodObject<{
         fontScale: "medium" | "small" | "large";
     };
     metadata?: {
-        tags?: string[] | undefined;
         author?: string | undefined;
+        tags?: string[] | undefined;
         homepage?: string | undefined;
     } | undefined;
 }, {
     id: string;
     name: string;
-    description: string;
-    version: string;
     stack: {
         components: "shadcn-ui";
         framework: "nextjs" | "vite" | "remix";
         styling: "tailwindcss";
     };
+    description: string;
+    version: string;
     questionnaire: {
         brandTone: "professional" | "playful" | "elegant" | "bold" | "minimal";
         contrast: "maximum" | "low" | "medium" | "high";
@@ -205,8 +205,8 @@ export declare const ThemeSchema: z.ZodObject<{
         fontScale: "medium" | "small" | "large";
     };
     metadata?: {
-        tags?: string[] | undefined;
         author?: string | undefined;
+        tags?: string[] | undefined;
         homepage?: string | undefined;
     } | undefined;
 }>;

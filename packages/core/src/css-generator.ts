@@ -268,6 +268,18 @@ function generateSemanticTokens(
  * @internal
  */
 function resolveTokenWithFallback(ref: string, tokens: ThemeWithTokens['tokens']): string {
+  // Check for direct CSS values first (not token references)
+  // Direct values: hex colors (#fff, #ffffff), CSS units (10px, 1rem), rgb/hsl functions
+  if (
+    ref.startsWith('#') ||
+    ref.startsWith('rgb') ||
+    ref.startsWith('hsl') ||
+    ref.startsWith('oklch') ||
+    /^\d+(\.\d+)?(px|rem|em|%|vh|vw|ms|s)$/.test(ref)
+  ) {
+    return ref;
+  }
+
   // First try standard resolution (with error handling)
   try {
     const resolved = resolveToken(ref, tokens);

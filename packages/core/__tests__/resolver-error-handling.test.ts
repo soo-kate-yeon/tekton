@@ -10,8 +10,8 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { resolveComponent, type ComponentContext } from '../src/screen-generation/resolver/component-resolver.js';
 import { resolveShell, resolvePage, resolveSection, type LayoutContext } from '../src/screen-generation/resolver/layout-resolver.js';
-import { substituteTemplateVariables, resolveBinding, resolveBindings, type TokenBindingContext } from '../src/screen-generation/resolver/token-resolver.js';
-import type { ComponentDefinition } from '../src/screen-generation/types.js';
+import { substituteTemplateVariables, resolveBindings, type TokenBindingContext } from '../src/screen-generation/resolver/token-resolver.js';
+import type { ComponentDefinition, ComponentType } from '../src/screen-generation/types.js';
 import type { TokenBindings } from '../src/component-schemas.js';
 import { clearScreenCache } from '../src/screen-generation/resolver/index.js';
 
@@ -32,7 +32,7 @@ describe('Resolver Error Handling', () => {
   describe('Unknown Component Type Errors', () => {
     it('should throw error for unknown component type with helpful list of available types', () => {
       const unknownComponent: ComponentDefinition = {
-        type: 'UnknownWidget',
+        type: 'UnknownWidget' as ComponentType, // Intentionally invalid for error testing
         props: {
           value: 'test',
         },
@@ -49,7 +49,7 @@ describe('Resolver Error Handling', () => {
 
     it('should include screen context in unknown component error message', () => {
       const unknownComponent: ComponentDefinition = {
-        type: 'CustomComponent',
+        type: 'CustomComponent' as ComponentType, // Intentionally invalid for error testing
         props: {},
       };
 
@@ -63,7 +63,7 @@ describe('Resolver Error Handling', () => {
 
     it('should include section context in unknown component error when resolving within section', () => {
       const unknownComponent: ComponentDefinition = {
-        type: 'InvalidType',
+        type: 'InvalidType' as ComponentType, // Intentionally invalid for error testing
         props: {},
       };
 
@@ -335,7 +335,7 @@ describe('Resolver Error Handling', () => {
         props: {},
         children: [
           {
-            type: 'InvalidChild',
+            type: 'InvalidChild' as ComponentType, // Intentionally invalid for error testing
             props: {},
           },
         ],

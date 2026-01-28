@@ -17,16 +17,13 @@ import {
   validateLayoutHierarchy,
   safeValidate,
   ShellTokenSchema,
-  PageLayoutTokenSchema,
-  SectionPatternTokenSchema,
-  TokenReferenceSchema,
 } from '../src/layout-validation.js';
 import type {
   ShellToken,
   PageLayoutToken,
   SectionPatternToken,
-  TokenReference,
 } from '../src/layout-tokens/types.js';
+import type { TokenReference } from '../src/token-resolver.js';
 
 // ============================================================================
 // Valid Fixtures

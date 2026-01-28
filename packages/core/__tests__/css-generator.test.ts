@@ -184,40 +184,45 @@ describe('generateThemeCSS - Atomic Layer', () => {
   it('should generate color variables with correct naming', () => {
     const css = generateThemeCSS(mockThemeWithTokens);
 
-    expect(css).toContain('--color-blue-500: #3b82f6;');
-    expect(css).toContain('--color-blue-600: #2563eb;');
-    expect(css).toContain('--color-neutral-50: #f9fafb;');
-    expect(css).toContain('--color-neutral-900: #111827;');
+    // v2.1: Atomic tokens use --atomic- prefix
+    expect(css).toContain('--atomic-color-blue-500: #3b82f6;');
+    expect(css).toContain('--atomic-color-blue-600: #2563eb;');
+    expect(css).toContain('--atomic-color-neutral-50: #f9fafb;');
+    expect(css).toContain('--atomic-color-neutral-900: #111827;');
   });
 
   it('should generate spacing variables', () => {
     const css = generateThemeCSS(mockThemeWithTokens);
 
-    expect(css).toContain('--spacing-4: 16px;');
-    expect(css).toContain('--spacing-8: 32px;');
+    // v2.1: Atomic tokens use --atomic- prefix
+    expect(css).toContain('--atomic-spacing-4: 16px;');
+    expect(css).toContain('--atomic-spacing-8: 32px;');
   });
 
   it('should generate radius variables', () => {
     const css = generateThemeCSS(mockThemeWithTokens);
 
-    expect(css).toContain('--radius-md: 8px;');
-    expect(css).toContain('--radius-lg: 12px;');
+    // v2.1: Atomic tokens use --atomic- prefix
+    expect(css).toContain('--atomic-radius-md: 8px;');
+    expect(css).toContain('--atomic-radius-lg: 12px;');
   });
 
   it('should generate typography variables', () => {
     const css = generateThemeCSS(mockThemeWithTokens);
 
-    expect(css).toContain('--typography-body-size: 16px;');
-    expect(css).toContain('--typography-body-line-height: 24px;');
-    expect(css).toContain('--typography-body-weight: 400;');
-    expect(css).toContain('--typography-heading-size: 24px;');
+    // v2.1: Typography uses --atomic-typography- prefix
+    expect(css).toContain('--atomic-typography-body-size: 16px;');
+    expect(css).toContain('--atomic-typography-body-line-height: 24px;');
+    expect(css).toContain('--atomic-typography-body-weight: 400;');
+    expect(css).toContain('--atomic-typography-heading-size: 24px;');
   });
 
   it('should generate shadow variables', () => {
     const css = generateThemeCSS(mockThemeWithTokens);
 
-    expect(css).toContain('--shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);');
-    expect(css).toContain('--shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);');
+    // v2.1: Shadow uses --atomic-shadow- prefix
+    expect(css).toContain('--atomic-shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);');
+    expect(css).toContain('--atomic-shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);');
   });
 });
 
@@ -229,23 +234,26 @@ describe('generateThemeCSS - Semantic Layer', () => {
   it('should generate background semantic variables with resolved values', () => {
     const css = generateThemeCSS(mockThemeWithTokens);
 
-    expect(css).toContain('--background-page: #f9fafb;'); // Resolves atomic.color.neutral.50
-    expect(css).toContain('--background-surface: #ffffff;');
-    expect(css).toContain('--background-muted: #f3f4f6;'); // Resolves atomic.color.neutral.100
+    // v2.1: Semantic tokens use --atomic-semantic- prefix
+    expect(css).toContain('--atomic-semantic-background-page:'); // Resolves atomic.color.neutral.50
+    expect(css).toContain('--atomic-semantic-background-surface:');
+    expect(css).toContain('--atomic-semantic-background-muted:'); // Resolves atomic.color.neutral.100
   });
 
   it('should generate foreground semantic variables', () => {
     const css = generateThemeCSS(mockThemeWithTokens);
 
-    expect(css).toContain('--foreground-primary: #111827;'); // Resolves atomic.color.neutral.900
-    expect(css).toContain('--foreground-accent: #3b82f6;'); // Resolves atomic.color.blue.500
+    // v2.1: Semantic tokens use --atomic-semantic- prefix
+    expect(css).toContain('--atomic-semantic-foreground-primary:'); // Resolves atomic.color.neutral.900
+    expect(css).toContain('--atomic-semantic-foreground-accent:'); // Resolves atomic.color.blue.500
   });
 
   it('should generate border semantic variables', () => {
     const css = generateThemeCSS(mockThemeWithTokens);
 
-    expect(css).toContain('--border-default: #e5e7eb;'); // Resolves atomic.color.neutral.200
-    expect(css).toContain('--border-focus: #3b82f6;'); // Resolves atomic.color.blue.500
+    // v2.1: Semantic tokens use --atomic-semantic- prefix
+    expect(css).toContain('--atomic-semantic-border-default:'); // Resolves atomic.color.neutral.200
+    expect(css).toContain('--atomic-semantic-border-focus:'); // Resolves atomic.color.blue.500
   });
 });
 
@@ -372,8 +380,9 @@ describe('generateThemeCSS - Edge Cases', () => {
   it('should handle direct color values (non-references)', () => {
     const css = generateThemeCSS(mockThemeWithTokens);
 
-    // semantic.background.surface is direct '#ffffff'
-    expect(css).toContain('--background-surface: #ffffff;');
+    // v2.1: semantic.background.surface is direct '#ffffff'
+    // Semantic tokens use --atomic-semantic- prefix
+    expect(css).toContain('--atomic-semantic-background-surface: #ffffff;');
   });
 
   it('should resolve multi-level references correctly', () => {

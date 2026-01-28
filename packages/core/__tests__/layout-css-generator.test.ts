@@ -19,7 +19,7 @@ import {
 import { getAllShellTokens } from '../src/layout-tokens/shells.js';
 import { getAllPageLayoutTokens } from '../src/layout-tokens/pages.js';
 import { getAllSectionPatternTokens } from '../src/layout-tokens/sections.js';
-import type { ShellToken, PageLayoutToken, SectionPatternToken } from '../src/layout-tokens/types.js';
+// Types imported but used implicitly through token retrieval functions
 
 // ============================================================================
 // Test: generateCSSVariables

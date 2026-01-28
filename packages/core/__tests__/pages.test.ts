@@ -19,7 +19,7 @@ import {
   getPagesByPurpose,
   getPageSections,
 } from '../src/layout-tokens/pages.js';
-import type { PageLayoutToken } from '../src/layout-tokens/types.js';
+// PageLayoutToken type is used implicitly via token retrieval functions
 
 describe('Page Layout Token Definitions', () => {
   describe('Individual Page Tokens', () => {

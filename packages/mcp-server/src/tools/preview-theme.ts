@@ -1,9 +1,10 @@
 /**
- * Preview Theme MCP Tool
+ * Preview Theme MCP Tool (v2.1)
  * SPEC-MCP-002: E-002 Theme Preview Request
+ * Updated for v2.1 theme schema
  */
 
-import { loadTheme, generateCSSVariables, listThemes } from '@tekton/core';
+import { loadTheme, listThemes } from '@tekton/core';
 import type { PreviewThemeInput, PreviewThemeOutput } from '../schemas/mcp-schemas.js';
 import { createThemeNotFoundError, extractErrorMessage } from '../utils/error-handler.js';
 
@@ -12,7 +13,7 @@ import { createThemeNotFoundError, extractErrorMessage } from '../utils/error-ha
  * SPEC: E-002 Theme Preview Request
  *
  * @param input - Theme ID to preview
- * @returns Theme metadata with CSS variables (MCP JSON-RPC format - no preview URL)
+ * @returns Full v2.1 theme data (MCP JSON-RPC format)
  */
 export async function previewThemeTool(input: PreviewThemeInput): Promise<PreviewThemeOutput> {
   try {
@@ -25,17 +26,25 @@ export async function previewThemeTool(input: PreviewThemeInput): Promise<Previe
       return createThemeNotFoundError(input.themeId, availableThemes);
     }
 
-    // SPEC: U-003 @tekton/core Integration - Use generateCSSVariables from @tekton/core
-    const cssVariables = generateCSSVariables(theme);
-
-    // MCP JSON-RPC format: Return theme data only (no preview URL)
+    // Return full v2.1 theme data
     return {
       success: true,
       theme: {
         id: theme.id,
         name: theme.name,
         description: theme.description,
-        cssVariables,
+        brandTone: theme.brandTone,
+        schemaVersion: theme.schemaVersion,
+        designDNA: theme.designDNA,
+        tokens: {
+          atomic: theme.tokens.atomic,
+          semantic: theme.tokens.semantic,
+          component: theme.tokens.component,
+        },
+        stateLayer: theme.stateLayer,
+        motion: theme.motion,
+        elevation: theme.elevation,
+        typography: theme.typography,
       },
     };
   } catch (error) {
