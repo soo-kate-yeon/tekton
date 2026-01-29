@@ -295,7 +295,7 @@ describe('Styled Wrapper - Interpolation', () => {
   it('should allow function interpolation returning tokens', () => {
     expect(() => {
       styled.div`
-        background: ${(props: { variant?: string }) =>
+        background: ${(props: any) =>
           props.variant === 'primary' ? tokens.bg.primary.default : tokens.bg.surface.default};
       `;
     }).not.toThrow();
@@ -306,7 +306,7 @@ describe('Styled Wrapper - Interpolation', () => {
   it.skip('should reject function returning hardcoded value (build-time check)', () => {
     expect(() => {
       styled.div`
-        background: ${(props: { variant?: string }) => (props.variant === 'primary' ? '#3b82f6' : '#ffffff')};
+        background: ${(props: any) => (props.variant === 'primary' ? '#3b82f6' : '#ffffff')};
       `;
     }).toThrow(/hardcoded value detected/i);
   });
