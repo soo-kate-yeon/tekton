@@ -99,7 +99,8 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
       },
       {
         name: 'preview-icon-library',
-        description: 'Preview an icon library and retrieve its configuration including package names and icon samples',
+        description:
+          'Preview an icon library and retrieve its configuration including package names and icon samples',
         inputSchema: {
           type: 'object',
           properties: {

@@ -60,7 +60,10 @@ export const GenerateBlueprintInputSchema = z.object({
   themeId: ThemeIdSchema,
   iconLibrary: z
     .string()
-    .regex(/^[a-z0-9-]+$/, 'Icon library ID must contain only lowercase letters, numbers, and hyphens')
+    .regex(
+      /^[a-z0-9-]+$/,
+      'Icon library ID must contain only lowercase letters, numbers, and hyphens'
+    )
     .optional(),
   componentHints: z.array(z.string()).optional(),
 });
@@ -449,7 +452,10 @@ export type ListTokensOutput = z.infer<typeof ListTokensOutputSchema>;
  */
 export const IconLibraryIdSchema = z
   .string()
-  .regex(/^[a-z0-9-]+$/, 'Icon library ID must contain only lowercase letters, numbers, and hyphens');
+  .regex(
+    /^[a-z0-9-]+$/,
+    'Icon library ID must contain only lowercase letters, numbers, and hyphens'
+  );
 
 /**
  * List Icon Libraries Input Schema
