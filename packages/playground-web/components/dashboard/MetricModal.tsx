@@ -20,7 +20,9 @@ export function MetricModal({ isOpen, onClose, metric }: MetricModalProps) {
   // Close on Escape key
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {onClose();}
+      if (e.key === 'Escape') {
+        onClose();
+      }
     };
     if (isOpen) {
       document.addEventListener('keydown', handleEscape);
@@ -32,7 +34,9 @@ export function MetricModal({ isOpen, onClose, metric }: MetricModalProps) {
     };
   }, [isOpen, onClose]);
 
-  if (!isOpen || !metric) {return null;}
+  if (!isOpen || !metric) {
+    return null;
+  }
 
   const maxValue = Math.max(...metric.chartData.map((d) => d.value));
 
