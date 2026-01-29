@@ -57,7 +57,9 @@ export default function HotPlacesPage() {
 
   // 추가 데이터 로드
   const loadMore = useCallback(() => {
-    if (isLoading || !hasMore) return;
+    if (isLoading || !hasMore) {
+      return;
+    }
 
     setIsLoading(true);
 

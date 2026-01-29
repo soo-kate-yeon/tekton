@@ -29,6 +29,27 @@ const demos = [
     theme: 'Linear Minimal',
     icon: '📊',
   },
+  {
+    title: 'Account Book',
+    description: 'Linear Minimal 테마 기반 가계부 서비스',
+    href: '/account-book',
+    theme: 'Linear Minimal',
+    icon: '💰',
+  },
+  {
+    title: 'Fitness App',
+    description: 'Equinox 테마 기반 피트니스 관리 서비스',
+    href: '/fitness',
+    theme: 'Equinox',
+    icon: '🏋️',
+  },
+  {
+    title: 'Bookstore',
+    description: 'Bookstore 테마 기반 서점 쇼핑몰',
+    href: '/bookstore',
+    theme: 'Linear Minimal',
+    icon: '📚',
+  },
 ];
 
 export default function HomePage() {
