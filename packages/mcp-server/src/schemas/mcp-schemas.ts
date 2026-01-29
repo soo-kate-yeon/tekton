@@ -49,6 +49,7 @@ export const ThemeIdSchema = z
 /**
  * Generate Blueprint Input Schema
  * SPEC: E-001 Blueprint Generation Request
+ * SPEC-ICON-001: Added iconLibrary parameter
  */
 export const GenerateBlueprintInputSchema = z.object({
   description: z
@@ -57,6 +58,13 @@ export const GenerateBlueprintInputSchema = z.object({
     .max(500, 'Description must not exceed 500 characters'),
   layout: LayoutTypeSchema,
   themeId: ThemeIdSchema,
+  iconLibrary: z
+    .string()
+    .regex(
+      /^[a-z0-9-]+$/,
+      'Icon library ID must contain only lowercase letters, numbers, and hyphens'
+    )
+    .optional(),
   componentHints: z.array(z.string()).optional(),
 });
 
@@ -64,6 +72,7 @@ export type GenerateBlueprintInput = z.infer<typeof GenerateBlueprintInputSchema
 
 /**
  * Generate Blueprint Output Schema (MCP JSON-RPC format - no previewUrl)
+ * SPEC-ICON-001: Added iconLibrary field
  */
 export const GenerateBlueprintOutputSchema = z.object({
   success: z.boolean(),
@@ -72,6 +81,7 @@ export const GenerateBlueprintOutputSchema = z.object({
       id: z.string(),
       name: z.string(),
       themeId: z.string(),
+      iconLibrary: z.string(), // SPEC-ICON-001: Icon library used
       layout: LayoutTypeSchema,
       components: z.array(ComponentNodeSchema), // ComponentNode[] from @tekton/core
       timestamp: z.number(),
@@ -431,3 +441,112 @@ export const ListTokensOutputSchema = z.object({
 });
 
 export type ListTokensOutput = z.infer<typeof ListTokensOutputSchema>;
+
+// ============================================================================
+// Icon Library Tool Schemas (SPEC-ICON-001)
+// ============================================================================
+
+/**
+ * Icon Library ID validation - alphanumeric with hyphens only
+ * SPEC-ICON-001: UW-001 No Icon Library ID Injection
+ */
+export const IconLibraryIdSchema = z
+  .string()
+  .regex(
+    /^[a-z0-9-]+$/,
+    'Icon library ID must contain only lowercase letters, numbers, and hyphens'
+  );
+
+/**
+ * List Icon Libraries Input Schema
+ * No input required - lists all available icon libraries
+ */
+export const ListIconLibrariesInputSchema = z.object({});
+
+export type ListIconLibrariesInput = z.infer<typeof ListIconLibrariesInputSchema>;
+
+/**
+ * Icon library metadata schema
+ */
+export const IconLibraryMetaSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  description: z.string(),
+  version: z.string(),
+  license: z.string(),
+  totalIcons: z.number(),
+  categories: z.array(z.string()),
+});
+
+export type IconLibraryMeta = z.infer<typeof IconLibraryMetaSchema>;
+
+/**
+ * List Icon Libraries Output Schema
+ */
+export const ListIconLibrariesOutputSchema = z.object({
+  success: z.boolean(),
+  libraries: z.array(IconLibraryMetaSchema).optional(),
+  count: z.number().optional(),
+  error: z.string().optional(),
+});
+
+export type ListIconLibrariesOutput = z.infer<typeof ListIconLibrariesOutputSchema>;
+
+/**
+ * Preview Icon Library Input Schema
+ */
+export const PreviewIconLibraryInputSchema = z.object({
+  libraryId: IconLibraryIdSchema,
+});
+
+export type PreviewIconLibraryInput = z.infer<typeof PreviewIconLibraryInputSchema>;
+
+/**
+ * Icon size mapping schema
+ */
+export const IconSizeMappingSchema = z.object({
+  xs: z.number().optional(),
+  sm: z.number(),
+  md: z.number(),
+  lg: z.number(),
+  xl: z.number().optional(),
+});
+
+/**
+ * Framework config schema
+ */
+export const IconFrameworkConfigSchema = z.object({
+  packageName: z.string(),
+  importStatement: z.string(),
+  componentPattern: z.string(),
+  variants: z.record(z.string()).optional(),
+});
+
+/**
+ * Preview Icon Library Output Schema
+ */
+export const PreviewIconLibraryOutputSchema = z.object({
+  success: z.boolean(),
+  library: z.optional(
+    z.object({
+      id: z.string(),
+      name: z.string(),
+      description: z.string(),
+      version: z.string(),
+      license: z.string(),
+      website: z.string(),
+      totalIcons: z.number(),
+      categories: z.array(z.string()),
+      sizeMapping: IconSizeMappingSchema,
+      frameworks: z.object({
+        react: IconFrameworkConfigSchema,
+        vue: IconFrameworkConfigSchema,
+      }),
+      defaultVariant: z.string().optional(),
+      iconSample: z.array(z.string()).optional(),
+    })
+  ),
+  error: z.string().optional(),
+});
+
+export type PreviewIconLibraryOutput = z.infer<typeof PreviewIconLibraryOutputSchema>;

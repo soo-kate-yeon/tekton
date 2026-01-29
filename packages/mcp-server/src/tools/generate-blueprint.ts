@@ -9,6 +9,8 @@ import {
   loadTheme,
   listThemes,
   COMPONENT_CATALOG,
+  iconLibraryExists,
+  listIconLibraries,
 } from '@tekton/core';
 import type { ComponentNode } from '@tekton/core';
 import type { GenerateBlueprintInput, GenerateBlueprintOutput } from '../schemas/mcp-schemas.js';
@@ -121,6 +123,15 @@ export async function generateBlueprintTool(
       return createThemeNotFoundError(input.themeId, availableThemes);
     }
 
+    // SPEC-ICON-001: Validate icon library exists (if provided)
+    if (input.iconLibrary && !iconLibraryExists(input.iconLibrary)) {
+      const availableLibraries = listIconLibraries().map((lib: { id: string }) => lib.id);
+      return {
+        success: false,
+        error: `Icon library "${input.iconLibrary}" not found. Available libraries: ${availableLibraries.join(', ')}`,
+      };
+    }
+
     // Parse description to generate components
     const components = parseDescriptionToComponents(input.description, input.componentHints);
 
@@ -163,6 +174,7 @@ export async function generateBlueprintTool(
         id: blueprintId,
         name: blueprint.name,
         themeId: blueprint.themeId,
+        iconLibrary: input.iconLibrary || 'lucide', // Default to lucide
         layout: blueprint.layout,
         components: blueprint.components,
         timestamp,

@@ -1,0 +1,53 @@
+/**
+ * MCP Tool: list-icon-libraries
+ * List all available icon libraries from .moai/icon-libraries/generated/
+ * [SPEC-ICON-001]
+ */
+
+import { listIconLibraries } from '@tekton/core';
+import type { ListIconLibrariesOutput } from '../schemas/mcp-schemas.js';
+import { info, error as logError } from '../utils/logger.js';
+
+/**
+ * List all available icon libraries
+ * @returns List of icon library metadata
+ */
+export async function listIconLibrariesTool(): Promise<ListIconLibrariesOutput> {
+  info('list-icon-libraries: Fetching available icon libraries');
+
+  try {
+    const libraries = listIconLibraries();
+
+    if (libraries.length === 0) {
+      info('list-icon-libraries: No icon libraries found');
+      return {
+        success: true,
+        libraries: [],
+        count: 0,
+      };
+    }
+
+    info(`list-icon-libraries: Found ${libraries.length} icon libraries`);
+
+    return {
+      success: true,
+      libraries: libraries.map(lib => ({
+        id: lib.id,
+        name: lib.name,
+        description: lib.description,
+        version: lib.version,
+        license: lib.license,
+        totalIcons: lib.totalIcons,
+        categories: lib.categories,
+      })),
+      count: libraries.length,
+    };
+  } catch (err) {
+    const errorMessage = err instanceof Error ? err.message : String(err);
+    logError(`list-icon-libraries: Failed to list libraries: ${errorMessage}`);
+    return {
+      success: false,
+      error: `Failed to list icon libraries: ${errorMessage}`,
+    };
+  }
+}

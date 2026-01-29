@@ -20,5 +20,12 @@
     "isolatedModules": true
   },
   "exclude": ["node_modules", "dist", "coverage", "packages/playground-web"],
-  "references": [{ "path": "./packages/core" }, { "path": "./packages/ui" }]
+  "references": [
+    { "path": "./packages/core" },
+    { "path": "./packages/tokens" },
+    { "path": "./packages/styled" },
+    { "path": "./packages/ui" },
+    { "path": "./packages/esbuild-plugin" },
+    { "path": "./packages/mcp-server" }
+  ]
 }

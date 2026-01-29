@@ -1,16 +1,18 @@
 {
-  "id": "atlantic-magazine-v1",
-  "name": "Atlantic Magazine v1",
+  "id": "platform-minimal",
+  "name": "Platform Minimal",
   "schemaVersion": "2.1",
   "brandTone": "professional",
   "designDNA": {
     "moodKeywords": [
-      "articulate",
-      "informed",
-      "structured"
+      "clean",
+      "modern",
+      "minimalist",
+      "efficient",
+      "precise"
     ],
-    "targetEmotion": "신뢰감",
-    "visualAtmosphere": "고품격 저널리즘"
+    "targetEmotion": "신뢰",
+    "visualAtmosphere": "세련된 카페"
   },
   "tokens": {
     "atomic": {
@@ -18,41 +20,46 @@
         "brand": {
           "500": {
             "l": 0.6,
-            "c": 0.28,
-            "h": 25
+            "c": 0.16,
+            "h": 260
           }
         },
         "neutral": {
           "50": {
             "l": 0.98,
-            "c": 0.01,
-            "h": 0
+            "c": 0.005,
+            "h": 150
           },
           "100": {
             "l": 0.95,
-            "c": 0.01,
-            "h": 0
+            "c": 0.005,
+            "h": 150
           },
           "200": {
-            "l": 0.88,
-            "c": 0.01,
-            "h": 0
+            "l": 0.89,
+            "c": 0.005,
+            "h": 150
           },
           "300": {
-            "l": 0.78,
-            "c": 0.01,
-            "h": 0
+            "l": 0.75,
+            "c": 0.005,
+            "h": 150
+          },
+          "500": {
+            "l": 0.5,
+            "c": 0.005,
+            "h": 150
           },
           "900": {
-            "l": 0.15,
-            "c": 0.01,
-            "h": 0
-          },
-          "white": {
-            "l": 1,
-            "c": 0,
-            "h": 0
+            "l": 0.2,
+            "c": 0.005,
+            "h": 150
           }
+        },
+        "white": {
+          "l": 1,
+          "c": 0,
+          "h": 0
         }
       },
       "spacing": {
@@ -71,15 +78,15 @@
         "24": "96px"
       },
       "radius": {
-        "sm": "4px",
         "md": "8px",
-        "lg": "12px",
+        "full": "9999px",
         "none": "0",
         "xs": "2px",
+        "sm": "4px",
+        "lg": "8px",
         "xl": "12px",
         "2xl": "16px",
-        "3xl": "24px",
-        "full": "9999px"
+        "3xl": "24px"
       }
     },
     "semantic": {
@@ -88,7 +95,7 @@
         "surface": {
           "subtle": "atomic.color.neutral.50",
           "default": "atomic.color.white",
-          "emphasis": "atomic.color.neutral.100"
+          "emphasis": "atomic.color.neutral.900"
         }
       },
       "border": {
@@ -97,6 +104,22 @@
           "default": "atomic.color.neutral.200",
           "emphasis": "atomic.color.neutral.300"
         }
+      },
+      "text": {
+        "primary": "atomic.color.neutral.900",
+        "secondary": "atomic.color.neutral.500",
+        "brand": "atomic.color.brand.500"
+      },
+      "icon": {
+        "default": "atomic.color.neutral.900",
+        "secondary": "atomic.color.neutral.500",
+        "brand": "atomic.color.brand.500"
+      },
+      "action": {
+        "primary": "atomic.color.neutral.900",
+        "primary-text": "atomic.color.white",
+        "disabled": "atomic.color.neutral.300",
+        "disabled-text": "atomic.color.neutral.500"
       }
     }
   },
@@ -112,22 +135,21 @@
   "elevation": {
     "level": {
       "0": "none",
-      "1": "0 1px 4px rgba(0,0,0,0.06)",
-      "2": "0 2px 8px rgba(0,0,0,0.08)",
-      "3": "0 4px 16px rgba(0,0,0,0.1)"
+      "1": "0 2px 8px rgba(0,0,0,0.04)",
+      "2": "0 4px 16px rgba(0,0,0,0.08)",
+      "3": "0 8px 32px rgba(0,0,0,0.12)"
     },
     "context": {
-      "modal": "elevation.level.3",
-      "popup": "elevation.level.2"
+      "modal": "elevation.level.2",
+      "popover": "elevation.level.1"
     }
   },
   "typography": {
     "fontFamily": {
-      "display": "Playfair Display, serif",
-      "body": "Inter, sans-serif",
-      "sans": "Inter, system-ui, sans-serif",
+      "sans": "Inter, sans-serif",
       "serif": "Georgia, Times, serif",
-      "mono": "JetBrains Mono, monospace"
+      "mono": "JetBrains Mono, monospace",
+      "display": "Inter Display, sans-serif"
     },
     "fontWeight": {
       "regular": "400",
@@ -140,26 +162,24 @@
       "black": "900"
     }
   },
-  "density": {
-    "mode": "comfortable"
-  },
   "motion": {
     "duration": {
-      "fast": "150ms",
+      "short": "150ms",
       "medium": "300ms",
-      "slow": "450ms",
+      "long": "450ms",
       "instant": "0ms",
       "micro": "50ms",
       "quick": "100ms",
       "standard": "150ms",
       "moderate": "200ms",
       "deliberate": "300ms",
+      "slow": "400ms",
       "complex": "500ms"
     },
     "easing": {
-      "standard": "ease-out",
-      "accelerate": "ease-in",
-      "decelerate": "cubic-bezier(0.0, 0.0, 0.2, 1.0)",
+      "standard": "cubic-bezier(0.2, 0, 0, 1)",
+      "decelerate": "cubic-bezier(0, 0, 0.2, 1)",
+      "accelerate": "cubic-bezier(0.4, 0, 1, 1)",
       "linear": "linear",
       "emphasized": "cubic-bezier(0.2, 0, 0, 1)",
       "spring": "cubic-bezier(0.34, 1.56, 0.64, 1)"
@@ -174,16 +194,19 @@
       "heavy": "4px"
     },
     "radius": {
-      "sm": "atomic.radius.sm",
       "md": "atomic.radius.md",
-      "lg": "atomic.radius.lg",
-      "full": "9999px",
+      "full": "atomic.radius.full",
       "none": "0",
       "xs": "2px",
+      "sm": "4px",
+      "lg": "8px",
       "xl": "12px",
       "2xl": "16px",
       "3xl": "24px",
       "circle": "50%"
     }
+  },
+  "density": {
+    "mode": "comfortable"
   }
 }

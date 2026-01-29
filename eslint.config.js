@@ -146,6 +146,30 @@ export default [
     },
   },
   {
+    files: ['packages/esbuild-plugin/**/*.js'],
+    languageOptions: {
+      ecmaVersion: 'latest',
+      sourceType: 'module',
+      globals: {
+        ...globals.node,
+      },
+    },
+    rules: {
+      // Allow console for esbuild plugin logging
+      'no-console': 'off',
+      // Support underscore prefix for unused variables
+      'no-unused-vars': [
+        'error',
+        {
+          argsIgnorePattern: '^_',
+          varsIgnorePattern: '^_',
+          ignoreRestSiblings: true,
+          caughtErrors: 'none',
+        },
+      ],
+    },
+  },
+  {
     ignores: ['dist/**', 'node_modules/**', 'coverage/**', '*.config.js', '.claude/**', '.moai/**'],
   },
 ];

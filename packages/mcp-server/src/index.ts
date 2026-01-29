@@ -10,6 +10,8 @@ import { exportScreenTool } from './tools/export-screen.js';
 import { generateScreenTool } from './tools/generate-screen.js';
 import { validateScreenTool } from './tools/validate-screen.js';
 import { listTokensTool } from './tools/list-tokens.js';
+import { listIconLibrariesTool } from './tools/list-icon-libraries.js';
+import { previewIconLibraryTool } from './tools/preview-icon-library.js';
 import {
   GenerateBlueprintInputSchema,
   PreviewThemeInputSchema,
@@ -18,6 +20,8 @@ import {
   GenerateScreenInputSchema,
   ValidateScreenInputSchema,
   ListTokensInputSchema,
+  ListIconLibrariesInputSchema,
+  PreviewIconLibraryInputSchema,
 } from './schemas/mcp-schemas.js';
 
 const server = new Server(
@@ -75,8 +79,38 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
               description: 'Optional component type hints',
               items: { type: 'string' },
             },
+            iconLibrary: {
+              type: 'string',
+              description: 'Icon library ID (e.g., lucide, heroicons, feather)',
+              pattern: '^[a-z0-9-]+$',
+            },
           },
           required: ['description', 'layout', 'themeId'],
+        },
+      },
+      {
+        name: 'list-icon-libraries',
+        description: 'List all available icon libraries from .moai/icon-libraries/generated/',
+        inputSchema: {
+          type: 'object',
+          properties: {},
+          required: [],
+        },
+      },
+      {
+        name: 'preview-icon-library',
+        description:
+          'Preview an icon library and retrieve its configuration including package names and icon samples',
+        inputSchema: {
+          type: 'object',
+          properties: {
+            libraryId: {
+              type: 'string',
+              description: 'Icon library ID to preview (e.g., lucide, heroicons, feather)',
+              pattern: '^[a-z0-9-]+$',
+            },
+          },
+          required: ['libraryId'],
         },
       },
       {
@@ -219,6 +253,36 @@ server.setRequestHandler(CallToolRequestSchema, async request => {
         };
       }
 
+      case 'list-icon-libraries': {
+        // Validate input (no required fields)
+        ListIconLibrariesInputSchema.parse(args);
+        const result = await listIconLibrariesTool();
+
+        return {
+          content: [
+            {
+              type: 'text',
+              text: JSON.stringify(result, null, 2),
+            },
+          ],
+        };
+      }
+
+      case 'preview-icon-library': {
+        // Validate input
+        const validatedInput = PreviewIconLibraryInputSchema.parse(args);
+        const result = await previewIconLibraryTool(validatedInput);
+
+        return {
+          content: [
+            {
+              type: 'text',
+              text: JSON.stringify(result, null, 2),
+            },
+          ],
+        };
+      }
+
       case 'list-themes': {
         // Validate input (no required fields)
         ListThemesInputSchema.parse(args);
@@ -347,5 +411,5 @@ await server.connect(transport);
 
 info('Tekton MCP Server connected via stdio transport');
 info(
-  '7 MCP tools registered: generate-blueprint, list-themes, preview-theme, export-screen, generate_screen, validate_screen, list_tokens'
+  '9 MCP tools registered: generate-blueprint, list-themes, preview-theme, list-icon-libraries, preview-icon-library, export-screen, generate_screen, validate_screen, list_tokens'
 );

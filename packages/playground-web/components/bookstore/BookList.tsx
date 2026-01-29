@@ -1,130 +1,98 @@
 'use client';
 
-const books = [
-  {
-    id: 1,
-    title: 'Thinking, Fast and Slow',
-    author: 'Daniel Kahneman',
-    price: '$14.99',
-    category: 'science',
-    image:
-      'https://images.unsplash.com/photo-1589829085413-56de8ae18c73?auto=format&fit=crop&q=80&w=200',
-    description:
-      'The major New York Times bestseller that changes the way we think about thinking.',
-  },
-  {
-    id: 2,
-    title: 'Cosmos',
-    author: 'Carl Sagan',
-    price: '$18.50',
-    category: 'science',
-    image:
-      'https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80&w=200',
-    description:
-      'A classic work of science writing that explores the universe and our place in it.',
-  },
-  {
-    id: 3,
-    title: 'The History of Art',
-    author: 'E.H. Gombrich',
-    price: '$45.00',
-    category: 'art',
-    image:
-      'https://images.unsplash.com/photo-1513364776144-60967b0f800f?auto=format&fit=crop&q=80&w=200',
-    description: 'One of the most famous and popular books on art ever written.',
-  },
-  {
-    id: 4,
-    title: 'Zero to One',
-    author: 'Peter Thiel',
-    price: '$12.99',
-    category: 'business',
-    image:
-      'https://images.unsplash.com/photo-1554774853-719586f8c277?auto=format&fit=crop&q=80&w=200',
-    description: 'Notes on startups, or how to build the future.',
-  },
-  {
-    id: 5,
-    title: 'Atomic Habits',
-    author: 'James Clear',
-    price: '$16.99',
-    category: 'humanities',
-    image:
-      'https://images.unsplash.com/photo-1555982105-d25af9c5cfaf?auto=format&fit=crop&q=80&w=200',
-    description: 'An easy & proven way to build good habits & break bad ones.',
-  },
-  {
-    id: 6,
-    title: 'Steve Jobs',
-    author: 'Walter Isaacson',
-    price: '$22.00',
-    category: 'humanities',
-    image:
-      'https://images.unsplash.com/photo-1531297461136-82lw8e8e0c8b?auto=format&fit=crop&q=80&w=200',
-    description: 'The exclusive biography of Steve Jobs.',
-  },
-  {
-    id: 7,
-    title: 'Clean Code',
-    author: 'Robert C. Martin',
-    price: '$34.00',
-    category: 'technology',
-    image:
-      'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&q=80&w=200',
-    description: 'A Handbook of Agile Software Craftsmanship.',
-  },
-];
-
 interface BookListProps {
   category: string;
 }
 
+const BOOKS = [
+  {
+    id: 1,
+    title: 'The Design of Everyday Things',
+    author: 'Don Norman',
+    category: 'design',
+    price: '$18.99',
+    coverColor: 'var(--atomic-color-neutral-200)',
+  },
+  {
+    id: 2,
+    title: 'Clean Code',
+    author: 'Robert C. Martin',
+    category: 'tech',
+    price: '$24.99',
+    coverColor: 'var(--atomic-color-neutral-300)',
+  },
+  {
+    id: 3,
+    title: 'Zero to One',
+    author: 'Peter Thiel',
+    category: 'business',
+    price: '$14.99',
+    coverColor: 'var(--atomic-color-neutral-100)',
+  },
+  {
+    id: 4,
+    title: 'Refactoring',
+    author: 'Martin Fowler',
+    category: 'tech',
+    price: '$32.00',
+    coverColor: 'var(--atomic-color-brand-200)',
+  },
+  {
+    id: 5,
+    title: 'Thinking, Fast and Slow',
+    author: 'Daniel Kahneman',
+    category: 'business',
+    price: '$16.50',
+    coverColor: 'var(--atomic-color-neutral-400)',
+  },
+  {
+    id: 6,
+    title: 'The Lean Startup',
+    author: 'Eric Ries',
+    category: 'business',
+    price: '$19.99',
+    coverColor: 'var(--atomic-color-neutral-200)',
+  },
+];
+
 export function BookList({ category }: BookListProps) {
   const filteredBooks =
-    category === 'all' ? books : books.filter((book) => book.category === category);
+    category === 'all' ? BOOKS : BOOKS.filter((book) => book.category === category);
 
   return (
-    <div className="px-6 py-4">
-      <div className="flex flex-col gap-4">
-        {filteredBooks.length > 0 ? (
-          filteredBooks.map((book) => (
+    <section className="px-6 md:px-10 pb-10">
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-8">
+        {filteredBooks.map((book) => (
+          <div key={book.id} className="group cursor-pointer">
             <div
-              key={book.id}
-              className="flex items-start gap-4 p-4 rounded-[--lm-radius-lg] hover:bg-[--lm-background-surface-default] transition-colors duration-[--lm-motion-duration-moderate] cursor-pointer group border border-transparent hover:border-[--lm-border-default-subtle]"
+              className="aspect-[2/3] rounded-[var(--atomic-radius-md)] mb-3 md:mb-4 relative overflow-hidden shadow-sm group-hover:shadow-md transition-shadow duration-300"
+              style={{ backgroundColor: book.coverColor }}
             >
-              <div className="w-20 h-28 flex-none rounded-[--lm-radius-md] overflow-hidden shadow-[--lm-elevation-level-1] bg-gray-100">
-                {/* In a real app, use Next.js Image */}
-                <img
-                  src={book.image}
-                  alt={book.title}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-[--lm-motion-duration-long]"
-                />
-              </div>
-
-              <div className="flex-1 py-1 min-w-0">
-                <h3 className="text-[--lm-text-primary] font-[--lm-font-family-sans] font-[--lm-font-weight-semibold] text-base mb-1 truncate">
-                  {book.title}
-                </h3>
-                <p className="text-[--lm-text-secondary] font-[--lm-font-family-sans] text-sm mb-2">
-                  {book.author}
-                </p>
-                <div className="flex items-center justify-between">
-                  <span className="text-[--lm-text-brand] font-[--lm-font-weight-bold] text-sm">
-                    {book.price}
-                  </span>
-                  <div className="px-2 py-1 bg-[--lm-background-surface-emphasis]/5 rounded-[--lm-radius-sm] text-[10px] uppercase tracking-wider text-[--lm-text-tertiary]">
-                    {book.category}
-                  </div>
+              {/* Mock Cover Design */}
+              <div className="absolute inset-0 flex items-center justify-center p-4">
+                <div className="text-center opacity-40">
+                  <span className="text-3xl md:text-4xl block mb-2">📖</span>
                 </div>
               </div>
+
+              {/* Hover Overlay */}
+              <div className="absolute inset-0 bg-black/5 opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
             </div>
-          ))
-        ) : (
-          <div className="text-center py-12 text-[--lm-text-tertiary]">
-            <p>No books found in this category.</p>
+
+            <div className="space-y-0.5 md:space-y-1">
+              <h3 className="text-sm md:text-base font-semibold text-[var(--atomic-semantic-text-primary)] line-clamp-1 group-hover:text-[var(--atomic-semantic-text-brand)] transition-colors">
+                {book.title}
+              </h3>
+              <p className="text-xs md:text-sm text-[var(--atomic-semantic-text-secondary)]">
+                {book.author}
+              </p>
+              <p className="text-xs md:text-sm font-medium text-[var(--atomic-semantic-text-primary)]">
+                {book.price}
+              </p>
+            </div>
           </div>
-        )}
+        ))}
       </div>
-    </div>
+    </section>
   );
 }

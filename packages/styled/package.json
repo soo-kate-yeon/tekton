@@ -1,0 +1,53 @@
+{
+  "name": "@tekton/styled",
+  "version": "0.1.0",
+  "description": "Token-enforced styled-components wrapper with compile-time and runtime validation",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "lint": "eslint src __tests__ --ext .ts"
+  },
+  "dependencies": {
+    "@tekton/tokens": "workspace:*",
+    "styled-components": "^6.1.13"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.5",
+    "@types/styled-components": "^5.1.34",
+    "@typescript-eslint/eslint-plugin": "^8.20.0",
+    "@typescript-eslint/parser": "^8.20.0",
+    "@vitest/coverage-v8": "^2.1.8",
+    "eslint": "^9.18.0",
+    "typescript": "^5.7.3",
+    "vitest": "^2.1.8"
+  },
+  "peerDependencies": {
+    "styled-components": "^6.0.0"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "license": "MIT",
+  "keywords": [
+    "styled-components",
+    "design-tokens",
+    "token-enforcement",
+    "design-system",
+    "css-in-js"
+  ]
+}

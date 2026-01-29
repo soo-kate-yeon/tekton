@@ -428,3 +428,20 @@ export {
   generateComponentTree,
   generateReactComponent,
 } from './screen-generation/index.js';
+
+// Icon Library (SPEC-ICON-001)
+export {
+  loadIconLibrary,
+  listIconLibraries,
+  iconLibraryExists,
+  findIcon,
+  getIconsByCategory,
+  searchIconsByTag,
+  generateImportStatement,
+  getPackageName,
+  type IconLibrary,
+  type IconLibraryMeta,
+  type IconSizeMapping,
+  type IconFrameworkConfig,
+  type IconDefinition,
+} from './icon-library.js';

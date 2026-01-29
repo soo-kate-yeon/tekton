@@ -29,7 +29,7 @@ describe('stdio transport', () => {
       const server: ChildProcess = spawn('node', [serverPath]);
 
       let stdoutData = '';
-      let stderrData = '';
+      let _stderrData = '';
 
       const timeout = setTimeout(() => {
         server.kill();
@@ -54,7 +54,7 @@ describe('stdio transport', () => {
       });
 
       server.stderr?.on('data', data => {
-        stderrData += data.toString();
+        _stderrData += data.toString();
       });
 
       server.on('error', error => {

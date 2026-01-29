@@ -245,7 +245,6 @@ export async function generateWithLLM(
     try {
       // Anthropic SDK 동적 import
       const anthropicModule = await import('@anthropic-ai/sdk');
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const Anthropic = (anthropicModule as any).default || (anthropicModule as any).Anthropic;
 
       const client = new Anthropic({
@@ -268,7 +267,6 @@ export async function generateWithLLM(
       });
 
       // 응답에서 텍스트 추출
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const textContent = response.content.find((block: any) => block.type === 'text');
       if (!textContent || textContent.type !== 'text') {
         lastError = 'No text content in LLM response';
