@@ -73,6 +73,7 @@ export interface FgTokens {
  * REQ-STY-002: Reject hardcoded spacing values
  */
 export interface SpacingTokens {
+  [key: number]: TokenReference;
   0: TokenReference;   // 0px
   1: TokenReference;   // 4px
   2: TokenReference;   // 8px

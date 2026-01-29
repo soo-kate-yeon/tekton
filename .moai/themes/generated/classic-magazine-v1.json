@@ -1,73 +1,58 @@
 {
-  "id": "linear-minimal-v1",
-  "name": "Linear Minimal",
+  "id": "classic-magazine-v1",
+  "name": "Classic Magazine v1",
   "schemaVersion": "2.1",
-  "brandTone": "minimal",
+  "brandTone": "professional",
   "designDNA": {
     "moodKeywords": [
-      "clean",
-      "efficient",
-      "focused"
+      "articulate",
+      "informed",
+      "structured"
     ],
-    "targetEmotion": "생산성",
-    "visualAtmosphere": "정돈된 워크스페이스"
+    "targetEmotion": "신뢰감",
+    "visualAtmosphere": "고품격 저널리즘"
   },
   "tokens": {
-    "atomic": {적
+    "atomic": {
       "color": {
         "brand": {
-          "100": {
-            "l": 0.95,
-            "c": 0.02,
-            "h": 265
-          },
           "500": {
-            "l": 0.55,
-            "c": 0.12,
-            "h": 265
-          },
-          "600": {
-            "l": 0.45,
-            "c": 0.14,
-            "h": 265
+            "l": 0.6,
+            "c": 0.28,
+            "h": 25
           }
         },
         "neutral": {
           "50": {
-            "l": 0.99,
-            "c": 0.005,
-            "h": 265
+            "l": 0.98,
+            "c": 0.01,
+            "h": 0
           },
           "100": {
-            "l": 0.96,
+            "l": 0.95,
             "c": 0.01,
-            "h": 265
+            "h": 0
           },
           "200": {
-            "l": 0.92,
-            "c": 0.015,
-            "h": 265
+            "l": 0.88,
+            "c": 0.01,
+            "h": 0
           },
           "300": {
-            "l": 0.85,
-            "c": 0.02,
-            "h": 265
-          },
-          "500": {
-            "l": 0.6,
-            "c": 0.03,
-            "h": 265
+            "l": 0.78,
+            "c": 0.01,
+            "h": 0
           },
           "900": {
-            "l": 0.2,
-            "c": 0.04,
-            "h": 265
+            "l": 0.15,
+            "c": 0.01,
+            "h": 0
+          },
+          "white": {
+            "l": 1,
+            "c": 0,
+            "h": 0
           }
-        },
-        "white": {
-          "l": 1,
-          "c": 0,
-          "h": 0
         }
       },
       "spacing": {
@@ -87,8 +72,8 @@
       },
       "radius": {
         "sm": "4px",
-        "md": "6px",
-        "lg": "8px",
+        "md": "8px",
+        "lg": "12px",
         "none": "0",
         "xs": "2px",
         "xl": "12px",
@@ -104,11 +89,6 @@
           "subtle": "atomic.color.neutral.50",
           "default": "atomic.color.white",
           "emphasis": "atomic.color.neutral.100"
-        },
-        "brand": {
-          "subtle": "atomic.color.brand.100",
-          "default": "atomic.color.brand.500",
-          "emphasis": "atomic.color.brand.600"
         }
       },
       "border": {
@@ -122,7 +102,7 @@
   },
   "stateLayer": {
     "hover": {
-      "opacity": 0.06
+      "opacity": 0.08
     },
     "disabled": {
       "opacity": 0.38,
@@ -132,34 +112,30 @@
   "elevation": {
     "level": {
       "0": "none",
-      "1": "0 1px 4px rgba(0,0,0,0.04)",
-      "2": "0 2px 8px rgba(0,0,0,0.06)",
+      "1": "0 1px 4px rgba(0,0,0,0.06)",
+      "2": "0 2px 8px rgba(0,0,0,0.08)",
       "3": "0 4px 16px rgba(0,0,0,0.1)"
     },
     "context": {
-      "card": {
-        "default": "elevation.level.1",
-        "hover": "elevation.level.2",
-        "raised": "elevation.level.2"
-      },
-      "modal": "elevation.level.3"
+      "modal": "elevation.level.3",
+      "popup": "elevation.level.2"
     }
   },
   "typography": {
     "fontFamily": {
-      "sans": "Inter, sans-serif",
+      "display": "Playfair Display, serif",
+      "body": "Inter, sans-serif",
+      "sans": "Inter, system-ui, sans-serif",
       "serif": "Georgia, Times, serif",
-      "mono": "JetBrains Mono, monospace",
-      "display": "Inter Display, sans-serif"
+      "mono": "JetBrains Mono, monospace"
     },
     "fontWeight": {
       "regular": "400",
       "medium": "500",
-      "semiBold": "600",
+      "bold": "700",
       "thin": "100",
       "light": "300",
       "semibold": "600",
-      "bold": "700",
       "extrabold": "800",
       "black": "900"
     }
@@ -169,9 +145,9 @@
   },
   "motion": {
     "duration": {
-      "slow": "300ms",
-      "medium": "200ms",
-      "fast": "100ms",
+      "fast": "150ms",
+      "medium": "300ms",
+      "slow": "450ms",
       "instant": "0ms",
       "micro": "50ms",
       "quick": "100ms",
@@ -182,9 +158,9 @@
     },
     "easing": {
       "standard": "ease-out",
-      "decelerate": "cubic-bezier(0,0,0.2,1)",
+      "accelerate": "ease-in",
+      "decelerate": "cubic-bezier(0.0, 0.0, 0.2, 1.0)",
       "linear": "linear",
-      "accelerate": "cubic-bezier(0.4, 0, 1, 1)",
       "emphasized": "cubic-bezier(0.2, 0, 0, 1)",
       "spring": "cubic-bezier(0.34, 1.56, 0.64, 1)"
     }
@@ -193,20 +169,20 @@
     "width": {
       "thin": "1px",
       "medium": "2px",
-      "thick": "3px",
       "none": "0",
+      "thick": "3px",
       "heavy": "4px"
     },
     "radius": {
-      "sm": "4px",
-      "md": "6px",
-      "lg": "8px",
+      "sm": "atomic.radius.sm",
+      "md": "atomic.radius.md",
+      "lg": "atomic.radius.lg",
+      "full": "9999px",
       "none": "0",
       "xs": "2px",
       "xl": "12px",
       "2xl": "16px",
       "3xl": "24px",
-      "full": "9999px",
       "circle": "50%"
     }
   }
