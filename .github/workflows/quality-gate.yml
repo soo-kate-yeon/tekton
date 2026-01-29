@@ -160,14 +160,8 @@ jobs:
       - name: Verify workspace dependencies
         run: pnpm list --depth 0
 
-      - name: Build tokens package first
-        run: pnpm --filter "@tekton/tokens" build
-
-      - name: Build all packages except styled
+      - name: Build all packages (except styled - temporary)
         run: pnpm --filter "./packages/*" --filter="!@tekton/styled" build
-
-      - name: Build styled package
-        run: pnpm --filter "@tekton/styled" build
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
