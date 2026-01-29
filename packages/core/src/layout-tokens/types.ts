@@ -67,6 +67,80 @@ export interface ResponsiveConfig<T> {
   '2xl'?: Partial<T>;
 }
 
+/**
+ * Container Query breakpoint values (component-level)
+ * These are smaller than viewport breakpoints as they query container width
+ */
+export const CONTAINER_BREAKPOINTS = {
+  sm: 320, // Small container
+  md: 480, // Medium container
+  lg: 640, // Large container
+  xl: 800, // Extra large container
+} as const;
+
+export type ContainerBreakpointKey = keyof typeof CONTAINER_BREAKPOINTS;
+
+/**
+ * Container Query breakpoint configuration
+ */
+export interface ContainerBreakpointConfig {
+  /** Minimum width in pixels */
+  minWidth: number;
+  /** CSS properties to apply at this breakpoint */
+  css: Record<string, string>;
+}
+
+/**
+ * Container Query configuration for component-level responsiveness
+ * Uses CSS @container queries for size-based styling
+ *
+ * @see https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_containment/Container_queries
+ */
+export interface ContainerQueryConfig {
+  /** Container name for CSS @container rule */
+  name: string;
+
+  /**
+   * Container type:
+   * - 'inline-size': Query width only (recommended for most cases)
+   * - 'size': Query both width and height (higher performance cost)
+   */
+  type: 'inline-size' | 'size';
+
+  /** Breakpoints for container queries */
+  breakpoints: {
+    sm?: ContainerBreakpointConfig;
+    md?: ContainerBreakpointConfig;
+    lg?: ContainerBreakpointConfig;
+    xl?: ContainerBreakpointConfig;
+  };
+}
+
+/**
+ * Orientation configuration for device rotation handling
+ * Supports portrait (height > width) and landscape (width > height) modes
+ *
+ * @template T - Configuration type being made orientation-aware
+ */
+export interface OrientationConfig<T> {
+  /** Portrait mode overrides (height >= width) */
+  portrait?: Partial<T>;
+
+  /** Landscape mode overrides (width > height) */
+  landscape?: Partial<T>;
+}
+
+/**
+ * Enhanced responsive configuration with orientation support
+ * Extends ResponsiveConfig with orientation-specific overrides
+ *
+ * @template T - Configuration type being made responsive and orientation-aware
+ */
+export interface FullResponsiveConfig<T> extends ResponsiveConfig<T> {
+  /** Orientation-specific overrides applied after breakpoint styles */
+  orientation?: OrientationConfig<Partial<T>>;
+}
+
 // ============================================================================
 // Layer 3: Section Pattern Tokens - Layout Primitives
 // ============================================================================

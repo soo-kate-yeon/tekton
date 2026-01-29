@@ -59,6 +59,14 @@ export const SHELL_WEB_APP: ShellToken = {
       sidebarVisible: true,
       sidebarWidth: 'atomic.spacing.64',
     },
+    xl: {
+      sidebarVisible: true,
+      sidebarWidth: 'atomic.spacing.80',
+    },
+    '2xl': {
+      sidebarVisible: true,
+      sidebarWidth: 'atomic.spacing.96',
+    },
   },
   tokenBindings: {
     headerBackground: 'semantic.background.surface',
@@ -115,6 +123,14 @@ export const SHELL_WEB_MARKETING: ShellToken = {
       heroHeight: 'atomic.spacing.full',
       contentPadding: 'atomic.spacing.12',
     },
+    xl: {
+      heroHeight: 'atomic.spacing.full',
+      contentPadding: 'atomic.spacing.16',
+    },
+    '2xl': {
+      heroHeight: 'atomic.spacing.full',
+      contentPadding: 'atomic.spacing.20',
+    },
   },
   tokenBindings: {
     heroBackground: 'semantic.background.brand',
@@ -154,6 +170,14 @@ export const SHELL_WEB_AUTH: ShellToken = {
     md: {
       mainMaxWidth: 'atomic.spacing.96',
       contentPadding: 'atomic.spacing.8',
+    },
+    xl: {
+      mainMaxWidth: 'atomic.spacing.128',
+      contentPadding: 'atomic.spacing.12',
+    },
+    '2xl': {
+      mainMaxWidth: 'atomic.spacing.160',
+      contentPadding: 'atomic.spacing.16',
     },
   },
   tokenBindings: {
@@ -205,6 +229,16 @@ export const SHELL_WEB_DASHBOARD: ShellToken = {
       sidebarVisible: true,
       sidebarCollapsed: false,
       sidebarWidth: 'atomic.spacing.64',
+    },
+    xl: {
+      sidebarVisible: true,
+      sidebarCollapsed: false,
+      sidebarWidth: 'atomic.spacing.80',
+    },
+    '2xl': {
+      sidebarVisible: true,
+      sidebarCollapsed: false,
+      sidebarWidth: 'atomic.spacing.96',
     },
   },
   tokenBindings: {
@@ -259,6 +293,16 @@ export const SHELL_WEB_ADMIN: ShellToken = {
       sidebarPosition: 'left',
       sidebarWidth: 'atomic.spacing.56',
     },
+    xl: {
+      layout: 'side-by-side',
+      sidebarPosition: 'left',
+      sidebarWidth: 'atomic.spacing.72',
+    },
+    '2xl': {
+      layout: 'side-by-side',
+      sidebarPosition: 'left',
+      sidebarWidth: 'atomic.spacing.80',
+    },
   },
   tokenBindings: {
     headerBackground: 'semantic.background.surface',
@@ -293,6 +337,14 @@ export const SHELL_WEB_MINIMAL: ShellToken = {
     md: {
       mainMaxWidth: 'atomic.spacing.128',
       contentPadding: 'atomic.spacing.8',
+    },
+    xl: {
+      mainMaxWidth: 'atomic.spacing.160',
+      contentPadding: 'atomic.spacing.12',
+    },
+    '2xl': {
+      mainMaxWidth: 'atomic.spacing.192',
+      contentPadding: 'atomic.spacing.16',
     },
   },
   tokenBindings: {

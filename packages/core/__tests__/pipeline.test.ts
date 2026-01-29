@@ -139,7 +139,7 @@ describe('Theme Module', () => {
     });
 
     it('should return empty object for any theme in v2.1', () => {
-      const theme = loadTheme('hims-v1');
+      const theme = loadTheme('atlantic-magazine-v1');
       expect(theme).not.toBeNull();
 
       const vars = generateCSSVariables(theme!);
@@ -732,7 +732,7 @@ describe('Render Module', () => {
 describe('Full Pipeline', () => {
   it('should complete Theme -> Blueprint -> Render flow', () => {
     // 1. Load theme
-    const theme = loadTheme('hims-v1');
+    const theme = loadTheme('atlantic-magazine-v1');
     expect(theme).not.toBeNull();
 
     // 2. Create blueprint
@@ -768,7 +768,7 @@ describe('Full Pipeline', () => {
     expect(result.success).toBe(true);
 
     // 5. Verify output
-    expect(result.code).toContain('Hims Design System v1');
+    expect(result.code).toContain('Atlantic Magazine v1');
     expect(result.code).toContain('StartupLanding');
     expect(result.code).toContain('Build the Future');
     expect(result.code).toContain('Get Started');

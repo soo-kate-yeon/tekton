@@ -35,6 +35,16 @@ export const SECTION_GRID_2: SectionPatternToken = {
       gridTemplateColumns: 'repeat(2, 1fr)', // Tablet+: 2 columns
       gap: 'atomic.spacing.4' as TokenReference,
     },
+    xl: {
+      display: 'grid',
+      gridTemplateColumns: 'repeat(2, 1fr)',
+      gap: 'atomic.spacing.5' as TokenReference,
+    },
+    '2xl': {
+      display: 'grid',
+      gridTemplateColumns: 'repeat(2, 1fr)',
+      gap: 'atomic.spacing.6' as TokenReference,
+    },
   },
   tokenBindings: {
     gap: 'atomic.spacing.4',
@@ -70,6 +80,16 @@ export const SECTION_GRID_3: SectionPatternToken = {
       display: 'grid',
       gridTemplateColumns: 'repeat(3, 1fr)', // Desktop: 3 columns
       gap: 'atomic.spacing.4' as TokenReference,
+    },
+    xl: {
+      display: 'grid',
+      gridTemplateColumns: 'repeat(3, 1fr)',
+      gap: 'atomic.spacing.5' as TokenReference,
+    },
+    '2xl': {
+      display: 'grid',
+      gridTemplateColumns: 'repeat(4, 1fr)',
+      gap: 'atomic.spacing.6' as TokenReference,
     },
   },
   tokenBindings: {
@@ -107,6 +127,16 @@ export const SECTION_GRID_4: SectionPatternToken = {
       gridTemplateColumns: 'repeat(4, 1fr)', // Desktop: 4 columns
       gap: 'atomic.spacing.4' as TokenReference,
     },
+    xl: {
+      display: 'grid',
+      gridTemplateColumns: 'repeat(5, 1fr)',
+      gap: 'atomic.spacing.5' as TokenReference,
+    },
+    '2xl': {
+      display: 'grid',
+      gridTemplateColumns: 'repeat(6, 1fr)',
+      gap: 'atomic.spacing.6' as TokenReference,
+    },
   },
   tokenBindings: {
     gap: 'atomic.spacing.4',
@@ -138,6 +168,16 @@ export const SECTION_GRID_AUTO: SectionPatternToken = {
       display: 'grid',
       gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))', // Tablet+: standard min
       gap: 'atomic.spacing.4' as TokenReference,
+    },
+    xl: {
+      display: 'grid',
+      gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
+      gap: 'atomic.spacing.5' as TokenReference,
+    },
+    '2xl': {
+      display: 'grid',
+      gridTemplateColumns: 'repeat(auto-fill, minmax(350px, 1fr))',
+      gap: 'atomic.spacing.6' as TokenReference,
     },
   },
   tokenBindings: {
@@ -176,6 +216,16 @@ export const SECTION_SPLIT_30_70: SectionPatternToken = {
       flexDirection: 'row', // Tablet+: side by side with 30/70
       gap: 'atomic.spacing.4' as TokenReference,
     },
+    xl: {
+      display: 'flex',
+      flexDirection: 'row',
+      gap: 'atomic.spacing.5' as TokenReference,
+    },
+    '2xl': {
+      display: 'flex',
+      flexDirection: 'row',
+      gap: 'atomic.spacing.6' as TokenReference,
+    },
   },
   tokenBindings: {
     gap: 'atomic.spacing.4',
@@ -211,6 +261,16 @@ export const SECTION_SPLIT_50_50: SectionPatternToken = {
       flexDirection: 'row', // Tablet+: side by side
       gap: 'atomic.spacing.4' as TokenReference,
     },
+    xl: {
+      display: 'flex',
+      flexDirection: 'row',
+      gap: 'atomic.spacing.5' as TokenReference,
+    },
+    '2xl': {
+      display: 'flex',
+      flexDirection: 'row',
+      gap: 'atomic.spacing.6' as TokenReference,
+    },
   },
   tokenBindings: {
     gap: 'atomic.spacing.4',
@@ -243,6 +303,16 @@ export const SECTION_SPLIT_70_30: SectionPatternToken = {
       display: 'flex',
       flexDirection: 'row', // Tablet+: side by side with 70/30
       gap: 'atomic.spacing.4' as TokenReference,
+    },
+    xl: {
+      display: 'flex',
+      flexDirection: 'row',
+      gap: 'atomic.spacing.5' as TokenReference,
+    },
+    '2xl': {
+      display: 'flex',
+      flexDirection: 'row',
+      gap: 'atomic.spacing.6' as TokenReference,
     },
   },
   tokenBindings: {
@@ -286,6 +356,18 @@ export const SECTION_STACK_START: SectionPatternToken = {
       alignItems: 'flex-start',
       gap: 'atomic.spacing.4' as TokenReference,
     },
+    xl: {
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'flex-start',
+      gap: 'atomic.spacing.5' as TokenReference,
+    },
+    '2xl': {
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'flex-start',
+      gap: 'atomic.spacing.6' as TokenReference,
+    },
   },
   tokenBindings: {
     gap: 'atomic.spacing.4',
@@ -324,6 +406,20 @@ export const SECTION_STACK_CENTER: SectionPatternToken = {
       justifyContent: 'center',
       gap: 'atomic.spacing.4' as TokenReference,
     },
+    xl: {
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      justifyContent: 'center',
+      gap: 'atomic.spacing.5' as TokenReference,
+    },
+    '2xl': {
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      justifyContent: 'center',
+      gap: 'atomic.spacing.6' as TokenReference,
+    },
   },
   tokenBindings: {
     gap: 'atomic.spacing.4',
@@ -358,6 +454,18 @@ export const SECTION_STACK_END: SectionPatternToken = {
       flexDirection: 'column',
       alignItems: 'flex-end',
       gap: 'atomic.spacing.4' as TokenReference,
+    },
+    xl: {
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'flex-end',
+      gap: 'atomic.spacing.5' as TokenReference,
+    },
+    '2xl': {
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'flex-end',
+      gap: 'atomic.spacing.6' as TokenReference,
     },
   },
   tokenBindings: {
@@ -395,6 +503,16 @@ export const SECTION_SIDEBAR_LEFT: SectionPatternToken = {
       flexDirection: 'row', // Tablet+: sidebar on left
       gap: 'atomic.spacing.4' as TokenReference,
     },
+    xl: {
+      display: 'flex',
+      flexDirection: 'row',
+      gap: 'atomic.spacing.5' as TokenReference,
+    },
+    '2xl': {
+      display: 'flex',
+      flexDirection: 'row',
+      gap: 'atomic.spacing.6' as TokenReference,
+    },
   },
   tokenBindings: {
     gap: 'atomic.spacing.4',
@@ -428,6 +546,16 @@ export const SECTION_SIDEBAR_RIGHT: SectionPatternToken = {
       display: 'flex',
       flexDirection: 'row', // Tablet+: sidebar on right
       gap: 'atomic.spacing.4' as TokenReference,
+    },
+    xl: {
+      display: 'flex',
+      flexDirection: 'row',
+      gap: 'atomic.spacing.5' as TokenReference,
+    },
+    '2xl': {
+      display: 'flex',
+      flexDirection: 'row',
+      gap: 'atomic.spacing.6' as TokenReference,
     },
   },
   tokenBindings: {
@@ -475,6 +603,18 @@ export const SECTION_CONTAINER: SectionPatternToken = {
       flexDirection: 'column',
       maxWidth: 'atomic.spacing.256' as TokenReference, // Desktop: 1024px
       padding: 'atomic.spacing.8' as TokenReference,
+    },
+    xl: {
+      display: 'flex',
+      flexDirection: 'column',
+      maxWidth: 'atomic.spacing.320' as TokenReference, // XL: 1280px
+      padding: 'atomic.spacing.10' as TokenReference,
+    },
+    '2xl': {
+      display: 'flex',
+      flexDirection: 'column',
+      maxWidth: 'atomic.spacing.384' as TokenReference, // 2XL: 1536px
+      padding: 'atomic.spacing.12' as TokenReference,
     },
   },
   tokenBindings: {

@@ -51,6 +51,14 @@ export const PAGE_JOB: PageLayoutToken = {
       formWidth: 'atomic.spacing.160',
       contentPadding: 'atomic.spacing.8',
     },
+    xl: {
+      formWidth: 'atomic.spacing.192',
+      contentPadding: 'atomic.spacing.10',
+    },
+    '2xl': {
+      formWidth: 'atomic.spacing.224',
+      contentPadding: 'atomic.spacing.12',
+    },
   },
   tokenBindings: {
     background: 'semantic.background.page',
@@ -103,6 +111,16 @@ export const PAGE_RESOURCE: PageLayoutToken = {
       listColumns: 1,
       detailWidth: '30%',
     },
+    xl: {
+      layout: 'split',
+      listColumns: 1,
+      detailWidth: '35%',
+    },
+    '2xl': {
+      layout: 'split',
+      listColumns: 1,
+      detailWidth: '40%',
+    },
   },
   tokenBindings: {
     background: 'semantic.background.page',
@@ -153,6 +171,14 @@ export const PAGE_DASHBOARD: PageLayoutToken = {
     lg: {
       metricsColumns: 4,
       chartsColumns: 2,
+    },
+    xl: {
+      metricsColumns: 4,
+      chartsColumns: 3,
+    },
+    '2xl': {
+      metricsColumns: 6,
+      chartsColumns: 3,
     },
   },
   tokenBindings: {
@@ -205,6 +231,16 @@ export const PAGE_SETTINGS: PageLayoutToken = {
       layout: 'sidebar',
       sidebarVisible: true,
       sidebarWidth: 'atomic.spacing.80',
+    },
+    xl: {
+      layout: 'sidebar',
+      sidebarVisible: true,
+      sidebarWidth: 'atomic.spacing.96',
+    },
+    '2xl': {
+      layout: 'sidebar',
+      sidebarVisible: true,
+      sidebarWidth: 'atomic.spacing.112',
     },
   },
   tokenBindings: {
@@ -259,6 +295,16 @@ export const PAGE_DETAIL: PageLayoutToken = {
       contentMaxWidth: 'atomic.spacing.224',
       relatedColumns: 3,
     },
+    xl: {
+      heroHeight: 'auto',
+      contentMaxWidth: 'atomic.spacing.256',
+      relatedColumns: 4,
+    },
+    '2xl': {
+      heroHeight: 'auto',
+      contentMaxWidth: 'atomic.spacing.320',
+      relatedColumns: 4,
+    },
   },
   tokenBindings: {
     background: 'semantic.background.page',
@@ -308,6 +354,14 @@ export const PAGE_EMPTY: PageLayoutToken = {
     lg: {
       illustrationSize: 'atomic.spacing.80',
       contentPadding: 'atomic.spacing.8',
+    },
+    xl: {
+      illustrationSize: 'atomic.spacing.96',
+      contentPadding: 'atomic.spacing.10',
+    },
+    '2xl': {
+      illustrationSize: 'atomic.spacing.112',
+      contentPadding: 'atomic.spacing.12',
     },
   },
   tokenBindings: {
@@ -371,6 +425,16 @@ export const PAGE_WIZARD: PageLayoutToken = {
       stepMaxWidth: 'atomic.spacing.192',
       contentPadding: 'atomic.spacing.8',
     },
+    xl: {
+      progressStyle: 'expanded',
+      stepMaxWidth: 'atomic.spacing.224',
+      contentPadding: 'atomic.spacing.10',
+    },
+    '2xl': {
+      progressStyle: 'expanded',
+      stepMaxWidth: 'atomic.spacing.256',
+      contentPadding: 'atomic.spacing.12',
+    },
   },
   tokenBindings: {
     background: 'semantic.background.page',
@@ -421,6 +485,14 @@ export const PAGE_ONBOARDING: PageLayoutToken = {
     lg: {
       cardMaxWidth: 'atomic.spacing.160',
       contentPadding: 'atomic.spacing.8',
+    },
+    xl: {
+      cardMaxWidth: 'atomic.spacing.192',
+      contentPadding: 'atomic.spacing.10',
+    },
+    '2xl': {
+      cardMaxWidth: 'atomic.spacing.224',
+      contentPadding: 'atomic.spacing.12',
     },
   },
   tokenBindings: {

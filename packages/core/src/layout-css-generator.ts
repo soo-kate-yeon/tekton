@@ -9,6 +9,10 @@ import type {
   PageLayoutToken,
   SectionPatternToken,
   SectionCSS,
+  ContainerQueryConfig,
+  OrientationConfig,
+  FullResponsiveConfig,
+  ResponsiveConfig,
 } from './layout-tokens/types.js';
 import { resolveTokenReference } from './layout-resolver.js';
 import { getAllShellTokens } from './layout-tokens/shells.js';
@@ -543,4 +547,175 @@ export function generateAllLayoutCSS(options: CSSGenerationOptions = {}): string
   const sections = getAllSectionPatternTokens();
 
   return generateLayoutCSS([...shells, ...pages, ...sections], options);
+}
+
+// ============================================================================
+// Container Query CSS Generation (SPEC-LAYOUT-003 Phase 3)
+// ============================================================================
+
+/**
+ * Generate CSS container queries with browser fallback
+ * Uses @supports for progressive enhancement
+ *
+ * @param config - Container query configuration
+ * @returns CSS string with container queries and fallback
+ */
+export function generateContainerQueryCSS(config: ContainerQueryConfig): string {
+  const rules: string[] = [];
+
+  // Container definition
+  rules.push(`  container-type: ${config.type};`);
+  rules.push(`  container-name: ${config.name};`);
+
+  // Container query rules with @supports progressive enhancement
+  const queryRules: string[] = [];
+
+  for (const [_bp, bpConfig] of Object.entries(config.breakpoints)) {
+    if (bpConfig) {
+      const cssProps = Object.entries(bpConfig.css)
+        .map(([prop, value]) => `    ${prop}: ${value};`)
+        .join('\n');
+
+      queryRules.push(`
+  @container ${config.name} (min-width: ${bpConfig.minWidth}px) {
+${cssProps}
+  }`);
+    }
+  }
+
+  // Wrap in @supports for browser compatibility
+  if (queryRules.length > 0) {
+    rules.push(`
+@supports (container-type: inline-size) {
+${queryRules.join('\n')}
+}`);
+  }
+
+  return rules.join('\n');
+}
+
+/**
+ * Generate fallback CSS for browsers without container query support
+ * Uses viewport-based media queries as fallback
+ *
+ * @param config - Container query configuration
+ * @returns CSS string with media query fallbacks
+ */
+export function generateContainerQueryFallback(config: ContainerQueryConfig): string {
+  const fallbackRules: string[] = [];
+
+  // Map container breakpoints to approximate viewport breakpoints
+  const breakpointMapping: Record<string, number> = {
+    sm: 640,
+    md: 768,
+    lg: 1024,
+    xl: 1280,
+  };
+
+  for (const [bp, bpConfig] of Object.entries(config.breakpoints)) {
+    if (bpConfig) {
+      const viewportWidth = breakpointMapping[bp] || bpConfig.minWidth * 2;
+      const cssProps = Object.entries(bpConfig.css)
+        .map(([prop, value]) => `    ${prop}: ${value};`)
+        .join('\n');
+
+      fallbackRules.push(`
+@supports not (container-type: inline-size) {
+  @media (min-width: ${viewportWidth}px) {
+${cssProps}
+  }
+}`);
+    }
+  }
+
+  return fallbackRules.join('\n');
+}
+
+// ============================================================================
+// Orientation CSS Generation (SPEC-LAYOUT-003 Phase 3)
+// ============================================================================
+
+/**
+ * Generate orientation-specific CSS media queries
+ * Supports portrait (height >= width) and landscape (width > height)
+ *
+ * @param config - Orientation configuration
+ * @param cssGenerator - Function to convert config to CSS properties
+ * @returns CSS string with orientation media queries
+ */
+export function generateOrientationCSS<T>(
+  config: OrientationConfig<T>,
+  cssGenerator: (config: Partial<T>) => string
+): string {
+  const rules: string[] = [];
+
+  if (config.portrait) {
+    const portraitCSS = cssGenerator(config.portrait);
+    if (portraitCSS) {
+      rules.push(`
+@media (orientation: portrait) {
+${portraitCSS}
+}`);
+    }
+  }
+
+  if (config.landscape) {
+    const landscapeCSS = cssGenerator(config.landscape);
+    if (landscapeCSS) {
+      rules.push(`
+@media (orientation: landscape) {
+${landscapeCSS}
+}`);
+    }
+  }
+
+  return rules.join('\n');
+}
+
+/**
+ * Generate complete responsive CSS with orientation support
+ * Combines viewport breakpoints, container queries, and orientation
+ *
+ * @param config - Full responsive configuration
+ * @param cssGenerator - Function to convert config to CSS properties
+ * @param containerConfig - Optional container query configuration
+ * @returns Complete CSS string
+ */
+export function generateAdvancedResponsiveCSS<T>(
+  config: FullResponsiveConfig<T>,
+  cssGenerator: (config: T | Partial<T>) => string,
+  containerConfig?: ContainerQueryConfig
+): string {
+  const sections: string[] = [];
+
+  // Base responsive CSS (viewport breakpoints)
+  sections.push(cssGenerator(config.default));
+
+  // Breakpoint overrides
+  const breakpoints: Array<keyof ResponsiveConfig<T>> = ['sm', 'md', 'lg', 'xl', '2xl'];
+  for (const bp of breakpoints) {
+    const override = config[bp];
+    if (override) {
+      const css = cssGenerator(override);
+      if (css) {
+        sections.push(`
+@media (min-width: ${BREAKPOINT_VALUES[bp]}px) {
+${css}
+}`);
+      }
+    }
+  }
+
+  // Container queries (if provided)
+  if (containerConfig) {
+    sections.push(generateContainerQueryCSS(containerConfig));
+    sections.push(generateContainerQueryFallback(containerConfig));
+  }
+
+  // Orientation overrides
+  if (config.orientation) {
+    sections.push(generateOrientationCSS(config.orientation, cssGenerator));
+  }
+
+  return sections.join('\n');
 }

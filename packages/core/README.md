@@ -45,6 +45,60 @@ const result = generateReactComponent(resolved);
 - [Integration Guide](./src/screen-generation/INTEGRATION.md)
 - [MCP Tools](../mcp-server/SCREEN-TOOLS.md)
 
+### NEW: Responsive Web Enhancement (SPEC-LAYOUT-003) ✅
+
+Advanced responsive design system with xl/2xl breakpoints, Container Queries, and Orientation support.
+
+**Features:**
+
+- 📱 **Extended Breakpoints** - xl (1280px), 2xl (1536px) for large displays
+- 📦 **Container Queries** - Component-level responsiveness independent of viewport
+- 🔄 **Orientation Support** - Portrait/Landscape optimizations for tablets
+- 🎯 **27 Layout Tokens Updated** - All shells, pages, and sections enhanced
+- ✅ **100% Test Coverage** - 1041/1041 tests passing
+- 🌐 **Browser Compatibility** - Chrome 105+, Safari 16+, Firefox 110+ with fallback
+
+**Quick Start:**
+
+```typescript
+import {
+  generateResponsiveCSS,
+  generateContainerQueryCSS,
+  generateOrientationCSS,
+} from '@tekton/core/layout-tokens';
+
+// Responsive breakpoints including xl/2xl
+const responsive = generateResponsiveCSS({
+  default: { gridColumns: 1 },
+  md: { gridColumns: 2 },
+  xl: { gridColumns: 4 },
+  '2xl': { gridColumns: 6 },
+});
+
+// Container Queries for component-level responsiveness
+const container = generateContainerQueryCSS({
+  name: 'card-grid',
+  type: 'inline-size',
+  breakpoints: {
+    md: { minWidth: 480, css: { 'grid-template-columns': 'repeat(2, 1fr)' } },
+    lg: { minWidth: 640, css: { 'grid-template-columns': 'repeat(3, 1fr)' } },
+  },
+});
+
+// Orientation support for tablets
+const orientation = generateOrientationCSS({
+  portrait: { gridColumns: 1 },
+  landscape: { gridColumns: 2 },
+});
+```
+
+**📚 Documentation:**
+
+- [Responsive Design Guide](../../docs/guides/responsive-design.md)
+- [Browser Compatibility Matrix](../../docs/guides/browser-compatibility.md)
+- [SPEC-LAYOUT-003 Specification](../../.moai/specs/SPEC-LAYOUT-003/spec.md)
+- [Acceptance Report](../../.moai/specs/SPEC-LAYOUT-003/acceptance.md)
+
 ## Installation
 
 ```bash

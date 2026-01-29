@@ -5,7 +5,6 @@
  * Layout: Header + Main + Footer
  */
 
-import React from 'react';
 import styles from './layouts.module.css';
 
 export interface LandingLayoutProps {
