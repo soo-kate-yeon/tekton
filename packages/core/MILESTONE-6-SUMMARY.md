@@ -1,6 +1,7 @@
 # SPEC-LAYOUT-004 Milestone 6 Implementation Summary
 
 ## 완료 일시
+
 2026-01-29
 
 ## 구현 내용
@@ -8,12 +9,14 @@
 ### Part 1: `packages/core/src/layout-tokens/index.ts` 업데이트
 
 **추가된 Exports:**
+
 ```typescript
-export * from './mobile-shells.js';  // Milestone 2에서 생성된 6개 모바일 셸 토큰
-export * from './keyboard.js';       // Milestone 4에서 생성된 키보드 유틸리티
+export * from './mobile-shells.js'; // Milestone 2에서 생성된 6개 모바일 셸 토큰
+export * from './keyboard.js'; // Milestone 4에서 생성된 키보드 유틸리티
 ```
 
 **기존 Exports:**
+
 - `./types.js` - 모든 타입 정의
 - `./shells.js` - 웹 셸 토큰
 - `./pages.js` - 페이지 레이아웃 토큰
@@ -61,15 +64,18 @@ export * from './keyboard.js';       // Milestone 4에서 생성된 키보드 �
     - minSize, hitSlop
 
 **메인 Schema:**
+
 - **MobileShellTokenSchema** - ShellTokenSchema를 확장하여 모바일 전용 설정 추가
   - platform: literal('mobile')
   - os: enum(['ios', 'android', 'cross-platform'])
   - safeArea, systemUI, keyboard, bottomTab, touchTarget
 
 **Validation Function:**
+
 ```typescript
-export function validateMobileShellToken(token: unknown): MobileShellToken
+export function validateMobileShellToken(token: unknown): MobileShellToken;
 ```
+
 - 완전한 타입 체크와 런타임 검증
 - 상세한 에러 메시지 제공
 - ZodError를 사용한 스키마 위반 감지
@@ -77,6 +83,7 @@ export function validateMobileShellToken(token: unknown): MobileShellToken
 ### Part 3: `packages/core/src/index.ts` 통합
 
 **추가된 Type Exports:**
+
 ```typescript
 export type {
   MobileShellToken,
@@ -92,10 +99,11 @@ export type {
   BottomTabItemConfig,
   TouchTargetConfig,
   HitSlopConfig,
-}
+};
 ```
 
 **추가된 Mobile Shell Token Exports:**
+
 ```typescript
 export {
   SHELL_MOBILE_APP,
@@ -107,34 +115,40 @@ export {
   getMobileShellToken,
   getAllMobileShellTokens,
   getMobileShellsByOS,
-}
+};
 ```
 
 **추가된 Utility Exports:**
+
 - **Safe Area:** getSafeAreaInsets, getSafeAreaTop, getSafeAreaBottom 등 6개 함수
 - **Keyboard:** getKeyboardHeight, applyKeyboardAvoidance 등 9개 함수
 - **Touch Target:** validateTouchTarget, applyMinTouchTarget 등 6개 함수
 
 **추가된 Validation Exports:**
+
 ```typescript
 export {
   validateMobileShellToken,
   MobileShellTokenSchema,
   SafeAreaConfigSchema,
   // ... 11개 스키마 추가
-}
+};
 ```
 
 ## 검증 결과
 
 ### TypeScript 컴파일
+
 ✅ **성공** - 타입 에러 없음
 
 ### ESLint 검사
+
 ✅ **성공** - 수정한 파일에 에러/경고 없음
 
 ### 기능 테스트
+
 ✅ **6/6 모바일 셸 토큰 검증 통과**
+
 - SHELL_MOBILE_APP
 - SHELL_MOBILE_FULLSCREEN
 - SHELL_MOBILE_MODAL
@@ -143,6 +157,7 @@ export {
 - SHELL_MOBILE_DETAIL
 
 ✅ **모든 Exports 사용 가능**
+
 ```typescript
 import {
   SHELL_MOBILE_APP,
@@ -157,11 +172,13 @@ import {
 ```
 
 ✅ **Invalid Token 거부**
+
 - 잘못된 토큰에 대해 적절한 ZodError 발생
 
 ## 파일 변경 사항
 
 ### 수정된 파일 (3개)
+
 1. `packages/core/src/layout-tokens/index.ts`
    - 2개 export 추가 (mobile-shells, keyboard)
 
@@ -176,6 +193,7 @@ import {
    - 12개 validation schema exports 추가
 
 ### 생성된 파일
+
 - 없음 (기존 파일만 수정)
 
 ## 통합 테스트 결과
@@ -201,6 +219,7 @@ import {
 ## 다음 단계
 
 Milestone 6 완료로 SPEC-LAYOUT-004의 모든 마일스톤이 완료되었습니다:
+
 - ✅ Milestone 1: MobileShellToken 타입 정의
 - ✅ Milestone 2: 6개 모바일 셸 토큰 생성
 - ✅ Milestone 3: SafeArea 유틸리티
@@ -209,6 +228,7 @@ Milestone 6 완료로 SPEC-LAYOUT-004의 모든 마일스톤이 완료되었습�
 - ✅ Milestone 6: 통합 및 Validation 확장
 
 **권장 사항:**
+
 1. SPEC-LAYOUT-004 완료 검토
 2. 통합 테스트 케이스 작성 (optional)
 3. 문서화 업데이트 (optional)
@@ -217,18 +237,21 @@ Milestone 6 완료로 SPEC-LAYOUT-004의 모든 마일스톤이 완료되었습�
 ## 기술적 세부사항
 
 ### Zod Schema 패턴
+
 - 기존 ShellTokenSchema 확장 (.extend() 사용)
 - TokenReferenceSchema 재사용
 - 계층적 스키마 구조 (leaf → composite)
 - Type-safe validation with runtime checks
 
 ### Export 전략
+
 - Progressive disclosure 원칙 준수
 - Barrel exports 패턴 (index.ts)
 - Type-only exports 분리
 - Named exports 사용 (tree-shaking 최적화)
 
 ### 코드 품질
+
 - TypeScript strict mode 준수
 - ESLint 규칙 위반 없음
 - JSDoc 문서화 완료
