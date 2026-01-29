@@ -18,10 +18,8 @@
     "noFallthroughCasesInSwitch": true,
     "skipLibCheck": true,
     "allowSyntheticDefaultImports": true,
-    "isolatedModules": true,
-    "composite": true
+    "isolatedModules": true
   },
   "include": ["src/**/*"],
-  "exclude": ["node_modules", "dist", "__tests__"],
-  "references": [{ "path": "../tokens" }]
+  "exclude": ["node_modules", "dist", "__tests__"]
 }
