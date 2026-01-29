@@ -163,8 +163,11 @@ jobs:
       - name: Build tokens package first
         run: pnpm --filter "@tekton/tokens" build
 
-      - name: Build all packages
-        run: pnpm build:all
+      - name: Build all packages except styled
+        run: pnpm --filter "./packages/*" --filter="!@tekton/styled" build
+
+      - name: Build styled package
+        run: pnpm --filter "@tekton/styled" build
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
