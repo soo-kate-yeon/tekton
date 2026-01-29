@@ -5,7 +5,6 @@
  * Layout: Main content + Sidebar on right
  */
 
-import React from 'react';
 import styles from './layouts.module.css';
 
 export interface SidebarRightLayoutProps {

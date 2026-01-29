@@ -135,7 +135,7 @@ No migration needed for v0.1.0 (initial release)
   - TypeScript 인터페이스 및 Zod 스키마
   - resolveLayout() 및 generateLayoutCSS() 함수 명세
 
-- **SPEC-LAYOUT-002**: Screen Generation Pipeline (Planned)
+- **SPEC-LAYOUT-002**: Screen Generation Pipeline (Completed 2026-01-28)
   - JSON Schema 기반 화면 정의 시스템
   - LLM 최적화 Screen Definition 포맷
   - Screen Resolver Pipeline 설계
@@ -143,7 +143,29 @@ No migration needed for v0.1.0 (initial release)
   - Tailwind CSS Generator
   - React Component Generator
   - MCP 서버 통합 (Claude Desktop/Code)
-  - **의존성**: SPEC-LAYOUT-001 완료 대기
+
+- **SPEC-LAYOUT-003**: Responsive Web Enhancement (Completed 2026-01-29)
+  - **xl/2xl 브레이크포인트 활성화**: 1280px (xl), 1536px (2xl)
+  - **Container Queries 시스템**: 컴포넌트 중심 반응형 디자인
+    - 4개 컨테이너 브레이크포인트 (sm: 320px, md: 480px, lg: 640px, xl: 800px)
+    - `@container` 기반 CSS 생성
+    - 브라우저 미지원 시 `@supports` 폴백
+  - **Orientation 지원**: Portrait/Landscape 미디어 쿼리
+  - **27개 레이아웃 토큰 업데이트**:
+    - 6개 Shell 토큰 (app, marketing, auth, dashboard, admin, minimal)
+    - 8개 Page 토큰 (job, resource, dashboard, settings, detail, empty, wizard, onboarding)
+    - 13개 Section 토큰 (grid-*, split-*, stack-*, sidebar-*, container)
+  - **새로운 타입 정의**:
+    - `ContainerQueryConfig` - 컨테이너 쿼리 설정
+    - `OrientationConfig<T>` - 방향별 오버라이드
+    - `FullResponsiveConfig<T>` - 통합 반응형 설정
+  - **CSS 생성 함수 추가**:
+    - `generateContainerQueryCSS()` - 컨테이너 쿼리 CSS
+    - `generateOrientationCSS()` - 방향별 미디어 쿼리
+    - `generateAdvancedResponsiveCSS()` - 통합 반응형 CSS
+  - **브라우저 호환성**:
+    - Container Queries: Chrome 105+, Safari 16+, Firefox 110+
+    - Media Queries (xl/2xl, orientation): 모든 모던 브라우저 지원
 
 ### Changed
 
@@ -160,10 +182,13 @@ No migration needed for v0.1.0 (initial release)
 
 ### Quality Metrics
 
-- **테스트 통과율**: 100%
+- **테스트 통과율**: 100% (1041/1041 tests passing)
+- **SPEC-LAYOUT-003 품질 점수**: 97/100 (TRUST 5 framework compliant)
+- **테스트 커버리지**: Layout Tokens 98.21% overall
 - **컴포넌트 수**: 19개 (Primitives 14개 + Components 5개)
 - **TypeScript 커버리지**: 100%
 - **WCAG 준수**: AA 레벨
+- **레이아웃 토큰**: 32개 (6 shells + 8 pages + 13 sections + 5 breakpoints)
 
 ### Known Issues
 

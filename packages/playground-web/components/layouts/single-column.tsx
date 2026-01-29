@@ -5,7 +5,6 @@
  * Layout: Single centered column
  */
 
-import React from 'react';
 import styles from './layouts.module.css';
 
 export interface SingleColumnLayoutProps {

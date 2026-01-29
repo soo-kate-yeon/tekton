@@ -5,7 +5,6 @@
  * Layout: Two equal columns
  */
 
-import React from 'react';
 import styles from './layouts.module.css';
 
 export interface TwoColumnLayoutProps {
