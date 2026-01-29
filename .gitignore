@@ -288,3 +288,4 @@ dist-ssr/
 # ===========================================
 # Private keys (specific patterns to avoid false positives)
 .nuxt/
+service-account.json

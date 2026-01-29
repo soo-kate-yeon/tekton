@@ -11,6 +11,7 @@ import type {
   ShellToken,
   PageLayoutToken,
   SectionPatternToken,
+  MobileShellToken,
 } from './layout-tokens/types.js';
 
 // ============================================================================
@@ -192,6 +193,155 @@ export const SectionPatternTokenSchema = z.object({
 });
 
 // ============================================================================
+// Mobile Shell Token Schemas
+// ============================================================================
+
+/**
+ * Safe Area Defaults Schema
+ * Validates device-specific safe area measurements
+ */
+export const SafeAreaDefaultsSchema = z.object({
+  notch: z.number(),
+  dynamicIsland: z.number(),
+  homeIndicator: z.number(),
+  statusBar: z.number(),
+});
+
+/**
+ * Safe Area Edges Schema
+ * Validates which edges should respect safe area insets
+ */
+export const SafeAreaEdgesSchema = z.object({
+  top: z.boolean(),
+  bottom: z.boolean(),
+  horizontal: z.boolean(),
+});
+
+/**
+ * Safe Area Config Schema
+ * Validates complete safe area configuration
+ */
+export const SafeAreaConfigSchema = z.object({
+  top: TokenReferenceSchema,
+  bottom: TokenReferenceSchema,
+  left: TokenReferenceSchema,
+  right: TokenReferenceSchema,
+  defaults: SafeAreaDefaultsSchema,
+  edges: SafeAreaEdgesSchema,
+});
+
+/**
+ * Status Bar Config Schema
+ * Validates mobile status bar configuration
+ */
+export const StatusBarConfigSchema = z.object({
+  height: TokenReferenceSchema,
+  visible: z.boolean(),
+  style: z.enum(['light-content', 'dark-content', 'auto']),
+  backgroundColor: TokenReferenceSchema.optional(),
+  translucent: z.boolean(),
+});
+
+/**
+ * Navigation Bar Config Schema
+ * Validates Android navigation bar configuration
+ */
+export const NavigationBarConfigSchema = z.object({
+  height: TokenReferenceSchema,
+  mode: z.enum(['overlay', 'inset', 'hidden']),
+  backgroundColor: TokenReferenceSchema.optional(),
+  buttonStyle: z.enum(['light', 'dark', 'auto']),
+});
+
+/**
+ * System UI Config Schema
+ * Validates combined status bar and navigation bar configuration
+ */
+export const SystemUIConfigSchema = z.object({
+  statusBar: StatusBarConfigSchema,
+  navigationBar: NavigationBarConfigSchema,
+});
+
+/**
+ * Keyboard Animation Config Schema
+ * Validates keyboard animation settings
+ */
+export const KeyboardAnimationConfigSchema = z.object({
+  duration: z.number(),
+  easing: z.string(),
+  enabled: z.boolean(),
+});
+
+/**
+ * Keyboard Config Schema
+ * Validates keyboard behavior configuration
+ */
+export const KeyboardConfigSchema = z.object({
+  avoidance: z.enum(['padding', 'resize', 'position', 'none']),
+  behavior: z.enum(['height', 'position', 'padding']),
+  animation: KeyboardAnimationConfigSchema,
+  dismissMode: z.enum(['on-drag', 'interactive', 'none']),
+});
+
+/**
+ * Bottom Tab Item Config Schema
+ * Validates individual tab bar item configuration
+ */
+export const BottomTabItemConfigSchema = z.object({
+  minTouchTarget: TokenReferenceSchema,
+  iconSize: TokenReferenceSchema,
+  labelSize: TokenReferenceSchema,
+  spacing: TokenReferenceSchema,
+});
+
+/**
+ * Bottom Tab Config Schema
+ * Validates bottom tab bar configuration
+ */
+export const BottomTabConfigSchema = z.object({
+  height: TokenReferenceSchema,
+  safeAreaBottom: TokenReferenceSchema,
+  totalHeight: TokenReferenceSchema,
+  visibility: z.enum(['always', 'scroll-hide', 'route-based']),
+  maxItems: z.number(),
+  item: BottomTabItemConfigSchema,
+});
+
+/**
+ * Hit Slop Config Schema
+ * Validates expanded touch area configuration
+ */
+export const HitSlopConfigSchema = z.object({
+  top: z.number(),
+  bottom: z.number(),
+  left: z.number(),
+  right: z.number(),
+});
+
+/**
+ * Touch Target Config Schema
+ * Validates minimum touch target size configuration
+ */
+export const TouchTargetConfigSchema = z.object({
+  minSize: TokenReferenceSchema,
+  hitSlop: HitSlopConfigSchema,
+});
+
+/**
+ * Mobile Shell Token Schema
+ * Validates complete mobile shell structure with platform-specific configurations
+ */
+export const MobileShellTokenSchema = ShellTokenSchema.extend({
+  platform: z.literal('mobile'),
+  os: z.enum(['ios', 'android', 'cross-platform']),
+  safeArea: SafeAreaConfigSchema,
+  systemUI: SystemUIConfigSchema,
+  keyboard: KeyboardConfigSchema,
+  bottomTab: BottomTabConfigSchema.optional(),
+  touchTarget: TouchTargetConfigSchema,
+});
+
+// ============================================================================
 // Validation Functions (Strict - for Application Code)
 // ============================================================================
 
@@ -292,6 +442,36 @@ export function validateTokenReference(data: unknown): TokenReference {
     );
   }
   return result.data;
+}
+
+/**
+ * Validate Mobile Shell Token (strict validation for application code)
+ *
+ * @param token - Mobile shell token to validate
+ * @returns Validated MobileShellToken
+ * @throws Error if validation fails with detailed error messages
+ *
+ * @example
+ * ```typescript
+ * import { SHELL_MOBILE_APP } from './mobile-shells.js';
+ * import { validateMobileShellToken } from './layout-validation.js';
+ *
+ * try {
+ *   const validated = validateMobileShellToken(SHELL_MOBILE_APP);
+ *   console.log('Valid mobile shell token');
+ * } catch (error) {
+ *   console.error('Invalid token:', error.message);
+ * }
+ * ```
+ */
+export function validateMobileShellToken(token: unknown): MobileShellToken {
+  const result = MobileShellTokenSchema.safeParse(token);
+  if (!result.success) {
+    throw new Error(
+      `Mobile shell token validation failed: ${JSON.stringify(result.error.errors.map(e => ({ path: e.path.join('.'), message: e.message })))}`
+    );
+  }
+  return result.data as MobileShellToken;
 }
 
 // ============================================================================

@@ -1,0 +1,213 @@
+{
+  "id": "linear-minimal-v1",
+  "name": "Linear Minimal",
+  "schemaVersion": "2.1",
+  "brandTone": "minimal",
+  "designDNA": {
+    "moodKeywords": [
+      "clean",
+      "efficient",
+      "focused"
+    ],
+    "targetEmotion": "생산성",
+    "visualAtmosphere": "정돈된 워크스페이스"
+  },
+  "tokens": {
+    "atomic": {적
+      "color": {
+        "brand": {
+          "100": {
+            "l": 0.95,
+            "c": 0.02,
+            "h": 265
+          },
+          "500": {
+            "l": 0.55,
+            "c": 0.12,
+            "h": 265
+          },
+          "600": {
+            "l": 0.45,
+            "c": 0.14,
+            "h": 265
+          }
+        },
+        "neutral": {
+          "50": {
+            "l": 0.99,
+            "c": 0.005,
+            "h": 265
+          },
+          "100": {
+            "l": 0.96,
+            "c": 0.01,
+            "h": 265
+          },
+          "200": {
+            "l": 0.92,
+            "c": 0.015,
+            "h": 265
+          },
+          "300": {
+            "l": 0.85,
+            "c": 0.02,
+            "h": 265
+          },
+          "500": {
+            "l": 0.6,
+            "c": 0.03,
+            "h": 265
+          },
+          "900": {
+            "l": 0.2,
+            "c": 0.04,
+            "h": 265
+          }
+        },
+        "white": {
+          "l": 1,
+          "c": 0,
+          "h": 0
+        }
+      },
+      "spacing": {
+        "0": "0",
+        "1": "4px",
+        "2": "8px",
+        "3": "12px",
+        "4": "16px",
+        "5": "20px",
+        "6": "24px",
+        "8": "32px",
+        "10": "40px",
+        "12": "48px",
+        "16": "64px",
+        "20": "80px",
+        "24": "96px"
+      },
+      "radius": {
+        "sm": "4px",
+        "md": "6px",
+        "lg": "8px",
+        "none": "0",
+        "xs": "2px",
+        "xl": "12px",
+        "2xl": "16px",
+        "3xl": "24px",
+        "full": "9999px"
+      }
+    },
+    "semantic": {
+      "background": {
+        "canvas": "atomic.color.neutral.50",
+        "surface": {
+          "subtle": "atomic.color.neutral.50",
+          "default": "atomic.color.white",
+          "emphasis": "atomic.color.neutral.100"
+        },
+        "brand": {
+          "subtle": "atomic.color.brand.100",
+          "default": "atomic.color.brand.500",
+          "emphasis": "atomic.color.brand.600"
+        }
+      },
+      "border": {
+        "default": {
+          "subtle": "atomic.color.neutral.100",
+          "default": "atomic.color.neutral.200",
+          "emphasis": "atomic.color.neutral.300"
+        }
+      }
+    }
+  },
+  "stateLayer": {
+    "hover": {
+      "opacity": 0.06
+    },
+    "disabled": {
+      "opacity": 0.38,
+      "contentOpacity": 0.38
+    }
+  },
+  "elevation": {
+    "level": {
+      "0": "none",
+      "1": "0 1px 4px rgba(0,0,0,0.04)",
+      "2": "0 2px 8px rgba(0,0,0,0.06)",
+      "3": "0 4px 16px rgba(0,0,0,0.1)"
+    },
+    "context": {
+      "card": {
+        "default": "elevation.level.1",
+        "hover": "elevation.level.2",
+        "raised": "elevation.level.2"
+      },
+      "modal": "elevation.level.3"
+    }
+  },
+  "typography": {
+    "fontFamily": {
+      "sans": "Inter, sans-serif",
+      "serif": "Georgia, Times, serif",
+      "mono": "JetBrains Mono, monospace",
+      "display": "Inter Display, sans-serif"
+    },
+    "fontWeight": {
+      "regular": "400",
+      "medium": "500",
+      "semiBold": "600",
+      "thin": "100",
+      "light": "300",
+      "semibold": "600",
+      "bold": "700",
+      "extrabold": "800",
+      "black": "900"
+    }
+  },
+  "density": {
+    "mode": "comfortable"
+  },
+  "motion": {
+    "duration": {
+      "slow": "300ms",
+      "medium": "200ms",
+      "fast": "100ms",
+      "instant": "0ms",
+      "micro": "50ms",
+      "quick": "100ms",
+      "standard": "150ms",
+      "moderate": "200ms",
+      "deliberate": "300ms",
+      "complex": "500ms"
+    },
+    "easing": {
+      "standard": "ease-out",
+      "decelerate": "cubic-bezier(0,0,0.2,1)",
+      "linear": "linear",
+      "accelerate": "cubic-bezier(0.4, 0, 1, 1)",
+      "emphasized": "cubic-bezier(0.2, 0, 0, 1)",
+      "spring": "cubic-bezier(0.34, 1.56, 0.64, 1)"
+    }
+  },
+  "border": {
+    "width": {
+      "thin": "1px",
+      "medium": "2px",
+      "thick": "3px",
+      "none": "0",
+      "heavy": "4px"
+    },
+    "radius": {
+      "sm": "4px",
+      "md": "6px",
+      "lg": "8px",
+      "none": "0",
+      "xs": "2px",
+      "xl": "12px",
+      "2xl": "16px",
+      "3xl": "24px",
+      "full": "9999px",
+      "circle": "50%"
+    }
+  }
+}

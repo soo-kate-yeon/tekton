@@ -1,59 +1,69 @@
 {
-  "id": "hims-v1",
-  "name": "Hims Design System v1",
+  "id": "equinox-fitness-v1",
+  "name": "Equinox Fitness App",
   "schemaVersion": "2.1",
   "brandTone": "professional",
   "designDNA": {
     "moodKeywords": [
       "modern",
-      "clean",
-      "trustworthy",
-      "accessible"
+      "functional",
+      "sleek",
+      "energetic"
     ],
-    "targetEmotion": "신뢰감",
-    "visualAtmosphere": "전문적인 헬스케어 플랫폼"
+    "targetEmotion": "집중",
+    "visualAtmosphere": "고성능 스튜디오"
   },
   "tokens": {
     "atomic": {
       "color": {
         "brand": {
+          "100": {
+            "l": 0.35,
+            "c": 0.05,
+            "h": 190
+          },
           "500": {
-            "l": 0.38,
-            "c": 0.18,
-            "h": 285
+            "l": 0.65,
+            "c": 0.12,
+            "h": 190
+          },
+          "700": {
+            "l": 0.5,
+            "c": 0.1,
+            "h": 190
           }
         },
         "neutral": {
           "50": {
-            "l": 0.99,
-            "c": 0.005,
-            "h": 285
+            "l": 0.12,
+            "c": 0.008,
+            "h": 250
           },
           "100": {
-            "l": 0.95,
-            "c": 0.008,
-            "h": 285
+            "l": 0.18,
+            "c": 0.009,
+            "h": 250
           },
           "200": {
-            "l": 0.85,
+            "l": 0.3,
             "c": 0.01,
-            "h": 285
+            "h": 250
           },
           "300": {
-            "l": 0.75,
-            "c": 0.012,
-            "h": 285
-          },
-          "900": {
-            "l": 0.15,
+            "l": 0.45,
             "c": 0.01,
-            "h": 285
+            "h": 250
+          },
+          "black": {
+            "l": 0.05,
+            "c": 0.005,
+            "h": 250
+          },
+          "white": {
+            "l": 0.99,
+            "c": 0.005,
+            "h": 250
           }
-        },
-        "white": {
-          "l": 1,
-          "c": 0,
-          "h": 0
         }
       },
       "spacing": {
@@ -85,19 +95,29 @@
     },
     "semantic": {
       "background": {
-        "canvas": "atomic.color.neutral.50",
+        "canvas": "atomic.color.neutral.black",
         "surface": {
-          "subtle": "atomic.color.neutral.50",
-          "default": "atomic.color.white",
-          "emphasis": "atomic.color.neutral.100"
+          "subtle": "atomic.color.neutral.100",
+          "default": "atomic.color.neutral.100",
+          "emphasis": "atomic.color.brand.500"
+        },
+        "brand": {
+          "subtle": "atomic.color.brand.100",
+          "default": "atomic.color.brand.500",
+          "emphasis": "atomic.color.brand.700"
         }
       },
       "border": {
         "default": {
-          "subtle": "atomic.color.neutral.100",
+          "subtle": "atomic.color.neutral.200",
           "default": "atomic.color.neutral.200",
-          "emphasis": "atomic.color.neutral.300"
+          "emphasis": "atomic.color.brand.500"
         }
+      },
+      "text": {
+        "primary": "atomic.color.neutral.white",
+        "secondary": "atomic.color.neutral.300",
+        "onBrand": "atomic.color.neutral.black"
       }
     }
   },
@@ -113,15 +133,16 @@
   "elevation": {
     "level": {
       "0": "none",
-      "1": "0 2px 8px rgba(0,0,0,0.04)",
-      "2": "0 4px 16px rgba(0,0,0,0.08)",
-      "3": "0 8px 24px rgba(0,0,0,0.12)"
+      "1": "0 2px 8px rgba(0,0,0,0.1)",
+      "2": "0 4px 16px rgba(0,0,0,0.15)",
+      "3": "0 8px 24px rgba(0,0,0,0.2)"
     },
     "context": {
       "card": {
-        "default": "elevation.level.1"
+        "default": "elevation.level.1",
+        "hover": "elevation.level.2",
+        "raised": "elevation.level.2"
       },
-      "button": "elevation.level.1",
       "modal": "elevation.level.3"
     }
   },
@@ -149,23 +170,19 @@
   "motion": {
     "duration": {
       "short": "150ms",
-      "medium": "300ms",
+      "moderate": "200ms",
+      "long": "300ms",
       "instant": "0ms",
       "micro": "50ms",
       "quick": "100ms",
       "standard": "150ms",
-      "moderate": "200ms",
       "deliberate": "300ms",
       "slow": "400ms",
       "complex": "500ms"
     },
-    "easing": {
-      "standard": "ease-out",
-      "linear": "linear",
-      "decelerate": "cubic-bezier(0, 0, 0.2, 1)",
-      "accelerate": "cubic-bezier(0.4, 0, 1, 1)",
-      "emphasized": "cubic-bezier(0.2, 0, 0, 1)",
-      "spring": "cubic-bezier(0.34, 1.56, 0.64, 1)"
+    "timingFunction": {
+      "standard": "cubic-bezier(0.4, 0, 0.2, 1)",
+      "decelerate": "cubic-bezier(0, 0, 0.2, 1)"
     }
   },
   "border": {
@@ -177,10 +194,10 @@
       "heavy": "4px"
     },
     "radius": {
-      "sm": "4px",
-      "md": "8px",
-      "lg": "12px",
-      "full": "9999px",
+      "sm": "atomic.radius.sm",
+      "md": "atomic.radius.md",
+      "lg": "atomic.radius.lg",
+      "full": "atomic.radius.full",
       "none": "0",
       "xs": "2px",
       "xl": "12px",

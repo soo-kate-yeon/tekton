@@ -323,4 +323,68 @@ describe('list_tokens Tool', () => {
     expect(firstShell).toHaveProperty('platform');
     expect(typeof firstShell.id).toBe('string');
   });
+
+  // ===== SPEC-LAYOUT-004 Mobile Shell Token Tests =====
+  it('should include mobile shell tokens from SPEC-LAYOUT-004', async () => {
+    const result = await listTokensTool({
+      tokenType: 'shell',
+    });
+
+    expect(result.success).toBe(true);
+    expect(result.shells).toBeDefined();
+
+    const shellIds = result.shells!.map(s => s.id);
+
+    // Verify web shells (SPEC-LAYOUT-001)
+    expect(shellIds).toContain('shell.web.app');
+    expect(shellIds).toContain('shell.web.dashboard');
+
+    // Verify mobile shells (SPEC-LAYOUT-004)
+    expect(shellIds).toContain('shell.mobile.app');
+    expect(shellIds).toContain('shell.mobile.fullscreen');
+    expect(shellIds).toContain('shell.mobile.modal');
+    expect(shellIds).toContain('shell.mobile.tab');
+    expect(shellIds).toContain('shell.mobile.drawer');
+    expect(shellIds).toContain('shell.mobile.detail');
+  });
+
+  it('should correctly identify mobile shells by platform', async () => {
+    const result = await listTokensTool({
+      tokenType: 'shell',
+    });
+
+    expect(result.success).toBe(true);
+    expect(result.shells).toBeDefined();
+
+    const mobileShells = result.shells!.filter(s => s.platform === 'mobile');
+    const webShells = result.shells!.filter(s => s.platform === 'web');
+
+    // Should have both web and mobile shells
+    expect(webShells.length).toBeGreaterThan(0);
+    expect(mobileShells.length).toBeGreaterThan(0);
+
+    // Mobile shells should have mobile platform
+    mobileShells.forEach(shell => {
+      expect(shell.platform).toBe('mobile');
+      expect(shell.id).toMatch(/^shell\.mobile\./);
+    });
+  });
+
+  it('should filter mobile shells by name pattern', async () => {
+    const result = await listTokensTool({
+      tokenType: 'shell',
+      filter: 'mobile',
+    });
+
+    expect(result.success).toBe(true);
+    expect(result.shells).toBeDefined();
+
+    // All returned shells should be mobile shells
+    result.shells!.forEach(shell => {
+      expect(shell.id).toMatch(/mobile/);
+    });
+
+    // Should include at least the 6 mobile shells from SPEC-LAYOUT-004
+    expect(result.shells!.length).toBeGreaterThanOrEqual(6);
+  });
 });

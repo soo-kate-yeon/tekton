@@ -128,6 +128,20 @@ export type {
   SectionCSS,
   SectionType,
   SectionPatternToken,
+  // Mobile Shell Types (SPEC-LAYOUT-004)
+  MobileShellToken,
+  SafeAreaConfig,
+  SafeAreaDefaults,
+  SafeAreaEdges,
+  StatusBarConfig,
+  NavigationBarConfig,
+  SystemUIConfig,
+  KeyboardConfig,
+  KeyboardAnimationConfig,
+  BottomTabConfig,
+  BottomTabItemConfig,
+  TouchTargetConfig,
+  HitSlopConfig,
 } from './layout-tokens/types.js';
 
 // Shell Token Definitions (SPEC-LAYOUT-001 - PHASE-3)
@@ -195,12 +209,67 @@ export {
   sortBreakpointsBySize,
 } from './layout-tokens/responsive.js';
 
-// Layout Token Validation (SPEC-LAYOUT-001 - PHASE-2)
+// Mobile Shell Token Definitions (SPEC-LAYOUT-004 - MILESTONE-2)
+export {
+  SHELL_MOBILE_APP,
+  SHELL_MOBILE_FULLSCREEN,
+  SHELL_MOBILE_MODAL,
+  SHELL_MOBILE_TAB,
+  SHELL_MOBILE_DRAWER,
+  SHELL_MOBILE_DETAIL,
+  getMobileShellToken,
+  getAllMobileShellTokens,
+  getMobileShellsByOS,
+} from './layout-tokens/mobile-shells.js';
+
+// Safe Area Utilities (SPEC-LAYOUT-004 - MILESTONE-3)
+export type { SafeAreaInsets, DeviceType } from './layout-tokens/safe-area.js';
+export {
+  detectDeviceType,
+  getSafeAreaTop,
+  getSafeAreaBottom,
+  getSafeAreaInsets,
+  applySafeAreaToLayout,
+  useSafeArea,
+} from './layout-tokens/safe-area.js';
+
+// Keyboard Utilities (SPEC-LAYOUT-004 - MILESTONE-4)
+export type {
+  KeyboardState,
+  KeyboardEventType,
+  KeyboardEventListener,
+  KeyboardAwareLayout,
+} from './layout-tokens/keyboard.js';
+export {
+  getKeyboardHeight,
+  applyKeyboardAvoidance,
+  useKeyboardAvoidance,
+  addKeyboardListener,
+  getKeyboardAnimationDuration,
+  getKeyboardAwareBottomSpacing,
+  getDefaultKeyboardAnimation,
+  isKeyboardVisible,
+  getKeyboardProgressMode,
+} from './layout-tokens/keyboard.js';
+
+// Touch Target Utilities (SPEC-LAYOUT-004 - MILESTONE-5)
+export type { AccessibilityGuideline, TouchTargetElement } from './layout-tokens/touch-target.js';
+export {
+  validateTouchTarget,
+  applyMinTouchTarget,
+  getHitSlop,
+  getMinTouchTargetForScale,
+  isAccessibleTouchTarget,
+  warnIfBelowMinimum,
+} from './layout-tokens/touch-target.js';
+
+// Layout Token Validation (SPEC-LAYOUT-001 - PHASE-2 & SPEC-LAYOUT-004 - MILESTONE-6)
 export {
   validateShellToken,
   validatePageLayoutToken,
   validateSectionPatternToken,
   validateTokenReference,
+  validateMobileShellToken,
   validateLLMShellInput,
   validateLLMPageInput,
   validateLLMSectionInput,
@@ -223,6 +292,20 @@ export {
   LLMShellInputSchema,
   LLMPageInputSchema,
   LLMSectionInputSchema,
+  // Mobile Shell Validation Schemas (SPEC-LAYOUT-004 - MILESTONE-6)
+  MobileShellTokenSchema,
+  SafeAreaConfigSchema,
+  SafeAreaDefaultsSchema,
+  SafeAreaEdgesSchema,
+  StatusBarConfigSchema,
+  NavigationBarConfigSchema,
+  SystemUIConfigSchema,
+  KeyboardConfigSchema,
+  KeyboardAnimationConfigSchema,
+  BottomTabConfigSchema,
+  BottomTabItemConfigSchema,
+  TouchTargetConfigSchema,
+  HitSlopConfigSchema,
   type ValidationResult as LayoutValidationResult,
   type LayoutTokenCollection,
 } from './layout-validation.js';

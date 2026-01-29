@@ -38,8 +38,12 @@ export async function listTokensTool(input: ListTokensInput): Promise<ListTokens
     const { tokenType = 'all', filter } = input;
 
     // Import token getters from @tekton/core
-    const { getAllShellTokens, getAllPageLayoutTokens, getAllSectionPatternTokens } =
-      await import('@tekton/core');
+    const {
+      getAllShellTokens,
+      getAllMobileShellTokens,
+      getAllPageLayoutTokens,
+      getAllSectionPatternTokens,
+    } = await import('@tekton/core');
 
     // Get tokens based on type
     let shells: TokenMetadata[] = [];
@@ -47,8 +51,13 @@ export async function listTokensTool(input: ListTokensInput): Promise<ListTokens
     let sections: TokenMetadata[] = [];
 
     if (tokenType === 'all' || tokenType === 'shell') {
-      const shellTokens = getAllShellTokens();
-      shells = shellTokens.map(token => ({
+      // Get both web and mobile shell tokens (SPEC-LAYOUT-001 + SPEC-LAYOUT-004)
+      const webShellTokens = getAllShellTokens();
+      const mobileShellTokens = getAllMobileShellTokens();
+
+      const allShellTokens = [...webShellTokens, ...mobileShellTokens];
+
+      shells = allShellTokens.map(token => ({
         id: token.id,
         name: token.id.split('.').pop() || token.id, // Extract name from id
         description: token.description,

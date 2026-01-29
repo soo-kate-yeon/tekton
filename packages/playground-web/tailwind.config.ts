@@ -8,6 +8,11 @@ const config: Config = {
         background: 'var(--background)',
         foreground: 'var(--foreground)',
       },
+      fontFamily: {
+        display: ['Playfair Display', 'serif'],
+        sans: ['Pretendard', 'system-ui', 'sans-serif'],
+        serif: ['Georgia', 'Times', 'serif'],
+      },
     },
   },
   plugins: [],
