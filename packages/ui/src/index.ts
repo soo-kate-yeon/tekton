@@ -30,6 +30,17 @@ export {
 } from './lib/theme-loader';
 export type { ThemeDefinition, OKLCHColor } from './lib/theme-loader';
 
+// Motion Utilities [SPEC-UI-001] [TAG-018]
+export {
+  motionTokens,
+  transitions,
+  fadeVariants,
+  slideVariants,
+  scaleVariants,
+  useMotionSafe,
+  getMotionTransition,
+} from './lib/motion';
+
 // ========================================
 // Tier 1: Core Components (15)
 // ========================================
@@ -212,6 +223,65 @@ export {
 
 // Progress
 export { Progress } from './components/progress';
+
+// ========================================
+// Tier 3: Advanced Components (5)
+// ========================================
+
+// Sidebar
+export {
+  Sidebar,
+  SidebarHeader,
+  SidebarContent,
+  SidebarItem,
+  SidebarSection,
+  SidebarSectionTitle,
+  SidebarFooter,
+  sidebarVariants,
+} from './components/sidebar';
+export type { SidebarProps, SidebarHeaderProps, SidebarContentProps, SidebarItemProps, SidebarSectionProps } from './components/sidebar';
+
+// NavigationMenu
+export {
+  navigationMenuTriggerStyle,
+  NavigationMenu,
+  NavigationMenuList,
+  NavigationMenuItem,
+  NavigationMenuContent,
+  NavigationMenuTrigger,
+  NavigationMenuLink,
+  NavigationMenuIndicator,
+  NavigationMenuViewport,
+} from './components/navigation-menu';
+
+// Breadcrumb
+export {
+  Breadcrumb,
+  BreadcrumbList,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+  BreadcrumbEllipsis,
+} from './components/breadcrumb';
+export type { BreadcrumbProps, BreadcrumbLinkProps, BreadcrumbSeparatorProps } from './components/breadcrumb';
+
+// Command
+export {
+  Command,
+  CommandDialog,
+  CommandInput,
+  CommandList,
+  CommandEmpty,
+  CommandGroup,
+  CommandItem,
+  CommandSeparator,
+  CommandShortcut,
+} from './components/command';
+export type { CalendarProps } from './components/calendar';
+
+// Calendar
+export { Calendar } from './components/calendar';
 
 // ========================================
 // Templates (Phase 3)

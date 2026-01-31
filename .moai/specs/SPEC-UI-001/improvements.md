@@ -447,7 +447,169 @@ Phase 3에서 템플릿 시스템의 **기능적 완성도**를 달성했으나,
 
 ---
 
-**문서 버전**: 1.0.0
+## Troubleshooting (문제 해결 가이드)
+
+### Issue 1: Tier 3 컴포넌트 CSS 미적용 (2026-01-31)
+
+**증상:**
+- Storybook에서 새로 추가된 Tier 3 컴포넌트들의 스타일이 적용되지 않음
+- 컴포넌트는 렌더링되지만 색상, 간격 등이 표시되지 않음
+
+**근본 원인:**
+```typescript
+// ❌ 잘못된 토큰 사용 (존재하지 않음)
+border-[var(--tekton-border-border)]
+text-[var(--tekton-text-foreground)]
+
+// ✅ 올바른 토큰
+border-[var(--tekton-border-default)]
+text-[var(--tekton-bg-foreground)]
+```
+
+**원인 분석:**
+1. Expert-frontend 에이전트가 Tekton 토큰 네이밍 규칙을 정확히 따르지 못함
+2. CSS Variable이 undefined이면 브라우저가 스타일을 무시함
+3. 토큰 이름 검증 프로세스 부재
+
+**해결 방법:**
+1. `packages/ui/styles/globals.css`에서 실제 정의된 토큰 확인
+2. 잘못된 토큰 이름을 올바른 이름으로 일괄 치환:
+   ```bash
+   sed -i '' 's/--tekton-border-border/--tekton-border-default/g' file.tsx
+   sed -i '' 's/--tekton-text-foreground/--tekton-bg-foreground/g' file.tsx
+   ```
+3. Storybook 재시작
+
+**예방 대책:**
+- **토큰 레퍼런스 문서 생성**: `packages/ui/docs/tokens.md`에 모든 사용 가능한 토큰 목록 문서화
+- **린트 규칙 추가**: ESLint 커스텀 룰로 잘못된 토큰 이름 감지
+- **타입 검증**: TokenReference 타입을 literal union으로 강화
+  ```typescript
+  type TektonBorderToken =
+    | 'var(--tekton-border-default)'
+    | 'var(--tekton-border-input)'
+    | 'var(--tekton-border-ring)';
+  ```
+
+---
+
+### Issue 2: Toast Stories React 에러 (2026-01-31)
+
+**증상:**
+```
+ReferenceError: Can't find variable: React
+```
+
+**근본 원인:**
+```typescript
+// ❌ React import 없음
+import type { Meta, StoryObj } from '@storybook/react';
+
+export const Default: Story = {
+  render: () => {
+    const [open, setOpen] = React.useState(false); // ❌ React 정의 안 됨
+```
+
+**해결 방법:**
+```typescript
+// ✅ React import 추가
+import * as React from 'react';
+import type { Meta, StoryObj } from '@storybook/react';
+```
+
+**추가 문제:**
+- `<TooltipProvider>` 사용 → `<ToastProvider>`로 수정
+
+**예방 대책:**
+- **Story 템플릿 생성**: 표준 import를 포함한 Story 템플릿 제공
+- **ESLint 규칙**: `react/jsx-uses-react` 활성화
+- **코드 리뷰 체크리스트**: Story 파일 생성 시 React import 확인
+
+---
+
+### Issue 3: Tailwind CSS 처리 누락 (Storybook)
+
+**증상:**
+- Storybook에서 모든 스타일이 적용되지 않음
+- `@tailwind`, `@apply` 디렉티브가 그대로 남아있음
+
+**근본 원인:**
+- `packages/ui`에 Tailwind CSS 의존성 없음
+- `tailwind.config.ts`, `postcss.config.js` 설정 파일 없음
+- Storybook이 PostCSS 처리를 하지 못함
+
+**해결 방법:**
+1. Tailwind CSS 설치:
+   ```bash
+   pnpm add -D tailwindcss postcss autoprefixer --filter @tekton/ui
+   ```
+
+2. `tailwind.config.ts` 생성:
+   ```typescript
+   export default {
+     content: [
+       './src/**/*.{js,ts,jsx,tsx,mdx}',
+       './.storybook/**/*.{js,ts,jsx,tsx}',
+     ],
+   };
+   ```
+
+3. `postcss.config.js` 생성:
+   ```javascript
+   export default {
+     plugins: { tailwindcss: {}, autoprefixer: {} },
+   };
+   ```
+
+4. Storybook 재시작
+
+**교훈:**
+- shadcn-ui는 "Copy & Paste" 방식이므로 각 프로젝트가 자체 Tailwind 설정 필요
+- Storybook은 독립 실행 환경이므로 패키지 자체에 Tailwind 설정 필요
+
+---
+
+## 토큰 네이밍 규칙 (정리)
+
+### 존재하는 토큰 (globals.css 기준)
+
+**배경 (Background):**
+- `--tekton-bg-background`
+- `--tekton-bg-foreground`
+- `--tekton-bg-card`
+- `--tekton-bg-card-foreground`
+- `--tekton-bg-primary`
+- `--tekton-bg-primary-foreground`
+- `--tekton-bg-secondary`
+- `--tekton-bg-secondary-foreground`
+- `--tekton-bg-muted`
+- `--tekton-bg-muted-foreground`
+- `--tekton-bg-accent`
+- `--tekton-bg-accent-foreground`
+- `--tekton-bg-destructive`
+- `--tekton-bg-destructive-foreground`
+
+**테두리 (Border):**
+- `--tekton-border-default`
+- `--tekton-border-input`
+- `--tekton-border-ring`
+
+**둥근 모서리 (Radius):**
+- `--tekton-radius-xs` ~ `--tekton-radius-3xl`
+- `--tekton-radius-full`
+- `--tekton-radius-none`
+
+**간격 (Spacing):**
+- `--tekton-spacing-0` ~ `--tekton-spacing-24`
+
+**모션 (Motion):**
+- `--tekton-motion-duration-{instant|fast|moderate|slow|complex}`
+- `--tekton-motion-easing-{linear|standard|emphasized|decelerate|accelerate}`
+
+---
+
+**문서 버전**: 1.1.0
 **작성일**: 2026-01-31
+**업데이트**: 2026-01-31 (Troubleshooting 섹션 추가)
 **작성자**: soo-kate-yeon
 **다음 검토일**: Phase 4 완료 시점

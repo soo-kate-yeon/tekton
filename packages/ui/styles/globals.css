@@ -85,6 +85,18 @@
   --tekton-spacing-16: 64px;
   --tekton-spacing-20: 80px;
   --tekton-spacing-24: 96px;
+
+  /* Motion Tokens [SPEC-UI-001] [TAG-018] */
+  --tekton-motion-duration-instant: 0ms;
+  --tekton-motion-duration-fast: 100ms;
+  --tekton-motion-duration-moderate: 200ms;
+  --tekton-motion-duration-slow: 300ms;
+  --tekton-motion-duration-complex: 500ms;
+  --tekton-motion-easing-linear: linear;
+  --tekton-motion-easing-standard: cubic-bezier(0, 0, 0.2, 1);
+  --tekton-motion-easing-emphasized: cubic-bezier(0.2, 0, 0, 1);
+  --tekton-motion-easing-decelerate: cubic-bezier(0, 0, 0.2, 1);
+  --tekton-motion-easing-accelerate: cubic-bezier(0.4, 0, 1, 1);
 }
 
 /* ========================================

@@ -144,8 +144,33 @@ export interface ShadowTokens {
 }
 
 /**
+ * Motion tokens (imported from motion.ts)
+ */
+export interface MotionDurationTokens {
+  instant: TokenReference;
+  fast: TokenReference;
+  moderate: TokenReference;
+  slow: TokenReference;
+  complex: TokenReference;
+}
+
+export interface MotionEasingTokens {
+  linear: TokenReference;
+  standard: TokenReference;
+  emphasized: TokenReference;
+  decelerate: TokenReference;
+  accelerate: TokenReference;
+}
+
+export interface MotionTokens {
+  duration: MotionDurationTokens;
+  easing: MotionEasingTokens;
+}
+
+/**
  * Complete Tekton tokens interface
  * REQ-STY-003: Provide IDE autocomplete for available tokens
+ * [SPEC-UI-001] [TAG-018] Motion tokens 추가
  */
 export interface TektonTokens {
   bg: BgTokens;
@@ -154,4 +179,5 @@ export interface TektonTokens {
   radius: RadiusTokens;
   typography: TypographyTokens;
   shadow: ShadowTokens;
+  motion: MotionTokens;
 }
