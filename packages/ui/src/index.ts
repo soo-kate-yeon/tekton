@@ -239,7 +239,13 @@ export {
   SidebarFooter,
   sidebarVariants,
 } from './components/sidebar';
-export type { SidebarProps, SidebarHeaderProps, SidebarContentProps, SidebarItemProps, SidebarSectionProps } from './components/sidebar';
+export type {
+  SidebarProps,
+  SidebarHeaderProps,
+  SidebarContentProps,
+  SidebarItemProps,
+  SidebarSectionProps,
+} from './components/sidebar';
 
 // NavigationMenu
 export {
@@ -264,7 +270,11 @@ export {
   BreadcrumbSeparator,
   BreadcrumbEllipsis,
 } from './components/breadcrumb';
-export type { BreadcrumbProps, BreadcrumbLinkProps, BreadcrumbSeparatorProps } from './components/breadcrumb';
+export type {
+  BreadcrumbProps,
+  BreadcrumbLinkProps,
+  BreadcrumbSeparatorProps,
+} from './components/breadcrumb';
 
 // Command
 export {

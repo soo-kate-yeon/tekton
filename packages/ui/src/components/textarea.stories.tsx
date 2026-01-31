@@ -117,19 +117,11 @@ export const CustomHeight: Story = {
     <div className="space-y-4">
       <div className="grid w-full gap-1.5">
         <Label htmlFor="message-small">Small (min-h-20)</Label>
-        <Textarea
-          placeholder="Small textarea"
-          id="message-small"
-          className="min-h-[60px]"
-        />
+        <Textarea placeholder="Small textarea" id="message-small" className="min-h-[60px]" />
       </div>
       <div className="grid w-full gap-1.5">
         <Label htmlFor="message-large">Large (min-h-40)</Label>
-        <Textarea
-          placeholder="Large textarea"
-          id="message-large"
-          className="min-h-[160px]"
-        />
+        <Textarea placeholder="Large textarea" id="message-large" className="min-h-[160px]" />
       </div>
     </div>
   ),
@@ -150,7 +142,7 @@ export const WithCharacterCount: Story = {
           placeholder="Tell us about yourself"
           id="bio"
           value={value}
-          onChange={(e) => setValue(e.target.value)}
+          onChange={e => setValue(e.target.value)}
           maxLength={maxLength}
         />
         <p className="text-sm text-[var(--tekton-bg-muted-foreground)] text-right">
@@ -194,11 +186,7 @@ export const Resizable: Story = {
   render: () => (
     <div className="grid w-full gap-1.5">
       <Label htmlFor="resizable">Resizable Textarea</Label>
-      <Textarea
-        placeholder="This textarea can be resized"
-        id="resizable"
-        className="resize"
-      />
+      <Textarea placeholder="This textarea can be resized" id="resizable" className="resize" />
     </div>
   ),
 };
@@ -210,11 +198,7 @@ export const FixedSize: Story = {
   render: () => (
     <div className="grid w-full gap-1.5">
       <Label htmlFor="fixed">Fixed Size Textarea</Label>
-      <Textarea
-        placeholder="This textarea cannot be resized"
-        id="fixed"
-        className="resize-none"
-      />
+      <Textarea placeholder="This textarea cannot be resized" id="fixed" className="resize-none" />
     </div>
   ),
 };

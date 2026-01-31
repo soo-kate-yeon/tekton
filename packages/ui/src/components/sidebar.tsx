@@ -103,8 +103,7 @@ const sidebarFooterVariants = cva(
 );
 
 export interface SidebarProps
-  extends React.HTMLAttributes<HTMLDivElement>,
-    VariantProps<typeof sidebarVariants> {
+  extends React.HTMLAttributes<HTMLDivElement>, VariantProps<typeof sidebarVariants> {
   /**
    * 컴포넌트가 접혀있는지 여부
    * @default false
@@ -117,9 +116,7 @@ const Sidebar = React.forwardRef<HTMLDivElement, SidebarProps>(
     return (
       <div
         ref={ref}
-        className={cn(
-          sidebarVariants({ variant, size: collapsed ? 'compact' : size, className })
-        )}
+        className={cn(sidebarVariants({ variant, size: collapsed ? 'compact' : size, className }))}
         role="navigation"
         aria-label="Main sidebar navigation"
         {...props}
@@ -130,8 +127,7 @@ const Sidebar = React.forwardRef<HTMLDivElement, SidebarProps>(
 Sidebar.displayName = 'Sidebar';
 
 export interface SidebarHeaderProps
-  extends React.HTMLAttributes<HTMLDivElement>,
-    VariantProps<typeof sidebarHeaderVariants> {}
+  extends React.HTMLAttributes<HTMLDivElement>, VariantProps<typeof sidebarHeaderVariants> {}
 
 const SidebarHeader = React.forwardRef<HTMLDivElement, SidebarHeaderProps>(
   ({ className, size, ...props }, ref) => {
@@ -141,8 +137,7 @@ const SidebarHeader = React.forwardRef<HTMLDivElement, SidebarHeaderProps>(
 SidebarHeader.displayName = 'SidebarHeader';
 
 export interface SidebarContentProps
-  extends React.HTMLAttributes<HTMLDivElement>,
-    VariantProps<typeof sidebarContentVariants> {}
+  extends React.HTMLAttributes<HTMLDivElement>, VariantProps<typeof sidebarContentVariants> {}
 
 const SidebarContent = React.forwardRef<HTMLDivElement, SidebarContentProps>(
   ({ className, spacing, ...props }, ref) => {
@@ -154,8 +149,7 @@ const SidebarContent = React.forwardRef<HTMLDivElement, SidebarContentProps>(
 SidebarContent.displayName = 'SidebarContent';
 
 export interface SidebarItemProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement>,
-    VariantProps<typeof sidebarItemVariants> {
+  extends React.ButtonHTMLAttributes<HTMLButtonElement>, VariantProps<typeof sidebarItemVariants> {
   /**
    * 아이템 앞에 표시될 아이콘
    */
@@ -239,12 +233,11 @@ const SidebarSection = React.forwardRef<HTMLDivElement, SidebarSectionProps>(
 );
 SidebarSection.displayName = 'SidebarSection';
 
-const SidebarSectionTitle = React.forwardRef<
-  HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement>
->(({ className, ...props }, ref) => {
-  return <div ref={ref} className={cn(sidebarSectionTitleVariants({ className }))} {...props} />;
-});
+const SidebarSectionTitle = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
+  ({ className, ...props }, ref) => {
+    return <div ref={ref} className={cn(sidebarSectionTitleVariants({ className }))} {...props} />;
+  }
+);
 SidebarSectionTitle.displayName = 'SidebarSectionTitle';
 
 const SidebarFooter = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(

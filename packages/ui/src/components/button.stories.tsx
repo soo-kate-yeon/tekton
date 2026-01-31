@@ -161,7 +161,9 @@ export const AllVariants: Story = {
         <Button size="sm">Small</Button>
         <Button size="default">Default</Button>
         <Button size="lg">Large</Button>
-        <Button size="icon" aria-label="Icon">🔍</Button>
+        <Button size="icon" aria-label="Icon">
+          🔍
+        </Button>
       </div>
     </div>
   ),

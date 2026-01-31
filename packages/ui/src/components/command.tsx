@@ -32,7 +32,10 @@ const Command = React.forwardRef<
 ));
 Command.displayName = CommandPrimitive.displayName;
 
-const CommandDialog = ({ children, ...props }: React.ComponentPropsWithoutRef<typeof CommandPrimitive.Dialog>) => {
+const CommandDialog = ({
+  children,
+  ...props
+}: React.ComponentPropsWithoutRef<typeof CommandPrimitive.Dialog>) => {
   return (
     <CommandPrimitive.Dialog
       {...props}
@@ -53,7 +56,10 @@ const CommandInput = React.forwardRef<
   React.ElementRef<typeof CommandPrimitive.Input>,
   React.ComponentPropsWithoutRef<typeof CommandPrimitive.Input>
 >(({ className, ...props }, ref) => (
-  <div className="flex items-center border-b border-[var(--tekton-border-default)] px-3" cmdk-input-wrapper="">
+  <div
+    className="flex items-center border-b border-[var(--tekton-border-default)] px-3"
+    cmdk-input-wrapper=""
+  >
     <svg
       width="15"
       height="15"

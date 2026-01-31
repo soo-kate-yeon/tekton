@@ -241,9 +241,7 @@ export const Complete: Story = {
               <div className="mt-1 h-2 w-2 rounded-full bg-[var(--tekton-bg-primary)]" />
               <div className="flex-1">
                 <p className="text-sm font-medium">Activity {i + 1}</p>
-                <p className="text-sm text-[var(--tekton-bg-muted-foreground)]">
-                  {i} minutes ago
-                </p>
+                <p className="text-sm text-[var(--tekton-bg-muted-foreground)]">{i} minutes ago</p>
               </div>
             </div>
           ))}

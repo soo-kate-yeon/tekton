@@ -127,10 +127,7 @@ export const ChatMessages: Story = {
     <ScrollArea className="h-[400px] w-[350px] rounded-md border p-4">
       <div className="space-y-4">
         {Array.from({ length: 15 }).map((_, i) => (
-          <div
-            key={i}
-            className={`flex ${i % 2 === 0 ? 'justify-start' : 'justify-end'}`}
-          >
+          <div key={i} className={`flex ${i % 2 === 0 ? 'justify-start' : 'justify-end'}`}>
             <div
               className={`rounded-lg p-3 max-w-[70%] ${
                 i % 2 === 0
@@ -139,9 +136,7 @@ export const ChatMessages: Story = {
               }`}
             >
               <p className="text-sm">Message {i + 1}</p>
-              <p className="text-xs opacity-70 mt-1">
-                {new Date().toLocaleTimeString()}
-              </p>
+              <p className="text-xs opacity-70 mt-1">{new Date().toLocaleTimeString()}</p>
             </div>
           </div>
         ))}

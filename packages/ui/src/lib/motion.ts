@@ -131,10 +131,7 @@ export function useMotionSafe(): boolean {
  * Motion-safe transition helper
  * 사용자 설정에 따라 애니메이션 비활성화
  */
-export function getMotionTransition(
-  transition: Transition,
-  motionSafe: boolean
-): Transition {
+export function getMotionTransition(transition: Transition, motionSafe: boolean): Transition {
   if (!motionSafe) {
     return { duration: 0.01 };
   }

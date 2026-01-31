@@ -6,7 +6,14 @@
  */
 
 import type { Meta, StoryObj } from '@storybook/react';
-import { Sidebar, SidebarHeader, SidebarContent, SidebarItem, SidebarSection, SidebarFooter } from './sidebar';
+import {
+  Sidebar,
+  SidebarHeader,
+  SidebarContent,
+  SidebarItem,
+  SidebarSection,
+  SidebarFooter,
+} from './sidebar';
 import { Badge } from './badge';
 
 const meta = {
@@ -48,7 +55,9 @@ export const Default: Story = {
           <span className="text-xl font-bold">Logo</span>
         </SidebarHeader>
         <SidebarContent>
-          <SidebarItem icon="🏠" active>Dashboard</SidebarItem>
+          <SidebarItem icon="🏠" active>
+            Dashboard
+          </SidebarItem>
           <SidebarItem icon="📊">Analytics</SidebarItem>
           <SidebarItem icon="👥">Users</SidebarItem>
           <SidebarItem icon="⚙️">Settings</SidebarItem>

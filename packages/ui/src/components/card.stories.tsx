@@ -6,14 +6,7 @@
  */
 
 import type { Meta, StoryObj } from '@storybook/react';
-import {
-  Card,
-  CardHeader,
-  CardFooter,
-  CardTitle,
-  CardDescription,
-  CardContent,
-} from './card';
+import { Card, CardHeader, CardFooter, CardTitle, CardDescription, CardContent } from './card';
 import { Button } from './button';
 
 const meta = {
@@ -150,9 +143,7 @@ export const Dashboard: Story = {
       </CardHeader>
       <CardContent>
         <div className="text-2xl font-bold">$45,231.89</div>
-        <p className="text-xs text-[var(--tekton-bg-muted-foreground)]">
-          +20.1% from last month
-        </p>
+        <p className="text-xs text-[var(--tekton-bg-muted-foreground)]">+20.1% from last month</p>
       </CardContent>
     </Card>
   ),
@@ -182,9 +173,7 @@ export const Notification: Story = {
           <span className="text-2xl">🔔</span>
           <div className="flex-1 space-y-1">
             <p className="text-sm font-medium leading-none">Reminder</p>
-            <p className="text-sm text-[var(--tekton-bg-muted-foreground)]">
-              Meeting at 3:00 PM
-            </p>
+            <p className="text-sm text-[var(--tekton-bg-muted-foreground)]">Meeting at 3:00 PM</p>
           </div>
         </div>
       </CardContent>

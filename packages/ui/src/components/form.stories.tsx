@@ -224,7 +224,7 @@ export const WithSelect: Story = {
 export const WithCheckbox: Story = {
   render: () => {
     const formSchema = z.object({
-      terms: z.boolean().refine((val) => val === true, {
+      terms: z.boolean().refine(val => val === true, {
         message: 'You must accept the terms and conditions',
       }),
     });
@@ -306,9 +306,7 @@ export const WithRadioGroup: Story = {
                       <FormControl>
                         <RadioGroupItem value="all" />
                       </FormControl>
-                      <FormLabel className="font-normal cursor-pointer">
-                        All new messages
-                      </FormLabel>
+                      <FormLabel className="font-normal cursor-pointer">All new messages</FormLabel>
                     </FormItem>
                     <FormItem className="flex items-center space-x-3 space-y-0">
                       <FormControl>
@@ -370,7 +368,9 @@ export const WithSwitch: Story = {
                 <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
                   <div className="space-y-0.5">
                     <FormLabel className="text-base">Marketing emails</FormLabel>
-                    <FormDescription>Receive emails about new products and features.</FormDescription>
+                    <FormDescription>
+                      Receive emails about new products and features.
+                    </FormDescription>
                   </div>
                   <FormControl>
                     <Switch checked={field.value} onCheckedChange={field.onChange} />
@@ -385,9 +385,7 @@ export const WithSwitch: Story = {
                 <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
                   <div className="space-y-0.5">
                     <FormLabel className="text-base">Security emails</FormLabel>
-                    <FormDescription>
-                      Receive emails about your account security.
-                    </FormDescription>
+                    <FormDescription>Receive emails about your account security.</FormDescription>
                   </div>
                   <FormControl>
                     <Switch checked={field.value} onCheckedChange={field.onChange} />

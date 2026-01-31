@@ -189,9 +189,7 @@ export const PaymentMethod: Story = {
           <Label htmlFor="bank" className="cursor-pointer font-medium">
             Bank Transfer
           </Label>
-          <p className="text-sm text-[var(--tekton-bg-muted-foreground)]">
-            Pay via bank transfer
-          </p>
+          <p className="text-sm text-[var(--tekton-bg-muted-foreground)]">Pay via bank transfer</p>
         </div>
       </div>
     </RadioGroup>

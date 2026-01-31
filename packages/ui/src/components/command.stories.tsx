@@ -158,7 +158,7 @@ export const Dialog: Story = {
       const down = (e: KeyboardEvent) => {
         if (e.key === 'k' && (e.metaKey || e.ctrlKey)) {
           e.preventDefault();
-          setOpen((open) => !open);
+          setOpen(open => !open);
         }
       };
 

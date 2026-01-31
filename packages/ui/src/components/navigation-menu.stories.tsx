@@ -37,19 +37,13 @@ export const Default: Story = {
     <NavigationMenu>
       <NavigationMenuList>
         <NavigationMenuItem>
-          <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-            Home
-          </NavigationMenuLink>
+          <NavigationMenuLink className={navigationMenuTriggerStyle()}>Home</NavigationMenuLink>
         </NavigationMenuItem>
         <NavigationMenuItem>
-          <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-            About
-          </NavigationMenuLink>
+          <NavigationMenuLink className={navigationMenuTriggerStyle()}>About</NavigationMenuLink>
         </NavigationMenuItem>
         <NavigationMenuItem>
-          <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-            Contact
-          </NavigationMenuLink>
+          <NavigationMenuLink className={navigationMenuTriggerStyle()}>Contact</NavigationMenuLink>
         </NavigationMenuItem>
       </NavigationMenuList>
     </NavigationMenu>
@@ -183,23 +177,17 @@ export const Compact: Story = {
     <NavigationMenu>
       <NavigationMenuList className="gap-0">
         <NavigationMenuItem>
-          <NavigationMenuLink
-            className={cn(navigationMenuTriggerStyle(), 'px-3 py-2 text-xs')}
-          >
+          <NavigationMenuLink className={cn(navigationMenuTriggerStyle(), 'px-3 py-2 text-xs')}>
             Home
           </NavigationMenuLink>
         </NavigationMenuItem>
         <NavigationMenuItem>
-          <NavigationMenuLink
-            className={cn(navigationMenuTriggerStyle(), 'px-3 py-2 text-xs')}
-          >
+          <NavigationMenuLink className={cn(navigationMenuTriggerStyle(), 'px-3 py-2 text-xs')}>
             About
           </NavigationMenuLink>
         </NavigationMenuItem>
         <NavigationMenuItem>
-          <NavigationMenuLink
-            className={cn(navigationMenuTriggerStyle(), 'px-3 py-2 text-xs')}
-          >
+          <NavigationMenuLink className={cn(navigationMenuTriggerStyle(), 'px-3 py-2 text-xs')}>
             Contact
           </NavigationMenuLink>
         </NavigationMenuItem>

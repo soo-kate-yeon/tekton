@@ -172,11 +172,7 @@ export const Indeterminate: Story = {
     return (
       <div className="space-y-3">
         <div className="flex items-center space-x-2">
-          <Checkbox
-            id="parent"
-            checked={checked}
-            onCheckedChange={setChecked}
-          />
+          <Checkbox id="parent" checked={checked} onCheckedChange={setChecked} />
           <Label htmlFor="parent" className="cursor-pointer">
             Select all
           </Label>

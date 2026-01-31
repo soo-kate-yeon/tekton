@@ -58,10 +58,7 @@ export const WithForgotPassword: Story = {
   args: {
     slots: {
       forgotPassword: (
-        <a
-          href="#"
-          className="text-sm text-[var(--tekton-bg-primary)] hover:underline"
-        >
+        <a href="#" className="text-sm text-[var(--tekton-bg-primary)] hover:underline">
           Forgot password?
         </a>
       ),
@@ -136,10 +133,7 @@ export const Complete: Story = {
         </div>
       ),
       forgotPassword: (
-        <a
-          href="#"
-          className="text-sm text-[var(--tekton-bg-primary)] hover:underline"
-        >
+        <a href="#" className="text-sm text-[var(--tekton-bg-primary)] hover:underline">
           Forgot?
         </a>
       ),

@@ -109,7 +109,7 @@ export const FileUpload: Story = {
       setUploading(true);
       setProgress(0);
       const interval = setInterval(() => {
-        setProgress((prev) => {
+        setProgress(prev => {
           if (prev >= 100) {
             clearInterval(interval);
             setUploading(false);

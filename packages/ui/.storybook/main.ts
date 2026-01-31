@@ -9,10 +9,7 @@
 import type { StorybookConfig } from '@storybook/react-vite';
 
 const config: StorybookConfig = {
-  stories: [
-    '../src/**/*.mdx',
-    '../src/**/*.stories.@(js|jsx|mjs|ts|tsx)',
-  ],
+  stories: ['../src/**/*.mdx', '../src/**/*.stories.@(js|jsx|mjs|ts|tsx)'],
   addons: [
     '@storybook/addon-essentials',
     '@storybook/addon-a11y',
@@ -31,7 +28,7 @@ const config: StorybookConfig = {
     reactDocgenTypescriptOptions: {
       shouldExtractLiteralValuesFromEnum: true,
       shouldRemoveUndefinedFromOptional: true,
-      propFilter: (prop) => {
+      propFilter: prop => {
         // Filter out props from node_modules except for specific ones
         if (prop.parent) {
           return !prop.parent.fileName.includes('node_modules');
