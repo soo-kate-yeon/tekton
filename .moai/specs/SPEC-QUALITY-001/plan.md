@@ -13,9 +13,9 @@ tags: [TAG-Q-001, TAG-Q-002, TAG-Q-003, TAG-Q-004, TAG-Q-005]
 ## 1. 개요
 
 ### 구현 기간
-- **총 기간**: 13일
+- **총 기간**: 14일
 - **Phase 4.1**: 6일 (TAG 주석 시스템)
-- **Phase 4.2**: 4일 (TypeScript 타입 개선)
+- **Phase 4.2**: 5일 (TypeScript 타입 개선) - **1일 연장**
 - **Phase 4.3**: 2일 (테스트 커버리지 향상)
 - **Phase 4.4**: 1일 (검증 및 문서화)
 
@@ -93,21 +93,25 @@ SPEC-UI-001 Phase 3 완료 후 품질을 TRUST 5 Framework 기준으로 강화�
 **의존성**: Phase 4.1 완료
 **결과물**: TypeScript strict mode 완전 준수
 
-#### Day 7: ScreenTemplateProps 타입 강화
+#### Day 7: ScreenTemplateProps 타입 강화 (제네릭 패턴)
 **작업 항목**:
-1. 제네릭 타입 매개변수 추가
-2. `content` 필드 타입 강화
-3. `meta` 필드 선택적 타입 개선
-4. 타입 가드 함수 추가
+1. 제네릭 타입 매개변수 추가 (`TContent extends Record<string, unknown>`)
+2. `content` 필드 타입 강화 및 타입 추론 개선
+3. `slots` 필드에 제네릭 타입 연동
+4. 타입 가드 함수 추가 및 테스트
 
 ```typescript
 /**
  * [TAG-Q-002] TypeScript strict mode 오류 없이 컴파일
  */
-interface ScreenTemplateProps<T extends Record<string, unknown>> {
+interface ScreenTemplateProps<TContent extends Record<string, unknown> = Record<string, unknown>> {
   layout: LayoutType;
-  content: T;
+  content: TContent;
   meta?: MetaData;
+  slots?: {
+    header?: React.ComponentType<{ content: TContent }>;
+    footer?: React.ComponentType<{ content: TContent }>;
+  };
 }
 ```
 
@@ -132,41 +136,155 @@ interface ScreenTemplateProps<T extends Record<string, unknown>> {
 3. 타입 가이드 예제 추가
 4. CI/CD 타입 체크 통합
 
-### Phase 4.3: 테스트 커버리지 향상 (중간)
-
-**우선순위**: Medium
-**의존성**: Phase 4.2 완료
-**결과물**: 95% 이상 테스트 커버리지
-
-#### Day 11: Edge Case 및 에러 핸들링 테스트
+#### Day 11: 검증 스크립트 성능 최적화 (신규)
 **작업 항목**:
-1. 빈 배열, null, undefined 케이스 테스트
-2. try-catch 블록 에러 핸들링 테스트
-3. 경계값 테스트 (0, -1, 최대값)
-4. 커버리지 리포트 생성 및 분석
+1. Worker Threads 기반 병렬 처리 구현
+   - `validate-tags-worker.js` 생성
+   - 파일 배열을 4개 청크로 분산
+   - 병렬 실행 후 결과 병합
+2. tsconfig.json exclude 최적화
+   - 테스트 파일 (`**/__tests__/**`, `**/*.test.ts`)
+   - 스크립트 파일 (`scripts/**`)
+   - 빌드 출력 (`dist/**`, `build/**`)
+3. 성능 목표 달성 검증
+   - validate-tags: < 5초 (500개 파일 기준)
+   - 전체 품질 게이트: < 15초 (병렬 실행)
+4. 성능 벤치마크 문서화
 
-**테스트 예시**:
+**코드 예시**:
 ```typescript
 /**
- * [TAG-Q-003] 테스트 커버리지 95% 이상 유지
+ * [TAG-Q-021] 검증 스크립트 Worker Threads 활용
  */
-describe('Edge Cases', () => {
-  it('should handle empty array', () => {
-    expect(processItems([])).toEqual([]);
-  });
+import { Worker } from 'worker_threads';
 
-  it('should throw error on null input', () => {
-    expect(() => processItems(null)).toThrow();
-  });
-});
+export async function validateTagsParallel(files: string[]): Promise<ValidationResult> {
+  const chunkSize = Math.ceil(files.length / 4);
+  const chunks = [];
+
+  for (let i = 0; i < files.length; i += chunkSize) {
+    chunks.push(files.slice(i, i + chunkSize));
+  }
+
+  const workers = chunks.map(chunk =>
+    new Worker('./validate-tags-worker.js', { workerData: chunk })
+  );
+
+  const results = await Promise.all(
+    workers.map(worker =>
+      new Promise((resolve, reject) => {
+        worker.on('message', resolve);
+        worker.on('error', reject);
+      })
+    )
+  );
+
+  return mergeResults(results);
+}
 ```
 
-#### Day 12: 타입 가드 및 통합 테스트
+### Phase 4.3: 테스트 커버리지 향상 (높음)
+
+**우선순위**: High (Medium → High로 상향)
+**의존성**: Phase 4.2 완료
+**결과물**: 95% 이상 테스트 커버리지 (특히 Functions: 85.29% → 95%)
+
+**현황 분석**:
+- 현재 Functions 커버리지: 85.29% (가장 낮은 지표)
+- 목표: 95% 이상
+- 누락 함수: 약 53개 추정
+- 전략: Test Factory Pattern + Integration Test
+
+#### Day 12: Functions Coverage 집중 개선 (Test Factory Pattern)
 **작업 항목**:
-1. 런타임 타입 검증 함수 테스트
-2. 컴포넌트 간 통합 테스트
-3. API 응답 mock 테스트
-4. 최종 커버리지 검증
+1. 커버리지 리포트 분석 및 미테스트 함수 식별
+   ```bash
+   pnpm run test:coverage
+   # Functions coverage가 낮은 파일 우선순위 지정
+   ```
+
+2. Test Factory Pattern 도입
+   ```typescript
+   /**
+    * [TAG-Q-003] 테스트 커버리지 95% 이상 유지
+    * Test Factory Pattern으로 반복 테스트 자동화
+    */
+   export function createVariantTests(
+     Component: React.ComponentType<any>,
+     variants: string[]
+   ) {
+     describe('Variants', () => {
+       it.each(variants)('renders %s variant', (variant) => {
+         render(<Component variant={variant}>Test</Component>);
+         expect(screen.getByText('Test')).toBeInTheDocument();
+       });
+     });
+   }
+
+   // 사용 예시
+   createVariantTests(Button, ['primary', 'secondary', 'outline', 'ghost']);
+   ```
+
+3. Edge Case 및 에러 핸들링 테스트
+   - 빈 배열, null, undefined 케이스 테스트
+   - try-catch 블록 에러 핸들링 테스트
+   - 경계값 테스트 (0, -1, 최대값)
+
+4. 헬퍼 함수 및 유틸리티 함수 테스트 추가
+   - `src/lib/utils.ts` 100% 커버
+   - `src/lib/tokens.ts` 타입 가드 함수 테스트
+
+**목표**: Functions 커버리지 85.29% → 92%
+
+#### Day 13: Integration Test 및 최종 커버리지 검증
+**작업 항목**:
+1. 컴포넌트 간 통합 테스트 시나리오
+   ```typescript
+   /**
+    * [TAG-Q-003] 통합 테스트로 함수 호출 경로 커버
+    */
+   describe('Dashboard Integration', () => {
+     it('should render complete dashboard with all metrics', () => {
+       const { container } = render(
+         <DashboardTemplate
+           slots={{
+             sidebar: <Sidebar />,
+             metrics: <MetricsSummary />,
+             primaryContent: <MetricsDetail />,
+           }}
+           texts={{ title: 'Dashboard' }}
+         />
+       );
+
+       expect(container.querySelector('.sidebar')).toBeInTheDocument();
+       expect(container.querySelector('.metrics')).toBeInTheDocument();
+     });
+   });
+   ```
+
+2. 런타임 타입 검증 함수 테스트
+   - `isTokenReference()` 타입 가드 테스트
+   - `createTokenRef()` 예외 처리 테스트
+
+3. vitest.config.ts 임계값 업데이트
+   ```typescript
+   export default defineConfig({
+     test: {
+       coverage: {
+         statements: 95,
+         branches: 90,
+         functions: 95,  // 85.29% → 95%로 상향
+         lines: 95,
+       },
+     },
+   });
+   ```
+
+4. 최종 커버리지 검증 및 리포트
+   - 모든 메트릭 95% 이상 확인
+   - 커버리지 HTML 리포트 생성
+
+**목표**: Functions 커버리지 92% → 95% (최종 목표 달성)
 
 ### Phase 4.4: 검증 및 문서화 (낮음)
 
@@ -174,7 +292,7 @@ describe('Edge Cases', () => {
 **의존성**: Phase 4.1, 4.2, 4.3 모두 완료
 **결과물**: TRUST 5 리포트 및 최종 문서
 
-#### Day 13: 최종 검증 및 문서화
+#### Day 14: 최종 검증 및 문서화
 **작업 항목**:
 1. TRUST 5 스코어 계산 (`trust-score.ts`)
 2. 품질 메트릭 리포트 생성
@@ -367,4 +485,8 @@ describe('Component Tests', () => {
 **작성일**: 2026-01-31
 **작성자**: soo-kate-yeon
 **상태**: Planned
-**예상 완료**: Phase 4.4 (Day 13)
+**예상 완료**: Phase 4.4 (Day 14)
+**변경 사항**:
+- Phase 4.2: 4일 → 5일로 연장 (Day 11: 성능 최적화 추가)
+- Phase 4.3: 우선순위 Medium → High로 상향 (Functions coverage 집중)
+- 총 기간: 13일 → 14일로 조정

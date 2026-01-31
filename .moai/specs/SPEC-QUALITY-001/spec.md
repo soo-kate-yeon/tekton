@@ -194,6 +194,16 @@ SPEC-UI-001 Phase 3 완료 후 품질을 TRUST 5 Framework 기준으로 강화�
 - WHY: 가이드가 개발자 학습 곡선 단축
 - IMPACT: 미제공 시 학습 시간 증가
 
+**[TAG-Q-020] tsconfig.json 테스트 파일 제외**
+- **항상** tsconfig.json에서 테스트 파일 및 스크립트를 exclude에 포함해야 한다
+- WHY: 빌드 성능 향상 및 타입 체크 범위 최적화
+- IMPACT: exclude 미설정 시 불필요한 파일 컴파일로 빌드 시간 증가
+
+**[TAG-Q-021] 검증 스크립트 Worker Threads 활용**
+- **가능하면** 검증 스크립트에서 Worker Threads를 활용하여 병렬 처리를 구현해야 한다
+- WHY: 대용량 코드베이스 검증 성능 향상
+- IMPACT: 미적용 시 검증 시간 10초 이상 소요 가능
+
 ## 4. Technical Specifications (기술 명세)
 
 ### TAG 주석 패턴
@@ -212,16 +222,38 @@ export function validateTag(code: string): boolean {
 
 ### TypeScript 타입 정의
 
-#### ScreenTemplateProps 타입 강화
+#### ScreenTemplateProps 타입 강화 (제네릭 패턴)
 ```typescript
 /**
  * [TAG-Q-002] TypeScript strict mode 오류 없이 컴파일
+ * [TAG-Q-020] 제네릭 타입을 통한 타입 안전성 강화
  */
-interface ScreenTemplateProps<T extends Record<string, unknown>> {
+interface ScreenTemplateProps<TContent extends Record<string, unknown> = Record<string, unknown>> {
   layout: LayoutType;
-  content: T;
+  content: TContent;
   meta?: MetaData;
+  slots?: {
+    header?: React.ComponentType<{ content: TContent }>;
+    footer?: React.ComponentType<{ content: TContent }>;
+    sidebar?: React.ComponentType<{ content: TContent }>;
+  };
 }
+
+// 사용 예시
+type DashboardContent = {
+  title: string;
+  metrics: Array<{ label: string; value: number }>;
+  charts: ChartConfig[];
+};
+
+const dashboardProps: ScreenTemplateProps<DashboardContent> = {
+  layout: 'dashboard',
+  content: {
+    title: 'Analytics Dashboard',
+    metrics: [{ label: 'Users', value: 1234 }],
+    charts: [],
+  },
+};
 ```
 
 #### TokenReference 동기화
@@ -236,19 +268,95 @@ type TokenReference = {
 };
 ```
 
+#### 타입 가드 패턴
+```typescript
+/**
+ * [TAG-Q-002] TypeScript strict mode 오류 없이 컴파일
+ * 런타임 타입 검증을 위한 타입 가드
+ */
+export function isTokenReference(value: unknown): value is TokenReference {
+  return (
+    typeof value === 'object' &&
+    value !== null &&
+    'category' in value &&
+    'name' in value &&
+    'value' in value &&
+    typeof (value as TokenReference).category === 'string' &&
+    typeof (value as TokenReference).name === 'string'
+  );
+}
+
+export function createTokenRef(tokenPath: string): TokenReference {
+  const ref = `var(--tekton-${tokenPath})` as const;
+  if (!isTokenReference(ref)) {
+    throw new TypeError(`Invalid token reference: ${ref}`);
+  }
+  return ref;
+}
+```
+
+### 검증 스크립트 성능 목표
+
+#### 성능 요구사항
+```typescript
+/**
+ * [TAG-Q-021] 검증 스크립트 Worker Threads 활용
+ * 대용량 코드베이스 검증을 위한 병렬 처리 구현
+ */
+import { Worker } from 'worker_threads';
+
+export async function validateTagsParallel(files: string[]): Promise<ValidationResult> {
+  const chunkSize = Math.ceil(files.length / 4); // 4개 워커로 분산
+  const chunks = [];
+
+  for (let i = 0; i < files.length; i += chunkSize) {
+    chunks.push(files.slice(i, i + chunkSize));
+  }
+
+  const workers = chunks.map(chunk =>
+    new Worker('./validate-tags-worker.js', { workerData: chunk })
+  );
+
+  const results = await Promise.all(
+    workers.map(worker =>
+      new Promise((resolve, reject) => {
+        worker.on('message', resolve);
+        worker.on('error', reject);
+      })
+    )
+  );
+
+  return mergeResults(results);
+}
+```
+
+#### 성능 목표
+- **validate-tags.ts**: < 5초 (500개 파일 기준)
+- **check-coverage.ts**: < 3초 (커버리지 리포트 파싱)
+- **trust-score.ts**: < 2초 (스코어 계산)
+- **전체 품질 게이트**: < 15초 (병렬 실행 시)
+
 ### 테스트 전략
 
 #### 테스트 커버리지 목표
 - Statements: 95% 이상
 - Branches: 90% 이상
-- Functions: 95% 이상
+- Functions: 95% 이상 (**현재 85.29% → 목표 95%**)
 - Lines: 95% 이상
+
+#### Functions Coverage 집중 전략
+현재 Functions 커버리지가 85.29%로 가장 낮으므로, 우선적으로 개선:
+1. 미테스트 함수 식별 (커버리지 리포트 분석)
+2. Test Factory Pattern으로 반복 테스트 자동화
+3. 헬퍼 함수 및 유틸리티 함수 테스트 추가
+4. Integration 테스트로 함수 호출 경로 커버
 
 #### 테스트 우선순위
 1. Edge Case 테스트 (빈 배열, null, undefined)
 2. 에러 핸들링 테스트 (throw, catch)
 3. 타입 가드 테스트 (런타임 검증)
 4. 통합 테스트 (컴포넌트 간 상호작용)
+5. **Test Factory Pattern으로 변형 테스트 자동화**
 
 ## 5. 파일 구조
 
@@ -256,6 +364,7 @@ type TokenReference = {
 .moai/
 └── scripts/
     ├── validate-tags.ts        # TAG 검증 스크립트
+    ├── validate-tags-worker.js # Worker Thread 병렬 처리
     ├── check-coverage.ts        # 커버리지 검증
     └── trust-score.ts           # TRUST 5 스코어 계산
 
@@ -271,6 +380,209 @@ docs/
     ├── quality-gate.yml         # 품질 게이트 워크플로우
     └── coverage-check.yml       # 커버리지 체크
 ```
+
+## 5.5. CI/CD 품질 게이트 구성
+
+### 4-Phase Pipeline 아키텍처
+
+```yaml
+# .github/workflows/quality-gate.yml
+name: Quality Gate - SPEC-QUALITY-001
+
+on:
+  pull_request:
+    branches: [main, develop]
+  push:
+    branches: [main, develop]
+
+jobs:
+  # Phase 1: Static Analysis (병렬 실행, 5-10분)
+  phase-1-static:
+    name: Phase 1 - Static Analysis
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        task: [tag-validation, type-check, lint]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v2
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Run ${{ matrix.task }}
+        run: |
+          case "${{ matrix.task }}" in
+            tag-validation) pnpm run validate:tags ;;
+            type-check) pnpm run type-check ;;
+            lint) pnpm run lint ;;
+          esac
+
+  # Phase 2: Build Verification (순차 실행, 3-5분)
+  phase-2-build:
+    name: Phase 2 - Build Verification
+    needs: phase-1-static
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v2
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build packages
+        run: pnpm run build
+
+  # Phase 3: Test & Coverage (병렬 실행, 10-15분)
+  phase-3-test:
+    name: Phase 3 - Test & Coverage
+    needs: phase-2-build
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        task: [unit-tests, integration-tests, coverage-check]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v2
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Run ${{ matrix.task }}
+        run: |
+          case "${{ matrix.task }}" in
+            unit-tests) pnpm run test ;;
+            integration-tests) pnpm run test:integration ;;
+            coverage-check) pnpm run test:coverage ;;
+          esac
+
+      - name: Upload coverage
+        if: matrix.task == 'coverage-check'
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: coverage/
+
+  # Phase 4: TRUST 5 Score (순차 실행, 1-2분)
+  phase-4-trust:
+    name: Phase 4 - TRUST 5 Score
+    needs: phase-3-test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v2
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Calculate TRUST 5 Score
+        id: trust-score
+        run: pnpm run quality:trust-score
+
+      - name: Comment PR with results
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const report = fs.readFileSync('trust-5-report.md', 'utf8');
+
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `## 🎯 TRUST 5 Quality Gate Results\n\n${report}`
+            });
+```
+
+### PR Comment Dashboard 예시
+
+PR에 자동으로 게시되는 품질 메트릭 대시보드:
+
+```markdown
+## 🎯 TRUST 5 Quality Gate Results
+
+### Overall Score: 92/100 ✅ PASSED
+
+| Pillar | Score | Status | Details |
+|--------|-------|--------|---------|
+| Test-first | 19/20 | ✅ | Coverage: 95.3% |
+| Readable | 18/20 | ✅ | JSDoc: 98% |
+| Unified | 18/20 | ✅ | Linter: 0 errors |
+| Secured | 20/20 | ✅ | Type errors: 0 |
+| Trackable | 20/20 | ✅ | TAG coverage: 100% |
+
+### Phase Results
+
+- ✅ Phase 1: Static Analysis (5m 32s)
+  - TAG Validation: PASSED
+  - Type Check: PASSED
+  - Lint: PASSED
+
+- ✅ Phase 2: Build Verification (3m 18s)
+  - Build: SUCCESS
+
+- ✅ Phase 3: Test & Coverage (12m 45s)
+  - Unit Tests: 497/497 PASSED
+  - Integration Tests: 53/53 PASSED
+  - Coverage: 95.3% (threshold: 95%)
+
+- ✅ Phase 4: TRUST 5 Score (1m 12s)
+  - Score: 92/100 (threshold: 90)
+
+**🎉 Quality Gate PASSED! Ready for merge.**
+
+[View Full Report](https://github.com/owner/repo/actions/runs/123456)
+```
+
+### Pre-commit Hook Strategy
+
+로컬 개발 환경에서 커밋 전 빠른 검증:
+
+```bash
+#!/bin/sh
+# .husky/pre-commit
+
+echo "🏷️  Validating TAG annotations (staged files only)..."
+pnpm run validate:tags:staged || {
+  echo "❌ TAG validation failed. Please add TAG annotations."
+  exit 1
+}
+
+echo "🔍 Type checking (staged files only)..."
+pnpm run type-check:staged || {
+  echo "❌ Type check failed. Please fix type errors."
+  exit 1
+}
+
+echo "✨ Running linter..."
+pnpm run lint:staged || {
+  echo "❌ Lint failed. Please fix linter errors."
+  exit 1
+}
+
+echo "✅ Pre-commit checks passed"
+```
+
+**성능 최적화**:
+- Staged files only: Git staged 파일만 검증하여 속도 향상
+- Incremental checks: 변경된 파일만 타입 체크
+- Parallel execution: TAG, Type, Lint를 병렬로 실행 (옵션)
 
 ## 6. 품질 기준 (TRUST 5 각 Pillar별 목표)
 
