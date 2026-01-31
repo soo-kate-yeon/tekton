@@ -2,6 +2,17 @@ import { defineConfig } from 'vitest/config';
 import path from 'path';
 
 export default defineConfig({
+  esbuild: {
+    loader: 'tsx',
+    include: /\.(tsx?|jsx?)$/,
+  },
+  optimizeDeps: {
+    esbuildOptions: {
+      loader: {
+        '.js': 'jsx',
+      },
+    },
+  },
   test: {
     globals: true,
     environment: 'happy-dom',
