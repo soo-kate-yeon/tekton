@@ -1,6 +1,6 @@
 /**
  * @tekton/ui - Tabs Component
- * SPEC-UI-001: shadcn-ui Fork & Token Integration
+ * [SPEC-COMPONENT-001-C] [COMPOSED]
  */
 
 import * as React from 'react';
@@ -16,7 +16,10 @@ const TabsList = React.forwardRef<
   <TabsPrimitive.List
     ref={ref}
     className={cn(
-      'inline-flex h-10 items-center justify-center rounded-[var(--tekton-radius-md)] bg-[var(--tekton-bg-muted)] p-1 text-[var(--tekton-bg-muted-foreground)]',
+      'inline-flex h-10 items-center justify-center',
+      'rounded-[var(--radius-md)] p-1',
+      'bg-[var(--tabs-list-background)]',
+      'text-[var(--tabs-list-foreground)]',
       className
     )}
     {...props}
@@ -31,7 +34,16 @@ const TabsTrigger = React.forwardRef<
   <TabsPrimitive.Trigger
     ref={ref}
     className={cn(
-      'inline-flex items-center justify-center whitespace-nowrap rounded-[var(--tekton-radius-sm)] px-[var(--tekton-spacing-3)] py-[var(--tekton-spacing-2)] text-sm font-medium ring-offset-[var(--tekton-bg-background)] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--tekton-border-ring)] focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-[var(--tekton-bg-background)] data-[state=active]:text-[var(--tekton-bg-foreground)] data-[state=active]:shadow-sm',
+      'inline-flex items-center justify-center whitespace-nowrap',
+      'rounded-[var(--radius-sm)] px-3 py-1.5 text-sm font-medium',
+      'ring-offset-[var(--tabs-trigger-ring-offset)]',
+      'transition-all',
+      'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2',
+      'focus-visible:ring-[var(--tabs-trigger-focus-ring)]',
+      'disabled:pointer-events-none disabled:opacity-50',
+      'data-[state=active]:bg-[var(--tabs-trigger-active-background)]',
+      'data-[state=active]:text-[var(--tabs-trigger-active-foreground)]',
+      'data-[state=active]:shadow-sm',
       className
     )}
     {...props}
@@ -46,7 +58,10 @@ const TabsContent = React.forwardRef<
   <TabsPrimitive.Content
     ref={ref}
     className={cn(
-      'mt-[var(--tekton-spacing-2)] ring-offset-[var(--tekton-bg-background)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--tekton-border-ring)] focus-visible:ring-offset-2',
+      'mt-2',
+      'ring-offset-[var(--tabs-content-ring-offset)]',
+      'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2',
+      'focus-visible:ring-[var(--tabs-content-focus-ring)]',
       className
     )}
     {...props}

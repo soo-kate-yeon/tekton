@@ -1,0 +1,179 @@
+/**
+ * @tekton/ui - Global Styles
+ * SPEC-UI-001: shadcn-ui Fork & Token Integration
+ *
+ * This file provides base styles for Tekton UI components.
+ * Theme-specific CSS Variables are loaded dynamically via theme-loader.ts
+ *
+ * Usage in Next.js:
+ * ```tsx
+ * import '@tekton/ui/styles/globals.css';
+ * ```
+ */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ========================================
+   Base Layer
+   Foundational styles for all components
+   ======================================== */
+
+@layer base {
+  * {
+    @apply border-[var(--tekton-border-default)];
+  }
+
+  body {
+    @apply bg-[var(--tekton-bg-background)] text-[var(--tekton-bg-foreground)];
+  }
+}
+
+/* ========================================
+   Tekton Token Defaults
+   Fallback values when theme is not loaded
+   These are overridden by theme-loader.ts
+   ======================================== */
+
+:root {
+  /* Background Tokens */
+  --tekton-bg-background: oklch(0.99 0.005 265);
+  --tekton-bg-foreground: oklch(0.2 0.04 265);
+  --tekton-bg-card: oklch(1 0 0);
+  --tekton-bg-card-foreground: oklch(0.2 0.04 265);
+  --tekton-bg-popover: oklch(1 0 0);
+  --tekton-bg-popover-foreground: oklch(0.2 0.04 265);
+  --tekton-bg-primary: oklch(0.55 0.12 265);
+  --tekton-bg-primary-foreground: oklch(1 0 0);
+  --tekton-bg-secondary: oklch(0.96 0.01 265);
+  --tekton-bg-secondary-foreground: oklch(0.2 0.04 265);
+  --tekton-bg-muted: oklch(0.99 0.005 265);
+  --tekton-bg-muted-foreground: oklch(0.6 0.03 265);
+  --tekton-bg-accent: oklch(0.96 0.01 265);
+  --tekton-bg-accent-foreground: oklch(0.2 0.04 265);
+  --tekton-bg-destructive: oklch(0.55 0.22 30);
+  --tekton-bg-destructive-foreground: oklch(1 0 0);
+
+  /* Border Tokens */
+  --tekton-border-default: oklch(0.92 0.015 265);
+  --tekton-border-input: oklch(0.96 0.01 265);
+  --tekton-border-ring: oklch(0.55 0.12 265);
+
+  /* Radius Tokens */
+  --tekton-radius-xs: 2px;
+  --tekton-radius-sm: 4px;
+  --tekton-radius-md: 6px;
+  --tekton-radius-lg: 8px;
+  --tekton-radius-xl: 12px;
+  --tekton-radius-2xl: 16px;
+  --tekton-radius-3xl: 24px;
+  --tekton-radius-full: 9999px;
+  --tekton-radius-none: 0;
+
+  /* Spacing Tokens */
+  --tekton-spacing-0: 0;
+  --tekton-spacing-1: 4px;
+  --tekton-spacing-2: 8px;
+  --tekton-spacing-3: 12px;
+  --tekton-spacing-4: 16px;
+  --tekton-spacing-5: 20px;
+  --tekton-spacing-6: 24px;
+  --tekton-spacing-8: 32px;
+  --tekton-spacing-10: 40px;
+  --tekton-spacing-12: 48px;
+  --tekton-spacing-16: 64px;
+  --tekton-spacing-20: 80px;
+  --tekton-spacing-24: 96px;
+}
+
+/* ========================================
+   Dark Mode Support
+   Auto-applied when [data-theme="*-dark"] or .dark
+   ======================================== */
+
+[data-theme*="-dark"],
+.dark {
+  --tekton-bg-background: oklch(0.15 0.02 265);
+  --tekton-bg-foreground: oklch(0.95 0.005 265);
+  --tekton-bg-card: oklch(0.2 0.03 265);
+  --tekton-bg-card-foreground: oklch(0.95 0.005 265);
+  --tekton-bg-popover: oklch(0.2 0.03 265);
+  --tekton-bg-popover-foreground: oklch(0.95 0.005 265);
+  --tekton-bg-primary: oklch(0.6 0.14 265);
+  --tekton-bg-primary-foreground: oklch(0.1 0.01 265);
+  --tekton-bg-secondary: oklch(0.25 0.03 265);
+  --tekton-bg-secondary-foreground: oklch(0.95 0.005 265);
+  --tekton-bg-muted: oklch(0.18 0.02 265);
+  --tekton-bg-muted-foreground: oklch(0.7 0.02 265);
+  --tekton-bg-accent: oklch(0.25 0.03 265);
+  --tekton-bg-accent-foreground: oklch(0.95 0.005 265);
+  --tekton-bg-destructive: oklch(0.5 0.2 30);
+  --tekton-bg-destructive-foreground: oklch(1 0 0);
+
+  --tekton-border-default: oklch(0.3 0.03 265);
+  --tekton-border-input: oklch(0.25 0.03 265);
+  --tekton-border-ring: oklch(0.6 0.14 265);
+}
+
+/* ========================================
+   Accessibility Utilities
+   Focus rings, reduced motion, high contrast
+   ======================================== */
+
+@layer utilities {
+  /* Focus visible states */
+  .focus-ring {
+    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--tekton-border-ring)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--tekton-bg-background)];
+  }
+
+  /* Reduced motion support */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+
+  /* High contrast mode support */
+  @media (prefers-contrast: high) {
+    * {
+      border-width: 2px;
+    }
+  }
+}
+
+/* ========================================
+   Component Base Styles
+   Shared styles for shadcn-ui components
+   ======================================== */
+
+@layer components {
+  /* Scrollbar styling */
+  .tekton-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: var(--tekton-bg-muted) transparent;
+  }
+
+  .tekton-scrollbar::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  .tekton-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .tekton-scrollbar::-webkit-scrollbar-thumb {
+    background: var(--tekton-bg-muted);
+    border-radius: var(--tekton-radius-full);
+  }
+
+  .tekton-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: var(--tekton-bg-muted-foreground);
+  }
+}

@@ -1,48 +1,44 @@
 /**
  * @tekton/ui - Component Library Index
- * [SPEC-COMPONENT-001-C]
+ * SPEC-UI-001: shadcn-ui Fork & Token Integration
+ *
+ * This package provides a shadcn-ui based component library
+ * fully integrated with Tekton's token system.
  */
 
-// Utility functions
+// ========================================
+// Utility Functions
+// ========================================
 export { cn } from './lib/utils';
+export { tokenVars, isTokenReference, extractTokenName } from './lib/tokens';
+export type { TektonTokenVars } from './lib/tokens';
 
-// Primitive Components
-export { Button, buttonVariants } from './primitives/button';
-export type { ButtonProps } from './primitives/button';
+export {
+  themeToCSS,
+  injectThemeCSS,
+  getCurrentThemeId,
+  setThemeId,
+  oklchToCSS,
+  resolveSemanticToken,
+} from './lib/theme-loader';
+export type { ThemeDefinition, OKLCHColor } from './lib/theme-loader';
 
-export { Input } from './primitives/input';
-export type { InputProps } from './primitives/input';
+// ========================================
+// Tier 1: Core Components (15)
+// ========================================
 
-export { Checkbox } from './primitives/checkbox';
+// Button
+export { Button, buttonVariants } from './components/button';
+export type { ButtonProps } from './components/button';
 
-export { RadioGroup, RadioGroupItem } from './primitives/radio';
+// Input
+export { Input } from './components/input';
+export type { InputProps } from './components/input';
 
-export { Switch } from './primitives/switch';
+// Label
+export { Label } from './components/label';
 
-export { Slider } from './primitives/slider';
-
-export { Text, textVariants } from './primitives/text';
-export type { TextProps } from './primitives/text';
-
-export { Heading, headingVariants } from './primitives/heading';
-export type { HeadingProps } from './primitives/heading';
-
-export { Badge, badgeVariants } from './primitives/badge';
-export type { BadgeProps } from './primitives/badge';
-
-export { Avatar, AvatarImage, AvatarFallback } from './primitives/avatar';
-
-export { Progress } from './primitives/progress';
-
-export { Link, linkVariants } from './primitives/link';
-export type { LinkProps } from './primitives/link';
-
-export { List, ListItem } from './primitives/list';
-
-export { Image } from './primitives/image';
-export type { ImageProps } from './primitives/image';
-
-// Composed Components
+// Card
 export {
   Card,
   CardHeader,
@@ -52,42 +48,99 @@ export {
   CardContent,
 } from './components/card';
 
+// Badge
+export { Badge, badgeVariants } from './components/badge';
+export type { BadgeProps } from './components/badge';
+
+// Avatar
+export { Avatar, AvatarImage, AvatarFallback } from './components/avatar';
+
+// Separator
+export { Separator } from './components/separator';
+
+// Checkbox
+export { Checkbox } from './components/checkbox';
+
+// RadioGroup
+export { RadioGroup, RadioGroupItem } from './components/radio-group';
+
+// Switch
+export { Switch } from './components/switch';
+
+// Textarea
+export { Textarea } from './components/textarea';
+export type { TextareaProps } from './components/textarea';
+
+// Skeleton
+export { Skeleton } from './components/skeleton';
+
+// ScrollArea
+export { ScrollArea, ScrollBar } from './components/scroll-area';
+
+// Form
 export {
+  useFormField,
   Form,
-  FormField,
+  FormItem,
   FormLabel,
   FormControl,
+  FormDescription,
   FormMessage,
-  useFormContext,
+  FormField,
 } from './components/form';
 
+// Select
 export {
-  Modal,
-  ModalPortal,
-  ModalOverlay,
-  ModalClose,
-  ModalTrigger,
-  ModalContent,
-  ModalHeader,
-  ModalFooter,
-  ModalTitle,
-  ModalDescription,
-} from './components/modal';
+  Select,
+  SelectGroup,
+  SelectValue,
+  SelectTrigger,
+  SelectContent,
+  SelectLabel,
+  SelectItem,
+  SelectSeparator,
+  SelectScrollUpButton,
+  SelectScrollDownButton,
+} from './components/select';
 
+// ========================================
+// Tier 2: Complex Components (10)
+// ========================================
+
+// Dialog
 export {
-  Dropdown,
-  DropdownTrigger,
-  DropdownContent,
-  DropdownItem,
-  DropdownSeparator,
-  DropdownGroup,
-  DropdownPortal,
-  DropdownSub,
-  DropdownRadioGroup,
-} from './components/dropdown';
+  Dialog,
+  DialogPortal,
+  DialogOverlay,
+  DialogClose,
+  DialogTrigger,
+  DialogContent,
+  DialogHeader,
+  DialogFooter,
+  DialogTitle,
+  DialogDescription,
+} from './components/dialog';
 
-export { Tabs, TabsList, TabsTrigger, TabsContent } from './components/tabs';
+// DropdownMenu
+export {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuCheckboxItem,
+  DropdownMenuRadioItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuShortcut,
+  DropdownMenuGroup,
+  DropdownMenuPortal,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
+  DropdownMenuRadioGroup,
+} from './components/dropdown-menu';
 
+// Table
 export {
   Table,
   TableHeader,
@@ -98,3 +151,62 @@ export {
   TableCell,
   TableCaption,
 } from './components/table';
+
+// Tabs
+export { Tabs, TabsList, TabsTrigger, TabsContent } from './components/tabs';
+
+// Toast
+export {
+  type ToastProps,
+  type ToastActionElement,
+  ToastProvider,
+  ToastViewport,
+  Toast,
+  ToastTitle,
+  ToastDescription,
+  ToastClose,
+  ToastAction,
+} from './components/toast';
+
+// Tooltip
+export { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from './components/tooltip';
+
+// Popover
+export { Popover, PopoverTrigger, PopoverContent } from './components/popover';
+
+// Sheet
+export {
+  Sheet,
+  SheetPortal,
+  SheetOverlay,
+  SheetTrigger,
+  SheetClose,
+  SheetContent,
+  SheetHeader,
+  SheetFooter,
+  SheetTitle,
+  SheetDescription,
+} from './components/sheet';
+
+// AlertDialog
+export {
+  AlertDialog,
+  AlertDialogPortal,
+  AlertDialogOverlay,
+  AlertDialogTrigger,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogFooter,
+  AlertDialogTitle,
+  AlertDialogDescription,
+  AlertDialogAction,
+  AlertDialogCancel,
+} from './components/alert-dialog';
+
+// Progress
+export { Progress } from './components/progress';
+
+// ========================================
+// Templates
+// Will be populated in Phase 3 (Day 5-7)
+// ========================================
