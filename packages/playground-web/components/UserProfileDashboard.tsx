@@ -8,9 +8,6 @@ import {
   Avatar,
   AvatarImage,
   AvatarFallback,
-  Heading,
-  Text,
-  Link,
   Button,
 } from '@tekton/ui';
 
@@ -21,30 +18,30 @@ export default function UserProfileDashboard() {
       <aside className="w-64 border-r bg-card p-6 flex flex-col gap-8">
         <div className="flex items-center gap-2">
           <div className="w-8 h-8 rounded-lg bg-primary" />
-          <Heading level={3} className="text-xl font-bold">
+          <h3 className="text-xl font-bold">
             Tekton UI
-          </Heading>
+          </h3>
         </div>
 
         <nav className="flex flex-col gap-2">
-          <Link
+          <a
             href="#"
             className="flex items-center gap-3 px-3 py-2 rounded-md bg-accent text-accent-foreground font-medium"
           >
             Dashboard
-          </Link>
-          <Link
+          </a>
+          <a
             href="#"
             className="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-accent hover:text-accent-foreground transition-colors"
           >
             Profile
-          </Link>
-          <Link
+          </a>
+          <a
             href="#"
             className="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-accent hover:text-accent-foreground transition-colors"
           >
             Settings
-          </Link>
+          </a>
         </nav>
       </aside>
 
@@ -52,7 +49,7 @@ export default function UserProfileDashboard() {
       <main className="flex-1 p-12">
         <div className="max-w-4xl mx-auto flex flex-col gap-8">
           <div className="flex justify-between items-center">
-            <Heading level={1}>User Profile</Heading>
+            <h1>User Profile</h1>
             <Button variant="outline" size="sm">
               Download CV
             </Button>
@@ -70,52 +67,52 @@ export default function UserProfileDashboard() {
                 <AvatarFallback>SY</AvatarFallback>
               </Avatar>
               <CardTitle className="mt-6 text-3xl font-bold z-10">Sooyeon Kim</CardTitle>
-              <Text className="text-muted-foreground font-medium z-10">
+              <span className="text-muted-foreground font-medium z-10">
                 Product Designer @ Tekton
-              </Text>
+              </span>
             </CardHeader>
             <CardContent className="p-10">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
                 <div className="space-y-2">
-                  <Text className="font-bold text-xs uppercase tracking-widest text-primary">
+                  <span className="font-bold text-xs uppercase tracking-widest text-primary">
                     Email Address
-                  </Text>
-                  <Text className="text-lg">sooyeon@example.com</Text>
+                  </span>
+                  <span className="text-lg">sooyeon@example.com</span>
                 </div>
                 <div className="space-y-2">
-                  <Text className="font-bold text-xs uppercase tracking-widest text-primary">
+                  <span className="font-bold text-xs uppercase tracking-widest text-primary">
                     Location
-                  </Text>
-                  <Text className="text-lg">Seoul, South Korea</Text>
+                  </span>
+                  <span className="text-lg">Seoul, South Korea</span>
                 </div>
                 <div className="space-y-2">
-                  <Text className="font-bold text-xs uppercase tracking-widest text-primary">
+                  <span className="font-bold text-xs uppercase tracking-widest text-primary">
                     Role
-                  </Text>
-                  <Text className="text-lg">Senior Product Designer</Text>
+                  </span>
+                  <span className="text-lg">Senior Product Designer</span>
                 </div>
                 <div className="space-y-2">
-                  <Text className="font-bold text-xs uppercase tracking-widest text-primary">
+                  <span className="font-bold text-xs uppercase tracking-widest text-primary">
                     Member Since
-                  </Text>
-                  <Text className="text-lg">January 2024</Text>
+                  </span>
+                  <span className="text-lg">January 2024</span>
                 </div>
               </div>
 
               <div className="mt-16 pt-8 border-t flex flex-col sm:flex-row justify-between items-center gap-4">
                 <div className="flex gap-4">
-                  <Link
+                  <a
                     href="#"
                     className="text-sm font-medium hover:text-primary underline-offset-4 hover:underline"
                   >
                     LinkedIn
-                  </Link>
-                  <Link
+                  </a>
+                  <a
                     href="#"
                     className="text-sm font-medium hover:text-primary underline-offset-4 hover:underline"
                   >
                     GitHub
-                  </Link>
+                  </a>
                 </div>
                 <div className="flex gap-4">
                   <Button variant="outline" className="px-6">
