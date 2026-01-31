@@ -180,7 +180,7 @@ describe('Textarea', () => {
 
     it('supports multiline text', async () => {
       render(<Textarea />);
-      const textarea = screen.getByRole('textbox');
+      const textarea = screen.getByRole('textbox') as HTMLTextAreaElement;
 
       await userEvent.type(textarea, 'Line 1{Enter}Line 2{Enter}Line 3');
       expect(textarea.value).toContain('Line 1\nLine 2\nLine 3');

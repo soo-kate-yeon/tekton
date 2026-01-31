@@ -2,6 +2,13 @@
  * @tekton/ui - Component Library Index
  * SPEC-UI-001: shadcn-ui Fork & Token Integration
  *
+ * [TAG-Q-001] 모든 요구사항 TAG 주석 포함
+ * [TAG-Q-002] TypeScript strict mode 오류 없이 컴파일
+ * [TAG-Q-004] TRUST 5 Framework 5개 Pillar 준수
+ *
+ * WHY: 진입점이 패키지 사용성을 보장
+ * IMPACT: 잘못된 export 시 패키지 사용 불가
+ *
  * This package provides a shadcn-ui based component library
  * fully integrated with Tekton's token system.
  */

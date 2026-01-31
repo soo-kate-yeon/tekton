@@ -107,11 +107,11 @@ Feature: Preview Mode 버튼 숨김
     When 액션 버튼 영역을 확인한다
     Then Export 버튼이 DOM에 존재하지 않는다
 
-  Scenario: Buy Now CTA 표시
+  Scenario: Get License CTA 표시
     Given 사용자가 Preview Mode에 있다
     When 액션 버튼 영역을 확인한다
-    Then "Buy Now" 버튼이 표시된다
-    And "Buy Now" 버튼은 주요 색상으로 강조된다
+    Then "Get License" 버튼이 표시된다
+    And "Get License" 버튼은 주요 색상으로 강조된다
 ```
 
 ### AC-005: 디바이스 미리보기 전환
@@ -336,35 +336,38 @@ Feature: 소셜 로그인
 
 ---
 
-## 6. 라이선스 & 결제 시나리오
+## 6. 라이선스 검증 시나리오
 
-### AC-012: 라이선스 구매 플로우
+### AC-012: 라이선스 검증 및 활성화
 
-**관련 TAG:** [TAG-UI003-011], [TAG-UI003-043], [TAG-UI003-044]
+**관련 TAG:** [TAG-UI003-011], [TAG-UI003-018]
+
+> **Note:** 결제 시스템(Paddle)은 추후 별도 SPEC에서 정의됩니다. 현재 라이선스는 외부에서 프로비저닝된다고 가정합니다.
 
 ```gherkin
-Feature: 라이선스 구매
-  Stripe를 통해 템플릿 라이선스를 구매할 수 있다.
+Feature: 라이선스 검증
+  유효한 라이선스가 있으면 Edit Mode에 접근할 수 있다.
 
-  Scenario: Checkout 페이지 진입
+  Scenario: 라이선스 보유 시 Edit Mode 활성화
     Given 사용자가 로그인한 상태이다
-    And Preview Mode에서 "Buy Now" 버튼을 클릭했다
-    Then "/checkout/[templateId]" 페이지로 이동한다
-    And 템플릿 정보가 표시된다
-    And 가격이 표시된다
-
-  Scenario: 결제 완료
-    Given 사용자가 Checkout 페이지에 있다
-    When Stripe 결제를 완료한다
-    Then "/checkout/success" 페이지로 리다이렉트된다
-    And 라이선스 키가 표시된다
-    And 라이선스가 User DB에 저장된다
-
-  Scenario: 구매 후 Edit Mode 활성화
-    Given 사용자가 라이선스를 구매했다
+    And 해당 템플릿의 유효한 라이선스를 보유하고 있다
     When 해당 템플릿의 Editor 페이지에 접근한다
     Then Edit Mode로 진입 가능하다
     And 12개 전체 화면이 표시된다
+
+  Scenario: 라이선스 키 입력으로 활성화 (임시)
+    Given 사용자가 로그인한 상태이다
+    And 라이선스를 보유하지 않았다
+    When Account 페이지에서 유효한 라이선스 키를 입력한다
+    Then 라이선스가 활성화된다
+    And 해당 템플릿의 Edit Mode에 접근 가능하다
+
+  Scenario: Get License CTA 표시
+    Given 사용자가 Preview Mode에 있다
+    And 라이선스를 보유하지 않았다
+    When 액션 버튼 영역을 확인한다
+    Then "Get License" 버튼이 표시된다
+    And 라이선스 안내 정보가 표시된다
 ```
 
 ---
@@ -504,12 +507,13 @@ Feature: 페이지 로드 성능
 
 ### 기능 완료 기준
 
-- [ ] 모든 8개 페이지가 접근 가능하고 정상 동작한다
+- [ ] 모든 6개 페이지가 접근 가능하고 정상 동작한다
 - [ ] Preview Mode와 Edit Mode가 라이선스에 따라 올바르게 분기된다
 - [ ] 프리셋 선택 시 CSS Variables가 즉시 반영된다
 - [ ] Google/GitHub OAuth 로그인이 정상 동작한다
 - [ ] 테마 저장 및 MCP Export가 정상 동작한다
 - [ ] 디바이스 미리보기가 Container 기반으로 동작한다
+- [ ] 라이선스 키 입력으로 Edit Mode 활성화 가능 (임시)
 
 ### 품질 완료 기준
 

@@ -1,6 +1,18 @@
 #!/bin/sh
+#
+# Pre-commit Hook
+# [TAG-Q-006] 코드 커밋 시 TAG 검증 스크립트 실행
+#
 
-# 1. tsup + composite 호환성 검사
+# 1. TAG 검증
+echo "🏷️  Validating TAG annotations..."
+pnpm run validate:tags || {
+  echo "❌ TAG validation failed. Please add TAG annotations."
+  echo "💡 See docs/quality/tag-system.md for details."
+  exit 1
+}
+
+# 2. tsup + composite 호환성 검사
 echo "🔍 Checking tsup + TypeScript composite compatibility..."
 pnpm check:tsup || exit 1
 

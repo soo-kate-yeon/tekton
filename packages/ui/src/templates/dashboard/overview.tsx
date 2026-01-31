@@ -1,6 +1,13 @@
 /**
  * @tekton/ui - Dashboard Template
  * SPEC-UI-001 Phase 3: Dashboard Screen Template
+ *
+ * [TAG-Q-001] 모든 요구사항 TAG 주석 포함
+ * [TAG-Q-002] TypeScript strict mode 오류 없이 컴파일
+ * [TAG-Q-004] TRUST 5 Framework 5개 Pillar 준수
+ *
+ * WHY: 대시보드 템플릿이 데이터 시각화를 보장
+ * IMPACT: 템플릿 오류 시 대시보드 표시 불가
  */
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../../components/card';

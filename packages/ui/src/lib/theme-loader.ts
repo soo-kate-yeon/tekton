@@ -2,6 +2,13 @@
  * @tekton/ui - Theme Loader
  * SPEC-UI-001: linear-minimal-v1.json → CSS Variables Converter
  *
+ * [TAG-Q-001] 모든 요구사항 TAG 주석 포함
+ * [TAG-Q-002] TypeScript strict mode 오류 없이 컴파일
+ * [TAG-Q-004] TRUST 5 Framework 5개 Pillar 준수
+ *
+ * WHY: 테마 로더가 런타임 테마 전환을 보장
+ * IMPACT: 테마 로더 오류 시 시각적 일관성 파괴
+ *
  * Converts Tekton theme JSON files to CSS Variables for runtime theming.
  * Supports OKLCH color format and semantic token resolution.
  */

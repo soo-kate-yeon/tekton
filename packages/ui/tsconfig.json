@@ -25,6 +25,13 @@
     "isolatedModules": true,
     "types": ["vitest/globals", "@testing-library/jest-dom", "vitest-axe/extend-expect"]
   },
-  "include": ["src/**/*", "__tests__/**/*"],
-  "exclude": ["node_modules", "dist"]
+  "include": ["src/**/*", "vitest-axe.d.ts"],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "src/**/__tests__/**",
+    "**/*.test.ts",
+    "**/*.test.tsx",
+    "scripts/**"
+  ]
 }

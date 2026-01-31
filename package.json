@@ -21,7 +21,8 @@
     "lint:all": "pnpm --filter \"./packages/*\" lint",
     "format": "prettier --write \"src/**/*.ts\" \"tests/**/*.ts\"",
     "check:tsup": "node scripts/check-tsup-config.js",
-    "precommit": "pnpm check:tsup && pnpm build:all",
+    "validate:tags": "npx tsx .moai/scripts/validate-tags.ts",
+    "precommit": "pnpm check:tsup && pnpm build:all && pnpm validate:tags",
     "prepare": "husky"
   },
   "keywords": [

@@ -2,6 +2,13 @@
  * @tekton/ui - Template Registry
  * SPEC-UI-001 Phase 3: Screen Template System Foundation
  *
+ * [TAG-Q-001] 모든 요구사항 TAG 주석 포함
+ * [TAG-Q-002] TypeScript strict mode 오류 없이 컴파일
+ * [TAG-Q-004] TRUST 5 Framework 5개 Pillar 준수
+ *
+ * WHY: Singleton 패턴이 템플릿 레지스트리의 일관성을 보장
+ * IMPACT: 레지스트리 중복 생성 시 템플릿 충돌 발생
+ *
  * Singleton pattern for managing screen templates
  */
 

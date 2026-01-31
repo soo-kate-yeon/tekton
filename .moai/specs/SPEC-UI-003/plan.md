@@ -32,14 +32,14 @@ Week 3 (7일) 동안 WebView Studio MVP를 구현합니다. 총 6개 Phase로 �
 
 ### 목표
 
-WebView Studio의 기반 구조를 설정하고, 8개 페이지 라우팅을 구현합니다.
+WebView Studio의 기반 구조를 설정하고, 6개 페이지 라우팅을 구현합니다.
 
 ### 태스크 목록
 
 | ID | 태스크 | TAG | 완료 기준 |
 |----|--------|-----|----------|
 | P1-01 | Studio 레이아웃 컴포넌트 생성 | [TAG-UI003-045] | Sidebar + Main Area 구조 |
-| P1-02 | 8개 페이지 라우트 생성 | [TAG-UI003-037~044] | 모든 경로 접근 가능 |
+| P1-02 | 6개 페이지 라우트 생성 | [TAG-UI003-037~042] | 모든 경로 접근 가능 |
 | P1-03 | ThemeContext 기본 구조 구현 | [TAG-UI003-053] | Provider 래핑 완료 |
 | P1-04 | 타입 정의 (User, Theme, License) | [TAG-UI003-057~058] | TypeScript 컴파일 성공 |
 | P1-05 | Studio 전용 CSS 설정 | [TAG-UI003-059] | CSS Variables 기본 적용 |
@@ -61,7 +61,7 @@ WebView Studio의 기반 구조를 설정하고, 8개 페이지 라우팅을 구
 
 ### 검증 기준
 
-- [ ] 모든 8개 라우트 접근 가능
+- [ ] 모든 6개 라우트 접근 가능
 - [ ] TypeScript 컴파일 오류 없음
 - [ ] CSS Variables 기본 적용 확인
 - [ ] Sidebar + Main 레이아웃 렌더링
@@ -128,7 +128,7 @@ interface TemplateCardProps {
 | P3-02 | DeviceSwitcher 컴포넌트 구현 | [TAG-UI003-049] | Desktop/Tablet/Mobile 전환 |
 | P3-03 | ScreenSelector 컴포넌트 구현 (Preview용) | [TAG-UI003-051] | 2개 화면만 표시 |
 | P3-04 | PresetPanel 컴포넌트 구현 (읽기 전용) | [TAG-UI003-050] | 프리셋 선택 UI |
-| P3-05 | "Buy Now" CTA 버튼 구현 | - | Checkout 페이지 이동 |
+| P3-05 | "Get License" CTA 버튼 구현 | - | 라이선스 안내 표시 |
 
 ### Preview Mode 제약사항
 
@@ -145,7 +145,7 @@ const PreviewModeConstraints = {
   disabledFeatures: ['saveSetting', 'exportTheme'],
 
   // 표시 요소
-  visibleCTA: 'Buy Now',
+  visibleCTA: 'Get License', // 라이선스 안내 (결제 시스템 추후 연동)
 };
 ```
 
@@ -169,7 +169,7 @@ const PreviewModeConstraints = {
 - [ ] 2개 화면만 표시 (Dashboard, Login) [TAG-UI003-019]
 - [ ] Save/Export 버튼 완전히 숨김 [TAG-UI003-021]
 - [ ] 디바이스 스위처 동작 [TAG-UI003-009]
-- [ ] "Buy Now" CTA 정상 동작
+- [ ] "Get License" CTA 정상 동작
 - [ ] iframe 미사용 확인 [TAG-UI003-028]
 
 ---
@@ -239,6 +239,8 @@ function applyPreset(presetId: string) {
 
 Google/GitHub OAuth 로그인과 라이선스 기반 기능 분기를 구현합니다.
 
+> **Note:** 결제 시스템(Paddle)은 추후 별도 SPEC에서 정의됩니다. 현재 라이선스는 외부에서 프로비저닝(관리자 발급)된다고 가정합니다.
+
 ### Day 5 태스크 (인증)
 
 | ID | 태스크 | TAG | 완료 기준 |
@@ -250,16 +252,15 @@ Google/GitHub OAuth 로그인과 라이선스 기반 기능 분기를 구현합�
 | P5-05 | OAuth Callback 처리 | [TAG-UI003-042] | 세션 생성 |
 | P5-06 | AuthContext 구현 | [TAG-UI003-054] | 로그인 상태 관리 |
 
-### Day 6 태스크 (라이선스 & 결제)
+### Day 6 태스크 (라이선스 검증)
 
 | ID | 태스크 | TAG | 완료 기준 |
 |----|--------|-----|----------|
 | P5-07 | License 데이터 모델 구현 | [TAG-UI003-057] | CRUD 동작 |
-| P5-08 | Checkout 페이지 구현 | [TAG-UI003-043] | Stripe 리다이렉트 |
-| P5-09 | Checkout Success 페이지 | [TAG-UI003-044] | 키 표시 |
-| P5-10 | 라이선스 검증 미들웨어 | [TAG-UI003-018] | Edit 진입 제어 |
-| P5-11 | Account 페이지 구현 | [TAG-UI003-038] | 라이선스 목록 표시 |
-| P5-12 | 좋아요 기능 구현 | - | 토글 동작 |
+| P5-08 | 라이선스 검증 미들웨어 | [TAG-UI003-018] | Edit 진입 제어 |
+| P5-09 | Account 페이지 구현 | [TAG-UI003-038] | 라이선스 목록 표시 |
+| P5-10 | 좋아요 기능 구현 | - | 토글 동작 |
+| P5-11 | 라이선스 입력 UI (임시) | - | 키 입력으로 활성화 |
 
 ### 인증 플로우
 
@@ -272,17 +273,17 @@ Google/GitHub OAuth 로그인과 라이선스 기반 기능 분기를 구현합�
                    └── /studio (또는 이전 페이지) 리다이렉트
 ```
 
-### 결제 플로우
+### 라이선스 검증 플로우
 
 ```
-1. "Buy Now" 버튼 클릭
+1. Edit Mode 접근 시도
    └── 로그인 확인 (미로그인 시 → /auth/login)
-       └── /checkout/[templateId] 이동
-           └── Stripe Checkout 리다이렉트
-               └── 결제 완료
-                   └── Webhook → DB 저장
-                       └── /checkout/success 리다이렉트
-                           └── 라이선스 키 표시
+       └── 라이선스 보유 확인
+           ├── 있음 → Edit Mode 진입
+           └── 없음 → Preview Mode + "Get License" CTA
+
+Note: 라이선스 발급은 추후 Paddle 결제 연동 시 자동화 예정
+      현재는 관리자가 수동으로 발급하거나, Account에서 키 입력으로 활성화
 ```
 
 ### 검증 기준
@@ -291,9 +292,9 @@ Google/GitHub OAuth 로그인과 라이선스 기반 기능 분기를 구현합�
 - [ ] GitHub OAuth 로그인 성공
 - [ ] 로그인 후 Account 탭 표시 [TAG-UI003-016]
 - [ ] 미로그인 시 Account 탭 숨김 [TAG-UI003-015]
-- [ ] Stripe Checkout 리다이렉트 동작
-- [ ] 구매 후 Edit Mode 접근 가능 [TAG-UI003-011]
+- [ ] 라이선스 보유 시 Edit Mode 접근 가능 [TAG-UI003-011]
 - [ ] Account 페이지에서 라이선스 목록 확인
+- [ ] 라이선스 키 입력으로 활성화 (임시 기능)
 
 ---
 
@@ -381,7 +382,6 @@ grep -rn "margin:.*px" packages/playground-web/
 | 위험 요소 | 발생 확률 | 영향도 | 대응 계획 |
 |-----------|----------|--------|----------|
 | OAuth Provider 연동 지연 | 중간 | 높음 | 목 인증으로 우선 개발 후 연동 |
-| Stripe 연동 복잡성 | 중간 | 중간 | Stripe Test Mode 활용, 결제 목 처리 |
 | CSS Variables 브라우저 호환성 | 낮음 | 중간 | 폴리필 적용 또는 폴백 스타일 |
 | Container Queries 지원 | 낮음 | 낮음 | 폴리필 적용 |
 | SPEC-UI-001/002 미완료 | 중간 | 높음 | 컴포넌트 스텁으로 병렬 개발 |
@@ -397,7 +397,6 @@ grep -rn "margin:.*px" packages/playground-web/
 | TypeScript | 5.7+ | strict mode |
 | Tailwind CSS | 4.0 | CSS Variables 연동 |
 | NextAuth.js | 5.x | OAuth 인증 |
-| Stripe SDK | latest | 결제 연동 |
 | Vitest | latest | 단위 테스트 |
 | Playwright | latest | E2E 테스트 |
 

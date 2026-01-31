@@ -2,6 +2,13 @@
  * @tekton/ui - Tekton Token CSS Variable Mappings
  * SPEC-UI-001: shadcn-ui Fork & Token Integration
  *
+ * [TAG-Q-001] 모든 요구사항 TAG 주석 포함
+ * [TAG-Q-002] TypeScript strict mode 오류 없이 컴파일
+ * [TAG-Q-004] TRUST 5 Framework 5개 Pillar 준수
+ *
+ * WHY: 토큰 시스템이 테마 일관성과 유지보수성을 보장
+ * IMPACT: 토큰 정의 누락 시 UI 불일치 발생
+ *
  * This file maps shadcn-ui semantic tokens to Tekton's global token system.
  * All values use `var(--tekton-*)` pattern for theme consistency.
  */

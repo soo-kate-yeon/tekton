@@ -7,7 +7,6 @@ import { describe, it, expect, beforeEach } from 'vitest';
 import { TemplateRegistry } from '../registry';
 import { LoginTemplate } from '../auth/login';
 import { DashboardTemplate } from '../dashboard/overview';
-import type { ScreenTemplate } from '../types';
 
 describe('TemplateRegistry', () => {
   let registry: TemplateRegistry;

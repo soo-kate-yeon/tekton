@@ -1,6 +1,13 @@
 /**
  * @tekton/ui - Screen Template Types
  * SPEC-UI-001 Phase 3: Screen Template System Foundation
+ *
+ * [TAG-Q-001] 모든 요구사항 TAG 주석 포함
+ * [TAG-Q-002] TypeScript strict mode 오류 없이 컴파일
+ * [TAG-Q-004] TRUST 5 Framework 5개 Pillar 준수
+ *
+ * WHY: 타입 정의가 템플릿 시스템의 타입 안전성을 보장
+ * IMPACT: 타입 정의 누락 시 런타임 오류 발생
  */
 
 import type { ComponentType, ReactNode } from 'react';

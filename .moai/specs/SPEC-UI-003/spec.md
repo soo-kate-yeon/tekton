@@ -43,8 +43,8 @@ WebView Studio는 Tekton Design System의 웹 기반 테마 커스터마이징 �
 |--------|------|
 | Explore 페이지 | Midjourney 스타일 템플릿 갤러리 |
 | Account 페이지 | 라이선스 관리 및 좋아요 목록 |
-| Editor (Preview Mode) | 구매 전 2개 대표 화면 미리보기 |
-| Editor (Edit Mode) | 구매 후 12개 전체 화면 + 프리셋 커스터마이징 |
+| Editor (Preview Mode) | 라이선스 없이 2개 대표 화면 미리보기 |
+| Editor (Edit Mode) | 라이선스 보유 시 12개 전체 화면 + 프리셋 커스터마이징 |
 | Auth System | Google/GitHub OAuth 소셜 로그인 |
 | MCP Export | 테마 설정 JSON 내보내기 |
 
@@ -79,7 +79,6 @@ Technology Stack:
   - React Context (테마 상태 관리)
   - Container Queries (반응형 미리보기)
   - NextAuth.js 5 (소셜 로그인)
-  - Stripe/Paddle (결제 연동)
 
 Target Architecture:
   - packages/playground-web/app/studio/ 라우트 구조
@@ -124,7 +123,7 @@ Target Architecture:
 | E-002 | **WHEN** 템플릿 카드가 클릭되면 **THEN** Editor 페이지로 이동해야 한다 | [TAG-UI003-008] |
 | E-003 | **WHEN** 디바이스 스위처가 변경되면 **THEN** 미리보기 컨테이너 크기가 해당 디바이스로 변경되어야 한다 | [TAG-UI003-009] |
 | E-004 | **WHEN** 사용자가 로그인하면 **THEN** 라이선스 정보가 로드되어야 한다 | [TAG-UI003-010] |
-| E-005 | **WHEN** 라이선스 구매가 완료되면 **THEN** Edit Mode가 활성화되어야 한다 | [TAG-UI003-011] |
+| E-005 | **WHEN** 유효한 라이선스가 확인되면 **THEN** Edit Mode가 활성화되어야 한다 | [TAG-UI003-011] |
 | E-006 | **WHEN** Save 버튼이 클릭되면 **THEN** 테마 설정이 User DB에 저장되어야 한다 | [TAG-UI003-012] |
 | E-007 | **WHEN** Export 버튼이 클릭되면 **THEN** MCP 형식의 JSON이 생성되어야 한다 | [TAG-UI003-013] |
 | E-008 | **WHEN** OAuth 콜백이 수신되면 **THEN** 사용자 세션이 생성되어야 한다 | [TAG-UI003-014] |
@@ -170,7 +169,7 @@ Target Architecture:
 
 ## 4. Technical Specifications (기술 명세)
 
-### 4.1 페이지 구조 (8개 페이지)
+### 4.1 페이지 구조 (6개 페이지)
 
 | 경로 | 페이지 | 설명 | 인증 필요 |
 |------|--------|------|----------|
@@ -180,8 +179,8 @@ Target Architecture:
 | `/studio/template/[id]/edit` | Editor (Edit) | 편집 모드 (12개 화면) | Yes + License |
 | `/auth/login` | Login | 소셜 로그인 선택 | No |
 | `/auth/callback` | OAuth Callback | OAuth 콜백 처리 | No |
-| `/checkout/[templateId]` | Checkout | Stripe 결제 리다이렉트 | Yes |
-| `/checkout/success` | Checkout Success | 구매 완료 + 키 표시 | Yes |
+
+> **Note:** 결제 시스템(Paddle)은 추후 별도 SPEC에서 정의 예정입니다. 현재 라이선스는 외부에서 프로비저닝된다고 가정합니다.
 
 ### 4.2 레이아웃 구조 (Midjourney 스타일)
 
@@ -548,16 +547,11 @@ packages/playground-web/
 │   │           ├── page.tsx     # [TAG-UI003-039] Editor Preview
 │   │           └── edit/
 │   │               └── page.tsx # [TAG-UI003-040] Editor Edit
-│   ├── auth/
-│   │   ├── login/
-│   │   │   └── page.tsx         # [TAG-UI003-041] Login 페이지
-│   │   └── callback/
-│   │       └── page.tsx         # [TAG-UI003-042] OAuth Callback
-│   └── checkout/
-│       ├── [templateId]/
-│       │   └── page.tsx         # [TAG-UI003-043] Checkout
-│       └── success/
-│           └── page.tsx         # [TAG-UI003-044] Checkout Success
+│   └── auth/
+│       ├── login/
+│       │   └── page.tsx         # [TAG-UI003-041] Login 페이지
+│       └── callback/
+│           └── page.tsx         # [TAG-UI003-042] OAuth Callback
 ├── components/
 │   └── studio/
 │       ├── Sidebar.tsx          # [TAG-UI003-045] 사이드바 컴포넌트
@@ -607,7 +601,6 @@ packages/playground-web/
 - [SPEC-MCP-002](../SPEC-MCP-002/spec.md) - MCP 도구 구현
 - [Midjourney](https://midjourney.com) - 레이아웃 참조
 - [NextAuth.js 5](https://authjs.dev) - 인증 라이브러리
-- [Stripe Checkout](https://stripe.com/docs/checkout) - 결제 연동
 
 ---
 
@@ -620,7 +613,7 @@ packages/playground-web/
 | [TAG-UI003-015~025] | State-Driven: 로그인 상태, 라이선스 상태, 모드별 기능, 디바이스별 크기 |
 | [TAG-UI003-026~031] | Unwanted: 라이선스 없이 Edit, 하드코딩, iframe, 평문 비밀번호 |
 | [TAG-UI003-032~036] | Optional: 커스텀 피커, 즐겨찾기, 히스토리, 다크모드 |
-| [TAG-UI003-037~044] | 페이지 구현 (8개) |
+| [TAG-UI003-037~042] | 페이지 구현 (6개) |
 | [TAG-UI003-045~059] | 컴포넌트 및 모듈 구현 |
 
 ---

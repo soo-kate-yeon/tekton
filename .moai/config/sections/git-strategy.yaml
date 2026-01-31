@@ -32,7 +32,7 @@ git_strategy:
       prompt_always: true
       auto_enabled: false
     automation:
-      auto_branch: false
+      auto_branch: true
       auto_commit: true
       auto_pr: false
       auto_push: false
