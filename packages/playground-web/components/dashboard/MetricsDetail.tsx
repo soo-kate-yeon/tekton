@@ -43,9 +43,10 @@ export function MetricsDetail() {
             className={`
               px-4 py-3 font-[--lm-font-family-sans] font-[--lm-font-weight-medium] text-sm
               border-b-2 transition-all duration-[--lm-motion-duration-fast]
-              ${activeTab === tab.id
-                ? 'border-[--lm-brand-default] text-[--lm-brand-default]'
-                : 'border-transparent text-[--lm-text-secondary] hover:text-[--lm-text-primary]'
+              ${
+                activeTab === tab.id
+                  ? 'border-[--lm-brand-default] text-[--lm-brand-default]'
+                  : 'border-transparent text-[--lm-text-secondary] hover:text-[--lm-text-primary]'
               }
             `}
           >
@@ -132,12 +133,13 @@ export function MetricsDetail() {
                     {item.value}
                   </span>
                   <div
-                    className={`w-3 h-3 rounded-full ${item.status === 'good'
+                    className={`w-3 h-3 rounded-full ${
+                      item.status === 'good'
                         ? 'bg-[--lm-success-default]'
                         : item.status === 'warning'
                           ? 'bg-[--lm-warning-default]'
                           : 'bg-[--lm-danger-default]'
-                      }`}
+                    }`}
                   />
                 </div>
               </div>

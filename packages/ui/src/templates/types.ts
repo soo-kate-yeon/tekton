@@ -16,27 +16,27 @@ import type { ComponentType, ReactNode } from 'react';
  * Screen categories for template organization
  */
 export type ScreenCategory =
-  | 'auth'           // Login, Signup, Forgot Password, Verification
-  | 'dashboard'      // Dashboard Overview, Analytics
-  | 'form'           // Settings, Profile
-  | 'marketing'      // Landing Page
-  | 'feedback';      // Loading, Error, Empty State, Success
+  | 'auth' // Login, Signup, Forgot Password, Verification
+  | 'dashboard' // Dashboard Overview, Analytics
+  | 'form' // Settings, Profile
+  | 'marketing' // Landing Page
+  | 'feedback'; // Loading, Error, Empty State, Success
 
 /**
  * Template layout types
  */
 export type TemplateLayout =
-  | 'centered'       // Auth screens, feedback screens
-  | 'sidebar'        // Dashboard, Settings
-  | 'full';          // Landing page
+  | 'centered' // Auth screens, feedback screens
+  | 'sidebar' // Dashboard, Settings
+  | 'full'; // Landing page
 
 /**
  * Responsive breakpoints
  */
 export interface ResponsiveBreakpoints {
-  mobile: number;    // < 768px
-  tablet: number;    // 768px - 1024px
-  desktop: number;   // >= 1024px
+  mobile: number; // < 768px
+  tablet: number; // 768px - 1024px
+  desktop: number; // >= 1024px
 }
 
 /**
@@ -44,19 +44,19 @@ export interface ResponsiveBreakpoints {
  */
 export interface ResponsiveLayout {
   mobile: {
-    padding: string;    // var(--tekton-layout-padding-mobile)
-    gap: string;        // var(--tekton-layout-gap-mobile)
-    columns: number;    // 4
+    padding: string; // var(--tekton-layout-padding-mobile)
+    gap: string; // var(--tekton-layout-gap-mobile)
+    columns: number; // 4
   };
   tablet: {
-    padding: string;    // var(--tekton-layout-padding-tablet)
-    gap: string;        // var(--tekton-layout-gap-tablet)
-    columns: number;    // 8
+    padding: string; // var(--tekton-layout-padding-tablet)
+    gap: string; // var(--tekton-layout-gap-tablet)
+    columns: number; // 8
   };
   desktop: {
-    padding: string;    // var(--tekton-layout-padding-desktop)
-    gap: string;        // var(--tekton-layout-gap-desktop)
-    columns: number;    // 12
+    padding: string; // var(--tekton-layout-padding-desktop)
+    gap: string; // var(--tekton-layout-gap-desktop)
+    columns: number; // 12
   };
 }
 
@@ -74,7 +74,7 @@ export interface TemplateLayoutConfig {
 export interface SectionTemplate {
   id: string;
   name: string;
-  slot: string;           // 'header', 'sidebar', 'main', 'footer'
+  slot: string; // 'header', 'sidebar', 'main', 'footer'
   required: boolean;
   Component: ComponentType<any>;
 }
@@ -83,17 +83,17 @@ export interface SectionTemplate {
  * Customization boundaries for AI
  */
 export interface CustomizationBoundaries {
-  texts: string[];        // AI can modify these text keys
-  optional: string[];     // AI can add/remove these optional features
-  slots: string[];        // AI can inject content into these slots
+  texts: string[]; // AI can modify these text keys
+  optional: string[]; // AI can add/remove these optional features
+  slots: string[]; // AI can inject content into these slots
 }
 
 /**
  * Template skeleton (non-customizable structure)
  */
 export interface TemplateSkeleton {
-  shell: string;          // 'centered-card', 'sidebar-layout', 'full-page'
-  page: string;           // Page wrapper configuration
+  shell: string; // 'centered-card', 'sidebar-layout', 'full-page'
+  page: string; // Page wrapper configuration
   sections: SectionTemplate[];
 }
 
@@ -151,18 +151,18 @@ export interface TemplateRegistryEntry {
  */
 export const DEFAULT_RESPONSIVE_LAYOUT: ResponsiveLayout = {
   mobile: {
-    padding: 'var(--tekton-layout-padding-mobile)',    // 16px
-    gap: 'var(--tekton-layout-gap-mobile)',            // 16px
+    padding: 'var(--tekton-layout-padding-mobile)', // 16px
+    gap: 'var(--tekton-layout-gap-mobile)', // 16px
     columns: 4,
   },
   tablet: {
-    padding: 'var(--tekton-layout-padding-tablet)',    // 32px
-    gap: 'var(--tekton-layout-gap-tablet)',            // 24px
+    padding: 'var(--tekton-layout-padding-tablet)', // 32px
+    gap: 'var(--tekton-layout-gap-tablet)', // 24px
     columns: 8,
   },
   desktop: {
-    padding: 'var(--tekton-layout-padding-desktop)',   // 64px
-    gap: 'var(--tekton-layout-gap-desktop)',           // 32px
+    padding: 'var(--tekton-layout-padding-desktop)', // 64px
+    gap: 'var(--tekton-layout-gap-desktop)', // 32px
     columns: 12,
   },
 };

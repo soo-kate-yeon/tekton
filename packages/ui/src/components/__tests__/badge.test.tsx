@@ -31,7 +31,7 @@ describe('Badge', () => {
   describe('Variants', () => {
     const variants = ['default', 'secondary', 'destructive', 'outline'] as const;
 
-    it.each(variants)('renders %s variant correctly', (variant) => {
+    it.each(variants)('renders %s variant correctly', variant => {
       const { container } = render(<Badge variant={variant}>Test</Badge>);
       expect(container.firstChild).toBeInTheDocument();
     });

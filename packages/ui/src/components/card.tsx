@@ -30,7 +30,10 @@ const CardHeader = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDiv
   ({ className, ...props }, ref) => (
     <div
       ref={ref}
-      className={cn('flex flex-col space-y-[var(--tekton-spacing-2)] p-[var(--tekton-spacing-6)]', className)}
+      className={cn(
+        'flex flex-col space-y-[var(--tekton-spacing-2)] p-[var(--tekton-spacing-6)]',
+        className
+      )}
       {...props}
     />
   )

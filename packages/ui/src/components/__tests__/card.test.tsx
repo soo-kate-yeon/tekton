@@ -124,7 +124,11 @@ describe('Card', () => {
     });
 
     it('supports ARIA attributes', () => {
-      render(<Card aria-label="Product card" data-testid="card">Content</Card>);
+      render(
+        <Card aria-label="Product card" data-testid="card">
+          Content
+        </Card>
+      );
       const card = screen.getByTestId('card');
       expect(card).toHaveAttribute('aria-label', 'Product card');
     });

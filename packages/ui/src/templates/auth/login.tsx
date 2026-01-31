@@ -10,7 +10,14 @@
  * IMPACT: 템플릿 오류 시 사용자 로그인 불가
  */
 
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '../../components/card';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '../../components/card';
 import { Button } from '../../components/button';
 import { Input } from '../../components/input';
 import { Label } from '../../components/label';
@@ -35,7 +42,9 @@ export function LoginTemplateComponent({
   const showRememberMe = options.remember_me ?? false;
 
   return (
-    <div className={`min-h-screen flex items-center justify-center p-[var(--tekton-spacing-4)] ${className}`}>
+    <div
+      className={`min-h-screen flex items-center justify-center p-[var(--tekton-spacing-4)] ${className}`}
+    >
       <Card className="w-full max-w-md">
         <CardHeader>
           {slots.logo && <div className="mb-[var(--tekton-spacing-4)]">{slots.logo}</div>}

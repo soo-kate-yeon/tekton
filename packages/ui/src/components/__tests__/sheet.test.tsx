@@ -5,7 +5,14 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, it, expect } from 'vitest';
-import { Sheet, SheetTrigger, SheetContent, SheetHeader, SheetTitle, SheetDescription } from '../sheet';
+import {
+  Sheet,
+  SheetTrigger,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetDescription,
+} from '../sheet';
 import { Button } from '../button';
 
 describe('Sheet', () => {
@@ -41,7 +48,7 @@ describe('Sheet', () => {
 
   describe('Variants', () => {
     const sides: Array<'top' | 'bottom' | 'left' | 'right'> = ['top', 'bottom', 'left', 'right'];
-    it.each(sides)('renders %s side correctly', async (side) => {
+    it.each(sides)('renders %s side correctly', async side => {
       renderSheet(side);
       await userEvent.click(screen.getByRole('button'));
       await waitFor(() => {

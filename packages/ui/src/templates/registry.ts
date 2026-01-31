@@ -58,7 +58,7 @@ export class TemplateRegistry {
    * Register multiple templates
    */
   public registerMany(templates: ScreenTemplate[]): void {
-    templates.forEach((template) => this.register(template));
+    templates.forEach(template => this.register(template));
   }
 
   /**
@@ -78,14 +78,14 @@ export class TemplateRegistry {
    * Get all templates
    */
   public getAll(): ScreenTemplate[] {
-    return Array.from(this.templates.values()).map((entry) => entry.template);
+    return Array.from(this.templates.values()).map(entry => entry.template);
   }
 
   /**
    * Get templates by category
    */
   public getByCategory(category: ScreenCategory): ScreenTemplate[] {
-    return this.getAll().filter((template) => template.category === category);
+    return this.getAll().filter(template => template.category === category);
   }
 
   /**
@@ -93,10 +93,8 @@ export class TemplateRegistry {
    * Returns templates that include ALL specified components
    */
   public findByRequiredComponents(components: string[]): ScreenTemplate[] {
-    return this.getAll().filter((template) => {
-      return components.every((component) =>
-        template.requiredComponents.includes(component)
-      );
+    return this.getAll().filter(template => {
+      return components.every(component => template.requiredComponents.includes(component));
     });
   }
 
@@ -106,12 +104,12 @@ export class TemplateRegistry {
    */
   public search(keyword: string): ScreenTemplate[] {
     const lowerKeyword = keyword.toLowerCase();
-    return this.getAll().filter((template) => {
+    return this.getAll().filter(template => {
       return (
         template.id.toLowerCase().includes(lowerKeyword) ||
         template.name.toLowerCase().includes(lowerKeyword) ||
         template.description.toLowerCase().includes(lowerKeyword) ||
-        template.tags?.some((tag) => tag.toLowerCase().includes(lowerKeyword))
+        template.tags?.some(tag => tag.toLowerCase().includes(lowerKeyword))
       );
     });
   }
@@ -130,7 +128,7 @@ export class TemplateRegistry {
     return Array.from(this.templates.values())
       .sort((a, b) => b.metadata.usageCount - a.metadata.usageCount)
       .slice(0, limit)
-      .map((entry) => entry.template);
+      .map(entry => entry.template);
   }
 
   /**
@@ -138,14 +136,14 @@ export class TemplateRegistry {
    */
   public getRecentlyUsed(limit: number = 10): ScreenTemplate[] {
     return Array.from(this.templates.values())
-      .filter((entry) => entry.metadata.lastUsed)
+      .filter(entry => entry.metadata.lastUsed)
       .sort((a, b) => {
         const dateA = new Date(a.metadata.lastUsed!).getTime();
         const dateB = new Date(b.metadata.lastUsed!).getTime();
         return dateB - dateA;
       })
       .slice(0, limit)
-      .map((entry) => entry.template);
+      .map(entry => entry.template);
   }
 
   /**

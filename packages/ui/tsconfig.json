@@ -26,10 +26,5 @@
     "types": ["vitest/globals", "@testing-library/jest-dom", "vitest-axe/extend-expect"]
   },
   "include": ["src/**/*", "vitest-axe.d.ts"],
-  "exclude": [
-    "node_modules",
-    "dist",
-    "vitest.setup.ts",
-    "vitest.config.ts"
-  ]
+  "exclude": ["node_modules", "dist", "vitest.setup.ts", "vitest.config.ts"]
 }

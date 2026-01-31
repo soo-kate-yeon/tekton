@@ -49,9 +49,10 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
             className={`
               flex items-center gap-3 px-3 py-2.5 rounded-[--lm-radius-md] mb-1
               transition-all duration-[--lm-motion-duration-fast]
-              ${item.active
-                ? 'bg-[--lm-brand-subtle] text-[--lm-brand-default]'
-                : 'text-[--lm-text-secondary] hover:bg-[--lm-background-hover]'
+              ${
+                item.active
+                  ? 'bg-[--lm-brand-subtle] text-[--lm-brand-default]'
+                  : 'text-[--lm-text-secondary] hover:bg-[--lm-background-hover]'
               }
             `}
             title={collapsed ? item.label : undefined}
@@ -74,8 +75,9 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
       >
         <ChevronLeft
           size={20}
-          className={`transition-transform duration-[--lm-motion-duration-moderate] ${collapsed ? 'rotate-180' : ''
-            }`}
+          className={`transition-transform duration-[--lm-motion-duration-moderate] ${
+            collapsed ? 'rotate-180' : ''
+          }`}
         />
       </button>
     </aside>

@@ -95,8 +95,9 @@ export function MetricModal({ isOpen, onClose, metric }: MetricModalProps) {
             <div className="text-right">
               <p className="text-sm text-[--lm-text-tertiary] mb-1">Change</p>
               <span
-                className={`text-2xl font-[--lm-font-family-sans] font-[--lm-font-weight-semibold] ${metric.trend === 'up' ? 'text-green-600' : 'text-red-600'
-                  }`}
+                className={`text-2xl font-[--lm-font-family-sans] font-[--lm-font-weight-semibold] ${
+                  metric.trend === 'up' ? 'text-green-600' : 'text-red-600'
+                }`}
               >
                 {metric.change}
               </span>

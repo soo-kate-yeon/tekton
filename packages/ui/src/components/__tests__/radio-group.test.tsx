@@ -181,7 +181,7 @@ describe('RadioGroup', () => {
       );
 
       const options = screen.getAllByRole('radio');
-      options.forEach((option) => {
+      options.forEach(option => {
         expect(option).toBeDisabled();
       });
     });

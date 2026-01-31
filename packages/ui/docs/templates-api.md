@@ -35,13 +35,13 @@ interface ScreenTemplate {
 
 **Properties:**
 
-| Property | Type | Required | Description |
-|----------|------|----------|-------------|
-| `meta` | `ScreenTemplateMeta` | ✅ | Template identification and classification |
-| `layout` | `TemplateLayout` | ✅ | Layout type and spacing configuration |
-| `slots` | `TemplateSlot[]` | ✅ | Customizable content slots |
-| `tokenBindings` | `Record<string, TokenReference>` | ❌ | Custom CSS Variable mappings |
-| `Component` | `React.ComponentType<ScreenTemplateProps>` | ✅ | React component implementation |
+| Property        | Type                                       | Required | Description                                |
+| --------------- | ------------------------------------------ | -------- | ------------------------------------------ |
+| `meta`          | `ScreenTemplateMeta`                       | ✅       | Template identification and classification |
+| `layout`        | `TemplateLayout`                           | ✅       | Layout type and spacing configuration      |
+| `slots`         | `TemplateSlot[]`                           | ✅       | Customizable content slots                 |
+| `tokenBindings` | `Record<string, TokenReference>`           | ❌       | Custom CSS Variable mappings               |
+| `Component`     | `React.ComponentType<ScreenTemplateProps>` | ✅       | React component implementation             |
 
 ---
 
@@ -70,15 +70,15 @@ interface ScreenTemplateMeta {
 
 **Properties:**
 
-| Property | Type | Required | Description |
-|----------|------|----------|-------------|
-| `id` | `string` | ✅ | Unique identifier (kebab-case) |
-| `name` | `string` | ✅ | Human-readable name |
-| `category` | `ScreenCategory` | ✅ | Template category for filtering |
-| `description` | `string` | ✅ | Brief description (1-2 sentences) |
-| `thumbnail` | `string` | ❌ | Preview image URL |
-| `tags` | `string[]` | ✅ | Search keywords |
-| `supportedThemes` | `string[]` | ✅ | Theme compatibility list |
+| Property          | Type             | Required | Description                       |
+| ----------------- | ---------------- | -------- | --------------------------------- |
+| `id`              | `string`         | ✅       | Unique identifier (kebab-case)    |
+| `name`            | `string`         | ✅       | Human-readable name               |
+| `category`        | `ScreenCategory` | ✅       | Template category for filtering   |
+| `description`     | `string`         | ✅       | Brief description (1-2 sentences) |
+| `thumbnail`       | `string`         | ❌       | Preview image URL                 |
+| `tags`            | `string[]`       | ✅       | Search keywords                   |
+| `supportedThemes` | `string[]`       | ✅       | Theme compatibility list          |
 
 **Example:**
 
@@ -101,26 +101,26 @@ Template category enumeration.
 
 ```typescript
 type ScreenCategory =
-  | 'auth'        // Authentication screens (Login, Signup, Forgot Password)
-  | 'dashboard'   // Dashboard screens (Overview, Analytics, Reports)
-  | 'content'     // Content screens (List, Detail, Gallery)
-  | 'form'        // Form screens (Create, Edit, Settings)
-  | 'navigation'  // Navigation components (Sidebar, Navbar, Breadcrumb)
-  | 'feedback'    // Feedback screens (Error, Empty, Loading)
-  | 'marketing';  // Marketing pages (Landing, Pricing, Features)
+  | 'auth' // Authentication screens (Login, Signup, Forgot Password)
+  | 'dashboard' // Dashboard screens (Overview, Analytics, Reports)
+  | 'content' // Content screens (List, Detail, Gallery)
+  | 'form' // Form screens (Create, Edit, Settings)
+  | 'navigation' // Navigation components (Sidebar, Navbar, Breadcrumb)
+  | 'feedback' // Feedback screens (Error, Empty, Loading)
+  | 'marketing'; // Marketing pages (Landing, Pricing, Features)
 ```
 
 **Categories:**
 
-| Category | Use Cases | Examples |
-|----------|-----------|----------|
-| `auth` | Authentication flows | Login, Signup, Password Reset |
-| `dashboard` | Data overview screens | Analytics, Reports, Metrics |
-| `content` | Content display | Article List, Detail View, Gallery |
-| `form` | Data entry | Create Post, Edit Profile, Settings |
-| `navigation` | Site navigation | Sidebar, Top Nav, Breadcrumbs |
-| `feedback` | User feedback | 404 Error, Empty State, Loading |
-| `marketing` | Public pages | Landing, Pricing, Features |
+| Category     | Use Cases             | Examples                            |
+| ------------ | --------------------- | ----------------------------------- |
+| `auth`       | Authentication flows  | Login, Signup, Password Reset       |
+| `dashboard`  | Data overview screens | Analytics, Reports, Metrics         |
+| `content`    | Content display       | Article List, Detail View, Gallery  |
+| `form`       | Data entry            | Create Post, Edit Profile, Settings |
+| `navigation` | Site navigation       | Sidebar, Top Nav, Breadcrumbs       |
+| `feedback`   | User feedback         | 404 Error, Empty State, Loading     |
+| `marketing`  | Public pages          | Landing, Pricing, Features          |
 
 ---
 
@@ -143,21 +143,21 @@ interface TemplateLayout {
 
 **Properties:**
 
-| Property | Type | Required | Description |
-|----------|------|----------|-------------|
-| `type` | `'full' \| 'centered' \| 'split' \| 'sidebar'` | ✅ | Layout structure type |
-| `maxWidth` | `'sm' \| 'md' \| 'lg' \| 'xl' \| 'full'` | ❌ | Content max width (default: `'full'`) |
-| `padding` | `TokenReference` | ❌ | Outer padding (default: `'var(--tekton-spacing-4)'`) |
-| `gap` | `TokenReference` | ❌ | Section gap (default: `'var(--tekton-spacing-4)'`) |
+| Property   | Type                                           | Required | Description                                          |
+| ---------- | ---------------------------------------------- | -------- | ---------------------------------------------------- |
+| `type`     | `'full' \| 'centered' \| 'split' \| 'sidebar'` | ✅       | Layout structure type                                |
+| `maxWidth` | `'sm' \| 'md' \| 'lg' \| 'xl' \| 'full'`       | ❌       | Content max width (default: `'full'`)                |
+| `padding`  | `TokenReference`                               | ❌       | Outer padding (default: `'var(--tekton-spacing-4)'`) |
+| `gap`      | `TokenReference`                               | ❌       | Section gap (default: `'var(--tekton-spacing-4)'`)   |
 
 **Layout Types:**
 
-| Type | Description | Best For |
-|------|-------------|----------|
-| `full` | Full-width layout | Landing pages, marketing |
-| `centered` | Centered container | Login, signup, forms |
-| `split` | Split-screen layout | Login with image, onboarding |
-| `sidebar` | Sidebar + main content | Dashboards, admin panels |
+| Type       | Description            | Best For                     |
+| ---------- | ---------------------- | ---------------------------- |
+| `full`     | Full-width layout      | Landing pages, marketing     |
+| `centered` | Centered container     | Login, signup, forms         |
+| `split`    | Split-screen layout    | Login with image, onboarding |
+| `sidebar`  | Sidebar + main content | Dashboards, admin panels     |
 
 **Example:**
 
@@ -193,13 +193,13 @@ interface TemplateSlot {
 
 **Properties:**
 
-| Property | Type | Required | Description |
-|----------|------|----------|-------------|
-| `id` | `string` | ✅ | Slot identifier (camelCase) |
-| `name` | `string` | ✅ | Human-readable name |
-| `required` | `boolean` | ✅ | Is slot required? |
-| `allowedComponents` | `string[]` | ❌ | Type constraints (future feature) |
-| `defaultComponent` | `React.ComponentType` | ❌ | Default component if not provided |
+| Property            | Type                  | Required | Description                       |
+| ------------------- | --------------------- | -------- | --------------------------------- |
+| `id`                | `string`              | ✅       | Slot identifier (camelCase)       |
+| `name`              | `string`              | ✅       | Human-readable name               |
+| `required`          | `boolean`             | ✅       | Is slot required?                 |
+| `allowedComponents` | `string[]`            | ❌       | Type constraints (future feature) |
+| `defaultComponent`  | `React.ComponentType` | ❌       | Default component if not provided |
 
 **Example:**
 
@@ -237,11 +237,11 @@ interface ScreenTemplateProps {
 
 **Properties:**
 
-| Property | Type | Required | Description |
-|----------|------|----------|-------------|
-| `slots` | `Record<string, React.ReactNode>` | ❌ | Custom slot content |
-| `className` | `string` | ❌ | Additional Tailwind/CSS classes |
-| `theme` | `string` | ❌ | Override active theme |
+| Property    | Type                              | Required | Description                     |
+| ----------- | --------------------------------- | -------- | ------------------------------- |
+| `slots`     | `Record<string, React.ReactNode>` | ❌       | Custom slot content             |
+| `className` | `string`                          | ❌       | Additional Tailwind/CSS classes |
+| `theme`     | `string`                          | ❌       | Override active theme           |
 
 **Example:**
 
@@ -277,8 +277,8 @@ TemplateRegistry.register(MyCustomTemplate);
 
 **Parameters:**
 
-| Parameter | Type | Description |
-|-----------|------|-------------|
+| Parameter  | Type             | Description         |
+| ---------- | ---------------- | ------------------- |
 | `template` | `ScreenTemplate` | Template definition |
 
 **Throws:** Error if template ID already exists.
@@ -300,9 +300,9 @@ if (loginTemplate) {
 
 **Parameters:**
 
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| `id` | `string` | Template ID |
+| Parameter | Type     | Description |
+| --------- | -------- | ----------- |
+| `id`      | `string` | Template ID |
 
 **Returns:** `ScreenTemplate | undefined`
 
@@ -322,8 +322,8 @@ authTemplates.forEach(template => {
 
 **Parameters:**
 
-| Parameter | Type | Description |
-|-----------|------|-------------|
+| Parameter  | Type             | Description       |
+| ---------- | ---------------- | ----------------- |
 | `category` | `ScreenCategory` | Template category |
 
 **Returns:** `ScreenTemplate[]`
@@ -360,9 +360,9 @@ const LoginTemplate = getTemplate('login-minimal');
 
 **Parameters:**
 
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| `id` | `string` | Template ID |
+| Parameter | Type     | Description |
+| --------- | -------- | ----------- |
+| `id`      | `string` | Template ID |
 
 **Returns:** `React.ComponentType<ScreenTemplateProps>`
 
@@ -381,16 +381,17 @@ const LoginTemplate = getTemplate('login-minimal');
 **Description:** Centered login card with optional branding and footer.
 
 **Layout:**
+
 - Type: `centered`
 - Max Width: `sm`
 - Padding: `var(--tekton-spacing-4)`
 
 **Slots:**
 
-| Slot ID | Name | Required | Description |
-|---------|------|----------|-------------|
-| `branding` | Brand Logo | ❌ | Logo or branding element |
-| `footer` | Footer Content | ❌ | Footer text or links |
+| Slot ID    | Name           | Required | Description              |
+| ---------- | -------------- | -------- | ------------------------ |
+| `branding` | Brand Logo     | ❌       | Logo or branding element |
+| `footer`   | Footer Content | ❌       | Footer text or links     |
 
 **Usage:**
 
@@ -418,17 +419,18 @@ import { LoginTemplate } from '@tekton/ui/templates/auth/login';
 **Description:** Full dashboard with sidebar navigation and content area.
 
 **Layout:**
+
 - Type: `sidebar`
 - Max Width: `full`
 - Gap: `var(--tekton-spacing-0)` (no gap)
 
 **Slots:**
 
-| Slot ID | Name | Required | Description |
-|---------|------|----------|-------------|
-| `sidebar` | Sidebar Navigation | ✅ | Sidebar content |
-| `header` | Top Header | ❌ | Optional top header |
-| `content` | Main Content | ✅ | Main dashboard content |
+| Slot ID   | Name               | Required | Description            |
+| --------- | ------------------ | -------- | ---------------------- |
+| `sidebar` | Sidebar Navigation | ✅       | Sidebar content        |
+| `header`  | Top Header         | ❌       | Optional top header    |
+| `content` | Main Content       | ✅       | Main dashboard content |
 
 **Usage:**
 
@@ -580,11 +582,13 @@ describe('MyTemplate', () => {
 ### 1. Template Naming
 
 **ID Conventions:**
+
 - Use kebab-case: `login-minimal`, `dashboard-sidebar`
 - Include variant: `login-split-screen`, `dashboard-minimal`
 - Be descriptive: `settings-two-column`, `pricing-three-tier`
 
 **File Naming:**
+
 - Match template purpose: `login.tsx`, `overview.tsx`
 - One template per file
 - Group by category: `templates/auth/`, `templates/dashboard/`
@@ -592,11 +596,13 @@ describe('MyTemplate', () => {
 ### 2. Slot Design
 
 **Required Slots:**
+
 - Only mark truly essential slots as required
 - Provide sensible defaults when possible
 - Document what happens when optional slots are omitted
 
 **Slot IDs:**
+
 - Use camelCase: `branding`, `mainContent`, `sidebarNav`
 - Be specific: `loginForm` instead of `form`
 - Avoid generic names: `slot1`, `section`, `area`
@@ -604,10 +610,12 @@ describe('MyTemplate', () => {
 ### 3. CSS Variables
 
 **Always Use Tokens:**
+
 - ✅ `padding: 'var(--tekton-spacing-4)'`
 - ❌ `padding: '1rem'`
 
 **Layer Appropriately:**
+
 - Use semantic tokens for colors: `var(--tekton-bg-background)`
 - Use atomic tokens for spacing: `var(--tekton-spacing-4)`
 - Use component tokens for variants: `var(--button-primary-background)`
@@ -615,10 +623,12 @@ describe('MyTemplate', () => {
 ### 4. Theme Compatibility
 
 **Universal Themes:**
+
 - Use `supportedThemes: ['*']` for most templates
 - Rely on CSS Variables for automatic theme adaptation
 
 **Theme-Specific:**
+
 - Only restrict themes if truly incompatible
 - Document why themes are restricted
 - Provide alternatives for unsupported themes
@@ -626,6 +636,7 @@ describe('MyTemplate', () => {
 ### 5. Accessibility
 
 **WCAG 2.1 AA Compliance:**
+
 - Ensure proper heading hierarchy
 - Use semantic HTML (header, main, nav, footer)
 - Provide ARIA labels where needed
@@ -647,6 +658,7 @@ const Component: React.FC<ScreenTemplateProps> = ({ slots }) => (
 ### 6. Testing
 
 **Test Coverage:**
+
 - Slot rendering (required and optional)
 - Theme application
 - Layout types
@@ -670,6 +682,7 @@ describe('MyTemplate', () => {
 ### 7. Documentation
 
 **Template Documentation:**
+
 - Describe purpose and use cases
 - List all slots with requirements
 - Provide usage examples
@@ -677,6 +690,7 @@ describe('MyTemplate', () => {
 - Document theme compatibility
 
 **Inline Comments:**
+
 - Explain non-obvious slot logic
 - Document token choices
 - Note accessibility considerations
@@ -736,6 +750,7 @@ export const LoginTemplate: ScreenTemplate = {
 ```
 
 **Benefits:**
+
 - ✅ Discoverable via `TemplateRegistry`
 - ✅ Searchable by category and tags
 - ✅ Standardized metadata
@@ -751,6 +766,7 @@ export const LoginTemplate: ScreenTemplate = {
 **Error:** `Template 'my-template' not found in registry`
 
 **Solution:**
+
 1. Verify template is registered: `TemplateRegistry.register(MyTemplate)`
 2. Check template ID matches: `id: 'my-template'`
 3. Ensure registry imports template file
@@ -760,6 +776,7 @@ export const LoginTemplate: ScreenTemplate = {
 **Error:** Component renders but slot content is missing
 
 **Solution:**
+
 1. Check slot is marked `required: true`
 2. Verify slot ID matches usage: `slots={{ correctId: <Content /> }}`
 3. Add runtime validation:
@@ -778,6 +795,7 @@ const Component: React.FC<ScreenTemplateProps> = ({ slots }) => {
 **Error:** Template renders but doesn't respect theme
 
 **Solution:**
+
 1. Verify CSS Variables are used: `var(--tekton-*)`
 2. Check theme loader is initialized
 3. Ensure template supports active theme
@@ -787,9 +805,9 @@ const Component: React.FC<ScreenTemplateProps> = ({ slots }) => {
 
 ## Version History
 
-| Version | Date | Changes |
-|---------|------|---------|
-| 1.0.0 | 2026-01-31 | Initial release with LoginTemplate and DashboardTemplate |
+| Version | Date       | Changes                                                  |
+| ------- | ---------- | -------------------------------------------------------- |
+| 1.0.0   | 2026-01-31 | Initial release with LoginTemplate and DashboardTemplate |
 
 ---
 

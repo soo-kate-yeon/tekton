@@ -194,13 +194,17 @@ describe('Switch', () => {
     it('uses Tekton color tokens for checked state', () => {
       const { container } = render(<Switch />);
       const switchElement = container.firstChild as HTMLElement;
-      expect(switchElement.className).toContain('data-[state=checked]:bg-[var(--tekton-bg-primary)]');
+      expect(switchElement.className).toContain(
+        'data-[state=checked]:bg-[var(--tekton-bg-primary)]'
+      );
     });
 
     it('uses Tekton color tokens for unchecked state', () => {
       const { container } = render(<Switch />);
       const switchElement = container.firstChild as HTMLElement;
-      expect(switchElement.className).toContain('data-[state=unchecked]:bg-[var(--tekton-bg-muted)]');
+      expect(switchElement.className).toContain(
+        'data-[state=unchecked]:bg-[var(--tekton-bg-muted)]'
+      );
     });
 
     it('uses Tekton background tokens for thumb', () => {

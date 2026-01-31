@@ -36,7 +36,7 @@ describe('Button', () => {
   describe('Variants', () => {
     const variants = ['default', 'destructive', 'outline', 'secondary', 'ghost', 'link'] as const;
 
-    it.each(variants)('renders %s variant correctly', (variant) => {
+    it.each(variants)('renders %s variant correctly', variant => {
       const { container } = render(<Button variant={variant}>Test</Button>);
       expect(container.firstChild).toBeInTheDocument();
     });
@@ -51,7 +51,7 @@ describe('Button', () => {
   describe('Sizes', () => {
     const sizes = ['default', 'sm', 'lg', 'icon'] as const;
 
-    it.each(sizes)('renders %s size correctly', (size) => {
+    it.each(sizes)('renders %s size correctly', size => {
       const { container } = render(<Button size={size}>Test</Button>);
       expect(container.firstChild).toBeInTheDocument();
     });
@@ -69,7 +69,11 @@ describe('Button', () => {
 
     it('does not trigger onClick when disabled', async () => {
       const handleClick = vi.fn();
-      render(<Button onClick={handleClick} disabled>Click</Button>);
+      render(
+        <Button onClick={handleClick} disabled>
+          Click
+        </Button>
+      );
 
       // disabled buttons don't trigger click events in jsdom
       expect(screen.getByRole('button')).toBeDisabled();

@@ -5,7 +5,15 @@
 import { render, screen } from '@testing-library/react';
 import { axe } from 'vitest-axe';
 import { describe, it, expect } from 'vitest';
-import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell, TableCaption } from '../table';
+import {
+  Table,
+  TableHeader,
+  TableBody,
+  TableRow,
+  TableHead,
+  TableCell,
+  TableCaption,
+} from '../table';
 
 describe('Table', () => {
   const renderTable = () =>
@@ -57,7 +65,11 @@ describe('Table', () => {
 
   describe('Styling', () => {
     it('applies custom className', () => {
-      render(<Table className="custom-table" data-testid="table"><tbody /></Table>);
+      render(
+        <Table className="custom-table" data-testid="table">
+          <tbody />
+        </Table>
+      );
       const table = screen.getByTestId('table');
       expect(table.className).toContain('custom-table');
     });

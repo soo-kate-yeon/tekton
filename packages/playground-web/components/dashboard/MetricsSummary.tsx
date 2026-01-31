@@ -95,8 +95,9 @@ export function MetricsSummary({ onMetricClick }: MetricsSummaryProps) {
               <metric.icon size={20} />
             </div>
             <span
-              className={`text-xs font-[--lm-font-family-sans] font-[--lm-font-weight-medium] px-2 py-1 rounded-[--lm-radius-sm] ${metric.trend === 'up' ? 'text-green-700 bg-green-50' : 'text-red-700 bg-red-50'
-                }`}
+              className={`text-xs font-[--lm-font-family-sans] font-[--lm-font-weight-medium] px-2 py-1 rounded-[--lm-radius-sm] ${
+                metric.trend === 'up' ? 'text-green-700 bg-green-50' : 'text-red-700 bg-red-50'
+              }`}
             >
               {metric.change}
             </span>

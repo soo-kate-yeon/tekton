@@ -90,7 +90,7 @@ describe('TemplateRegistry', () => {
 
     it('finds templates with all specified components', () => {
       const withButtonAndCard = registry.findByRequiredComponents(['Button', 'Card']);
-      expect(withButtonAndCard.some((t) => t.id === 'auth.login')).toBe(true);
+      expect(withButtonAndCard.some(t => t.id === 'auth.login')).toBe(true);
     });
 
     it('searches by keyword in id', () => {
@@ -106,7 +106,7 @@ describe('TemplateRegistry', () => {
 
     it('searches by keyword in tags', () => {
       const results = registry.search('auth');
-      expect(results.some((t) => t.id === 'auth.login')).toBe(true);
+      expect(results.some(t => t.id === 'auth.login')).toBe(true);
     });
 
     it('search is case-insensitive', () => {
@@ -151,7 +151,7 @@ describe('TemplateRegistry', () => {
 
       registry.get('auth.login');
       // Small delay to ensure different timestamps
-      await new Promise((resolve) => setTimeout(resolve, 10));
+      await new Promise(resolve => setTimeout(resolve, 10));
       registry.get('dashboard.overview');
 
       const recent = registry.getRecentlyUsed(2);

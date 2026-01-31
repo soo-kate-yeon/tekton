@@ -49,7 +49,7 @@ describe('Progress', () => {
 
     it('handles intermediate values', () => {
       const values = [25, 50, 75];
-      values.forEach((value) => {
+      values.forEach(value => {
         const { unmount } = render(<Progress value={value} />);
         const progress = screen.getByRole('progressbar');
         expect(progress).toHaveAttribute('aria-valuenow', String(value));

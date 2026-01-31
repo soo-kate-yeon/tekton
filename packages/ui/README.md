@@ -661,6 +661,7 @@ import { Button } from '@tekton/ui';
 Screen Templates provide pre-built, theme-aware full-screen layouts that combine multiple components into cohesive user experiences. Each template is registered in a centralized `TemplateRegistry` for easy discovery and reuse.
 
 **Features:**
+
 - **Pre-built Layouts**: Login, Dashboard, and more coming soon
 - **Theme-Aware**: Automatically adapts to active theme via CSS Variables
 - **Composable**: Combine templates with custom slots
@@ -680,7 +681,7 @@ const LoginTemplate = getTemplate('login-minimal');
     branding: <YourLogo />,
     footer: <YourFooter />,
   }}
-/>
+/>;
 ```
 
 ### Available Templates
@@ -697,10 +698,11 @@ import { LoginTemplate } from '@tekton/ui/templates/auth/login';
     branding: <img src="/logo.svg" alt="Brand" />,
     footer: <p>© 2026 Your Company</p>,
   }}
-/>
+/>;
 ```
 
 **Metadata:**
+
 - **ID**: `login-minimal`
 - **Category**: `auth`
 - **Supported Themes**: All
@@ -719,10 +721,11 @@ import { DashboardTemplate } from '@tekton/ui/templates/dashboard/overview';
     header: <YourHeader />,
     content: <YourDashboardContent />,
   }}
-/>
+/>;
 ```
 
 **Metadata:**
+
 - **ID**: `dashboard-minimal`
 - **Category**: `dashboard`
 - **Supported Themes**: All
@@ -840,6 +843,7 @@ TemplateRegistry.register(MyCustomTemplate);
 ### Phase 3 Status
 
 **Completed:**
+
 - ✅ Template type system (`ScreenTemplate`, `TemplateRegistry`)
 - ✅ LoginTemplate implementation
 - ✅ DashboardTemplate implementation
@@ -847,12 +851,14 @@ TemplateRegistry.register(MyCustomTemplate);
 - ✅ 497 tests with 91.72% coverage
 
 **Upcoming (Phase 4):**
+
 - Additional templates (Settings, Profile, Analytics)
 - Enhanced template customization
 - Storybook documentation
 - Template preview gallery
 
 **Known Issues:**
+
 - TAG comment annotations incomplete (see [SPEC-UI-001 improvements.md](../../.moai/specs/SPEC-UI-001/improvements.md))
 - 23 TypeScript type definition warnings
 

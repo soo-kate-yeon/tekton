@@ -47,8 +47,8 @@ describe('theme-loader', () => {
             '2': '8px',
           },
           radius: {
-            'sm': '4px',
-            'md': '6px',
+            sm: '4px',
+            md: '6px',
           },
         },
         semantic: {
@@ -127,10 +127,10 @@ describe('theme-loader', () => {
             '4': '16px',
           },
           radius: {
-            'sm': '4px',
-            'md': '6px',
-            'lg': '8px',
-            'full': '9999px',
+            sm: '4px',
+            md: '6px',
+            lg: '8px',
+            full: '9999px',
           },
         },
         semantic: {
@@ -221,16 +221,28 @@ describe('theme-loader', () => {
               white: { l: 1, c: 0, h: 0 },
             },
             spacing: { '1': '4px' },
-            radius: { 'md': '6px' },
+            radius: { md: '6px' },
           },
           semantic: {
             background: {
               canvas: 'atomic.color.neutral.50',
-              surface: { default: 'atomic.color.white', subtle: 'atomic.color.neutral.50', emphasis: 'atomic.color.neutral.50' },
-              brand: { default: 'atomic.color.brand.500', subtle: 'atomic.color.brand.500', emphasis: 'atomic.color.brand.500' },
+              surface: {
+                default: 'atomic.color.white',
+                subtle: 'atomic.color.neutral.50',
+                emphasis: 'atomic.color.neutral.50',
+              },
+              brand: {
+                default: 'atomic.color.brand.500',
+                subtle: 'atomic.color.brand.500',
+                emphasis: 'atomic.color.brand.500',
+              },
             },
             border: {
-              default: { default: 'atomic.color.neutral.50', subtle: 'atomic.color.neutral.50', emphasis: 'atomic.color.neutral.50' },
+              default: {
+                default: 'atomic.color.neutral.50',
+                subtle: 'atomic.color.neutral.50',
+                emphasis: 'atomic.color.neutral.50',
+              },
             },
           },
         },

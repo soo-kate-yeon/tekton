@@ -18,9 +18,7 @@ export default function UserProfileDashboard() {
       <aside className="w-64 border-r bg-card p-6 flex flex-col gap-8">
         <div className="flex items-center gap-2">
           <div className="w-8 h-8 rounded-lg bg-primary" />
-          <h3 className="text-xl font-bold">
-            Tekton UI
-          </h3>
+          <h3 className="text-xl font-bold">Tekton UI</h3>
         </div>
 
         <nav className="flex flex-col gap-2">

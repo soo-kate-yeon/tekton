@@ -19,7 +19,11 @@ describe('Avatar', () => {
     it('renders with image', () => {
       const { container } = render(
         <Avatar>
-          <AvatarImage src="https://via.placeholder.com/150" alt="User avatar" data-testid="avatar-image" />
+          <AvatarImage
+            src="https://via.placeholder.com/150"
+            alt="User avatar"
+            data-testid="avatar-image"
+          />
         </Avatar>
       );
       // In test environment, images may not load, so we check for the container

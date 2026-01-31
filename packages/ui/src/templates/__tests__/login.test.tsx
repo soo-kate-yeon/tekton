@@ -87,9 +87,7 @@ describe('LoginTemplate', () => {
     });
 
     it('renders forgot password slot', () => {
-      render(
-        <LoginTemplateComponent slots={{ forgotPassword: <a href="#">Forgot?</a> }} />
-      );
+      render(<LoginTemplateComponent slots={{ forgotPassword: <a href="#">Forgot?</a> }} />);
       expect(screen.getByText('Forgot?')).toBeInTheDocument();
     });
 
@@ -136,9 +134,7 @@ describe('LoginTemplate', () => {
     });
 
     it('renders custom footer', () => {
-      render(
-        <LoginTemplateComponent slots={{ footer: <div>Custom Footer</div> }} />
-      );
+      render(<LoginTemplateComponent slots={{ footer: <div>Custom Footer</div> }} />);
       expect(screen.getByText('Custom Footer')).toBeInTheDocument();
     });
 
